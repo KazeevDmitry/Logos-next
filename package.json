@@ -9,11 +9,29 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "antd": "^4.23.2",
+    "axios": "^0.27.2",
+    "bootstrap": "^5.2.1",
+    "cookies-next": "^2.1.1",
+    "dotenv": "^16.0.3",
+    "i18next": "^21.9.2",
+    "i18next-browser-languagedetector": "^6.1.5",
+    "i18next-http-backend": "^1.4.4",
+    "moment": "^2.29.4",
     "next": "12.3.1",
+    "next-auth": "^4.17.0",
+    "next-connect": "^0.13.0",
+    "next-iron-session": "^4.2.0",
+    "next-plugin-antd-less": "^1.8.0",
+    "pluralize": "^8.0.0",
+    "pluralize-ru": "^1.0.1",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-bootstrap": "^2.5.0",
+    "react-dom": "18.2.0",
+    "react-i18next": "^11.18.6"
   },
   "devDependencies": {
+    "babel-plugin-import": "^1.13.5",
     "eslint": "8.23.1",
     "eslint-config-next": "12.3.1"
   }

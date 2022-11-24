@@ -1,0 +1,143 @@
+@font-face {
+    font-family: 'Futura PT Book';
+    src: url('../../fonts/FuturaPT-Book.eot');
+    src: local('../../fonts/Futura PT Book'), local('FuturaPT-Book'),
+        url('../../fonts/FuturaPT-Book.eot?#iefix') format('embedded-opentype'),
+        url('../../fonts/FuturaPT-Book.woff2') format('woff2'),
+        url('../../fonts/FuturaPT-Book.woff') format('woff'),
+        url('../../fonts/FuturaPT-Book.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+.footer {
+    /* height: 100px; */
+    width: 100%;
+    background-color: rgba(22, 35, 64, 1);
+
+    font-family: Futura PT Book;
+    font-style: normal;
+    letter-spacing: 0em;
+    /* text-align: left; */
+    font-weight: normal;
+    font-style: normal;
+    color: white;
+    position: relative;
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    align-items:center;
+}
+
+.footerContainer {
+    width: 1400px;
+    height: 240px;
+    margin-top: 80px;
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    
+   
+}
+
+.blockCopyright, .aboutLogos, .toclients, .tolawyers, .topartners {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items:center;
+    position: relative;
+    height: auto;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+/* 
+.blockCopyright {
+    width: 310px;
+} */
+
+.title {
+    color: white;
+    font-size: 16px;
+    font-weight: 450;
+    line-height: 21px;
+    letter-spacing: 0.02em;
+}
+
+.aboutLogos {
+    width: 77px;
+    margin-left: 480px;
+}
+
+.toclients {
+    width: 179px;
+    margin-left: 720px;
+}
+
+.tolawyers {
+    width: 153px;
+    margin-left: 960px;
+}
+
+.topartners {
+    width: 120px;
+    margin-left: 1200px;
+}
+
+.logo {
+    height: 50px;
+    width: 250px;
+    border-radius: 4px;
+    opacity: 15%;
+    background-color: darkgrey;
+}
+
+.copyright {
+    width: 301px;
+    height: 48px;
+    color: darkgrey;
+    /* margin-top: 40px; */
+    margin-left: 50px;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+}
+
+.confidentialLink, .ofertaLink {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20.5px;
+    color: white;
+}
+
+.confidentialLink {
+    margin-top: 50px;
+}
+
+.ofertaLink {
+    margin-top: 10px;
+}
+
+.aboutLink, .questionsLink, .ordersLink, .partnershipLink {
+    margin-top: 25px;
+    color: darkgrey;
+}
+
+.teamLink, .vacancyLink, .articlesLink, .helpLink, .specsLink, .answersLink, .journalLink, .tarifsLink, .adminLink, .referLink, .advertizersLink {
+    margin-top: 15px;
+    color: darkgrey;
+}
+
+.confidentialLink, .ofertaLink, .aboutLink, .questionsLink, .ordersLink, .partnershipLink, .teamLink, .vacancyLink, .articlesLink, .helpLink, .specsLink, .answersLink, .journalLink, .tarifsLink, .adminLink, .referLink, .advertizersLink {
+    text-decoration: none;
+}
+
+@media (max-width: 760px){
+    
+    .blockCopyright {
+        justify-content: center;
+    }
+    .copyright {
+        margin-left: 0px;
+    }
+}
