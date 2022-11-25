@@ -106,19 +106,11 @@ const curr = sizes.filter(item => useMediaQuery(item.query));
       getCities();
     }, []); 
 
-  /// TODO -  use .env for the API URL
-
-
-
 
 const theme = {...curr[0], branches, spec, cities};
 
 
-console.log(process.env.NEXT_PUBLIC_API)
-
-
-
-  return (
+return (
     <ThemeContext.Provider value={theme}>
       {children}
     </ThemeContext.Provider>

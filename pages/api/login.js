@@ -7,8 +7,6 @@ export default nc()
   .post(async (req, res) => {
     const { email, password } = req.body;
 
-    console.log('credentials fron api/login', email, password);
-
     try {
       const user = await createStrapiAxios()
         .post(`/auth/local`, {
@@ -17,9 +15,8 @@ export default nc()
         })
         .then((res) => res.data)
         .then((data) => ({
-          // ...data.user,
-          strapiToken: data.jwt,
-        }));
+            strapiToken: data.jwt,
+          }));
 
       // if (!user.confirmed) {
       //   return res.status(401).json({

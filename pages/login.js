@@ -87,16 +87,26 @@ export default function Auth ({logIn = true}) {
             
             axios.post('/api/login', values).then((user) => {
                 console.log('logged user ---------   ', user);
-                router.push('/');
+                router.back();
               })
-              .catch(e => console.log('error from login page', e));
+              .catch(error => {
+                console.log('An error occurred:', error);   
+                    if (error.response && error.response?.status !== 500) 
+                    {
+                        console.log('Error response:', error.response);   
+                        if (error.response.data?.message[0]?.messages[0].id === 'Auth.form.error.invalid') 
+                        {
+                            setFormStatus({error: 'error', text: 'ОШИБКА АВТОРИЗАЦИИ! Проверьте введенные данные.'});
+                        }    
+                    }
+                    else {
+                        setFormStatus({error: 'error', text: 'ОШИБКА ПЕРЕДАЧИ ДАННЫХ!'});
+                    }
+                });
 
+               
 
-            axios.post('/api/hello', values).then((res) => {
-                console.log('hello ---------   ', res);
-            
-              });
-      
+     
             // try {
             //     const response = await axios.post(`${process.env.NEXT_PUBLIC_API}/auth/local/`, {...values});
             //     let sp = await response.data;

@@ -1,4 +1,5 @@
 import '../styles/globals.css'
+import React, { useEffect } from 'react';
 
 import "../styles/antdVariables.less";
 import { ThemeProvider } from '../src/context/themeContext';
@@ -15,12 +16,12 @@ import moment from 'moment';
 import 'moment/locale/ru';
 import MainLayout from '../src/components/layouts/mainLayout';
 
-import { SessionProvider } from 'next-auth/react';
+import axios from 'axios';
 
 moment.locale('ru')
 
 
-function MyApp({ Component, pageProps }) {
+export default function MyApp({ Component, pageProps }) {
 
   const { t, i18n } = useTranslation();
   const changeLanguage = (language) => {
@@ -29,26 +30,38 @@ function MyApp({ Component, pageProps }) {
       moment.locale(i18n.language);
   };
 
+  //const {currentUser, setCurrentUser} = useUserContext();
+
   const antdLocales = (lang = 'ru') => {
       const covab = { ru, en };
       return covab[lang];
     }
 
 
+    useEffect(() => {
+      axios.post('/api/user').then((user) => {
+
+        if (user.strapiToken) {
+          console.log('jwt from app---------------', user.strapiToken);
+        }
+
+        //setCurrentUser(user);
+        
+      })
+      .catch(error => console.log(error))
+    }, []); 
 
   return (  
           <ThemeProvider>
            <UserProvider>
-            <SessionProvider session={pageProps.session}>
               <ConfigProvider locale={antdLocales(i18n.language)}>
                 <MainLayout>
                   <Component {...pageProps} /> 
                 </MainLayout>
               </ConfigProvider>  
-            /</SessionProvider>  
             </UserProvider>
           </ThemeProvider>    
             )
 }
 
-export default MyApp
+// export default MyApp

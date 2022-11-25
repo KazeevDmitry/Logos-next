@@ -5,7 +5,7 @@ import styles from '../styles/Home.module.css'
 import { Button, DatePicker } from 'antd'
 
 import {useThemeContext} from '../src/context/themeContext'
-import {useUserContext} from '../src/context/userContext'
+import {UserContext} from '../src/context/userContext'
 
 import { useTranslation } from 'react-i18next'
 
@@ -19,11 +19,9 @@ export default function Home() {
 
   const theme = useThemeContext();
 
-  const currentUser = useUserContext();
+  // const currentUser = useContext(UserContext);
 
   const {t} = useTranslation();
-
-  console.log('from useContext', theme.branches);
 
   const branches = theme.branches.map(item => {
     return (

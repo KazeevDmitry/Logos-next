@@ -1,18 +1,19 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import axios from "axios";
 
 import AskModal from "../askModal/askModal";
 import Icons from "../../../utils/icons";
 import { useTranslation } from 'react-i18next';
 
+
 import styles from "./app-header.module.less";
 
 import { Select, Button, Divider } from 'antd';
 
-
 import {useThemeContext} from '../../context/themeContext';
-import {useUserContext} from '../../context/userContext';
+import {UserContext} from '../../context/userContext';
 
 import UserImage from "../userImage/userImage";
 
@@ -28,9 +29,9 @@ export default function AppHeader(props)
   const [ askShow, setAskShow ] = useState(false);
 
 
-  const {currentUser, setCurrentUser} = useUserContext();
+  const {currentUser, setCurrentUser} = useContext(UserContext);
 
-  const userJWT = currentUser.jwt;
+  const userJWT = currentUser?.jwt ?? '';
   
   const { t, i18n } = useTranslation();
 
@@ -40,16 +41,29 @@ export default function AppHeader(props)
 
   const theme=useThemeContext();
 
-  // useEffect( () => {
+  // async function getUser() {
+  //   axios.post('/api/user').then((user) => {
 
-  //   async function currSession() {
-  //     const response = await getSession();
-  //   }
-  //   const session = currSession();      
-  //   if (session) {
-  //     console.log('session', session);
-  //   }     
-  // }, [])
+  //     if (user.data.strapiToken) {
+  //       console.log('jwt from appHeader---------------', user.data.strapiToken);
+  //       putUserToContext(user.data.strapiToken);
+
+  //     }
+  //     else {
+  //       console.log('Not authenticated (AppHaeder)');
+  //     }
+
+  //     //setCurrentUser(user);
+      
+  //   })
+  //   .catch(error => console.log(error))
+  // }
+
+  // useEffect(() => {
+  //   getUser();
+  // }, []); 
+ 
+
 
   const callUserMenu = () => {
     setUserMenuOpen(!userMenuOpen);
@@ -135,7 +149,7 @@ export default function AppHeader(props)
 
   const logoffStr = t('buttons.logoff');
 
-  const userImage= currentUser.user?.avatar?.url??  '';
+  const userImage= currentUser?.user?.avatar?.url??  '';
 
   const username = currentUser?.user?.name?? '';
   
@@ -304,7 +318,7 @@ export default function AppHeader(props)
                                     
                                   </div>}
 
-                      {theme?.id !== "md" && Object.keys(currentUser).length !== 0 && 
+                      {theme?.id !== "md" && currentUser && 
                       
                           <span className={styles.userLink} onClick={callUserMenu}>
                               {currentUser?.user?.name}
@@ -313,7 +327,7 @@ export default function AppHeader(props)
                           </span>
                           }
                     
-                      {Object.keys(currentUser).length === 0 && 
+                      {currentUser && 
                     
                       <Link href={'/login'}>
                         <Button type="primary" htmlType="button"
