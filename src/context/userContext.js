@@ -13,21 +13,19 @@ export const UserProvider = (props) => {
     async function getUser() {
       
         await axios.post('/api/user')
-    .then(async (user) => {
+        .then(async (user) => {
 
-        const JWT = user.data.strapiToken;
-
-        console.log('jwt from API (getLoggedUser)---------------', JWT);
-        
-        let response = await createStrapiAxios(JWT)
-        .get(`/users/me`);
-        
-        let br = await response.data;
-    
-        console.log('USER fron getUserMe---------------------',br);
-        setCurrentUser(br);
-  })
-                
+            const JWT = user.data.strapiToken;
+            let response = await createStrapiAxios(JWT)
+            .get(`/users/me`);
+            
+            let br = await response.data;
+            response = await createStrapiAxios(JWT)
+            .get(`/users/${br?.id}`);
+            
+            let cU = await response?.data;
+            setCurrentUser({...cU, jwt: JWT});
+        })
       }  
   
     useEffect(() => {

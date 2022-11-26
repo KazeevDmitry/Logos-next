@@ -38,11 +38,12 @@ export default function UserImage ({image, online, width, onClick}) {
         width: greenWidthStr,
         top: greenPosStr,
         left: greenPosStr,
-        borderWidth: greenBorderWidth
+        borderWidth: greenBorderWidth,
+        
          
     }
 
-    const userImage = `${process.env.REACT_APP_API}${image}`
+    const userImage = `${process.env.NEXT_PUBLIC_API}${image}`
 
     
     const letterStyle = {
@@ -62,22 +63,22 @@ export default function UserImage ({image, online, width, onClick}) {
     return (
 
         <div style={wrapDiv} onClick={()=>onClick?.()}>
-            { image !== '' && <img style={imageStyle}
+            { image !== '' && 
+          
+                                <img style={imageStyle}
                                       src={userImage} //временно
                                       alt="img">
-                                  </img> }
-            {/* { image ==='' && <div className={styles.imageDiv} style={{...imageStyle, backgroundColor: circleColor}}>
-                                <span className={styles.userImageLetter} style={letterStyle}>
-                                    {username[0]}
-                                </span>
-                            </div>} */}
+                                  </img> 
+                                  }
+  
 
             { image ==='' && <div className={styles.imageDiv} style={{...imageStyle}}>
                                 <UserOutlined style={letterStyle}/>    
                             </div>}
                             
 
-            <div className={ styles.greenLight + ' ' + ((online === "true") ? "" : styles.nonActive)}
+            {/* <div className={ styles.greenLight + ' ' + ((online==='true') ? "" : styles.nonActive)} */}
+            <div className={ styles.greenLight}
                 style={greenLightStyle}
             ></div>
         </div>

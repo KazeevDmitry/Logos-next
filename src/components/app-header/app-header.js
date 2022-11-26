@@ -31,7 +31,7 @@ export default function AppHeader(props)
 
   const {currentUser, setCurrentUser} = useContext(UserContext);
 
-  const userJWT = currentUser?.jwt ?? '';
+  const userJWT = currentUser?.jwt ?? null;
   
   const { t, i18n } = useTranslation();
 
@@ -149,9 +149,9 @@ export default function AppHeader(props)
 
   const logoffStr = t('buttons.logoff');
 
-  const userImage= currentUser?.user?.avatar?.url??  '';
+  const userImage= currentUser?.avatar?.url??  '';
 
-  const username = currentUser?.user?.name?? '';
+  const username = currentUser?.name?? '';
   
 
   //return (
@@ -270,9 +270,9 @@ export default function AppHeader(props)
                 <div style={{marginRight: "30px"}}>
                   <UserImage
                       image= {userImage}
-                      online={false}
+                      online="true"
                       width= {35}
-                      username={currentUser.user?.name}
+             
                     />
                   </div>  }
             </div>
@@ -318,16 +318,16 @@ export default function AppHeader(props)
                                     
                                   </div>}
 
-                      {theme?.id !== "md" && currentUser && 
+                      {theme?.id !== "md" && userJWT && 
                       
                           <span className={styles.userLink} onClick={callUserMenu}>
-                              {currentUser?.user?.name}
+                              {currentUser?.name}
                               <br></br>
-                              {currentUser?.user?.surname}
+                              {currentUser?.surname}
                           </span>
                           }
                     
-                      {currentUser && 
+                      {!userJWT && 
                     
                       <Link href={'/login'}>
                         <Button type="primary" htmlType="button"

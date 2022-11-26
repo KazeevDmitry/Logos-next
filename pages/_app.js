@@ -16,8 +16,6 @@ import moment from 'moment';
 import 'moment/locale/ru';
 import MainLayout from '../src/components/layouts/mainLayout';
 
-import axios from 'axios';
-
 moment.locale('ru')
 
 
@@ -30,26 +28,12 @@ export default function MyApp({ Component, pageProps }) {
       moment.locale(i18n.language);
   };
 
-  //const {currentUser, setCurrentUser} = useUserContext();
 
   const antdLocales = (lang = 'ru') => {
       const covab = { ru, en };
       return covab[lang];
     }
 
-
-    useEffect(() => {
-      axios.post('/api/user').then((user) => {
-
-        if (user.strapiToken) {
-          console.log('jwt from app---------------', user.strapiToken);
-        }
-
-        //setCurrentUser(user);
-        
-      })
-      .catch(error => console.log(error))
-    }, []); 
 
   return (  
           <ThemeProvider>
@@ -64,4 +48,4 @@ export default function MyApp({ Component, pageProps }) {
             )
 }
 
-// export default MyApp
+

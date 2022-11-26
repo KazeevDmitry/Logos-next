@@ -4,31 +4,14 @@ import axios from 'axios';
 
 import styles from '../styles/Home.module.css'
 
+import { useUserContext } from '../src/context/userContext';
 
 import { useTranslation } from 'react-i18next'
 
 
 export default function Experts() {
 
-  async function getUser() {
-    axios.post('/api/user').then((user) => {
-
-      if (user.data.strapiToken) {
-        console.log('jwt from app---------------', user.data.strapiToken);
-      }
-      else {
-        console.log('no token----', user);
-      }
-
-      //setCurrentUser(user);
-      
-    })
-    .catch(error => console.log(error))
-  }
-
-  useEffect(() => {
-    getUser();
-  }, []); 
+  const {currentUser} = useUserContext();
   
   
 
@@ -39,6 +22,9 @@ export default function Experts() {
       <div className={styles.main}>
         <h1 className={styles.title}>
          <p> EXPERTS page</p>
+         <p>{currentUser?.name}</p>
+         <p>{currentUser?.surname}</p>
+         <p>{currentUser?.avatar?.url}</p>
         </h1>
 
   
