@@ -85,16 +85,15 @@ export default function Auth ({logIn = true}) {
   
         const onFinish = async (values) => {
             
-            axios.post('/api/login', values).then((user) => {
-                console.log('logged user ---------   ', user);
+            axios.post('/api/login', values).then((res) => {
+                setCurrentUser({...res.data.user, jwt: res.data.jwt});
                 router.back();
               })
               .catch(error => {
                 console.log('An error occurred:', error);   
                     if (error.response && error.response?.status !== 500) 
                     {
-                        console.log('Error response:', error.response);   
-                        if (error.response.data?.message[0]?.messages[0].id === 'Auth.form.error.invalid') 
+                          if (error.response.data?.message[0]?.messages[0].id === 'Auth.form.error.invalid') 
                         {
                             setFormStatus({error: 'error', text: 'ОШИБКА АВТОРИЗАЦИИ! Проверьте введенные данные.'});
                         }    
@@ -104,36 +103,7 @@ export default function Auth ({logIn = true}) {
                     }
                 });
 
-               
-
-     
-            // try {
-            //     const response = await axios.post(`${process.env.NEXT_PUBLIC_API}/auth/local/`, {...values});
-            //     let sp = await response.data;
-            //     setCurrentUser(sp);
-            //     setCookie('jwt', sp.jwt);
-              
-            //     router.back();
-
-            // } catch (error) {
-
-            //     if (error.response) {
-            //         console.log('An error occurred:', error.response);   
-            //         if (error.response.data?.message[0]?.messages[0].id === 'Auth.form.error.invalid') {
-            //             setFormStatus({error: 'error', text: 'Неправильно введены данные для авторизации!'});
-            //         }
-                    
-
-            //     }
-            //     else {
-            //         alert("Ошибка сети!"); 
-            //     }
-                
-            // };
-        };
-
- 
-    
+         
     return(
         <div className={styles.sectionEnter}>
             
@@ -237,7 +207,10 @@ export default function Auth ({logIn = true}) {
                         <div className={styles.register}>
 
                             <Link 
-                                href="/registration" passHref={true}>
+                                href="/register" 
+                                passHref={true}
+                                replace={true}
+                                >
                                 <a className={styles.registerLink}>
                                     {'Зарегистрироваться'}
                                     </a>

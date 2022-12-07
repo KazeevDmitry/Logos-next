@@ -75,28 +75,38 @@ appContainerPadding: 50
 const curr = sizes.filter(item => useMediaQuery(item.query));
 
   async function getSpec() {
-      //let response = await axios.get(`${process.env.REACT_APP_API}/specializations`);
-      let response = await axios.get(`${process.env.NEXT_PUBLIC_API}/specializations`);
+     
+      await axios.get(`${process.env.NEXT_PUBLIC_API}/specializations`)
+      .then((res)=> res.data)
+      .then((res) => {
+        setSpec(res.data)
+      })
+      .catch((e) => console.log('ERROR spec from themeContext', e));
       
-      let sp = await response.data;
-      setSpec(sp);
       
     }
     async function getBranches() {
       
-      let response = await axios.get(`${process.env.NEXT_PUBLIC_API}/branches`);
-      
-      let br = await response.data;
-      setBranch(br);
-      
+      await axios.get(`${process.env.NEXT_PUBLIC_API}/branches`)
+      .then((res)=> res.data)
+      .then((res) => {
+        setBranch(res.data)
+      })
+      .catch((e) => console.log('ERROR branches from themeContext', e));
+     
+         
     }
-    
+
     async function getCities() {
-      
-      let response = await axios.get(`${process.env.NEXT_PUBLIC_API}/uploads/russia_indexed_6713615a5a.json`);
-      
-      let city = await response.data;
-      setCities(city);
+
+      const way = `${process.env.NEXT_PUBLIC_UPLOADS_API}/uploads/russia_indexed_6713615a5a_8f47a8f68f.json`;
+
+      await axios.get(way)
+       .then((res) => {
+        console.log("res CITIES from context-----------------", res.data);
+        setCities(res.data)
+      })
+      .catch((e) => console.log('ERROR CANt get cities    themeContext', e));
       
     }  
 

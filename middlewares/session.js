@@ -1,4 +1,5 @@
 import { withIronSession, ironSession } from 'next-iron-session';
+import { withIronSessionApiRoute, withIronSessionSsr } from 'next-iron-session';
 
 const sessionConfig = {
   password: process.env.SECRET_COOKIE_PASSWORD,

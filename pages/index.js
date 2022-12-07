@@ -23,11 +23,15 @@ export default function Home() {
 
   const {t} = useTranslation();
 
-  const branches = theme.branches.map(item => {
+
+
+  const branches = theme?.branches?.map(item => {
     return (
-      <div> {item.name}</div>
+      <div> {item.attributes.name}</div>
     )
   });
+
+  console.log("cities--------------------------", theme.cities);
 
   return (
 
@@ -49,7 +53,9 @@ export default function Home() {
 
       <p>{t('links.editPhoto')}</p>
 
-      {branches}
+      {
+      branches
+      }
 
        </main>
     </div>

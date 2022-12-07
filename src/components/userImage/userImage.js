@@ -43,9 +43,8 @@ export default function UserImage ({image, online, width, onClick}) {
          
     }
 
-    const userImage = `${process.env.NEXT_PUBLIC_API}${image}`
+    const userImage = `${process.env.NEXT_PUBLIC_UPLOADS_API}${image}`;
 
-    
     const letterStyle = {
         fontSize: `${width/2}px`,
         color: "#fff"

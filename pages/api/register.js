@@ -5,29 +5,21 @@ import { createStrapiAxios } from '../../utils/strapi';
 export default nc()
   .use(sessionMiddleware)
   .post(async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password, name, surname } = req.body;
 
     try {
       const user = await createStrapiAxios()
-        .post(`/auth/local`, {
-          identifier: email,
+        .post(`/auth/local/register`, {
+          email: email,
+          username: email,
           password,
+          role: 3,
+          name: name,
+          surname,
         })
         .then((res) => res.data);
-        // .then((data) => ({
-        //     strapiToken: data.jwt,
-        //   }));
-        // );
-       
-     
-      // if (!user.confirmed) {
-      //   return res.status(401).json({
-      //     statusCode: 401,
-      //     message: 'User not confirmed'
-      //   });
-      // }
-
-        req.session.set('user', user?.jwt);
+        
+        req.session.set('user', user.jwt);
         await req.session.save();
         res.json(user);
     } catch (error) {
@@ -38,3 +30,4 @@ export default nc()
       res.status(500).json(error);
     }
   });
+

@@ -2,6 +2,7 @@
 
 import nc from 'next-connect';
 import { sessionMiddleware } from '../../middlewares/session';
+import { createStrapiAxios } from '../../utils/strapi';
 
 export default nc()
   .use(sessionMiddleware)
@@ -15,5 +16,5 @@ export default nc()
       });
     }
 
-    res.json(user);
+   res.json(user);
   });

@@ -7,13 +7,14 @@ import AskModal from "../askModal/askModal";
 import Icons from "../../../utils/icons";
 import { useTranslation } from 'react-i18next';
 
+import { createStrapiAxios } from '../../../utils/strapi';
 
 import styles from "./app-header.module.less";
 
 import { Select, Button, Divider } from 'antd';
 
 import {useThemeContext} from '../../context/themeContext';
-import {UserContext} from '../../context/userContext';
+import {useUserContext} from '../../context/userContext';
 
 import UserImage from "../userImage/userImage";
 
@@ -27,9 +28,10 @@ export default function AppHeader(props)
   const [ userMenuOpen, setUserMenuOpen ] = useState(false);
 
   const [ askShow, setAskShow ] = useState(false);
+  const [ curAvatar, setcurAvatar ] = useState();
 
 
-  const {currentUser, setCurrentUser} = useContext(UserContext);
+  const {currentUser, setCurrentUser} = useUserContext();
 
   const userJWT = currentUser?.jwt ?? null;
   
@@ -41,36 +43,20 @@ export default function AppHeader(props)
 
   const theme=useThemeContext();
 
-  // async function getUser() {
-  //   axios.post('/api/user').then((user) => {
-
-  //     if (user.data.strapiToken) {
-  //       console.log('jwt from appHeader---------------', user.data.strapiToken);
-  //       putUserToContext(user.data.strapiToken);
-
-  //     }
-  //     else {
-  //       console.log('Not authenticated (AppHaeder)');
-  //     }
-
-  //     //setCurrentUser(user);
-      
-  //   })
-  //   .catch(error => console.log(error))
-  // }
-
-  // useEffect(() => {
-  //   getUser();
-  // }, []); 
- 
-
 
   const callUserMenu = () => {
     setUserMenuOpen(!userMenuOpen);
   };
 
   const onUserLeave = () => {
-    setAskShow(true);
+    // setAskShow(true);
+
+    axios.post('/api/logout').then((res) => {
+      console.log('Delete session cod ---------   ', res);
+      setCurrentUser({})
+      
+    })
+    setUserMenuOpen(!userMenuOpen);
   };
 
   const askHide = (value) => {
@@ -78,9 +64,7 @@ export default function AppHeader(props)
     if (value) {
       setUserMenuOpen(false);
 
-      
-      // props.onUserLeave();
-      setCurrentUser({});
+   
   }
   setAskShow(false);
   };
@@ -144,100 +128,47 @@ export default function AppHeader(props)
     }
   ];
   
-
-  const { changeLanguage} = props;
+  //console.log('currenUser---------IS ', currentUser);  
 
   const logoffStr = t('buttons.logoff');
 
-  const userImage= currentUser?.avatar?.url??  '';
-
   const username = currentUser?.name?? '';
+
+  async function getAvatar(JWT, ID) {
+  await createStrapiAxios(JWT)
+  .get(`/upload/files/${ID}`)
+  .then((res) => {
+    setcurAvatar(`http://localhost:1337${res.data.url}`);
+    console.log('res.data -------- AVATAR', res.data);
+    console.log(`URL -------- AVATAR  http://localhost:1337${res.data.url}`);
+  })
+  .catch((error) => {
+      console.log('ERROR from uploads-----------------',error);
+      return null;
+  });
+};
   
 
-  //return (
-    // <>  
-      
-    //      <header className={styles.mainHeader}>
-    //         <div className={styles.menu}>
-        
-    //           <div className={styles.mainLogo}>
-    //             <Link href="/">
-    //             <a className={styles.logosHeader} style={{color: "#1890ff"}}>LogosEst</a>
-              
-    //             </Link>
-    //           </div>  
+useEffect(() => {
+  if (currentUser.avatar) 
+    {
+      console.log('FROM useEffect------------getAvatar-------------')
+      getAvatar(userJWT, currentUser.avatar[0].id);
 
-    //           <div className={styles.navToolsBox}>
+    }
+  else{
+    console.log('NO CurrentUser.avatar in useEffect')
+  }  
+}, []); 
 
-    //             <ul className={styles.menuBox}>
-    //               {
-    //                 PAGES.map(({ to, name }, i) => (
-    //                   <li key={i}>
-    //                     <NavLink
-    //                       href={to}
-    //                       style={{marginLeft: "50px"}}
-    //                     >
-    //                        {name}
-    //                     </NavLink>
-    //                   </li>
-    //                 ))
-    //               }
-    //               </ul>
-    //               <div className={styles.toolBar}>
+let userImage ='';
 
-    //                   <div className={styles.userBox}>
-    //                     {userJWT && <div className={styles.imageClazz} onClick={callUserMenu}>
-    //                         <UserImage
-    //                             image= {userImage}
-    //                             online={false}
-    //                             width= {55}
-    //                             username={username}
-    //                           />
-                        
-    //                     </div>}
+console.log("NEXT_PUBLIC_UPLOADS_API", process.env.NEXT_PUBLIC_UPLOADS_API);
 
-            
-
-    //                     {theme?.id !== "md" && Object.keys(currentUser).length !== 0 && 
-    //                       <span className={styles.userLink} onClick={callUserMenu}>
-    //                         {currentUser?.user?.name}
-    //                         <br></br>
-    //                         {currentUser?.user?.surname}
-    //                       </span>
-    //                     }
-    //           {/* {!props.userLogged && ( */}
-    //           {Object.keys(currentUser).length === 0 && (
-    //             <Button type="primary" ghost htmlType="button"
-    //                     style={{
-    //                             // width: '62%',
-    //                             marginLeft: '20px'
-    //                           }}
-    //                     onClick={()=> router.push('/auth')}
-    //                     >
-    //                     {t('buttons.headerBtn')}
-    //             </Button>
-    //           )}
-    //         </div>
-
-    //         {/* {theme?.id !== "md" && <div className={styles.box}>
-    //           <a
-    //             href="#"
-    //             className={styles.logOff}
-    //             onClick={onUserLeave}
-    //           >
-    //             <Icons.logoffDoor color={blueForIcon} />
-    //           </a>
-    //         </div>} */}
-    //       </div>
-    //             </div>
-    //         </div>   
-    //         {theme?.id !== "xs" && <div className={styles.crumbBox}>
-    //           <Breadcrumbs />
-              
-    //       </div>}
-    //       </header>
-    // </>
-   //  )
+if (currentUser.avatar)
+ {
+  userImage = currentUser.avatar[0].url;
+}
 
    return (
     <>
@@ -305,6 +236,13 @@ export default function AppHeader(props)
                       ))
                     }
                     </ul>
+
+                    <Button onClick={async() => getAvatar(userJWT, currentUser.avatar[0].id)}>getAvatar</Button>
+
+                    <img
+                      src= {curAvatar}
+                      alt='WTF'
+                    />
                   
                   <div className={styles.toolBar} style={{fontSize: '16px'}}>
 
@@ -321,9 +259,9 @@ export default function AppHeader(props)
                       {theme?.id !== "md" && userJWT && 
                       
                           <span className={styles.userLink} onClick={callUserMenu}>
-                              {currentUser?.name}
+                              {currentUser?.name?? currentUser.email}
                               <br></br>
-                              {currentUser?.surname}
+                              {currentUser?.surname?? ''}
                           </span>
                           }
                     

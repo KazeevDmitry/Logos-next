@@ -1,10 +1,16 @@
-import React, { useRef, useContext, useState } from 'react';
-import { useNavigate, useLocation } from "react-router-dom";
-import styles from './logInForm.module.less';
-import axios from 'axios';
-import Icons from "Utils/icons";
+import React, { useRef, useState } from 'react';
 
-import { useThemeContext } from '../../Providers/themeContext';
+import styles from '../styles/auth.module.less';
+import axios from 'axios';
+
+import { useRouter } from 'next/router';
+
+import {useThemeContext} from '../src/context/themeContext';
+import {useUserContext} from '../src/context/userContext';
+
+import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
+
 
 import {
     
@@ -12,32 +18,19 @@ import {
     
   } from '@ant-design/icons';
 
-import '../../Common/antd-theme.less';
 
-import { Validation } from '../../Utils';
-
-
-import vkImg from './icons/vk.svg'
-import facebookImg from './icons/facebook.svg'
-import googleImg from './icons/google.svg'
-
-import { Link } from 'react-router-dom';
-
-import { useTranslation } from 'react-i18next';
-
-import { Form,
+import{ Form,
     Input,
     Button,
     Radio
     } from 'antd';
+import { sendError } from 'next/dist/server/api-utils';
 
-import { useUserContext } from '../../Providers/UserContext';
 
-export default function Registration () {
+
+export default function Register () {
 
     const [form] = Form.useForm();
-
-    const { t, i18n } = useTranslation();
 
     const {setCurrentUser} = useUserContext();
 
@@ -48,43 +41,44 @@ export default function Registration () {
 
     const myRef = useRef(null);
 
-    let navigate = useNavigate();
-
     const theme = useThemeContext();
-  
+    const router = useRouter();
+     
     
         const onFinish = async (values) => {
 
-            const sendValues = {...values, password: 'Default', username: values.email};
+            const {email, name, surname} = values;
+            const sendValues = {email, username: email, password: 'Default', name, surname};
+           
 
-            try {
-                const response = await axios.post(`${process.env.REACT_APP_API}/auth/local/register`, sendValues);
-                setCurrentUser(response.data);
-
-                navigate(-2);
-            } catch (error) {
-                if (error.response) {
-                    console.log('An error occurred:', error.response.data.message[0]?.messages[0].id);   
-                    if (error.response.data.message[0]?.messages[0].id === 'Auth.form.error.username.taken' || error.response.data.message[0]?.messages[0].id === 'Auth.form.error.email.taken') {
-                        setFormStatus({error: 'error', text: 'Указанная почта уже зарегистрирована!'});
+            axios.post('/api/register', sendValues).then((res) => {
+                console.log('Registered user ---------   ', res);
+                setCurrentUser({...res.data.user, jwt: res.data.jwt});
+                router.back();
+              })
+              .catch(error => {
+                console.log('An error occurred:', error);   
+                    if (error.response) 
+                    {
+                        if (error.response.status === 400) {
+                            setFormStatus({error: 'error', text: 'УКАЗАННАЯ ПОЧТА УЖЕ ЗАРЕГИСТРИРОВАНА!'});
+                        }else {
+                            setFormStatus({error: 'error', text: 'ОШИБКА ПЕРЕДАЧИ ДАННЫХ!'});
+                        }  
                     }
-                    
-                }
-                else {
-                    setFormStatus({error: 'error', text: 'ЧТО-ТО ПОШЛО НЕ ТАК!'});
-                }
-                
-            };
+                    else {
+                        setFormStatus({error: 'error', text: 'ОШИБКА ПЕРЕДАЧИ ДАННЫХ!'});
+                    }
+                });
+
         };
 
                 
         const onFormCHnge = (e) => {
 
-            console.log('clientStatus', e.target.value);
-            
             setClientStatus(e.target.value);
        
-        }
+        };
 
         const requiredSurname = clientStatus !== 1;
 
@@ -96,9 +90,9 @@ export default function Registration () {
             
             <div className={styles.blockMain} ref={myRef}>
 
-                <div className={styles.closeBtn} onClick={()=> navigate(-2)}><CloseOutlined /></div>
+                <div className={styles.closeBtn} onClick={()=> router.back()}><CloseOutlined /></div>
             
-                <h3 className={styles.title}>{t('headers.registration')}</h3>
+                <h3 className={styles.title}>Регистрация</h3>
 
                 <div
                                     style={{display: 'flex', justifyContent: 'center', width: '100%'}}
@@ -129,11 +123,11 @@ export default function Registration () {
 
                         <Form.Item
                             name="name"
-                            label= {t('labels.name')}
+                            label= "Имя"
                             rules={[
                                 {
                                     required: true,
-                                    message: t('validation.required.name'),
+                                    message: 'Имя обязательно!',
                                 },
                             ]}
                              style={{marginBottom: '15px'}}
@@ -143,11 +137,11 @@ export default function Registration () {
                         </Form.Item>
                         <Form.Item
                             name="surname"
-                            label= {t('labels.surname')}
+                            label= "Фамилия"
                             rules={[
                                 {
                                     required: requiredSurname, //stateValues.clientStatus !==1,
-                                    message: t('validation.required.surname'),
+                                    message: 'Введите фамилию!',
                                 },
                             ]}
                              style={{marginBottom: '15px'}}
@@ -161,11 +155,11 @@ export default function Registration () {
                                 rules={[
                                 {
                                     type: 'email',
-                                    message: t('validation.e-mail'),
+                                    message: 'Неверно введена почта!',
                                 },
                                 {
                                     required: true,
-                                    message: t('validation.required.email'),
+                                    message: 'Укажите вашу почту!',
                                 },
                                 ]}
                                 style={{marginBottom: '15px'}}
@@ -181,6 +175,20 @@ export default function Registration () {
                              {formStatus.text}   
                         </div>}
 
+                        <div className={styles.register}>
+
+                            <Link 
+                                href="/login" 
+                                passHref={true}
+                                replace={true}
+                                >
+                                <a className={styles.registerLink}>
+                                    {'Вход'}
+                                    </a>
+
+                            </Link>
+                        </div>
+
                         <Form.Item >
                             <Button type="primary" 
                                 htmlType="submit"
@@ -190,7 +198,7 @@ export default function Registration () {
                                     marginTop: '30px'
                                 }}
                             >
-                            {t('buttons.registration')}
+                            Зарегистрироваться
                             </Button>
                                        
                         </Form.Item>
@@ -198,14 +206,14 @@ export default function Registration () {
                     </Form>                    
             </div>                    
 
-                <div className={styles.register}>
+                {/* <div className={styles.register}>
                     {`${t('labels.haveAccount')}  `} 
                     <Link 
-                        to="/auth" 
+                        href="/auth" 
                         className={styles.registerLink}>
                             {t('links.login')}
                     </Link>
-                </div>
+                </div> */}
 
                 
 
