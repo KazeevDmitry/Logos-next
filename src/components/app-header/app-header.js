@@ -134,36 +134,7 @@ export default function AppHeader(props)
 
   const username = currentUser?.name?? '';
 
-  async function getAvatar(JWT, ID) {
-  await createStrapiAxios(JWT)
-  .get(`/upload/files/${ID}`)
-  .then((res) => {
-    setcurAvatar(`http://localhost:1337${res.data.url}`);
-    console.log('res.data -------- AVATAR', res.data);
-    console.log(`URL -------- AVATAR  http://localhost:1337${res.data.url}`);
-  })
-  .catch((error) => {
-      console.log('ERROR from uploads-----------------',error);
-      return null;
-  });
-};
-  
-
-useEffect(() => {
-  if (currentUser.avatar) 
-    {
-      console.log('FROM useEffect------------getAvatar-------------')
-      getAvatar(userJWT, currentUser.avatar[0].id);
-
-    }
-  else{
-    console.log('NO CurrentUser.avatar in useEffect')
-  }  
-}, []); 
-
-let userImage ='';
-
-console.log("NEXT_PUBLIC_UPLOADS_API", process.env.NEXT_PUBLIC_UPLOADS_API);
+  let userImage='';
 
 if (currentUser.avatar)
  {
@@ -237,13 +208,6 @@ if (currentUser.avatar)
                     }
                     </ul>
 
-                    <Button onClick={async() => getAvatar(userJWT, currentUser.avatar[0].id)}>getAvatar</Button>
-
-                    <img
-                      src= {curAvatar}
-                      alt='WTF'
-                    />
-                  
                   <div className={styles.toolBar} style={{fontSize: '16px'}}>
 
                     <div className={styles.userBox}  style={{fontSize: '16px'}}>

@@ -103,7 +103,6 @@ const curr = sizes.filter(item => useMediaQuery(item.query));
 
       await axios.get(way)
        .then((res) => {
-        console.log("res CITIES from context-----------------", res.data);
         setCities(res.data)
       })
       .catch((e) => console.log('ERROR CANt get cities    themeContext', e));

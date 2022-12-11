@@ -12,6 +12,7 @@ import Link from 'next/link';
 import Image from 'next/image'
 
 import { setCookie } from 'cookies-next'; 
+import { createStrapiAxios } from '../utils/strapi';
 
 
 import {
@@ -23,11 +24,13 @@ import {
 import googleImg from '../public/google.svg';
 import vk from '../public/vk copy.svg';
 import odnoklassniki from '../public/odnoklassniki.svg';
+import { InfoCircleOutlined } from "@ant-design/icons";
 
 
 import { Form,
     Input,
     Button,
+    Modal,
     } from 'antd';
 
 
@@ -49,12 +52,17 @@ export default function Auth ({logIn = true}) {
           })
 
     const [formStatus, setFormStatus] = useState({error: '', text: ''});      
+    const [modalOpen, setModalOpen] = useState(false);
+    const [curEmail, setCurEmail] = useState();
 
     const myRef = useRef(null);
 
     const theme = useThemeContext();
   
     const router = useRouter();
+
+    console.log("router.query", router.query);
+
 
         // const history = useHistory();
                 
@@ -82,34 +90,105 @@ export default function Auth ({logIn = true}) {
             }
         }
 
+        const onCloseBtn = () => {
+            if (router.query.confirmed) {
+                router.push('/');
+            }else{
+                router.back();
+            }
+        }
   
         const onFinish = async (values) => {
             
-            axios.post('/api/login', values).then((res) => {
-                setCurrentUser({...res.data.user, jwt: res.data.jwt});
-                router.back();
+            axios.post('/api/login', values).then(async (res) => {
+                const JWT = res.data.jwt;
+
+                await createStrapiAxios(JWT)
+                .get(`/users/${res.data.user.id}?populate=avatar`)
+                .then((res) => setCurrentUser({...res.data, jwt: JWT}))
+                .catch((error) => console.log('ERROR from /users/id------------', error));
+
+                //setCurrentUser({...res.data.user, jwt: res.data.jwt});
+                //router.back();
+                /* if (router.query.confirmed) {
+                    router.push('/');
+                }else{
+                    router.back();
+                } */
+                onCloseBtn();
               })
               .catch(error => {
                 console.log('An error occurred:', error);   
-                    if (error.response && error.response?.status !== 500) 
+                    if (error.response?.status !== 500) 
                     {
-                          if (error.response.data?.message[0]?.messages[0].id === 'Auth.form.error.invalid') 
-                        {
+// handle ALL ERRORS but not only 500 status                          
                             setFormStatus({error: 'error', text: 'ОШИБКА АВТОРИЗАЦИИ! Проверьте введенные данные.'});
-                        }    
                     }
                     else {
                         setFormStatus({error: 'error', text: 'ОШИБКА ПЕРЕДАЧИ ДАННЫХ!'});
                     }
                 });
+            };
+        
+       
 
+    
+
+    const onfogPass = async () => {
+        try {
+          const values = await form.validateFields(['email']);
+          console.log('Success:', values);
+          await axios
+            .post(`${process.env.NEXT_PUBLIC_UPLOADS_API}/api/auth/forgot-password`, {
+                email: values.email,
+            })
+            .then(response => {
+               console.log('Your user received an email');
+                setCurEmail(values.email);
+                setModalOpen(true);
+            })
+            .catch(error => {
+                // Handle error.
+                console.log('An error occurred email not sent:', error.response);
+            });
+          
+
+        } catch (errorInfo) {
+          console.log('Failed:', errorInfo);
+        }
+      };
+const onModalOk = () => {
+    setModalOpen(false);
+    onCloseBtn();
+}
          
     return(
-        <div className={styles.sectionEnter}>
+        <div className={styles.sectionEnter} style={{minHeight:`${document.documentElement.clientHeight-200}px`}}>
+
+            <Modal
+                title="Восстановление пароля"
+                /* style={{
+                top: 20,
+                }} */
+                centered
+                open={modalOpen}
+                onOk={onModalOk}
+                onCancel={onModalOk}
+                footer={[
+                    
+                    <Button key="submit" type="primary" onClick={onModalOk}>
+                      OK
+                    </Button>,
+                  ]}
+            >
+                <p>{`На вашу почту`}</p>
+                <p style={{fontSize: "18px", fontWeight: "600"}}>{curEmail}</p>
+                <p>Отправлена ссылка, проверьте входящие сообщения</p>
+            </Modal>  
             
             <div className={styles.blockMain} ref={myRef}>
 
-                <div className={styles.closeBtn} onClick={()=> router.back()}><CloseOutlined /></div>
+                <div className={styles.closeBtn} onClick={onCloseBtn}><CloseOutlined /></div>
             
                 <h3 className={styles.title}>{logIn ? 'Вход' : 'Регистрация'}</h3>
                     
@@ -125,8 +204,7 @@ export default function Auth ({logIn = true}) {
 
                             <Form.Item
                                 name="email"
-                                //label="E-mail"
-                                // style={{marginBottom: '15px'}}
+                                style={{marginBottom: "0px"}}
                                 rules={[
                                 {
                                     type: 'email',
@@ -134,7 +212,7 @@ export default function Auth ({logIn = true}) {
                                 },
                                 {
                                     required: true,
-                                    message: 'E-mail нужно ввести обязательно!',
+                                    message: 'Укажите E-mail!',
                                 },
                                 ]}
 
@@ -149,40 +227,41 @@ export default function Auth ({logIn = true}) {
 
                             </Form.Item>
                         {/* </div>     */}
-                        <Form.Item
-                            name="password"
-                            //label={'labels.password'}
-                            style={{
-                                // marginTop: '40px', 
-                                marginBottom: '10px'}}
-                            validateFirst={true}
-                           
-                          //  rules={Validation().password}
-                          rules={[
-                            {
-                                required: true,
-                                message: 'Введите пароль!!',
-                            },
-                            ]}
-                        
-                        >
-                            <Input.Password
-                                size={theme?.size}
-                                onFocus={onPassFocus(1)}
-                                onBlur={onPassBlur}
-                                status={formStatus.error}
-                                placeholder={'Пароль'}
-                                onChange = {resetFormStatus}
-                            />
-                        </Form.Item>
+                            <Form.Item
+                                name="password"
+                                //label={'labels.password'}
+                                style={{
+                                    marginTop: '15px', 
+                                    marginBottom: '10px'}}
+                                validateFirst={true}
+                            
+                            //  rules={Validation().password}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Введите пароль!!',
+                                },
+                                ]}
+                            
+                            >
+                                <Input.Password
+                                    size={theme?.size}
+                                    onFocus={onPassFocus(1)}
+                                    onBlur={onPassBlur}
+                                    status={formStatus.error}
+                                    placeholder={'Пароль'}
+                                    onChange = {resetFormStatus}
+                                />
+                            </Form.Item>
                         <div style={{display: "flex", justifyContent: "flex-end", marginTop: "10px"}}>
-                            <Link href="/recovery" passHref={true}>
-                                    {/* <a className={styles.recoveryLink}> */}
-                                        Забыли пароль?
-                                    {/* </a> */}
-                                
-                            </Link>
-    
+                            
+                            <Button 
+                                type="link" 
+                                onClick={onfogPass}
+                                >
+                                    Забыли пароль?
+                            </Button>
+                            
                         </div>    
                         
                         {formStatus.error === 'error' && <div
@@ -204,6 +283,8 @@ export default function Auth ({logIn = true}) {
                                        
                         </Form.Item>
 
+                    {!router.query.confirmed && 
+                       <>
                         <div className={styles.register}>
 
                             <Link 
@@ -212,16 +293,19 @@ export default function Auth ({logIn = true}) {
                                 replace={true}
                                 >
                                 <a className={styles.registerLink}>
-                                    {'Зарегистрироваться'}
+                                    {'РЕГИСТРАЦИЯ >>'}
                                     </a>
 
                             </Link>
                         </div>
-                        
+
                         <div className={styles.divider}></div>
-                        <h4 className={styles.socialTitle}>Войти через соцсети</h4>
+
+                        
+                       
+                       <h4 className={styles.socialTitle}>Войти через соцсети</h4>
                         <div className={styles.socialLinks}>
-                            <Link href="/" >
+                            <Link href="#" >
                                 <Image
                                     src={vk}
                                     alt="VK..."
@@ -229,7 +313,7 @@ export default function Auth ({logIn = true}) {
                                     height={50}
                                 />
                             </Link>
-                            <Link href="/" >
+                            <Link href="#" >
                                 <Image
                                     src={odnoklassniki}
                                     alt="VK..."
@@ -237,7 +321,7 @@ export default function Auth ({logIn = true}) {
                                     height={50}
                                 />
                             </Link>
-                            <Link href="/" >
+                            <Link href="#" >
                                 <div style ={{width: "50px", height: "50px", borderRadius: "50%", backgroundColor: "#F5F6F7", display: "flex", justifyContent: "center", alignItems: "center"}}>
                                 <Image
                                     src={googleImg}
@@ -247,8 +331,20 @@ export default function Auth ({logIn = true}) {
                                 />
                                 </div>
                             </Link>
-                            
+                           
                         </div>
+                        </>
+                        }
+                        {router.query.confirmed && 
+                            <div className={styles.infodiv}>
+                                <InfoCircleOutlined 
+                                className={styles.infoimage}
+                                />
+                                <div style={{textAlign: "left", marginLeft: "10px"}}>
+                                    Не забудьте заполнить ваш профиль в личном кабинете!
+                                </div>
+                            </div>
+                        }
 
                         
                     </Form>

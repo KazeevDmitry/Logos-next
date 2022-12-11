@@ -9,7 +9,7 @@ export default nc()
 
     try {
       const user = await createStrapiAxios()
-        .post(`/auth/local`, {
+        .post(`/auth/local?populate=avatar`, {
           identifier: email,
           password,
         })

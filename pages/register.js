@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next';
 import {
     
     CloseOutlined,
+    SettingOutlined,
     
   } from '@ant-design/icons';
 
@@ -22,7 +23,8 @@ import {
 import{ Form,
     Input,
     Button,
-    Radio
+    Radio,
+    Tooltip,
     } from 'antd';
 import { sendError } from 'next/dist/server/api-utils';
 
@@ -45,14 +47,20 @@ export default function Register () {
     const router = useRouter();
      
     
+    console.log('высота экрана------------------', document.documentElement.clientHeight)
+
         const onFinish = async (values) => {
 
-            const {email, name, surname} = values;
-            const sendValues = {email, username: email, password: 'Default', name, surname};
-           
+            const {email, password, confirmpassword} = values;
+
+            if (password !== confirmpassword) {
+                setFormStatus({error: 'error', text: 'Пароли не совпадают!'});
+                return;
+            }
+
+           const sendValues = {...values, username: email};
 
             axios.post('/api/register', sendValues).then((res) => {
-                console.log('Registered user ---------   ', res);
                 setCurrentUser({...res.data.user, jwt: res.data.jwt});
                 router.back();
               })
@@ -82,11 +90,16 @@ export default function Register () {
 
         const requiredSurname = clientStatus !== 1;
 
-        
+        const getRandomPass = () => {
+
+            const randomstring = Math.random().toString(36).slice(-8);
+            form.setFieldsValue({password: randomstring});
+
+        }
         
     
     return(
-        <div className={styles.sectionEnter}>
+        <div className={styles.sectionEnter} style={{minHeight:`${document.documentElement.clientHeight-200}px`}}>
             
             <div className={styles.blockMain} ref={myRef}>
 
@@ -123,7 +136,6 @@ export default function Register () {
 
                         <Form.Item
                             name="name"
-                            label= "Имя"
                             rules={[
                                 {
                                     required: true,
@@ -132,12 +144,14 @@ export default function Register () {
                             ]}
                              style={{marginBottom: '15px'}}
                             >
-                                <Input size={theme.size}/>
+                                <Input 
+                                    size={theme.size}
+                                    placeholder="Имя"
+                                    />
 
                         </Form.Item>
                         <Form.Item
                             name="surname"
-                            label= "Фамилия"
                             rules={[
                                 {
                                     required: requiredSurname, //stateValues.clientStatus !==1,
@@ -146,12 +160,13 @@ export default function Register () {
                             ]}
                              style={{marginBottom: '15px'}}
                             >
-                                <Input size={theme.size} />
+                                <Input 
+                                    placeholder='Фамилия'
+                                    size={theme.size} />
 
                         </Form.Item>
                         <Form.Item
                                 name="email"
-                                label="E-mail"
                                 rules={[
                                 {
                                     type: 'email',
@@ -164,9 +179,76 @@ export default function Register () {
                                 ]}
                                 style={{marginBottom: '15px'}}
                             >
-                                <Input size={theme.size}/>
+                                <Input 
+                                    placeholder='e-mail'
+                                    size={theme.size}/>
 
                         </Form.Item>
+                        <div
+                            style={{width: "100%", display: "flex", justifyContent: "space-between", alignItems: "flex-start"}}
+                        >
+                            <Tooltip 
+                                title="Сгенерировать случайный пароль"
+                                color='#2db7f5'
+                               // overlayClassName={styles.tooltip}
+                               // overlayInnerStyle = {styles.tooltip}
+                                >
+                                <Button 
+                                    type="primary" 
+                                    size={theme.size} 
+                                    onClick={getRandomPass} 
+                                    style={{marginRight:"15px", width: "60px"}}
+                                    icon={<SettingOutlined 
+                                        style={{color: "white"}}/>}>
+                                
+                                    </Button>    
+                                </Tooltip>    
+                            <div style={{width: "100%"}}>
+                                    <Form.Item
+                                        name="password"
+                                        style={{
+                                             marginBottom: '15px'}} 
+                                        validateFirst={true}
+                                    
+                                        rules={[
+                                        {
+                                            required: true,
+                                            message: 'Введите пароль!',
+                                        },
+                                        ]}
+                                    
+                                    >
+                                        <Input.Password
+                                            size={theme?.size}
+                                            placeholder={'Пароль'}
+                                            status={formStatus.error}
+                                            onChange = {() => setFormStatus(false)}
+                                        />
+                                    </Form.Item>
+                                    <Form.Item
+                                        name="confirmpassword"
+                                        style={{
+                                             marginBottom: '15px'}} 
+                                        validateFirst={true}
+                                    
+                                        rules={[
+                                        {
+                                            required: true,
+                                            message: 'Повторите пароль!',
+                                        },
+                                        ]}
+                                    
+                                    >
+                                        <Input.Password
+                                            size={theme?.size}
+                                            placeholder={'Повторите пароль'}
+                                            status={formStatus.error}
+                                            onChange = {() => setFormStatus(false)}
+                                        />
+                                    </Form.Item>
+                                </div>    
+                            </div>        
+                        
                         
                         {formStatus.error === 'error' && <div
                             text-align = {'left'} 
@@ -174,8 +256,20 @@ export default function Register () {
                         >
                              {formStatus.text}   
                         </div>}
+                        <Form.Item >
+                            <Button type="primary" 
+                                htmlType="submit"
+                                size={theme.size}
+                                style={{
+                                    width: '100%',
+                                    marginTop: '15px'
+                                }}
+                            >
+                            Зарегистрироваться
+                            </Button>
+                        </Form.Item>
 
-                        <div className={styles.register}>
+                        <div className={styles.register} style={{marginTop:"30px", marginBottom: "0px"}}>
 
                             <Link 
                                 href="/login" 
@@ -183,25 +277,15 @@ export default function Register () {
                                 replace={true}
                                 >
                                 <a className={styles.registerLink}>
-                                    {'Вход'}
+                                    {"ВХОД >>"}
                                     </a>
 
                             </Link>
                         </div>
 
-                        <Form.Item >
-                            <Button type="primary" 
-                                htmlType="submit"
-                                size={theme.size}
-                                style={{
-                                    width: '100%',
-                                    marginTop: '30px'
-                                }}
-                            >
-                            Зарегистрироваться
-                            </Button>
+                        
                                        
-                        </Form.Item>
+                        
                         
                     </Form>                    
             </div>                    

@@ -13,7 +13,6 @@ export default nc()
           email: email,
           username: email,
           password,
-          role: 3,
           name: name,
           surname,
         })
