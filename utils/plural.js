@@ -13,11 +13,11 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import pluralizeRu from 'pluralize-ru';
-import pluralizeEu from 'pluralize';
+import pluralizeEn from 'pluralize';
 
 
 function Plural({ count = 0, i18nextPath = '' }){
-    if(!count) return null;
+    if(typeof(count) === 'undefined') return null;
 
     const { t, i18n = 'ru' } = useTranslation();
     const useI18nextPath = (id) => t(`${i18nextPath}.${id}`);
@@ -30,7 +30,8 @@ function Plural({ count = 0, i18nextPath = '' }){
 
 
     const num = !isNaN(count) ? count : Number(count?.replace(/[A-Za-z]/ig, '') ?? 0);
-    
+
+ 
     const getTraslatedForms = (size = 0) => 
       Array.from(new Array(size)).map((_, id) => useI18nextPath(id))
 

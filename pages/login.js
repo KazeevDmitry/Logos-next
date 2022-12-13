@@ -1,4 +1,4 @@
-import React, { useRef, useContext, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 
 import styles from '../styles/auth.module.less';
 import axios from 'axios';
@@ -51,6 +51,8 @@ export default function Auth ({logIn = true}) {
                    
           })
 
+    const [sectionMinHeigth, setSectionMinHeigth] = useState('');     
+
     const [formStatus, setFormStatus] = useState({error: '', text: ''});      
     const [modalOpen, setModalOpen] = useState(false);
     const [curEmail, setCurEmail] = useState();
@@ -91,7 +93,7 @@ export default function Auth ({logIn = true}) {
         }
 
         const onCloseBtn = () => {
-            if (router.query.confirmed) {
+            if (router.query.confirmed || router.query.resetpassword) {
                 router.push('/');
             }else{
                 router.back();
@@ -161,9 +163,17 @@ const onModalOk = () => {
     setModalOpen(false);
     onCloseBtn();
 }
+
+useEffect(() => {
+    if (typeof window !== 'undefined') {
+        setSectionMinHeigth(`${document.documentElement.clientHeight-200}px`);
+    }
+}, []);
+
+
          
     return(
-        <div className={styles.sectionEnter} style={{minHeight:`${document.documentElement.clientHeight-200}px`}}>
+        <div className={styles.sectionEnter} style={{minHeight: sectionMinHeigth}}>
 
             <Modal
                 title="Восстановление пароля"

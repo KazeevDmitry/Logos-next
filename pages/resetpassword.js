@@ -1,4 +1,4 @@
-import React, { useRef, useContext, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 
 import styles from '../styles/auth.module.less';
 import axios from 'axios';
@@ -35,24 +35,13 @@ export default function ResetPassword ({logIn = true}) {
 
     const [form] = Form.useForm();
 
-    const {currentUser, setCurrentUser} = useUserContext();
-
-    const [values, setValues] = React.useState({
-        
-            inputType: 'e-mail',
-            showPassInfo: false,
-            xPopup : 0,
-            yPopup: 0,
-            passInfoText: '',
-            codeInfoText: '',
-                   
-          })
-
     const theme = useThemeContext();
 
     const [formStatus, setFormStatus] = useState({error: '', text: ''}); 
   
     const router = useRouter();
+
+    const [sectionMinHeigth, setSectionMinHeigth] = useState(''); 
 
    
     const onFinish = async (values) => {
@@ -68,7 +57,7 @@ export default function ResetPassword ({logIn = true}) {
         .post(`${process.env.NEXT_PUBLIC_UPLOADS_API}/api/auth/reset-password`, values)
         .then(response => {
             console.log("Your user's password has been reset.");
-            router.replace('/login');
+            router.replace('/login?resetpassword=true');
         })
         .catch(error => {
             console.log('An error occurred due to reset password:', error.response);
@@ -80,10 +69,14 @@ export default function ResetPassword ({logIn = true}) {
                 router.push('/');
         }
 
-
+        useEffect(() => {
+            if (typeof window !== 'undefined') {
+                setSectionMinHeigth(`${document.documentElement.clientHeight-200}px`);
+            }
+        }, []);
          
     return(
-        <div className={styles.sectionEnter}>
+        <div className={styles.sectionEnter} style={{minHeight: sectionMinHeigth}}>
 
             
             <div className={styles.blockMain}>

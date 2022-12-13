@@ -25,6 +25,7 @@
     "next-plugin-antd-less": "^1.8.0",
     "pluralize": "^8.0.0",
     "pluralize-ru": "^1.0.1",
+    "rc-tween-one": "^3.0.6",
     "react": "18.2.0",
     "react-bootstrap": "^2.5.0",
     "react-dom": "18.2.0",

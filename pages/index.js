@@ -5,33 +5,35 @@ import styles from '../styles/Home.module.css'
 import { Button, DatePicker } from 'antd'
 
 import {useThemeContext} from '../src/context/themeContext'
-import {UserContext} from '../src/context/userContext'
+import {useUserContext} from '../src/context/userContext'
 
 import { useTranslation } from 'react-i18next'
-
+import UserCircle from '../src/components/userCircle/userCircle';
 
 import moment from 'moment';
 import 'moment/locale/ru';
 
+import { createStrapiAxios } from '../utils/strapi';
+
 import MainLayout from '../src/components/layouts/mainLayout'
 
-export default function Home() {
+export default function Home({circlePeople}) {
 
   const theme = useThemeContext();
 
-  // const currentUser = useContext(UserContext);
+  const currentUser = useUserContext();
 
   const {t} = useTranslation();
 
 
 
-  const branches = theme?.branches?.map(item => {
+  const branches = circlePeople.map(item => {
     return (
-      <div> {item.attributes.name}</div>
+      <div> {item.email}</div>
     )
   });
 
-  console.log("cities--------------------------", theme.cities);
+  console.log("USERS------------------", circlePeople);
 
   return (
 
@@ -46,6 +48,28 @@ export default function Home() {
         <h1 className={styles.title}>
          <p> Welcome to LogosNext!</p>
         </h1>
+{/* ------------------------------------------------------------------------------------------------------------------- */}
+        <UserCircle 
+          width={150}
+          uImage = {''}
+          name = "Савелий"
+          surname = "Никодимов123456789"
+          stars={4.88}
+          reviews = {82}
+          cups={25}
+          spec='Адвокат'
+        />
+        <br></br>
+        <br></br>
+        <UserCircle width={80}
+          uImage = {''}
+          name = "Акакий"
+          surname = "Новомостовой"
+          stars={4.8}
+          reviews = {0}
+          cups={14}
+        />
+  {/* ---------------------------------------------------------------------------------------------------------------------------       */}
 
       <Button type="primary">-------------antd button-------------------</Button>
 
@@ -61,4 +85,18 @@ export default function Home() {
     </div>
 
   )
+}
+
+
+export async function getServerSideProps() {
+  // Fetch data from external API
+  
+  const res = await createStrapiAxios()
+  //.get(`/users?populate=avatar&pagination[page]=1&pagination[pageSize]=6`)
+  .get(`/users?start=0&limit=6`)
+
+  const data = await res.data;
+
+  
+  return { props: { circlePeople: data } }
 }

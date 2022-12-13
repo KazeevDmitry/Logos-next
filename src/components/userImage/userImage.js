@@ -3,7 +3,7 @@ import styles from './userImage.module.less';
 import { UserOutlined } from '@ant-design/icons';
 
 
-export default function UserImage ({image, online, width, onClick}) {
+export default function UserImage ({image, online, width, onClick, onMouseEnter, onMouseLeave}) {
 
 
     const wrapDiv = {
@@ -58,28 +58,39 @@ export default function UserImage ({image, online, width, onClick}) {
         
     }
       
-
+  
     return (
 
-        <div style={wrapDiv} onClick={()=>onClick?.()}>
+        <div 
+            style={wrapDiv} 
+            onClick={()=>onClick?.()}
+            >
             { image !== '' && 
           
                                 <img style={imageStyle}
-                                      src={userImage} //временно
+                                      src={userImage} 
+                                      onMouseEnter={onMouseEnter?? null}
+                                      onMouseLeave={onMouseLeave?? null}
                                       alt="img">
                                   </img> 
                                   }
   
 
-            { image ==='' && <div className={styles.imageDiv} style={{...imageStyle}}>
+            { image ==='' && <div 
+                                className={styles.imageDiv} 
+                                style={{...imageStyle}}
+                                onMouseEnter={onMouseEnter?? null}
+                                onMouseLeave={onMouseLeave?? null}
+                                >
                                 <UserOutlined style={letterStyle}/>    
                             </div>}
                             
 
-            {/* <div className={ styles.greenLight + ' ' + ((online==='true') ? "" : styles.nonActive)} */}
-            <div className={ styles.greenLight}
+        <div className={ styles.greenLight + ' ' + ((online==='true') ? "" : styles.nonActive)}
+            /* <div className={ styles.greenLight} */
                 style={greenLightStyle}
             ></div>
+      
         </div>
     )
 };

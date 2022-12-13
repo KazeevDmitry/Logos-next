@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 
 import styles from '../styles/auth.module.less';
 import axios from 'axios';
@@ -43,13 +43,14 @@ export default function Register () {
 
     const myRef = useRef(null);
 
+
+    const [sectionMinHeigth, setSectionMinHeigth] = useState(''); 
+
     const theme = useThemeContext();
     const router = useRouter();
      
     
-    console.log('высота экрана------------------', document.documentElement.clientHeight)
-
-        const onFinish = async (values) => {
+    const onFinish = async (values) => {
 
             const {email, password, confirmpassword} = values;
 
@@ -97,9 +98,14 @@ export default function Register () {
 
         }
         
+        useEffect(() => {
+            if (typeof window !== 'undefined') {
+                setSectionMinHeigth(`${document.documentElement.clientHeight-200}px`);
+            }
+        }, []);
     
     return(
-        <div className={styles.sectionEnter} style={{minHeight:`${document.documentElement.clientHeight-200}px`}}>
+        <div className={styles.sectionEnter} style={{minHeight:sectionMinHeigth}}>
             
             <div className={styles.blockMain} ref={myRef}>
 

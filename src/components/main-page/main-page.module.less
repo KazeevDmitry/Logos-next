@@ -1,0 +1,625 @@
+@import '../../Variables.module.less';
+  
+  @font-face {
+    font-family: 'Futura PT Book';
+    src: url('../../fonts/FuturaPT-Book.eot');
+    src: local('../../fonts/Futura PT Book'), local('FuturaPT-Book'),
+        url('../../fonts/FuturaPT-Book.eot?#iefix') format('embedded-opentype'),
+        url('../../fonts/FuturaPT-Book.woff2') format('woff2'),
+        url('../../fonts/FuturaPT-Book.woff') format('woff'),
+        url('../../fonts/FuturaPT-Book.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: 'Futura PT';
+    src: url('../../fonts/FuturaPT-Medium.eot');
+    src: local('../../fonts/Futura PT Medium'), local('FuturaPT-Medium'),
+        url('../../fonts/FuturaPT-Medium.eot?#iefix') format('embedded-opentype'),
+        url('../../fonts/FuturaPT-Medium.woff2') format('woff2'),
+        url('../../fonts/FuturaPT-Medium.woff') format('woff'),
+        url('../../fonts/FuturaPT-Medium.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+.sectionPromo {
+  position: relative;
+//   padding-left: 6%;
+  margin-top: 100px;
+//   width: 100%+100px;
+  height: 650px;
+  
+//   max-height: 650px;
+  background: url('./img/main_bg.jpg') center center/cover no-repeat;
+  font-family: Futura PT;
+}
+
+
+.promoHeader {
+    width: 502px;
+    // height: 124px;
+    
+    margin-top: 130px;
+
+    font-size: 56px;
+    font-weight: 400;
+    line-height: 62px;
+    text-align: left;
+    color: white;
+}
+
+.promoLabel {
+    // width: 522px;
+    width: 100%;
+    min-height: 64px;
+
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 32px;
+    color: white;
+    
+}
+
+
+.txtWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    max-width: 522px;
+    height: 366px;
+    margin-left: 10%;
+    
+}
+
+.promoFoto {
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+}
+
+.promoFotoLg {
+    border-radius: 50%;
+    width: 130px;
+    height: 130px;
+}
+
+
+.promoImg_1, .promoImg_2, .promoImg_3, .promoImg_4 {
+   position: absolute;
+    width: 80px;
+    height: 80px;
+    
+}
+
+.promoImg_1 {
+
+    right: 37.5%;
+    top: 20%;
+}
+
+.promoImg_2 {
+    top: 44%;
+    right: 34%;
+}
+
+.promoImg_3 {
+    top: 31%;
+    right: 26.3%;
+}
+
+.promoImg_4 {
+    top: 14.5%;
+    right: 20.5%;
+}
+
+.promoImg_5 {
+    top: 25.8%;
+    right: 9.5%;
+    position: absolute;
+    width: 130px;
+    height: 130px;
+}
+
+.promoImg_6 {
+    top: 46%;
+    right: 18%;
+    position: absolute;
+    width: 130px;
+    height: 130px;
+}
+
+
+
+
+.littleCard {
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items:center;
+    padding: 10px 20px;
+    position: absolute;
+    height: 85px;
+    width: 301px;
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    box-shadow: 0 0 7px #666;
+}
+
+.littleCard1 {
+    margin-top: 180px;
+    margin-left: 630px;
+    composes: littleCard;
+}
+
+.littleCard2 {
+    margin-top: 350px;
+    margin-left: 720px;
+    composes: littleCard;
+}
+
+.littleCard3 {
+    margin-top: 250px;
+    margin-left: 850px;
+    composes: littleCard;
+}
+
+.littleCard4 {
+    margin-top: 40px;
+    margin-left: 970px;
+    composes: littleCard;
+
+}
+
+.littleCard5 {
+    margin-top: 380px;
+    margin-left: 1410px;
+    composes: littleCard;
+
+}
+
+.littleCard6 {
+    margin-top: 80px;
+    margin-left: 1490px;
+    composes: littleCard;
+
+}
+
+.gridContainer {
+    position: relative;
+    display: grid;
+    margin-top: 15px;
+    
+    grid-template: 33% 33% 33% / 50% 50%;
+    row-gap: 10px;
+    column-gap: 40px;
+    
+    
+}
+
+.gridElement {
+    display: block;
+    grid-area: 1 / 1 / span 1 / span 5;
+    margin-top: 3%;
+    width: 100%;
+    white-space: nowrap;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+    letter-spacing: 0em;
+    text-align: center;
+
+}
+
+#okIcon {
+    position: absolute;
+    display: flex;
+    margin-top: 2.25%;
+    margin-left: 85%;
+    z-index: 2;   
+}
+
+.secondRowItem {
+    display: block;
+    justify-content: center;
+    text-align: center;
+}
+
+.reviewsItem {
+    composes: secondRowItem;
+    color: #0066FF;
+}
+
+
+.cup_elem {
+    position: absolute;
+    display: flex;
+    margin-left: 53%;
+
+}
+
+
+.sliderBox {
+    display: flex;
+    margin-top: 30px;
+    margin-left: 200px;
+}
+
+
+.tabBox {
+    display: flex;
+    position: relative;
+    max-width: @containerMaxWidth;
+    // height: 270px;
+    background-color: #F5F6F7;
+    border-radius: 15px;
+    /* box-shadow: 0 0 3px #666; */
+    margin-left: auto;
+    margin-right: auto;
+    // top: 515px;
+    margin-top: 160px;
+
+    div {
+        min-height: 1px;
+    }
+    z-index: 3;
+}
+
+
+.tabContentBox {
+    display: flex;
+    width: 100%;
+    // height: 200px;
+    background-color: white;
+    margin-top: 50px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    padding-left: 60px;
+    padding-right: 60px;
+    padding-top: 25px;
+    padding-bottom: 35px;
+    justify-content: space-between;
+    margin-left: 0px;
+
+}
+
+.tabSection {
+    display: flex;
+
+    align-items: center;
+    position: absolute;
+    margin-top: -135px;
+    width: 100%;
+
+//   margin-top: 42px;
+  width: 100%;
+}
+
+.contSection {
+    margin-top: 0px;
+    width: 100%;
+    z-index: -1;
+    
+}
+
+.tabCls1 {
+    position: absolute;
+    display:flex;
+    // width: 220px;
+    height: 50px;
+    min-width: 220px;
+    // min-height: 70px;
+    margin-top: 0;
+    margin-left: 0;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    color: #5E6674;
+    justify-content: space-around;
+    align-items: center;
+    cursor: pointer;
+    
+}
+
+.tabCls2 {
+    composes: tabCls1;
+    margin-left: 220px;
+
+}
+
+.activeTab {
+    background-color: white;
+    color: #262626;
+}
+
+.nonActiveTab {
+    background-color: #F5F6F7;
+    color: #5E6674;
+}
+
+.tabText {
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 300;
+    font-family: Futura PT;
+}
+
+
+.inTabSpan {
+    margin-bottom: 10px;
+}
+
+.inTabBox {
+    display: flex;
+    width: 100%;
+    // height: 200px;
+    background-color: white;
+    margin-top: 10px;
+    flex-direction: column;
+    // padding-top: 35px;
+    align-items:flex-start ;
+    font-family: Futura PT;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 200;
+    color: #5E6674;
+}
+
+.tabInput {
+
+    border-width:1px;  
+    border-style:solid;
+    border-radius: 4px;
+    width: 100%;
+    height: 50px;
+    /* margin-top: 10px; */
+    font-family: Futura PT Book;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 100;
+    color: black;
+}
+
+
+
+.tabInput:focus {
+    border-color: gray;
+    outline: gray;
+}
+
+
+
+.tabBtn {
+    width: 240px;
+    height: 50px;
+    background-color: #0066FF;
+    color: white;
+    border: 2px solid #0066FF;
+    box-sizing: border-box;
+    border-radius: 4px;
+    margin-top: 35px;
+}
+
+.tabBtn:hover {
+    border: 4px solid #719cdc;
+}
+
+.cityListStyle {
+    display: flex;
+    width: 350px;
+ 
+    background-color: #0066FF;
+    margin-top: -70px;
+    margin-left: 400px;
+    flex-direction: column;
+    padding-top: 10px;
+    padding-bottom: 10px;
+ 
+    align-items:flex-start ;
+    font-family: Futura PT;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 200;
+    color: #5E6674;
+    position: absolute;
+    border: 2px solid #818ea1;
+    border-radius: 4px;
+}
+
+.cityListInput {
+
+    border-width:1px;  
+    border-style:solid;
+    
+    width: 346px;
+    height: 30px;
+    /* margin-top: 10px; */
+    font-family: Futura PT Book;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 100;
+    color: black;
+}
+
+.sectionAdv2 {
+
+    width: 100%;
+    position: absolute;
+    z-index: -1;
+    min-height: 400px;
+    
+    background-color: white;
+
+    
+}
+
+.checked {
+    width: 20px;
+    height: 20px;
+    padding-left: 5px;
+}
+
+.appContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  
+    width: 100%;
+  
+  }
+
+
+  .dropDownCity {
+      width: 400px;
+  }
+
+
+
+
+@media (max-width: 1200px){
+    
+    .tabContentBox {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
+
+
+
+
+
+@media (max-width: 1280px) and (min-width: 992px) {
+    
+
+    .promoHeader {
+        font-size: 45px;
+    }
+
+    .promoLabel {
+        max-width: 300px;
+        font-size: 20px;
+        font-weight: 300;
+        line-height: 32px;
+        
+    }
+
+
+    .promoImg_1, .promoImg_2, .promoImg_3, .promoImg_4 {
+        width: 70px;
+        height: 70px;
+    }
+
+    .promoImg_5, .promoImg_6 {
+        width: 100px;
+        height: 100px;
+    }
+}
+
+
+@media (max-width: 991px) and (min-width: 768px) {
+
+    .sectionPromo {
+        height: 450px;
+    }
+
+    .txtWrapper {
+        height: 270px;
+    }
+    .tabBox {
+        margin-top: 60px ;
+    }
+    .promoHeader {
+    max-width: 502px;
+    height: 124px;
+    
+    margin-top: 50px;
+    
+    font-size: 56px;
+    font-weight: 400;
+    line-height: 62px;
+    text-align: left;
+    color: white;
+    }
+    
+    .promoLabel {
+    max-width: 522px;
+    min-height: 64px;
+    
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 32px;
+    color: white;
+    }
+    
+    .promoFoto, .promoFotoLg {
+    display: none;
+    }
+    }
+    
+    @media (max-width: 767px) {
+        .tabBox {
+            margin-top: 60px ;
+        }
+        
+        .sectionPromo {
+        display: none;
+        }
+        
+        .promoLabel {
+            font-size: 18px;
+        }
+        
+        .promoFoto, .promoFotoLg {
+        display: none;
+        }
+        .tabCls1 {
+            width: 50%;
+            min-width: 10px;
+        }
+        .tabCls2 {
+            margin-left: 50%;
+        }
+
+    }
+    
+    
+
+    .headerContainer {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: baseline ;
+        // font-family: Futura PT;
+        margin-top: 160px;
+        // min-height: 122px;
+        max-width: 1400px;
+        margin-left: auto;
+        margin-right: auto;
+        
+    }
+    
+    .headText {
+        font-style: normal;
+        font-size: inherit;
+        font-weight: 450;
+        line-height: 41px;
+        letter-spacing: 0em;
+        text-align: left;
+        margin-bottom: 20px;
+        // font-family: Futura PT;
+        
+    }
+    
+    .headLink {    
+        position: block;
+        font-size: 18px;
+        line-height: 23.08px;
+        font-style: normal;
+        font-weight: 300;
+        letter-spacing: 0em;
+        text-align: right;
+        font-family: Futura PT Book;
+        
+    }
