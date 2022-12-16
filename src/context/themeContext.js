@@ -10,6 +10,7 @@ export function ThemeProvider({ children }) {
   let [spec, setSpec] = useState([]);
   let [branches, setBranch] = useState([]);
   let [cities, setCities] = useState([]);
+  let [payments, setPayments] = useState([]);
 
   const gutters = {gorizontal: {xs: 10, sm: 10, md: 15, lg: 20, xl: 30,  xxl: 40},
   vertical: {xs: 10, sm: 10, md: 15, lg: 20, xl: 30,  xxl: 40}}
@@ -107,16 +108,28 @@ const curr = sizes.filter(item => useMediaQuery(item.query));
       })
       .catch((e) => console.log('ERROR CANt get cities    themeContext', e));
       
+    }
+    async function getPayments() {
+     
+      await axios.get(`${process.env.NEXT_PUBLIC_API}/payments`)
+      .then((res)=> res.data)
+      .then((res) => {
+        setPayments(res.data)
+      })
+      .catch((e) => console.log('ERROR payments from themeContext', e));
+      
+      
     }  
 
     useEffect(() => {
       getSpec();
       getBranches();
       getCities();
+      getPayments();
     }, []); 
 
 
-const theme = {...curr[0], branches, spec, cities};
+const theme = {...curr[0], branches, spec, cities, payments};
 
 
 return (

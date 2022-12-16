@@ -1,0 +1,59 @@
+
+/* @import '~antd/dist/antd.css'; */
+
+.inputSlider {
+    display:grid;
+    grid-template: auto 30px / auto auto;
+    row-gap: 10px;
+    column-gap: 10px;
+    width: 100%;
+    /* height: 100px; */
+    /* max-width: 260px; */
+    max-height: 100px;
+    
+    outline: none;
+
+    /* flex-direction: row;
+    align-content: space-between; */
+}
+.inputSliderInput {
+    /* width: 110px;
+    height: 50px; */
+    border-radius: 4px;
+    font-family: inherit;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 21px;
+    /* border-width:1px;  
+    border-style:solid;
+    border-radius: 4px; */
+
+}
+
+
+.inputSliderInput:focus {
+    border-color: gray;
+    outline: gray;
+}
+
+
+
+.sliderBlock {
+    display: block;
+    align-content: center;
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+/* input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none; 
+} */
+/* 
+input[type='number'],
+input[type="number"]:hover,
+input[type="number"]:focus {
+    appearance: none;
+    -moz-appearance: textfield;
+} */

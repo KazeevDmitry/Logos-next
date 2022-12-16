@@ -1,0 +1,174 @@
+.sectionPromo {
+    position: relative;
+   // display: flex;
+    margin-top: 60px;
+    height: 600px;
+
+    background: url('/main_bg.jpg') center center/cover no-repeat;
+   //font-family: Futura PT;
+  }
+
+  .promoHeader {
+    width: 502px;
+    // height: 124px;
+    
+    margin-top: 130px;
+
+    font-size: 56px;
+    font-weight: 400;
+    line-height: 62px;
+    text-align: left;
+    color: white;
+}
+
+.promoLabel {
+    // width: 522px;
+    width: 100%;
+    min-height: 64px;
+
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 32px;
+    color: white;
+    
+}
+
+.txtWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  max-width: 522px;
+  height: 366px;
+  margin-left: 5%;
+  
+}
+
+.littleCard {
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items:center;
+  padding: 10px 20px;
+  position: absolute;
+  min-height: 100px;
+  width: 300px;
+  background-color: #FFFFFF;
+  border-radius: 10px;
+ // box-shadow: 0 0 2px #666;
+  z-index: 1;
+}
+
+.gridElement {
+
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.tabBox {
+  display: flex;
+  position: relative;
+  max-width: @containerMaxWidth;
+  background-color: #F5F6F7;
+  border-radius: 15px;
+  margin-left: auto;
+  margin-right: auto;
+  
+  margin-top: -110px;
+  z-index: 1;
+
+  div {
+      min-height: 1px;
+  }
+  z-index: 3;
+}
+
+.tabContentBox {
+  display: flex;
+  width: 100%;
+  background-color: white;
+  margin-top: 50px;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  padding-left: 40px;
+  padding-right: 40px;
+  padding-top: 20px;
+  padding-bottom: 30px;
+  justify-content: space-between;
+  margin-left: 0px;
+
+}
+
+.tabSection {
+  display: flex;
+
+  align-items: center;
+  position: absolute;
+  margin-top: -135px;
+  width: 100%;
+
+}
+
+.contSection {
+  margin-top: 0px;
+  width: 100%;
+  z-index: -1;
+  
+}
+
+.tabCls1 {    
+  position: absolute;
+  display:flex;
+  height: 50px;
+  min-width: 220px;
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 0;
+  margin-left: 0;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  color: #5E6674;
+  justify-content: space-around;
+  align-items: center;
+  cursor: pointer;
+  
+}
+
+.tabCls2 { 
+  composes: tabCls1;
+  margin-left: 220px;
+
+}
+
+.activeTab {
+  background-color: white;
+  color: #262626;
+}
+
+
+@media (max-width: 1280px) and (min-width: 992px) {
+    
+
+  .promoHeader {
+      font-size: 45px;
+      margin-top: 80px;
+  }
+
+  .promoLabel {
+      max-width: 300px;
+      font-size: 20px;
+      font-weight: 300;
+      line-height: 32px;
+      
+  }
+  .sectionPromo {
+    height: 530px;
+  }
+}
+

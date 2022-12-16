@@ -32,15 +32,11 @@ import { Link, useNavigate } from "react-router-dom";
 import PageHeader from '../../components/layout/pageHeader';
 import PageContainer from '../../components/layout/pageContainer';
 import RatingBar from '../../components/ratingbar/ratingbar';
-// import { default as CATEGORIES } from '../../directories/kategory.json';
-// import { default as SPECIALIZATION } from '../../directories/special.json';
-// import cityInitObj from '../../directories/russia.json';
+
 
 let THEME = {};
 let userId = null;
 
-// let SPECIALIZATION = [];
-// let CATEGORIES = [];
 let EXPERTS = [];
 
 const USERS_COUNT = 1000;
@@ -757,7 +753,7 @@ const s2 = THEME?.isDesktop ? t('labels.lookExpert'): t('labels.experts');
                 }}
               >  
         <Row 
-          gutter = {{xs: 10, sm: 10, md: 15, lg: 20, xl: 30,  xxl: 40}, {xs: 10, sm: 10, md: 15, lg: 20, xl: 30,  xxl: 40}} 
+          gutter = {[{xs: 10, sm: 10, md: 15, lg: 20, xl: 30,  xxl: 40}, {xs: 10, sm: 10, md: 15, lg: 20, xl: 30,  xxl: 40}]} 
           // gutter = {theme?.gutters.vertical, theme?.gutters.gorizontal}
           className={styles.tabContentBox}
           style={{marginLeft: "0px", paddingBottom: contPadding}}

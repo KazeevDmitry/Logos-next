@@ -3,13 +3,14 @@ import styles from './userImage.module.less';
 import { UserOutlined } from '@ant-design/icons';
 
 
-export default function UserImage ({image, online, width, onClick, onMouseEnter, onMouseLeave}) {
+export default function UserImage ({image, online, width, onClick, onMouseEnter, onMouseLeave, style}) {
 
 
     const wrapDiv = {
         position: "relative",
         width: width, 
-        height: width
+        height: width, 
+        ...style
     }
 
     let gWidth = width/5;
@@ -58,19 +59,30 @@ export default function UserImage ({image, online, width, onClick, onMouseEnter,
         
     }
       
+    const onImageMouseEnter =(e) => {
+        if (onMouseEnter) {
+            onMouseEnter(e);
+        }
+    }
+
+    const onImageMouseLeave =(e) => {
+        if (onMouseLeave) {
+            onMouseLeave(e);
+        }
+    }
   
     return (
 
         <div 
             style={wrapDiv} 
-            onClick={()=>onClick?.()}
+            onClick={ onClick?? null}
             >
             { image !== '' && 
           
                                 <img style={imageStyle}
                                       src={userImage} 
-                                      onMouseEnter={onMouseEnter?? null}
-                                      onMouseLeave={onMouseLeave?? null}
+                                      onMouseEnter={onImageMouseEnter}
+                                      onMouseLeave={onImageMouseLeave}
                                       alt="img">
                                   </img> 
                                   }
@@ -80,7 +92,7 @@ export default function UserImage ({image, online, width, onClick, onMouseEnter,
                                 className={styles.imageDiv} 
                                 style={{...imageStyle}}
                                 onMouseEnter={onMouseEnter?? null}
-                                onMouseLeave={onMouseLeave?? null}
+                                onMouseLeave={onImageMouseLeave}
                                 >
                                 <UserOutlined style={letterStyle}/>    
                             </div>}
