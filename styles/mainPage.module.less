@@ -56,7 +56,7 @@
   background-color: #FFFFFF;
   border-radius: 10px;
  // box-shadow: 0 0 2px #666;
-  z-index: 1;
+  z-index: 2;
 }
 
 .gridElement {
@@ -170,5 +170,102 @@
   .sectionPromo {
     height: 530px;
   }
+  .tabBox{
+    margin-top: -105px;
+  }
 }
 
+@media (max-width: 1280px) and (min-width: 992px) {
+    
+
+  .promoHeader {
+      font-size: 45px;
+      margin-top: 80px;
+  }
+
+  .promoLabel {
+      max-width: 300px;
+      font-size: 20px;
+      font-weight: 300;
+      line-height: 32px;
+      
+  }
+  .sectionPromo {
+    height: 530px;
+  }
+  .tabBox{
+    margin-top: -105px;
+  }
+}
+
+
+
+@media (max-width: 991px) and (min-width: 768px) {
+
+  .sectionPromo {
+      height: 450px;
+  }
+
+  .txtWrapper {
+      height: 270px;
+  }
+  /* .tabBox {
+      margin-top: 60px ;
+  } */
+
+
+
+
+  .promoHeader {
+  max-width: 400px;
+  height: 124px;
+  
+  font-size: 40px;
+  margin-top: 50px;
+  font-weight: 400;
+  line-height: 62px;
+  text-align: left;
+  color: white;
+  }
+  
+  .promoLabel {
+
+  min-height: 64px;
+  
+  max-width: 300px;
+  font-size: 20px;
+  font-weight: 300;
+  line-height: 32px;
+  color: white;
+  }
+  
+  .promoFoto, .promoFotoLg {
+  display: none;
+  }
+  }
+  
+  @media (max-width: 767px) {
+      .tabBox {
+          margin-top: 60px ;
+      }
+      
+      .sectionPromo {
+      display: none;
+      }
+      
+      .promoLabel {
+          font-size: 18px;
+      }
+      
+      .promoFoto, .promoFotoLg {
+      display: none;
+      }
+      .tabCls1 {
+          width: 50%;
+          min-width: 10px;
+      }
+      .tabCls2 {
+          margin-left: 50%;
+      }
+    }
+  

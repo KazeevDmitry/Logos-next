@@ -10,6 +10,7 @@ import {useUserContext} from '../src/context/userContext'
 import { useTranslation } from 'react-i18next'
 import UserCircle from '../src/components/userCircle/userCircle';
 import UserImage from '../src/components/userImage/userImage';
+import PageHeader from '../src/components/layouts/pageHeader';
 
 import moment from 'moment';
 import 'moment/locale/ru';
@@ -28,26 +29,23 @@ let THEME ={};
 
 export default function Home({circlePeople}) {
 
-  const theme = useThemeContext();
+  THEME = useThemeContext();
 
-  THEME = theme;
+  
+  /* const currentUser = useUserContext();
 
-  const currentUser = useUserContext();
-
-  const {t} = useTranslation();
+  const {t} = useTranslation(); */
 
   
   const [showLittleCard, setshowLittleCard] = useState();
-  const [circleUser, setCircleUser] = useState({});
+  const [circleUser, setCircleUser] = useState(null);
 
+ 
+  const res = `-${THEME?.appContainerPadding}px`;
 
-  console.log("SPEC------------------------", THEME.spec);
-  
-  const res = `-${theme?.appContainerPadding}px`;
-
-  const bigCircle = theme.size === "middle" ? "100px" : (theme.id === "xl" ? "130px" : "150px");
-  const midlCircle = theme.size === "middle" ? "80px" : (theme.id === "xl" ? "100px" : "120px");
-  const smallCircle = theme.size === "middle" ? "60px" : (theme.id === "xl" ? "80px" : "100px");
+  const bigCircle = THEME.size === "middle" ? "100px" : (THEME.id === "xl" ? "130px" : "150px");
+  const midlCircle = THEME.size === "middle" ? "80px" : (THEME.id === "xl" ? "100px" : "120px");
+  const smallCircle = THEME.size === "middle" ? "60px" : (THEME.id === "xl" ? "80px" : "100px");
 
   const circleStyles = [
     
@@ -55,6 +53,7 @@ export default function Home({circlePeople}) {
       top: "44%",
       right: "16%",
       width: bigCircle,
+      toptolltip: true,
     },
     {
       top: "21.8%",
@@ -84,47 +83,15 @@ export default function Home({circlePeople}) {
     
   ];
 
- /*  const circleStyles = [
-    
-    {
-      top: "49%",
-      right: "14%",
-      width: bigCircle,
-    },
-    {
-      top: "28.8%",
-      right: "6%",
-      width: bigCircle,
-    },
-    {
-      top: "16.5%", 
-      right: "16.5%",
-      width: midlCircle,
-    },
-    {
-      top: "33%",
-      right: "22.3%",
-      width: midlCircle,
-    },
-    {
-      top: "23%",
-      right: "33.5%",
-      width: smallCircle,
-    },
-    {
-      top: "47%",
-      right: "30%",
-      width: smallCircle,
-    },
-    
-  ]; */
-
-  const onMouseEnter = (user) => (e) => {
+  const onMouseEnter = (user, topt) => (e) => {
     let c = e.target.getBoundingClientRect();
 
-    const left = Math.round(c.left - 300 + c.width * 0.2 + window.pageXOffset);
-    const top = Math.round(c.bottom -60 + window.pageYOffset - c.height * 0.2);
-    
+  
+      const left = Math.round(c.left - 300 + c.width * 0.2 + window.pageXOffset);
+      const top = !topt ? Math.round(c.bottom -60 + window.pageYOffset - c.height * 0.2) :
+        Math.round(c.top -160 + window.pageYOffset + c.height * 0.2);
+      
+
 
     setCircleUser({user, left, top});
     setshowLittleCard(true);
@@ -133,16 +100,19 @@ export default function Home({circlePeople}) {
 
   const onMouseLeave = () => {
     setshowLittleCard(false);
+    setCircleUser(null);
   }
 
   const circleUsers = circlePeople.map((item, i) => {
+    const topt = circleStyles[i].toptolltip;
+
     return (
       <div style={{...circleStyles[i], position: "absolute"}}> 
         <Link href='experts' >
           <UserImage
             image= {item.avatar[0].url}
             width= {circleStyles[i].width}
-            onMouseEnter = {onMouseEnter(item)}
+            onMouseEnter = {onMouseEnter(item, topt)}
             onMouseLeave = {onMouseLeave}
             style={{cursor: "pointer"}}
           />
@@ -154,11 +124,14 @@ export default function Home({circlePeople}) {
 
 const USERS_COUNT= 1000;
 
+const userSpec = circleUser?.user?.specializations?.length>0 ? circleUser?.user?.specializations[0].name : '';
+
   return (
     <>
-   <div className={styles.sectionPromo} style={{marginLeft: res, marginRight: res, padding: `0px ${theme?.appContainerPadding}px`}}> 
+    <MobyleMainHeader/>
+   {THEME.isDesktop && <div className={styles.sectionPromo} style={{marginLeft: res, marginRight: res, padding: `0px ${THEME?.appContainerPadding}px`}}> 
    
-       <div className={styles.txtWrapper} style={{marginLeft: `6%-${theme?.appContainerPadding}px`, height: "100%"}}>
+       <div className={styles.txtWrapper} style={{marginLeft: `6%-${THEME?.appContainerPadding}px`, height: "100%"}}>
               <Promo count={USERS_COUNT} />
         </div>  
       {circleUsers}
@@ -171,17 +144,41 @@ const USERS_COUNT= 1000;
             stars = {4} //временно---------------------------------------------------------------------------------
             reviews={18} //временно--------------------------------------------------------------------------------------
             cups={circleUser.user.rating}
-            spec={"Адвлкат"} //временно------------------------------------------------------------------------------
+            spec={userSpec} 
         />}
         <MainTabs/>   
     
 
     </div>
-
+}
     
     </>
   )
 }
+
+
+function MobyleMainHeader({ count }) {
+  
+  const {t, i18n} = useTranslation();
+  if (THEME?.isDesktop) {
+    return null;
+  }
+
+  return (
+    <>
+      <PageHeader title={t('main.promo.title')}>
+        <div className={styles.promoLabel}>
+          <p>
+            { t('main.promo.subtitle', { count }) }
+          </p>
+        </div>
+        </PageHeader> 
+
+        <MainTabs/>
+
+    </>
+  )
+} 
 
 function Promo({ count }) {
   const { t } = useTranslation();
@@ -230,20 +227,7 @@ function LittleCard({ username, surname, spec, stars=0, reviews = 0, cups=0, top
   )
 }
 
-export async function getServerSideProps() {
-
-  
-  const res = await createStrapiAxios()
-  .get(`/users?populate=avatar&start=0&limit=6&sort[0]=rating:desc&filters[rating][$null]`)
-
-  const data = await res.data;
-
-  
-  return { props: { circlePeople: data } }
-}
-
-
-function MainTabs ({onChange}, ...props) {
+function MainTabs () {
 
   const [activeTab, setActiveTab] = useState(1);
 
@@ -405,4 +389,18 @@ function TabCol ({children}) {
           </div>
         </Col>
   )
+}
+
+
+
+export async function getServerSideProps() {
+
+  
+  const res = await createStrapiAxios()
+  .get(`/users?populate=%2A&start=0&limit=6&sort[0]=rating:desc&filters[rating][$null]`)
+
+  const data = await res.data;
+
+  
+  return { props: { circlePeople: data } }
 }

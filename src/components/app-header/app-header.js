@@ -155,20 +155,21 @@ if (currentUser.avatar)
                <Link href='/'>
                  <a className={styles.logosHeader}>LogosEst</a>
                   </Link>
-               {!props.userLogged && (
+               {!userJWT && (
                   <Button  htmlType="button"
+                  type = "ghost"
                           style={{
                                   height: "30px",
                                   fontSize: "12px",
                                   marginRight: "30px",
                                   borderRadius: "4px"
                                 }}
-                          onClick={()=> navigate('/auth')}
+                          onClick={()=> router.push('/auth')}
                           >
                           {t('buttons.mobileheaderBtn')}
                   </Button>
                 )}
-               {props.userLogged &&
+               {userJWT &&
                 <div style={{marginRight: "30px"}}>
                   <UserImage
                       image= {userImage}
@@ -316,7 +317,7 @@ function NavLink({ children, href, style }) {
 function MobileUserMenu (props) {
   let mainRef = useRef();
 
-  const {setCurrentUser} = useContext(UserContext);
+  const {setCurrentUser} = useUserContext();
 
   useEffect(() => {
 
