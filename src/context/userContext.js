@@ -50,10 +50,9 @@ export const UserProvider = (props) => {
       }  
   
     useEffect(() => {
+
         getUser();
       }, []); 
-
-console.log('user from userContext------------', currentUser);
 
     return(
         <UserContext.Provider value = {{currentUser, setCurrentUser}} >

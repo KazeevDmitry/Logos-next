@@ -12,8 +12,8 @@ export function ThemeProvider({ children }) {
   let [cities, setCities] = useState([]);
   let [payments, setPayments] = useState([]);
 
-  const gutters = {gorizontal: {xs: 10, sm: 10, md: 15, lg: 20, xl: 30,  xxl: 40},
-  vertical: {xs: 10, sm: 10, md: 15, lg: 20, xl: 30,  xxl: 40}}
+  const gutters = {gorizontal: {xs: 10, sm: 10, md: 15, lg: 20, xl: 20,  xxl: 30},
+  vertical: {xs: 10, sm: 10, md: 15, lg: 20, xl: 20,  xxl: 30}}
 
 
 let sizes = [{ id: "xs",

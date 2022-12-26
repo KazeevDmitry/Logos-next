@@ -1,5 +1,5 @@
 import '../styles/globals.css'
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import "../styles/antdVariables.less";
 import { ThemeProvider } from '../src/context/themeContext';
@@ -15,6 +15,7 @@ import en from 'antd/lib/locale/en_US';
 import moment from 'moment';
 import 'moment/locale/ru';
 import MainLayout from '../src/components/layouts/mainLayout';
+import { Hydrate, QueryClient, QueryClientProvider } from "react-query";
 
 moment.locale('ru')
 
@@ -34,17 +35,26 @@ export default function MyApp({ Component, pageProps }) {
       return covab[lang];
     }
 
+   // const [queryClient] = useState(() => new QueryClient());
+
+   const queryClient = new QueryClient();
 
   return (  
+    <>
+
           <ThemeProvider>
            <UserProvider>
+           <QueryClientProvider client={queryClient}>
               <ConfigProvider locale={antdLocales(i18n.language)}>
                 <MainLayout>
                   <Component {...pageProps} /> 
                 </MainLayout>
               </ConfigProvider>  
+              </QueryClientProvider>
             </UserProvider>
-          </ThemeProvider>    
+          </ThemeProvider> 
+          </>      
+
             )
 }
 

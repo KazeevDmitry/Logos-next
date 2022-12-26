@@ -11,6 +11,8 @@ import { useTranslation } from 'react-i18next'
 import UserCircle from '../src/components/userCircle/userCircle';
 import UserImage from '../src/components/userImage/userImage';
 import PageHeader from '../src/components/layouts/pageHeader';
+import PageContainer from '../src/components/layouts/pageContainer';
+import UserCard from '../src/components/userCard/userCard';
 
 import moment from 'moment';
 import 'moment/locale/ru';
@@ -103,7 +105,7 @@ export default function Home({circlePeople}) {
     setCircleUser(null);
   }
 
-  const circleUsers = circlePeople.map((item, i) => {
+  const circleUsers = circlePeople.slice(0, 6).map((item, i) => {
     const topt = circleStyles[i].toptolltip;
 
     return (
@@ -121,6 +123,35 @@ export default function Home({circlePeople}) {
     )
   });
 
+  let cnt = 15;
+  if (THEME?.id === "sm"||THEME?.id === "md" ) {
+    cnt= 14;
+  }
+
+ const BESTSPECS = circlePeople.slice(6,cnt).map((item) => {
+   const userSpec = item.specializations?.length>0 ? item.specializations[0].name : '';
+   const cityName = THEME.cities.find(city => city.id === item.city)?.city;
+   return (
+     <>
+     <Col  xs={24} sm={12} md={12} lg={8} xl={8}  xxl={8}>
+        {/* <Link href="/experts" style={{ color: 'black' }}> */}
+         <UserCard
+           username={item.name}
+           surname={item.surname}
+           stars = {4} //временно---------------------------------------------------------------------------------
+            reviews={18} //временно--------------------------------------------------------------------------------------
+           cups={item.rating}
+           spec={userSpec}
+           image = {item.avatar[0].url}
+           online = {"true"}
+           cityName={cityName}
+         /> 
+      {/*  </Link> */}
+     </Col>
+     </>
+   )
+ });
+
 
 const USERS_COUNT= 1000;
 
@@ -128,30 +159,41 @@ const userSpec = circleUser?.user?.specializations?.length>0 ? circleUser?.user?
 
   return (
     <>
-    <MobyleMainHeader/>
-   {THEME.isDesktop && <div className={styles.sectionPromo} style={{marginLeft: res, marginRight: res, padding: `0px ${THEME?.appContainerPadding}px`}}> 
+     <MobyleMainHeader/>
+      {THEME.isDesktop && 
+      <div className={styles.sectionPromo} style={{marginLeft: res, marginRight: res, padding: `0px ${THEME?.appContainerPadding}px`}}> 
    
-       <div className={styles.txtWrapper} style={{marginLeft: `6%-${THEME?.appContainerPadding}px`, height: "100%"}}>
+        <div className={styles.txtWrapper} style={{marginLeft: `6%-${THEME?.appContainerPadding}px`, height: "100%"}}>
               <Promo count={USERS_COUNT} />
         </div>  
-      {circleUsers}
-      {showLittleCard && 
-        <LittleCard
-            username={circleUser.user.name}
-            surname={circleUser.user.surname}
-            top = {circleUser.top}
-            left={circleUser.left}
-            stars = {4} //временно---------------------------------------------------------------------------------
-            reviews={18} //временно--------------------------------------------------------------------------------------
-            cups={circleUser.user.rating}
-            spec={userSpec} 
-        />}
-        <MainTabs/>   
-    
+        {circleUsers}
+        {showLittleCard && 
+          <LittleCard
+              username={circleUser.user.name}
+              surname={circleUser.user.surname}
+              top = {circleUser.top}
+              left={circleUser.left}
+              stars = {4} //временно---------------------------------------------------------------------------------
+              reviews={18} //временно--------------------------------------------------------------------------------------
+              cups={circleUser.user.rating}
+              spec={userSpec} 
+          />}
+        <MainTabs/>  
+      </div>}   
 
-    </div>
-}
-    
+          <div className={styles.contSection}>
+            <div style={{width: "100%", height: "90px"}}>
+
+            </div>
+              <InfoBlock
+                elements = {BESTSPECS}
+                linkTo = '/experts'
+                headerT = 'main.top.title'
+                linkT = 'links.allExperts'
+              /> 
+          </div>
+        
+     
     </>
   )
 }
@@ -175,7 +217,7 @@ function MobyleMainHeader({ count }) {
         </PageHeader> 
 
         <MainTabs/>
-
+       
     </>
   )
 } 
@@ -202,12 +244,17 @@ function Promo({ count }) {
 function LittleCard({ username, surname, spec, stars=0, reviews = 0, cups=0, top, left }){
  
   const nameStr = `${username} ${surname}`;
-
+  
+  
   return (
          
       <div className={styles.littleCard} style={{left: `${left}px`, top: `${top}px`}} >
-            <div className={styles.gridElement}> {nameStr} 
-              </div>
+            <div className={styles.gridElement}> 
+              {nameStr} 
+            </div>
+            {/* <div className={styles.gridElement}> 
+              {cityName} 
+            </div> */}
             <div
               className={styles.gridElement}
               style={{fontSize: "16px", fontWeight: "250", marginTop: "10px", marginBottom: "10px"}}
@@ -226,6 +273,8 @@ function LittleCard({ username, surname, spec, stars=0, reviews = 0, cups=0, top
 
   )
 }
+
+
 
 function MainTabs () {
 
@@ -391,13 +440,47 @@ function TabCol ({children}) {
   )
 }
 
+function InfoBlock ({ elements, linkTo, headerT, linkT}) {
+  const {t} = useTranslation();
+
+  const headerStyle = THEME?.isDesktop ? {
+    paddingLeft: "0px",
+    paddingRight: "0px",
+    marginTop: "70px",
+    fontSize: "44px"
+        
+    } : {
+        paddingLeft: "10px",
+        paddingRight: "10px",
+        marginTop: "50px",
+        fontSize: "32px"
+    }
+
+    return(
+    <>
+        <div className={styles.headerContainer} style = {headerStyle}>
+            <div className={styles.headText}>{t(headerT)}</div>
+            {THEME?.isDesktop && 
+              <Link href={linkTo}>
+                <a  className={styles.headLink}>{t(linkT)}</a>
+              </Link>}
+        </div>
+
+      <PageContainer>
+        {elements}  
+        {!THEME?.isDesktop && <Link href={linkTo} className={styles.headLink} style={{marginLeft: "auto", marginRight: "auto", marginTop: "20px"}}>{t(linkT)}</Link>}
+      </PageContainer> 
+    
+    </>    
+    )
+}
 
 
 export async function getServerSideProps() {
-
+ 
   
   const res = await createStrapiAxios()
-  .get(`/users?populate=%2A&start=0&limit=6&sort[0]=rating:desc&filters[rating][$null]`)
+  .get(`/users?populate=%2A&start=0&limit=15&sort[0]=rating:desc&filters[rating][$null]`)
 
   const data = await res.data;
 

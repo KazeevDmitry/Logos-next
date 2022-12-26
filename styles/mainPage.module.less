@@ -118,7 +118,6 @@
 .contSection {
   margin-top: 0px;
   width: 100%;
-  z-index: -1;
   
 }
 
@@ -151,6 +150,67 @@
   color: #262626;
 }
 
+.littleExpertCard {
+  display: flex;
+  justify-content: space-between;
+  align-items:center;
+  padding: 20px;
+  min-height: 150px;
+  width: 100%;
+  background-color: #FFFFFF;
+  border-radius: 10px;
+ // box-shadow: 0 0 2px #666;
+
+}
+
+.littleExpertCardContent {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-left: 20px;
+  justify-content: space-between;
+}
+
+.headerContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: baseline ;
+  // font-family: Futura PT;
+  margin-top: 160px;
+  // min-height: 122px;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+  
+}
+
+.headText {
+  font-style: normal;
+  font-size: inherit;
+  font-weight: 450;
+  line-height: 41px;
+  letter-spacing: 0em;
+  text-align: left;
+  margin-bottom: 20px;
+  // font-family: Futura PT;
+  
+}
+
+.headLink {    
+  position: block;
+  font-size: 18px;
+  line-height: 23.08px;
+  font-style: normal;
+  font-weight: 300;
+  letter-spacing: 0em;
+  text-align: right;
+ // font-family: Futura PT Book;
+  
+}
+
+//********************************************************************** MEDIA ******************************************
+
 
 @media (max-width: 1280px) and (min-width: 992px) {
     
@@ -158,6 +218,9 @@
   .promoHeader {
       font-size: 45px;
       margin-top: 80px;
+  }
+  .headText {
+    font-size: 40px;
   }
 
   .promoLabel {
@@ -174,30 +237,6 @@
     margin-top: -105px;
   }
 }
-
-@media (max-width: 1280px) and (min-width: 992px) {
-    
-
-  .promoHeader {
-      font-size: 45px;
-      margin-top: 80px;
-  }
-
-  .promoLabel {
-      max-width: 300px;
-      font-size: 20px;
-      font-weight: 300;
-      line-height: 32px;
-      
-  }
-  .sectionPromo {
-    height: 530px;
-  }
-  .tabBox{
-    margin-top: -105px;
-  }
-}
-
 
 
 @media (max-width: 991px) and (min-width: 768px) {
@@ -238,10 +277,11 @@
   line-height: 32px;
   color: white;
   }
-  
-  .promoFoto, .promoFotoLg {
-  display: none;
+  .headText {
+    font-size: 35px;
   }
+  
+
   }
   
   @media (max-width: 767px) {
@@ -257,9 +297,6 @@
           font-size: 18px;
       }
       
-      .promoFoto, .promoFotoLg {
-      display: none;
-      }
       .tabCls1 {
           width: 50%;
           min-width: 10px;
