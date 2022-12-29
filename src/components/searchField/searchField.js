@@ -34,7 +34,7 @@ export default function SearchField ({placeholder = '', style, resetPage=true}) 
 
     const onSearch = () => {
         if (value && value !== '') {
-            router.query.search = value
+            router.query.search = encodeURI(value)
            if (resetPage) {
              router.query.page = 1;
            }
@@ -50,7 +50,7 @@ export default function SearchField ({placeholder = '', style, resetPage=true}) 
 
       useEffect(() => {
         if (router.query.search) {
-          setValue(router.query.search);
+          setValue(decodeURI(router.query.search));
         }
       }, [router.query.search]); 
 

@@ -20,6 +20,7 @@ import SearchField from '../src/components/searchField/searchField';
 import PageContainer from '../src/components/layouts/pageContainer';
 import PageHeader from '../src/components/layouts/pageHeader';
 import { useThemeContext } from '../src/context/themeContext';
+import SideFilter from '../src/components/SideFilter/sideFilter';
 
 const PAGESIZE = 3;
 
@@ -64,7 +65,7 @@ export default function Experts({serverExperts}) {
     }
   }, [router.query.page]); 
   
-  
+  console.log("users------------------------", experts);
 
   let EXPERTS = [];
 
@@ -112,11 +113,11 @@ export default function Experts({serverExperts}) {
           />
                 </Col>
                 <Col xs={0} sm={0} md={8} lg={6} xl={6} >
-              {/*      <SideFilter show = {{
+                    <SideFilter show = {{
                         city: true,
                         budget: false,
                         branch: true}
-                    }/>   */}
+                    }/>   
                 </Col>
   
             {/* </Row> */}
@@ -138,26 +139,33 @@ async function getUsers({page, search, branch, specialization, city}) {
     searchArr.push(`filters[$or][0][name][$containsi]=${search}&filters[$or][1][surname][$containsi]=${search}`);
   }
   if (branch) {
-    searchArr.push(`_where[branches.id]=${branch}`);
+    searchArr.push(`filters[branches][id][$eq]=${branch}`);
   }
   if (specialization) {
-    searchArr.push(`_where[specialization.id]=${specialization}`);
+    searchArr.push(`filters[specialization][id][$eq]=${specialization}`);
   }
   if (city) {
-    searchArr.push(`_where[city]=${city}`);
+    searchArr.push(`filters[city][$eq]=${city}`);
   }
 
   let countSearchStr = searchArr.join("&");
 
   searchArr.push(`limit=${PAGESIZE}&start=${(page-1)*PAGESIZE}`);
+
+  searchArr.push(`populate=%2A`);
     
-  //searchArr.push(`sort[0]=rating:desc`);
+  searchArr.push(`sort[0]=rating:desc`);
 
   let searchStr = searchArr.join("&");
+
+  console.log("SearchStr---------------", searchStr);
 
   const data = await createStrapiAxios()
  .get(`/users?${searchStr}`)
  .then(res => res.data)
+
+
+ console.log("USERS ------------------- ", data);
 
  return (data) 
 
@@ -171,6 +179,10 @@ export async function getServerSideProps(context) {
   if (context.query.page) {
     page = parseInt(context.query.page);
   }
+
+  console.log("query------------", context.query);
+  console.log("Search------------", context.query.search);
+
   const {search, branch, specialization, city} = context.query;
 
   const data = await getUsers({page, search, branch, specialization, city});
