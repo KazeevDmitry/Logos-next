@@ -50,7 +50,6 @@ export default function Home({circlePeople}) {
   const smallCircle = THEME.size === "middle" ? "60px" : (THEME.id === "xl" ? "80px" : "100px");
 
   const circleStyles = [
-    
     {
       top: "44%",
       right: "16%",
@@ -106,15 +105,20 @@ export default function Home({circlePeople}) {
   }
 
   const circleUsers = circlePeople.slice(0, 6).map((item, i) => {
+
     const topt = circleStyles[i].toptolltip;
+    const user = item.attributes.user.data.attributes;
+    const spec = item.attributes.specializations.data[0].attributes.name;
+    const rating = item.attributes.rating;
+    const sendUser = {id: item.id, ...user, spec, rating};
 
     return (
       <div style={{...circleStyles[i], position: "absolute"}}> 
         <Link href='experts' >
           <UserImage
-            image= {item.avatar[0].url}
+            image= {user ? user.avatar.data[0]?.attributes?.url : ''} 
             width= {circleStyles[i].width}
-            onMouseEnter = {onMouseEnter(item, topt)}
+            onMouseEnter = {onMouseEnter(sendUser, topt)} 
             onMouseLeave = {onMouseLeave}
             style={{cursor: "pointer"}}
           />
@@ -129,24 +133,33 @@ export default function Home({circlePeople}) {
   }
 
  const BESTSPECS = circlePeople.slice(6,cnt).map((item) => {
-   const userSpec = item.specializations?.length>0 ? item.specializations[0].name : '';
-   const cityName = THEME.cities.find(city => city.id === item.city)?.city;
+   
+   const user = item.attributes.user.data.attributes;
+
+   
+   const cityName = THEME.cities.find(city => city.id === user.city)?.city;
+   const spec = item.attributes.specializations?.data[0]?.attributes?.name?? '';
+   const rating = item.attributes.rating;
+
    return (
      <>
      <Col  xs={24} sm={12} md={12} lg={8} xl={8}  xxl={8}>
-        {/* <Link href="/experts" style={{ color: 'black' }}> */}
-         <UserCard
-           username={item.name}
-           surname={item.surname}
-           stars = {4} //временно---------------------------------------------------------------------------------
-            reviews={18} //временно--------------------------------------------------------------------------------------
-           cups={item.rating}
-           spec={userSpec}
-           image = {item.avatar[0].url}
-           online = {"true"}
-           cityName={cityName}
-         /> 
-      {/*  </Link> */}
+{/* 
+         <Link href="/experts" passHref = {true}> */}  {/* use id from item for href */}
+            <a style={{ color: 'black' }}>
+              <UserCard
+                username={user.name}
+                surname={user.surname}
+                stars = {4} //временно---------------------------------------------------------------------------------
+                  reviews={18} //временно--------------------------------------------------------------------------------------
+                cups={rating}
+                spec={spec}
+                image = {user ? user.avatar?.data[0]?.attributes?.url : ''}
+                online = {"true"}
+                cityName={cityName}
+              />
+            </a>  
+         {/* </Link> */}
      </Col>
      </>
    )
@@ -155,7 +168,7 @@ export default function Home({circlePeople}) {
 
 const USERS_COUNT= 1000;
 
-const userSpec = circleUser?.user?.specializations?.length>0 ? circleUser?.user?.specializations[0].name : '';
+const userSpec = circleUser?.user?.spec?? '';
 
   return (
     <>
@@ -480,9 +493,10 @@ export async function getServerSideProps() {
  
   
   const res = await createStrapiAxios()
-  .get(`/users?populate=%2A&start=0&limit=15&sort[0]=rating:desc&filters[rating][$null]`)
+ 
+    .get(`/experts?populate[0]=branches&populate[1]=specializations&populate[2]=user.avatar&pagination[page]=1&pagination[pageSize]=15&sort[0]=rating:desc&filters[rating][$null]`)
 
-  const data = await res.data;
+  const data = await res.data.data;
 
   
   return { props: { circlePeople: data } }

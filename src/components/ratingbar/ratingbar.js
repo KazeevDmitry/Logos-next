@@ -1,16 +1,16 @@
 import React from 'react';
-import styles from '../../../styles/ratingbar.module.less';
+import styles from './ratingbar.module.less';
 import Plural from '../../../utils/plural';
 import { TrophyOutlined, StarOutlined } from '@ant-design/icons';
 
-export default function RatingBar ({stars=0, reviews=0, cups=0}) {
+export default function RatingBar ({stars=0, reviews=0, cups=0, fontSize = 14}) {
 
     return(
-        <div className={styles.row2} style={{fontSize: "14px", fontWeight: "600"}}>
+        <div className={styles.row2} style={{fontSize: `${fontSize}px`, fontWeight: "400"}}>
             <div className={styles.numBlock}>
                 <StarOutlined 
                     style={{color : stars > 0 ? "#F44336" : "#CED3DB", 
-                            fontSize: "18px", 
+                            fontSize: `${fontSize+4}px`, 
                             fontWeight: "600"}}
                     /* color = {stars > 0 ? "#F44336" : "#CED3DB"}  */
                 />
@@ -26,7 +26,7 @@ export default function RatingBar ({stars=0, reviews=0, cups=0}) {
             <div className={styles.numBlock}>
             
                 <TrophyOutlined style={{color : cups > 0 ? "#F4B336" : "#CED3DB", 
-                            fontSize: "18px", 
+                            fontSize: `${fontSize+4}px`, 
                             fontWeight: "600"}}
                 />
                 <span className={styles.innerBlock}

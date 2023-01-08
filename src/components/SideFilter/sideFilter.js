@@ -48,6 +48,7 @@ export default function  SideFilter({show = {
     const onSpecChange = (e) => {
         
         router.query.specialization = e.target.value; 
+        router.query.page = 1;
         const url = {
             pathname: router.pathname,
             query: router.query
@@ -58,6 +59,7 @@ export default function  SideFilter({show = {
     const onBranchChange = (value) => {
         
         router.query.branch = value; 
+        router.query.page = 1;
         const url = {
             pathname: router.pathname,
             query: router.query
@@ -68,6 +70,7 @@ export default function  SideFilter({show = {
     const onCityChange = (value) => {
         
         router.query.city = value; 
+        router.query.page = 1;
         const url = {
             pathname: router.pathname,
             query: router.query
@@ -79,6 +82,7 @@ export default function  SideFilter({show = {
 
         router.query.budgetmin = value.inp1;
         router.query.budgetmax = value.inp2; 
+        router.query.page = 1;
         const url = {
             pathname: router.pathname,
             query: router.query
@@ -93,6 +97,7 @@ export default function  SideFilter({show = {
             delete router.query.budgetmax
         }
         router.query.contractual = e.target.checked;
+        router.query.page = 1;
 
         const url = {
             pathname: router.pathname,
@@ -111,6 +116,7 @@ export default function  SideFilter({show = {
          delete router.query.contractual
          delete router.query.budgetmin
          delete router.query.budgetmax
+         router.query.page = 1;
      
          const url = {
             pathname: router.pathname,

@@ -15,12 +15,13 @@ export default function UserCard({username, surname, image, stars, reviews = '0'
   const  THEME = useThemeContext();
 
     const cHeight = THEME?.isDesktop ? 80 : 60;
+    const pad = THEME?.isDesktop ? 25 : 15;
     const cardHeight = THEME?.id !== "xs" ? "150px" : "130px";
     
     return (
       
         <div className={styles.card}
-        //   style ={{height: cardHeight}}
+           style ={{padding: pad}}
         >
           <Row gutter={[20, 40]} 
             justify= "center" align = "middle" 
