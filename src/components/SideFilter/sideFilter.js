@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 export default function  SideFilter({show = {
     city: false,
     budget: false,
-    branch: true
+    branch: true,
 }}) {
 
     const {t} = useTranslation()
@@ -47,7 +47,7 @@ export default function  SideFilter({show = {
        
     const onSpecChange = (e) => {
         
-        router.query.specialization = e.target.value; 
+        router.query.specialization = e.target?.value?? e; 
         router.query.page = 1;
         const url = {
             pathname: router.pathname,
@@ -55,6 +55,20 @@ export default function  SideFilter({show = {
           }
         router.push(url, undefined, { shallow: true });
     };
+
+    const onSpecSelectChange = (value) => {
+        onSpecChange(value);
+    }
+
+    const onBranchSelectChange =(e) => {
+        router.query.branch = e.target.value; 
+        router.query.page = 1;
+        const url = {
+            pathname: router.pathname,
+            query: router.query
+          }
+        router.push(url, undefined, { shallow: true });    
+    }
 
     const onBranchChange = (value) => {
         
@@ -161,40 +175,71 @@ export default function  SideFilter({show = {
 
       return (
 
-        <div className={styles.specBlock} style= {{padding: pad}}>
+        <div className={styles.specBlock} style= {{padding: !theme.isDesktop ? "20px" : pad, marginBottom: pad}}>
+            {!theme.isDesktop && <div className={styles.flexCont}>
+                <div className={styles.filterHeader}> Фильтр </div>
+                <Button 
+                    size={theme?.size} 
+                    //style={{width: "100%", marginTop: "30px"}}
+                    type="primary" 
+                    htmlType="button"
+                    onClick = {onResetParams}
+                    
+                    >
+                       Сбросить
+                </Button>
+            </div>    }
+            
+
             {show.city && <><div className={styles.specBlockHeader}> 
                 {t('labels.city')}
               </div>
             <CityInput marker = "city" 
                        value = {city} 
                        onChange = {onCityChange} 
+                       //placeholder={!theme.isDesktop ? "Город" : ""}
                         
             />
-            <Divider/>
+            {theme.isDesktop && <Divider/>}
             </>
             }
-
+         
+        
             <div className={styles.specBlockHeader}> 
                 {t('headers.specialization')}
-              </div>
-                    <Radio.Group 
-                        onChange={onSpecChange} 
-                        value={specialization}>
+            </div>
+            {!theme.isDesktop && 
+                <CityInput 
+                    marker="spec" 
+                    value = {specialization} 
+                    onChange = {onSpecSelectChange} 
+                />}
+            {theme.isDesktop && 
+                <Radio.Group 
+                    onChange={onSpecChange} 
+                    value={specialization}>
                     
-                        <Space direction="vertical">
-                            {elements}
-                        </Space>
-                    </Radio.Group>
-            
+                    <Space direction="vertical">
+                        {elements}
+                    </Space>
+                </Radio.Group>}
+        
             {show.branch && <>
-                <Divider/>
+                { theme.isDesktop && <Divider/>}
                 <div className={styles.specBlockHeader}> 
                     {t('headers.lawBranches')}
                 </div>
-                {branchs}
+                {!theme.isDesktop &&
+                    <CityInput 
+                        marker="branch" 
+                        value = {branch} 
+                        onChange = {onBranchSelectChange} 
+                    />}
+                {theme.isDesktop && branchs}
+                
             </>}
             {show.budget && <>
-                <Divider/>
+                {theme.isDesktop && <Divider/>}
                 <div className={styles.specBlockHeader}> 
                     {t('labels.budget')}
                 </div>
@@ -212,16 +257,21 @@ export default function  SideFilter({show = {
             </>
             }
 
-            <Button 
+            {theme.isDesktop && <Button 
                 size={theme?.size} 
-                style={{width: "100%", marginTop: "30px"}}
+                style={{
+                 //   width: "100%", 
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                    marginTop: "30px"
+                }}
                 type="primary" 
                 htmlType="button"
                 onClick = {onResetParams}
                 
                 >
                     {t('buttons.resetFilter')}
-            </Button>
+            </Button>}
                         
         </div>
        

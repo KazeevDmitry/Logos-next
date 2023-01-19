@@ -20,7 +20,13 @@ module.exports = withAntdLess({
   lessVarsFilePathAppendToEndOfContent: false,
   // optional https://github.com/webpack-contrib/css-loader#object
   cssLoaderOptions: {},
-
+ 
+    i18n: {
+      locales: ['ru'],
+      defaultLocale: 'ru',
+    },
+ 
+  
   // Other Config Here...
 
   reactStrictMode: true,

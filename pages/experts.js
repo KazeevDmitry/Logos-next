@@ -13,7 +13,8 @@ import { useTranslation } from 'react-i18next'
 import axios from 'axios';
 import { createStrapiAxios } from '../utils/strapi';
 
-import { Pagination, Row, Col } from 'antd';
+
+import { Pagination, Row, Col } from 'antd'; 
 
 import SearchField from '../src/components/searchField/searchField';
 /* import SideFilter from '../src/components/SideFilter/sideFilter'; */
@@ -23,6 +24,7 @@ import { useThemeContext } from '../src/context/themeContext';
 import SideFilter from '../src/components/SideFilter/sideFilter';
 import UserCard from '../src/components/userCard/userCard';
 import ExpertCard from '../src/components/expertCard/expertCard';
+import MyPagination from '../src/components/pagination';
 
 const PAGESIZE = 8;
 
@@ -32,6 +34,8 @@ export default function Experts({serverExperts}) {
   const {currentUser} = useUserContext();
 
   const THEME = useThemeContext();
+
+  console.log("THEME", THEME);
 
   const router = useRouter();
   const [page, setPage] = useState(1);
@@ -49,17 +53,6 @@ export default function Experts({serverExperts}) {
                                                 initialData: serverExperts 
                                               }
                                             );
-
-  function handlePaginationChange(value) {
-    
-    router.query.page = value;
-    const url = {
-      pathname: router.pathname,
-      query: router.query
-    }
-    router.push(url, undefined, { shallow: true });
-    setPage(value);
-  }
 
    useEffect(() => {
     if (router.query.page) {
@@ -82,10 +75,8 @@ export default function Experts({serverExperts}) {
       const user = item.attributes.user.data.attributes;
       const cityName = THEME.cities.find(city => city.id === user.city)?.city;
       const spec = item.attributes.specializations?.data[0]?.attributes?.name?? '';
-      const rating = item.attributes.rating;
+      const rating = item.attributes.rating?? 0;
       const description = item.attributes.description;
-
-console.log("user for card------------------", user);
 
       return(
         <>
@@ -101,7 +92,7 @@ console.log("user for card------------------", user);
                  reviews={18} //временно--------------------------------------------------------------------------------------
                cups={rating}
                spec={spec}
-               image = {user ? user.avatar?.data[0]?.attributes?.url : ''}
+               image = {user ? user.avatar?.data?.attributes?.url : ''}
                online = {"true"}
                cityName={cityName}
                branches={itenBranchesArr}
@@ -110,8 +101,7 @@ console.log("user for card------------------", user);
            </a>  
         
         </Col>
-        {/* <p> {`${attr.name}   ${attr.surname}`}</p>
-        {branches} */}
+
         </>
       )
     });
@@ -125,17 +115,24 @@ console.log("user for card------------------", user);
 
  const pagination = () => {
   return(
-  <Pagination 
-          current={page} 
-          onChange={handlePaginationChange} 
-          //total={  data?.info.pages} 
-          total={total}
-          pageSize={PAGESIZE}
-          //showLessItems={true}
-          hideOnSinglePage={true} 
-          //size={THEME?.id === "xs"||THEME?.id==="sm" ? "small" : "middle"}
-          size="small"
-/>)
+    <div 
+                  style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      width: "100%",
+                      paddingRight: THEME.isDesktop ? "0px" : "10px",
+                  }}
+                >
+                  <MyPagination
+                    page = {page}
+                    total = {total}
+                    pageSize = {PAGESIZE}
+                    setPage = {setPage}
+                  />
+    
+      {total>PAGESIZE && <p>{`${total} специалистов`}</p>}
+    </div>
+)
  }
 
  
@@ -150,29 +147,30 @@ console.log("user for card------------------", user);
         />
         <PageContainer>
          
-                 <Col  xs={24} sm={24} md={16} lg={18} xl={18} >
+                 <Col  xs={24} sm={24} md={16} lg={17} xl={18} >
      
                   <SearchField 
                     style={{ width: "100%", marginTop: "0px", borderRadius: "10px", marginBottom: pad}} 
                     //placeholder={t('placeholders.searchExperts')}
                     placeholder="Введите полностью или частично имя или фамилию"
                     />  
+                    {!THEME.isDesktop && <SideFilter show = {{
+                        city: true,
+                        budget: false,
+                        branch: true}
+                    }/>}
                 {/* <ExpertList /> */}
-                <div 
-                  style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      width: "100%"
-                  }}
-                >
+               
                   {pagination()}
-                  {total>PAGESIZE && <p>{`${total} специалистов`}</p>}
-                </div>
+               
 
 
   
                 {isSuccess && <div>
-                  <Row style = {{width: `100%+${THEME?.gutters?.gorizontal[THEME?.id]}`}} gutter={[THEME?.gutters?.gorizontal, THEME?.gutters?.vertical]}>
+                  <Row 
+                    style = {{width: `100%+${THEME?.gutters?.gorizontal[THEME?.id]}`, marginBottom: "20px"}} 
+                    gutter={[pad, pad]}
+                  >
                     {EXPERTS}
                   </Row>
                  
@@ -181,7 +179,7 @@ console.log("user for card------------------", user);
 
                 {pagination()}
                 </Col>
-                <Col xs={0} sm={0} md={8} lg={6} xl={6} >
+                <Col xs={0} sm={0} md={8} lg={7} xl={6} >
                     <SideFilter show = {{
                         city: true,
                         budget: false,
@@ -248,9 +246,6 @@ export async function getServerSideProps(context) {
   if (context.query.page) {
     page = parseInt(context.query.page);
   }
-
-  console.log("query------------", context.query);
-  console.log("Search------------", context.query.search);
 
   const {search, branch, specialization, city} = context.query;
 

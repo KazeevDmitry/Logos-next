@@ -3,7 +3,7 @@ import { Select } from "antd";
 
 
 
-export default function CityInput({value, onChange, marker="city", width="100%"}) {
+export default function CityInput({value, onChange, marker="city", width="100%", placeholder}) {
    
     const theme = useThemeContext();
  
@@ -20,7 +20,6 @@ export default function CityInput({value, onChange, marker="city", width="100%"}
       onChange?.(newvalue);
    };
  
-
    const elements = marker === "spec" ? 
    SPECIALIZATION.map((item) => 
        <Select.Option key={item.id} value={+item.id}>{item.attributes.name}</Select.Option>
@@ -45,7 +44,7 @@ export default function CityInput({value, onChange, marker="city", width="100%"}
      <Select
        showSearch
        style = {{width: width}}
-       placeholder=""
+       placeholder={placeholder?? ''}
        optionFilterProp="children"
        value={value ? +value : null}
        onChange={onThisChange}

@@ -58,8 +58,8 @@ export default function Register () {
                 setFormStatus({error: 'error', text: 'Пароли не совпадают!'});
                 return;
             }
-
-           const sendValues = {...values, username: email};
+             
+           const sendValues = {...values, username: email, status: clientStatus};
 
             axios.post('/api/register', sendValues).then((res) => {
                 setCurrentUser({...res.data.user, jwt: res.data.jwt});

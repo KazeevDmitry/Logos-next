@@ -16,7 +16,7 @@ export default function ExpertCard({username, surname, image, stars, reviews = '
 
   const  THEME = useThemeContext();
 
-    const cHeight = THEME?.id === "xxl" || THEME?.id === "xl" ? 150 : 120;
+    const cHeight = THEME?.id === "xxl" || THEME?.id === "xl" ? 150 : THEME?.id === "xs" ? 80 : 110;
     const cardHeight = THEME?.id !== "xs" ? "150px" : "130px";
 
 

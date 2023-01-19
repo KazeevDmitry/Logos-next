@@ -18,12 +18,29 @@
     font-size: 20px;
     font-style: normal;
     font-weight: 600;
-    line-height: 36px;
+  ///  line-height: 36px;
     letter-spacing: 0em;
     text-align: left;
     margin-bottom: 15px;
 }
 
+.filterHeader {
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 600;
+   // line-height: 36px;
+    letter-spacing: 0em;
+    text-align: left;
+
+}
+
+.flexCont {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    width: 100% ;
+}
 
 .arbitr {
     display: flex;
@@ -59,3 +76,50 @@
     background: @primary-color !important;
     color: white;
 }
+
+
+
+
+@media (max-width: 1280px) and (min-width: 992px) {
+    
+  }
+  
+  
+  @media (max-width: 991px) and (min-width: 768px) {
+    .specBlock {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    .specBlockHeader {
+        width: 100%;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        //line-height: 36px;
+        letter-spacing: 0em;
+        text-align: left;
+        margin-bottom: 0px;
+        color: #5E6674;
+    }
+
+  
+    }
+    
+    @media (max-width: 767px) {
+        .specBlock {
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+        .specBlockHeader {
+            width: 100%;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 400;
+            //line-height: 36px;
+            letter-spacing: 0em;
+            text-align: left;
+            margin-bottom: 0px;
+            color: #5E6674;
+        }
+      }
+    

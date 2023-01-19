@@ -128,7 +128,7 @@ export default function AppHeader(props)
     }
   ];
   
-  //console.log('currenUser---------IS ', currentUser);  
+ 
 
   const logoffStr = t('buttons.logoff');
 
@@ -138,7 +138,7 @@ export default function AppHeader(props)
 
 if (currentUser.avatar)
  {
-  userImage = currentUser.avatar[0].url;
+  userImage = currentUser.avatar?.url;
 }
 
    return (

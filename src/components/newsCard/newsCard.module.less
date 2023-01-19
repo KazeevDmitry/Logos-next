@@ -1,0 +1,123 @@
+
+.card {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    justify-content: flex-end;
+    width: 100%;
+    height: 320px;
+    border-radius: 10px;
+    padding-bottom: 20px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,.42);
+    z-index: 0;
+    opacity: 1;
+    transition: opacity 0.342s linear;
+    border-radius: 10px;
+  }
+  &:hover {
+    &::before {
+      opacity: .42;
+    }
+  }
+}
+
+.flexCont {
+  display: flex;
+  align-items: center;
+}
+
+.partnerCard {
+  display: flex;
+  position: relative;
+  justify-content: flex-start;
+  width: 100%;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgb(207, 203, 203);
+
+&::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,.42);
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 0.342s linear;
+
+}
+&:hover {
+  &::before {
+    opacity: .42;
+  }
+}
+}
+
+
+.catglabel {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items:center;
+    height: 27px;
+    // background-color: #1890ff;
+    background-color: @primary-color;
+    border-radius: 30px;
+    top: 20px;
+    left: 20px;
+    justify-content: center;
+    padding-left: 20px;
+    padding-right: 20px;
+    color: white;
+
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 450;
+    line-height: 13px;
+    letter-spacing: 0.02em;
+    text-align: center;
+}
+
+.title {
+    color: white;
+    margin-bottom: 30px;
+    width: 80%;
+    margin-left: 20px;
+    margin-right: auto;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 450;
+    line-height: 24px;
+    letter-spacing: 0em;
+    text-align: left;
+}
+
+
+@media (max-width: 1280px) {
+    
+  .card {
+      height: 200px;
+      padding-bottom: 10px;
+      .title {
+          font-size: 16px;
+          margin-bottom: 10px;
+      }
+  }
+  .partnersContainer {
+      margin-top: 20px;
+  }
+  .catglabel {
+    padding: 0px 10px ;
+  }
+}

@@ -116,7 +116,7 @@ export default function Home({circlePeople}) {
       <div style={{...circleStyles[i], position: "absolute"}}> 
         <Link href='experts' >
           <UserImage
-            image= {user ? user.avatar.data[0]?.attributes?.url : ''} 
+            image= {user ? user.avatar.data?.attributes?.url : ''} 
             width= {circleStyles[i].width}
             onMouseEnter = {onMouseEnter(sendUser, topt)} 
             onMouseLeave = {onMouseLeave}
@@ -154,7 +154,7 @@ export default function Home({circlePeople}) {
                   reviews={18} //временно--------------------------------------------------------------------------------------
                 cups={rating}
                 spec={spec}
-                image = {user ? user.avatar?.data[0]?.attributes?.url : ''}
+                image = {user ? user.avatar?.data?.attributes?.url : ''}
                 online = {"true"}
                 cityName={cityName}
               />
