@@ -6,7 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useThemeContext } from '../../context/themeContext';
 
-export default function NewsCard ({title, slug, image, published_at, cnt, catgName, showCatg=true}) {
+export default function NewsCard ({title, slug, image, published_at, cnt, catgName, showCatg=true, catgSlug}) {
 
 
     const currDate = new Date(published_at);
@@ -15,7 +15,7 @@ export default function NewsCard ({title, slug, image, published_at, cnt, catgNa
 return(
     <Col span={cnt}>
 
-        <Link href={`/news/${slug}`} style={{ color: 'white' }}> 
+        <Link href={`/article/${slug}?category=${catgSlug}`} style={{ color: 'white', cursor: "pointer" }}> 
           <div lang="ru"
             className={styles.card}
             style={{
@@ -23,6 +23,7 @@ return(
               backgroundImage: artImage,
               hyphens: "auto",
               backgroundSize: 'cover',
+              cursor: "pointer",
             }}>
 
             {showCatg && catgName && <div className={styles.catglabel}>
@@ -30,12 +31,12 @@ return(
             </div>}
             
             <h5 className={styles.title}
-                style={{ zIndex: 1 }}
+                style={{ zIndex: 1, cursor: "pointer" }}
              >
                   { title } 
             </h5>
            
-            <PublishedDate marginLeft={"20px"} width = {"170px"} currDate = {currDate} textColor = "white"/>
+            <PublishedDate style={{marginLeft: "20px"}} width = {"170px"} currDate = {currDate} textColor = "white"/>
           </div>
           </Link >
     </Col>      

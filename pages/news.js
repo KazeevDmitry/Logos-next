@@ -133,6 +133,7 @@ export default function News({serverNews, categories, partnernews}) {
       const {title, slug} = itemAttrib;
       const image = itemAttrib.image.data?.attributes?.url ?? '';
       const catgName = itemAttrib.category.data?.attributes?.name ?? null;
+      const catgSlug = itemAttrib.category.data?.attributes?.slug ?? null;
       const published_at = itemAttrib.publishedAt;
 
       const cnt = THEME?.id==="xs" ? 24 : ((THEME?.id!=="md" && THEME?.id!=="sm") ? (i === breakPoint ? 16 : 8) : (i % 3 ? 12 : 24));
@@ -155,6 +156,7 @@ export default function News({serverNews, categories, partnernews}) {
           cnt= {cnt}
           catgName = {catgName}
           showCatg = {showCatg}
+          catgSlug = {catgSlug}
         />
   
       )

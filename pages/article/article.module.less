@@ -1,0 +1,272 @@
+.articleStyle {
+    width: 100%;
+    margin-top: 0px;
+    background-color: white;
+    border-radius: 10px;
+    padding-bottom: 40px;
+
+   
+    
+}
+
+.antImageMask {
+    border-radius: 10px 10px 0px 0px;
+}
+
+
+.articleBlock {
+    width: 100%;
+    padding: 0px 40px 0px 40px;
+    margin-top: 40px;
+
+    
+
+    blockquote {
+        background-color: #F5F6F7;
+        padding: 45px 80px 45px 80px;
+        border-radius: 10px;
+        color: black;
+        font-weight: 450;
+        font-style: italic;
+        position: relative;
+        margin-top: 70px;
+        margin-bottom: 45px;
+        &::before {
+            position: absolute;
+            width: 40px;
+            height: 30px;
+            left: 40px;
+            top: -15px;
+            background-image: url("/blockquote.png");
+          //  background: url('/main_bg.jpg') center center/cover no-repeat;
+            background-size: contain;
+            background-repeat: no-repeat;
+            content: '';
+        }
+    }
+
+    h3 {
+        color: #262626;
+        font-size: 24px;
+        font-style: normal;
+        font-weight: 450;
+    }
+    h5 {
+        color: #262626;
+        font-size: 20px;
+        font-style: italic;
+        font-weight: 450;
+    }
+}
+
+.spinBlock {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items:center;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: none;
+
+}
+
+
+.sectionNews {
+    min-height: 782px;
+    width: 100%;
+    background-color: #e5e5e5da;
+    font-family: Futura PT;
+}
+
+.flexContainer {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 150px;
+    z-index: 5;
+    
+}
+
+.headText {
+    font-style: normal;
+    font-size: 44px;
+    font-weight: 450;
+    line-height: 62px;
+    letter-spacing: 0em;
+    text-align: left;
+    font-family: Futura PT;
+    
+}
+
+.newsContainer {
+    position: relative;
+    display: flex;
+    max-width: 1400px;
+    height:auto;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 40px;
+    flex-direction: column;
+    margin-bottom: 40px;
+    z-index: 3;
+}
+
+
+.lastNews {
+    width: 100%;
+    margin-top: 0px;
+    color: #262626;
+    font-size: 28px;
+    font-style: normal;
+    font-weight: 450;
+    line-height: 36px;
+    letter-spacing: 0em;
+    text-align: center;
+    margin-bottom: 40px;
+    
+}
+
+.netIconsBlock {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 40px;
+    
+}
+
+.commentsBlock {
+    width: 100%;
+    background-color: white;
+    border-radius: 10px;
+    margin-top: 20px;
+    padding: 40px 40px 40px 40px;
+    min-height: 200px;
+    
+}
+
+.commentsHeader {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    color: #262626;
+    font-size: 28px;
+    font-style: normal;
+    font-weight: 450;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.addCommentBtn {
+    max-width: 350px;
+}
+
+@media (max-width: 992px) and (min-width: 576px) {
+        
+    .headText {
+        font-size: 35px;
+    }
+    .flexContainer {
+        margin-top: 130px;
+    }
+    .newsContainer {
+        margin-top: 20px;
+    }
+
+    
+    .articleBlock {
+
+        blockquote {
+            
+            padding: 30px 40px;
+            margin-top: 50px;
+            margin-bottom: 35px;
+            &::before {
+                position: absolute;
+                width: 30px;
+                height: 20px;
+                left: 40px;
+                top: -10px;
+            
+            }
+        }
+
+}
+}
+@media (max-width: 576px) {
+        
+     .articleStyle {
+        background-color: none;
+        background: none;
+    }
+    .netIconsBlock {
+        width: 80%;
+        margin-top: 20px;
+        justify-content: space-between;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .articleBlock {
+        padding: 0px 0px;
+        blockquote {
+            background-color: white;
+            padding: 25px 25px;
+            margin-top: 40px;
+            margin-bottom: 30px;
+            &::before {
+                position: absolute;
+                width: 30px;
+                height: 20px;
+                left: 40px;
+                top: -10px;
+            
+            }
+        }
+
+    }
+    .commentsBlock {
+        padding: 15px 20px;
+    }
+    .addCommentBtn {
+        width: 100%;
+        margin-top: 20px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+
+@media (max-width: 767px){
+    
+    .flexContainer {
+        padding-bottom: 20px;
+        padding-left: 20px;
+        
+        color: white;
+        margin-top: 110px;
+        
+
+    }
+    .headText {
+        color:white;
+        font-size: 32px;
+        line-height: 42px;
+    }
+    .newsContainer {
+        padding:10px 10px 10px 10px;
+        border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    background-color: #f0f2f5;
+    z-index: 2;
+    margin-top: 0px;
+    }
+    .articleStyle {
+        margin-top: 0px;
+    }
+}

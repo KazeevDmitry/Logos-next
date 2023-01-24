@@ -9,12 +9,21 @@ import {
 
 
 
-export default function PublishedDate({currDate= new Date(), 
+export default function PublishedDate({
+    currDate= new Date(), 
     textColor= "#CED3DB", 
     imgColor= "#CED3DB", 
     conversations, 
     views, 
-    marginLeft="auto", width = '80%', showEye=false}) {
+    marginLeft="auto",
+    imageWidth = 20,
+    showEye=false,
+    style,
+    imageStyle = {
+        fontSize: `24px`, 
+        fontWeight: "600"
+        },
+}) {
 
     const above1023 = useMediaQuery('(min-width: 1023px)');
 
@@ -28,11 +37,16 @@ export default function PublishedDate({currDate= new Date(),
 
     const conv = conversations ?? '?';
     const cViews = views ?? '?';
+
+    const wrapStyle={...style, color: textColor};
     
     return(
-        <div className={styles.wrapper} style={{color: textColor, marginLeft: marginLeft}}>
+        <div className={styles.wrapper} style={wrapStyle}>
             <div className={styles.dateWrapp}>
-                <CalendarOutlined width = {imgWidth} height = {imgWidth} color = {imgColor}/>
+                <CalendarOutlined style={imageStyle}
+                              width = {imgWidth} 
+                              height = {imgWidth} 
+                              color = {imgColor}/>
                 <span className={styles.date}>{ dateStr }</span>
             </div>
             {showEye && <div className={styles.convWrapp}>

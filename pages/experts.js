@@ -35,7 +35,6 @@ export default function Experts({serverExperts}) {
 
   const THEME = useThemeContext();
 
-  console.log("THEME", THEME);
 
   const router = useRouter();
   const [page, setPage] = useState(1);
@@ -225,14 +224,10 @@ async function getUsers({page, search, branch, specialization, city}) {
 
   let searchStr = searchArr.join("&");
 
-  console.log("SearchStr---------------", searchStr);
-
   const data = await createStrapiAxios()
  .get(`/experts?populate[0]=branches&populate[1]=specializations&populate[2]=user.avatar&${searchStr}`)
  .then(res => res.data)
 
-
- console.log("USERS ------------------- ", data);
 
  return (data) 
 
