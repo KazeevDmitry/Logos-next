@@ -11,7 +11,7 @@ import { useUserContext } from '../src/context/userContext';
 import { useTranslation } from 'react-i18next'
 
 import axios from 'axios';
-import { createStrapiAxios } from '../utils/strapi';
+
 
 import { Pagination, Row, Col } from 'antd';
 
@@ -28,6 +28,7 @@ import MyPagination from '../src/components/pagination';
 import NewsFilter from '../src/components/SideFilter/newsFilter';
 import NewsCard from '../src/components/newsCard/newsCard';
 import {PartnerNewsCard} from '../src/components/newsCard/newsCard';
+import { createStrapiAxios } from '../utils/strapi';
 
 const PAGESIZE = 10;
 
