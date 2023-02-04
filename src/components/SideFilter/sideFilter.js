@@ -11,6 +11,7 @@ export default function  SideFilter({show = {
     city: false,
     budget: false,
     branch: true,
+    spec: true,
 }}) {
 
     const {t} = useTranslation()
@@ -205,6 +206,7 @@ export default function  SideFilter({show = {
             }
          
         
+            {show.spec && <>
             <div className={styles.specBlockHeader}> 
                 {t('headers.specialization')}
             </div>
@@ -223,7 +225,9 @@ export default function  SideFilter({show = {
                         {elements}
                     </Space>
                 </Radio.Group>}
-        
+            </>}
+
+
             {show.branch && <>
                 { theme.isDesktop && <Divider/>}
                 <div className={styles.specBlockHeader}> 

@@ -1,0 +1,66 @@
+.layoutSection {
+
+    //font-family: Futura PT Book;
+   // font-style: normal;
+    
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    margin-top: 70px;
+}
+
+.blockMain {
+    position: relative;
+    width: 900px;
+    //height: 400px;
+    background: white;
+   
+    border-radius: 10px;
+    /* box-shadow: -10px 20px 10px 0px rgba(243, 245, 246, 1); */
+    
+    margin-top: 50px;
+    // margin-right: auto;
+    padding: 40px;
+    margin-bottom: 50px;
+    font-size: 18px;
+
+}
+
+.title {
+    /* margin-top: 30px; */
+    font-size: 25px;
+    font-weight: 600;
+    line-height: 38px;
+    margin-bottom: 20px;
+}
+
+.closeBtn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding-right: 10px;
+    padding-top: 10px;
+    cursor: pointer;
+    color: black;
+    &:hover {
+      color: @primary-color;
+    }
+  }
+
+  .labelContent {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .labelText {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    line-height: 21px;
+    margin-bottom: 5px;
+  }

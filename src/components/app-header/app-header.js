@@ -101,7 +101,7 @@ export default function AppHeader(props)
     },
     {
       name: t('header.menu.3'), // Вопросы юристам
-      to: '/questions'
+      to: '/addquestion' //временно
     }
   ];
 

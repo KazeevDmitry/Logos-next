@@ -88,7 +88,7 @@ const curr = sizes.filter(item => useMediaQuery(item.query));
     }
     async function getBranches() {
       
-      await axios.get(`${process.env.NEXT_PUBLIC_API}/branches`)
+      await axios.get(`${process.env.NEXT_PUBLIC_API}/branches?populate=subbranches`)
       .then((res)=> res.data)
       .then((res) => {
         setBranch(res.data)
