@@ -6,7 +6,7 @@ import { useQuery, useQueryClient, useMutation } from 'react-query';
 
 import axios from 'axios';
 
-import styles from './commentCard.module.less';
+import styles from './questionCard.module.less';
 import UserImage from '../userImage/userImage';
 import Plural from '../../../utils/plural';
 
@@ -18,18 +18,33 @@ import {CaretDownOutlined, CaretUpOutlined} from '@ant-design/icons';
 
 import { useTranslation } from 'react-i18next';
 import {useUserContext} from '../../context/userContext';
+import {useThemeContext} from '../../context/themeContext';
 import { createStrapiAxios } from '../../../utils/strapi';
+import PublishedDate from '../publishedDate/publishedDate';
+import {EnvironmentOutlined} from '@ant-design/icons';
 
 
 const { Paragraph } = Typography;
 const { TextArea } = Input;
 
-export default function QuestionCard ({props}) {
+export default function QuestionCard ({authorName, 
+                                       authorAvatar,
+                                       branch,
+                                       subbranch,
+                                       description,
+                                       title,
+                                       authorCity,
+                                       date,
+                                       questionID,
+                                       childrenCount,
+                                      }) {
 
   const [ellipsis, setEllipsis] = useState(true);
   const [showModal, setShowModal]  = useState(false);
   
   const {currentUser} = useUserContext();
+
+  const theme = useThemeContext();
 
   const {t} = useTranslation();
   
@@ -37,12 +52,10 @@ export default function QuestionCard ({props}) {
   
   const userJWT = currentUser.jwt;
   
+  const currDate = new Date(date);
 
+  const cityName = theme.cities.find(city => city.id === authorCity)?.city;
 
-  const {childrenCount} = props;
-  
-
-  
   const onAnswerBtn = () => {
     setShowModal(true);
   };
@@ -76,98 +89,88 @@ const answersStr = <Plural count={childrenCount} i18nextPath="answers.plural" />
       }
 
       <Col span={24}>
-        <div className={styles.commentCard}>
-          <div className={styles.userWrapper}>
-            <div className={styles.leftUserBox}>
-      
-              <UserImage
-                  image= {userImage}
-                  online={userOnline}
-                  width= {35}
-                  username={username}
-              />
-              <div className={styles.nameBox}>
-                  <span style={{fontSize: "16px"}}>{username}</span>
-                  <span style={{color: "#5E6674", fontWeight: "400", fontSize: "14px", lineHeight: "16px"}}>{moment(date).format('DD MMM YYYY    hh:mm')}</span>
-              </div>    
-            </div>
-
-          </div>  
-          <div className={styles.contentStyle}>
+        <div className={styles.Card}>
+          <div className={styles.title}>
+            <div lang='ru' style={{hyphens: "auto"}}>
+              {title}
+            </div>  
+            <div style={{
+                          display: "flex", 
+                          justifyContent: "flex-start",
+                          marginTop: "15px",
+                          }}
+            >
+              <div className={styles.branchLabel}>
+                {branch}
+              </div>  
+              <div className={styles.branchLabel} style={{marginLeft: "5px"}}>
+                {subbranch}
+              </div>  
+            </div>  
+          </div>
+          <div lang='ru' className={styles.contentStyle}>
             <Paragraph 
-              style={{marginBottom: "5px"}}
               ellipsis={
-                ellipsis
-                  ? {
-                    rows: 3,
-                    expandable: true,
-                    symbol: moreStr,
-                    tooltip: false,
-                  }
-                  : false
-              }>
-            {content}
+                  ellipsis
+                    ? {
+                      rows: 5,
+                      expandable: true,
+                      symbol: moreStr,
+                      tooltip: false,
+                    }
+                    : false
+                }>
+              {description}
             </Paragraph>
           </div>
-         
-          <div className={styles.likesBox}>
-                                                    
-                                                    {/*  {childrenCount>0 && 
-                                                    <Button 
-                                                        //type="text" 
-                                                        icon={!showChildren ? <CaretDownOutlined /> : <CaretUpOutlined />}
-                                                        onClick={() => setShowChildren(!showChildren)}
-                                                      >
-                                                        <Plural count={childrenCount} i18nextPath="answers.plural" /> 
-                                                      </Button>} */}
-
-              {childrenCount>0 && 
-                <div 
-                  className={styles.ellipseAnswers}
-                  onClick={() => setShowChildren(!showChildren)}
-                >
-                  {!showChildren ? <CaretDownOutlined /> : <CaretUpOutlined />}
-                  <span 
-                    style={{
-                      marginLeft: "5px"
-                    }}
+          <div style={{
+                        display: "flex",
+                        justifyContent : "space-between",
+                        alignItems: "base-line",
+                        width: "100%",
+                      }}
+          >
+            <div style={{
+                        display: "flex",
+                        justifyContent : "flex-start",
+                        alignItems: "center",
+                       
+                      }}
+            >
+                 <PublishedDate 
+                    style={{marginRight: "10px"}} 
+                  // width = {"170px"} 
+                    currDate = {currDate} 
+                    textColor = "#babec5"
+                    imageColor = "#babec5"
+                    
+                  />
+                  <div style={{fontWeight: "600", fontSize: "16px", marginRight: "10px", color: "#babec5",}}>
+                    {authorName}
+                  </div>  
+                  <EnvironmentOutlined 
+                                style={{
+                                //  color : "#CED3DB", 
+                                  color: "#babec5",
+                                  fontSize: `19px`, 
+                                  fontWeight: "600",
+                                  //marginLeft: "10px"
+                                  }}/>
+                  <div  style={{
+                                marginLeft: "5px", 
+                                fontSize: "16px",
+                                color: "#babec5",
+                              }}
                   >
-                      <Plural count={childrenCount} i18nextPath="answers.plural" /> 
-                  </span>
-                
-                </div>}
-
-              <button className={styles.answerBtn} disabled={!userJWT } onClick = {onAnswerBtn}>
-                  {t('buttons.answer')}
-              </button>
-
-              
+                    {cityName}
+                  </div>
+            </div>  
           </div>
-
-                   
-          {showChildren && 
-          <div className={styles.commentsBlock}>
-            {props.children}
-          </div>}
-    </div>
+        </div>
   </Col>
   </>
     )
   }
-
-
-async function getComments(commentId) {
-
-  
-  const data = await createStrapiAxios()
- .get(`/comments?filters[parent]=${commentId}`)
- .then(res => res.data)
- .catch(e => console.log("ERROR in getComments --------", e));
- return (data) 
-
-};
-
-
 
   export const AddEntryDialog = ({articleId, currParent, onSuccess, onCancel}) => {
 

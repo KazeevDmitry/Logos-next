@@ -87,8 +87,8 @@ export default function AppHeader(props)
 
   const PAGES = [
     {
-      name: t('header.menu.0'),
-      to: '/tasks',
+      name: 'Задать вопрос',
+      to: '/addquestion',
       
     },
     {
@@ -101,7 +101,7 @@ export default function AppHeader(props)
     },
     {
       name: t('header.menu.3'), // Вопросы юристам
-      to: '/addquestion' //временно
+      to: '/questions'
     }
   ];
 

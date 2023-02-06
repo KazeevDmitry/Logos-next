@@ -23,7 +23,7 @@ import PageHeader from '../src/components/layouts/pageHeader';
 import { useThemeContext } from '../src/context/themeContext';
 import SideFilter from '../src/components/SideFilter/sideFilter';
 import UserCard from '../src/components/userCard/userCard';
-import ExpertCard from '../src/components/expertCard/expertCard';
+import QuestionCard from '../src/components/questionCard/questionCard';
 import MyPagination from '../src/components/pagination';
 
 const PAGESIZE = 8;
@@ -61,12 +61,12 @@ export default function Questions({serverQuestions}) {
   
   
 
-  let EXPERTS = [];
+  let QUESTIONS = [];
   let total = 0;
 
   if (isSuccess) {
     console.log("QUESTIONS--------------------------------------------------------------", questions);
-    return;
+  
   }
 
 
@@ -74,37 +74,40 @@ export default function Questions({serverQuestions}) {
 
     total = meta?.pagination?.total?? 0;
 
-    EXPERTS = experts.map((item, i) => {
+    QUESTIONS = questions.map((item, i) => {
   
-      const itenBranchesArr = item.attributes.branches.data;
-      const user = item.attributes.user.data.attributes;
-      const cityName = THEME.cities.find(city => city.id === user.city)?.city;
-      const spec = item.attributes.specializations?.data[0]?.attributes?.name?? '';
-      const rating = item.attributes.rating?? 0;
+      const authorName = item.attributes.author.data.attributes.name;
+      const authorSurname = item.attributes.author.data.attributes.surname?? '';
+      const authorAvatar = item.attributes.author.data.attributes.avatar.data.attributes.url?? '';
+      const authorCity = item.attributes.author.data.attributes.city;
+      const branchName = item.attributes.branch?.data?.attributes?.name?? '';
+      const subbranchName = item.attributes.subbranch?.data?.attributes?.name?? '';
       const description = item.attributes.description;
+      const title = item.attributes.title;
+      const date = item.attributes.publishedAt;
+      const childrenArr=item.attributes.answers?? [];
+     
 
       return(
         <>
-         {/* <Col  xs={24} sm={12} md={12} lg={12} xl={12}  xxl={12}> */}
-         <Col  xs={24} sm={24} md={24} lg={24} xl={24}  xxl={24}>
-{/* 
-        <Link href="/experts" passHref = {true}> */}  {/* use id from item for href */}
-           <a style={{ color: 'black' }}>
-             <ExpertCard
-               username={user.name}
-               surname={user.surname}
-               stars = {4} //временно---------------------------------------------------------------------------------
-                 reviews={18} //временно--------------------------------------------------------------------------------------
-               cups={rating}
-               spec={spec}
-               image = {user ? user.avatar?.data?.attributes?.url : ''}
-               online = {"true"}
-               cityName={cityName}
-               branches={itenBranchesArr}
-               description={description}
-             />
-           </a>  
         
+         <Col  xs={24} sm={24} md={24} lg={24} xl={24}  xxl={24}>
+
+        
+            <QuestionCard
+               authorName={`${authorName} ${authorSurname}`}
+               authorAvatar = {authorAvatar}
+               branch={branchName}
+               subbranch={subbranchName}
+               description={description}
+               authorCity={authorCity}
+               date={date}
+               questionID = {item.id}
+               childrenCount = {childrenArr.lenght}
+               title={title}
+             />
+
+      
         </Col>
 
         </>
@@ -148,7 +151,7 @@ export default function Questions({serverQuestions}) {
       
         <PageHeader 
           /* title={t('headers.experts')} */
-          title="Эксперты"  
+          title="Вопросы и ответы"  
         />
         <PageContainer>
          
@@ -157,7 +160,7 @@ export default function Questions({serverQuestions}) {
                   <SearchField 
                     style={{ width: "100%", marginTop: "0px", borderRadius: "10px", marginBottom: pad}} 
                     //placeholder={t('placeholders.searchExperts')}
-                    placeholder="Введите полностью или частично имя или фамилию"
+                    placeholder="Введите строку для поиска"
                     />  
                     {!THEME.isDesktop && <SideFilter show = {{
                         city: true,
@@ -176,7 +179,7 @@ export default function Questions({serverQuestions}) {
                     style = {{width: `100%+${THEME?.gutters?.gorizontal[THEME?.id]}`, marginBottom: "20px"}} 
                     gutter={[pad, pad]}
                   >
-                    {EXPERTS}
+                    {QUESTIONS}
                   </Row>
                  
                   </div>}
@@ -228,7 +231,7 @@ async function getUsers({page, search, branch, subbranch}) {
 
   const data = await createStrapiAxios()
  //.get(`/experts?populate[0]=branches&populate[1]=specializations&populate[2]=user.avatar&${searchStr}`)
- .get(`/questions?${searchStr}`)
+ .get(`/questions?populate[0]=branch&populate[1]=subbranch&populate[2]=author.avatar&populate[3]=answers${searchStr}`)
  .then(res => res.data)
 
 
