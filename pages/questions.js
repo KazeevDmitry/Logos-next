@@ -85,8 +85,11 @@ export default function Questions({serverQuestions}) {
       const description = item.attributes.description;
       const title = item.attributes.title;
       const date = item.attributes.publishedAt;
-      const childrenArr=item.attributes.answers?? [];
+      const childrenArr=item.attributes.answers.data?? [];
+
+      //const ANSWERS = childrenArr.map()
      
+      console.log("childrenArr--------------------------------------------------------------", childrenArr);
 
       return(
         <>
@@ -103,8 +106,9 @@ export default function Questions({serverQuestions}) {
                authorCity={authorCity}
                date={date}
                questionID = {item.id}
-               childrenCount = {childrenArr.lenght}
+               childrenCount = {childrenArr.length}
                title={title}
+               answers={childrenArr}
              />
 
       
@@ -223,7 +227,7 @@ async function getUsers({page, search, branch, subbranch}) {
 
   searchArr.push(`pagination[page]=${page}&pagination[pageSize]=${PAGESIZE}`);
   
-  searchArr.push(`populate=%2A`);
+  //searchArr.push(`populate=%2A`);
     
   searchArr.push(`sort[0]=publishedAt:desc`);
 
@@ -231,7 +235,8 @@ async function getUsers({page, search, branch, subbranch}) {
 
   const data = await createStrapiAxios()
  //.get(`/experts?populate[0]=branches&populate[1]=specializations&populate[2]=user.avatar&${searchStr}`)
- .get(`/questions?populate[0]=branch&populate[1]=subbranch&populate[2]=author.avatar&populate[3]=answers${searchStr}`)
+ //.get(`/questions?populate[0]=branch&populate[1]=subbranch&populate[2]=author.avatar&populate[3]=answers${searchStr}`)
+ .get(`/questions?populate=deep&${searchStr}`)
  .then(res => res.data)
 
 
