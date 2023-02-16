@@ -9,11 +9,13 @@ export default function PageContainer (props) {
     
     const theme = useThemeContext();
     
-    const gorGutter = `${theme?.gutters?.gorizontal[theme?.id]/2}px`;
+    const gut = theme?.gutters?.gorizontal[theme?.id]?? 20;
+    const gorGutter = `${gut/2}px`;
+    const pad = `${gut}px`;
 
 return (
-    <div className={styles.container}>
-        <Row gutter = {[theme?.gutters?.gorizontal[theme?.id], theme?.gutters?.gorizontal[theme?.id]]} style={{width: `100%+${gorGutter}`}}>
+    <div className={styles.container} style={{marginTop: pad}}>
+        <Row gutter = {[gut, gut]} style={{width: `100%+${gorGutter}`}}>
           {props.children}
           </Row>
       </div>  

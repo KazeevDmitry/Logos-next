@@ -8,7 +8,8 @@ export const UserContext = createContext();
 
 export const UserProvider = (props) => {
    
-    const [currentUser, setCurrentUser] = useState({});
+    //const [currentUser, setCurrentUser] = useState({});
+    const [currentUser, setCurrentUser] = useState(null);
 
     async function getUser() {
       

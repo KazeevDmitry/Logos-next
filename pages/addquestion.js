@@ -62,9 +62,9 @@ const { errorStatus,qTitle,qBody,qBranch } = stateValues;
     const router=useRouter();
 
   const {currentUser} = useUserContext();
-  const userId = currentUser.id;
+  const userId = currentUser?.id;
    
-  const userJWT = currentUser.jwt;
+  const userJWT = currentUser?.jwt;
 
     const p = theme?.gutters?.gorizontal[theme?.id];
 
@@ -111,7 +111,7 @@ const { errorStatus,qTitle,qBody,qBranch } = stateValues;
     );
 
     const onSuccess = () => {
-      console.log("Вопрос сохранен--------------------------------------------------------------!!!!!!!!!!!!!!!!!!!!!");
+    
       setUnsavedChanges(false);
       setQuestionSaved(true);
     };
@@ -144,11 +144,11 @@ const { errorStatus,qTitle,qBody,qBranch } = stateValues;
 
    // };
         
-    useEffect(() => {
+/*     useEffect(() => {
       if (typeof window !== 'undefined') {
           setSectionMinHeigth(`${document.documentElement.clientHeight-200}px`);
       }
-    }, []);
+    }, []); */
 
     const [unsavedChanges, setUnsavedChanges] = useState(false);
 
@@ -181,7 +181,8 @@ const { errorStatus,qTitle,qBody,qBranch } = stateValues;
 
       return (
 
-        <div className={styles.layoutSection} style={{minHeight: sectionMinHeigth}}>
+         <div className={styles.layoutSection}> 
+       
           {!questionSaved && 
           <div className={styles.blockMain} style={{padding: pad}}>
             <div className={styles.closeBtn} onClick={()=> router.back()}><CloseOutlined /></div>
@@ -325,6 +326,7 @@ const { errorStatus,qTitle,qBody,qBranch } = stateValues;
 
             </div>
           }
+        
         </div>
       );
     };

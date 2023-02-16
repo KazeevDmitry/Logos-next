@@ -5,7 +5,7 @@ import {useThemeContext} from '../../context/themeContext';
 
 import { TreeSelect } from 'antd';
 
-export default function BranchSelect({onChange, errorStatus}) {
+export default function BranchSelect({value, onChange, errorStatus}) {
 
     
 const {branches} = useThemeContext();
@@ -31,7 +31,11 @@ let treeData = [];
 
     
 
-      const [value, setValue] = useState();
+      const [thisValue, setValue] = useState(value);
+
+      useEffect(() => {
+        setValue(value)
+      }, [value]);
 
       const onThisChange = (newValue) => {
 
@@ -56,7 +60,8 @@ let treeData = [];
 
      };
 
-        
+
+
      return (
               
         <TreeSelect
@@ -64,18 +69,18 @@ let treeData = [];
           style={{
             width: '100%',
           }}
-          value={value}
+          value={thisValue}
           dropdownStyle={{
             maxHeight: 400,
             overflow: 'auto',
           }}
           placeholder="Начните ввод для поиска"
-          allowClear
           treeDefaultExpandAll
           treeData={treeData}
           size='large'
           onChange={onThisChange}
           status={errorStatus ? "error" : null}
+          allowClear
         />
       
       );

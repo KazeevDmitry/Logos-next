@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import styles from './sideFilter.module.less';
 import {useThemeContext} from '../../context/themeContext';
 import { Button, Radio, Space, Divider, Checkbox } from 'antd';
@@ -6,12 +6,15 @@ import CityInput from '../cityInput/cityInput';
 import InputSlider from '../input-slider/input-slider';
 import { useRouter } from "next/router";
 import { useTranslation } from 'react-i18next';
+import BranchSelect from '../branchSelect/branchSelect';
+
 
 export default function  SideFilter({show = {
     city: false,
     budget: false,
     branch: true,
     spec: true,
+    showreset: true,
 }}) {
 
     const {t} = useTranslation()
@@ -20,32 +23,40 @@ export default function  SideFilter({show = {
     const SPECS = theme.spec;
     const BRANCHES = theme.branches;
 
+    const [branchValue, setBranchValue] = useState();
+
     const maxValues=[1000, 500000];
     
-    const {branch, specialization, city, budgetmin, budgetmax, contractual} = router.query;
+    const {branch, specialization, city, budgetmin, budgetmax, contractual, subbranch} = router.query;
  
     const budget = !contractual && budgetmin !== null && budgetmax !==null  ? {inp1: budgetmin, inp2: budgetmax} : null; 
 
-    /* const onParamChange = (param, value) => (sent) => {
-        if (param === "contr") {
-            router.query.contractual = e.target.checked;    
-        }else
-        {
-            if (value) {
-                router.query[param] = value;
-            }else{
-                router.query[param] = sent.target ? sent.target.value : sent;
-            }
-            
-        }
+    // BRANCHES.map((item) => {
+    //     if()
+    // } )
+
+    useEffect(() => {
+        const currBranch = BRANCHES.find(item => item.id === parseInt(branch));
+
+        let currBranchValue = '';
+        let cSub = null;
         
-        const url = {
-          pathname: router.pathname,
-          query: router.query
-        }
-        router.push(url, undefined, { shallow: true });
-    }; */
-       
+            if (currBranch) {
+               currBranchValue = currBranch.attributes.name;
+                if (subbranch) {
+                    cSub = currBranch.attributes.subbranches.data.find(item => item.id === parseInt(subbranch));
+            
+                    if (cSub) {
+                        currBranchValue=cSub.attributes.name;
+                    }
+                }
+            }
+        setBranchValue(currBranchValue);
+console.log("currBranch ----------------------------------------------------------------------------", currBranchValue);               
+      }, [theme]);
+
+
+         
     const onSpecChange = (e) => {
         
         router.query.specialization = e.target?.value?? e; 
@@ -73,7 +84,9 @@ export default function  SideFilter({show = {
 
     const onBranchChange = (value) => {
         
-        router.query.branch = value; 
+
+        router.query.branch = value.branch_id;
+        router.query.subbranch = value.subbranch_id; 
         router.query.page = 1;
         const url = {
             pathname: router.pathname,
@@ -127,6 +140,7 @@ export default function  SideFilter({show = {
 
          delete router.query.city
          delete router.query.branch
+         delete router.query.subbranch
          delete router.query.specialization
          delete router.query.contractual
          delete router.query.budgetmin
@@ -155,19 +169,6 @@ export default function  SideFilter({show = {
     );
 
 
-    const branchs = BRANCHES?.map((item, i) => 
- 
-            <div 
-                key = {item.id}
-                className={String(item.id)===branch ? styles.arbitr + ' ' + styles.activeKatg : styles.arbitr}
-                onClick={() => onBranchChange(item.id)}
-               
-                >
-                    {item.attributes.name.toUpperCase()}
-            </div>
-        
-    );
-
     const contr = contractual === 'true' ? true : false;
 
 
@@ -190,6 +191,9 @@ export default function  SideFilter({show = {
                        Сбросить
                 </Button>
             </div>    }
+            {theme.isDesktop &&
+                <div style={{fontSize: "25px", lineHeight: "27px", fontWeight: "600", marginBottom: pad}}> Фильтр </div>
+            }
             
 
             {show.city && <><div className={styles.specBlockHeader}> 
@@ -201,7 +205,7 @@ export default function  SideFilter({show = {
                        //placeholder={!theme.isDesktop ? "Город" : ""}
                         
             />
-            {theme.isDesktop && <Divider/>}
+           {/*  {theme.isDesktop && <Divider/>} */}
             </>
             }
          
@@ -210,13 +214,17 @@ export default function  SideFilter({show = {
             <div className={styles.specBlockHeader}> 
                 {t('headers.specialization')}
             </div>
-            {!theme.isDesktop && 
+           {/*  {!theme.isDesktop &&  */}
                 <CityInput 
                     marker="spec" 
                     value = {specialization} 
                     onChange = {onSpecSelectChange} 
-                />}
-            {theme.isDesktop && 
+                />
+            </>}
+               
+
+ {/* ВРЕМЕННО УБРАЛ---------------------------------------------------------------------------------------------------
+             {theme.isDesktop && 
                 <Radio.Group 
                     onChange={onSpecChange} 
                     value={specialization}>
@@ -227,23 +235,22 @@ export default function  SideFilter({show = {
                 </Radio.Group>}
             </>}
 
-
+ */}
             {show.branch && <>
-                { theme.isDesktop && <Divider/>}
+                {/* { theme.isDesktop && <Divider/>} */}
                 <div className={styles.specBlockHeader}> 
-                    {t('headers.lawBranches')}
+                    Отрасль права
                 </div>
-                {!theme.isDesktop &&
-                    <CityInput 
-                        marker="branch" 
-                        value = {branch} 
-                        onChange = {onBranchSelectChange} 
-                    />}
-                {theme.isDesktop && branchs}
+                
+                <BranchSelect
+                      onChange={onBranchChange}
+                      value={branchValue}
+                      //value="налогообложение"
+                    />  
                 
             </>}
             {show.budget && <>
-                {theme.isDesktop && <Divider/>}
+                {/* {theme.isDesktop && <Divider/>} */}
                 <div className={styles.specBlockHeader}> 
                     {t('labels.budget')}
                 </div>
@@ -261,7 +268,8 @@ export default function  SideFilter({show = {
             </>
             }
 
-            {theme.isDesktop && <Button 
+            {theme.isDesktop && show.showreset && 
+            <Button 
                 size={theme?.size} 
                 style={{
                  //   width: "100%", 
@@ -272,7 +280,7 @@ export default function  SideFilter({show = {
                 type="primary" 
                 htmlType="button"
                 onClick = {onResetParams}
-                
+                ghost
                 >
                     {t('buttons.resetFilter')}
             </Button>}
@@ -281,4 +289,29 @@ export default function  SideFilter({show = {
        
       )
 
+}
+
+
+export function AskQuestionSideBlock ({style}) {
+
+   
+    const theme = useThemeContext();  
+    
+    return (
+        
+       <div className={styles.specBlock} style={style}> 
+            <span style={{fontSize: "22px", fontWeight: "600",textAlign: "center"}}>
+                Задайте бесплатный вопрос специалистам портала
+            </span>
+                
+            <Button 
+                type="primary"
+                onClick={() => router.push("/addquestion")}
+                size={theme.size}
+                style={{marginTop : style?.padding, width: "100%"}}
+            >
+                Задать вопрос
+            </Button>
+        </div> 
+    )
 }

@@ -136,9 +136,9 @@ export default function AppHeader(props)
 
   let userImage='';
 
-if (currentUser.avatar)
+if (currentUser?.avatar)
  {
-  userImage = currentUser.avatar?.url;
+  userImage = currentUser?.avatar?.url;
 }
 
    return (

@@ -1,4 +1,4 @@
-
+import React, {useEffect, useState} from 'react';
 import AppHeader from '../app-header/app-header';
 import Footer from '../footer/footer';
 
@@ -11,13 +11,30 @@ const { Content } = Layout;
 
 export default function MainLayout({ children }) {
 
+
+  const [sectionMinHeigth, setSectionMinHeigth] = useState(``); 
+
   const theme = useThemeContext();
+
+  const resizeHandler = () => {
+
+    setSectionMinHeigth(`${document.documentElement.clientHeight-130}px`);
+  }
+
+  useEffect(() => {
+    window.addEventListener("resize", resizeHandler);
+    resizeHandler();
+    return () => {
+      window.removeEventListener("resize", resizeHandler);
+    };
+  }, []);
+
 
   return (
     <>
     <Layout>
       <AppHeader />
-      <Content className={styles.appContainer} style={{paddingLeft: theme?.appContainerPadding, paddingRight: theme?.appContainerPadding}}>
+      <Content className={styles.appContainer} style={{paddingLeft: theme?.appContainerPadding, paddingRight: theme?.appContainerPadding, minHeight: sectionMinHeigth}}>
         {children}  
       </Content>
       

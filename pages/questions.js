@@ -1,5 +1,6 @@
 
 import React, { useEffect } from 'react';
+import Link from 'next/link';
 
 import { useQuery, dehydrate, QueryClient } from "react-query";
 import { useState } from "react";
@@ -14,7 +15,7 @@ import axios from 'axios';
 import { createStrapiAxios } from '../utils/strapi';
 
 
-import { Pagination, Row, Col } from 'antd'; 
+import { Pagination, Row, Col, Button } from 'antd'; 
 
 import SearchField from '../src/components/searchField/searchField';
 /* import SideFilter from '../src/components/SideFilter/sideFilter'; */
@@ -25,13 +26,16 @@ import SideFilter from '../src/components/SideFilter/sideFilter';
 import UserCard from '../src/components/userCard/userCard';
 import QuestionCard from '../src/components/questionCard/questionCard';
 import MyPagination from '../src/components/pagination';
-
+import {AskQuestionSideBlock} from '../src/components/SideFilter/sideFilter'
 const PAGESIZE = 8;
 
 
-export default function Questions({serverQuestions}) {
+export default function Questions(
+  {serverQuestions}
+  ) {
 
   const {currentUser} = useUserContext();
+  const [isExpert, setIsExpert]  = useState(false);
 
   const THEME = useThemeContext();
 
@@ -49,7 +53,7 @@ export default function Questions({serverQuestions}) {
                                                 keepPreviousData: true,
                                                 refetchOnMount: false,
                                                 refetchOnWindowFocus: false,
-                                                initialData: serverQuestions 
+                                                initialData: serverQuestions ,
                                               }
                                             );
 
@@ -59,16 +63,18 @@ export default function Questions({serverQuestions}) {
     }
   }, [router.query.page]); 
   
-  
+  useEffect(() => {
+    if ( currentUser ) {
+        if (!Object.keys(currentUser).length) {
+          setIsExpert(false);    
+        }else {
+          setIsExpert(currentUser.status === 1);
+        }
+      }
+}, [currentUser]);
 
   let QUESTIONS = [];
   let total = 0;
-
-  if (isSuccess) {
-    console.log("QUESTIONS--------------------------------------------------------------", questions);
-  
-  }
-
 
  if (isSuccess) {
 
@@ -78,7 +84,7 @@ export default function Questions({serverQuestions}) {
   
       const authorName = item.attributes.author.data.attributes.name;
       const authorSurname = item.attributes.author.data.attributes.surname?? '';
-      const authorAvatar = item.attributes.author.data.attributes.avatar.data.attributes.url?? '';
+     // const authorAvatar = item.attributes.author.data.attributes.avatar.data.attributes.url?? '';
       const authorCity = item.attributes.author.data.attributes.city;
       const branchName = item.attributes.branch?.data?.attributes?.name?? '';
       const subbranchName = item.attributes.subbranch?.data?.attributes?.name?? '';
@@ -87,19 +93,17 @@ export default function Questions({serverQuestions}) {
       const date = item.attributes.publishedAt;
       const childrenArr=item.attributes.answers.data?? [];
 
-      //const ANSWERS = childrenArr.map()
-     
-      console.log("childrenArr--------------------------------------------------------------", childrenArr);
 
       return(
         <>
         
          <Col  xs={24} sm={24} md={24} lg={24} xl={24}  xxl={24}>
 
-        
+         <Link href={`/question/${item.id}`} > 
+          <a style={{ color: 'black', cursor: "pointer" }}>
             <QuestionCard
                authorName={`${authorName} ${authorSurname}`}
-               authorAvatar = {authorAvatar}
+               //authorAvatar = {authorAvatar}
                branch={branchName}
                subbranch={subbranchName}
                description={description}
@@ -110,7 +114,8 @@ export default function Questions({serverQuestions}) {
                title={title}
                answers={childrenArr}
              />
-
+             </a>
+          </Link>
       
         </Col>
 
@@ -192,11 +197,18 @@ export default function Questions({serverQuestions}) {
                 {pagination()}
                 </Col>
                 <Col xs={0} sm={0} md={8} lg={7} xl={6} >
+
+                {!isExpert && 
+                <AskQuestionSideBlock style={{padding: pad, marginBottom: pad}}/>}
+
                     <SideFilter show = {{
-                        city: true,
+                        city: false,
                         budget: false,
-                        branch: true}
+                        branch: true,
+                        showreset: false,
+                      }
                     }/>   
+                    
                 </Col>
   
             {/* </Row> */}
@@ -235,7 +247,7 @@ async function getUsers({page, search, branch, subbranch}) {
 
   const data = await createStrapiAxios()
  //.get(`/experts?populate[0]=branches&populate[1]=specializations&populate[2]=user.avatar&${searchStr}`)
- //.get(`/questions?populate[0]=branch&populate[1]=subbranch&populate[2]=author.avatar&populate[3]=answers${searchStr}`)
+ //.get(`/questions?populate[0]=branch&populate[1]=subbranch&populate[2]=author&populate[3]=answers${searchStr}`)
  .get(`/questions?populate=deep&${searchStr}`)
  .then(res => res.data)
 
@@ -247,16 +259,15 @@ async function getUsers({page, search, branch, subbranch}) {
 
 
 export async function getServerSideProps(context) {
-  let page = 1;
- 
-  if (context.query.page) {
-    page = parseInt(context.query.page);
-  }
+   let page = 1;
 
-  const {search, branch, subbranch} = context.query;
+   if (context.query.page) {
+     page = parseInt(context.query.page);
+   }
 
-  const data = await getUsers({page, search, branch, subbranch});
+   const {search, branch, subbranch} = context.query;
+   const data = await getUsers({page, search, branch, subbranch});
 
   
-  return { props: { serverQuestions: data } }  
-}
+   return { props: { serverQuestions: data } }  
+ }

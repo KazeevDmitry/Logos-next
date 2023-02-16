@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import { Typography } from 'antd';
 import { useQuery, useQueryClient, useMutation } from 'react-query';
@@ -24,7 +24,6 @@ import PublishedDate from '../publishedDate/publishedDate';
 
 let theme={};
 
-
 const { Paragraph } = Typography;
 const { TextArea } = Input;
 
@@ -42,18 +41,20 @@ export default function QuestionCard ({authorName,
                                        ellipseAnswers=false,
                                       }) {
 
-  const [ellipsis, setEllipsis] = useState(true);
-  const [showModal, setShowModal]  = useState(false);
+  const [answerText, setAnswerText]  = useState('');
   
   const {currentUser} = useUserContext();
-  const [showChildren, setShowChildren] = useState(false);
+
+  const isExpert = currentUser?.status === 1;
+
+  const [showChildren, setShowChildren] = useState(ellipseAnswers && !isExpert);
   theme = useThemeContext();
 
   const {t} = useTranslation();
   
   const moreStr = <span style={{color: "#0066FF", fontWeight: "600"}}>{`>>>>`}</span>;
   
-  const userJWT = currentUser.jwt;
+  const userJWT = currentUser?.jwt;
   
   const currDate = new Date(date);
 
@@ -65,7 +66,6 @@ export default function QuestionCard ({authorName,
 
 
 const ANSWERS = answers.map(item=>{
-  console.log("ANSWER--------------------------------------------------------------", item);
 
   return (
     <AnswerCard
@@ -91,31 +91,20 @@ const ANSWERS = answers.map(item=>{
   const onAddCancel = () => {
     setShowModal(false);    
   };
+  const onAnswerChange = (e) => {
+    setAnswerText(e.target.value);    
+  };
 
 //const answersStr = <Plural count={childrenCount} i18nextPath="answers.plural" />;
 
     return(
       <>
-      {showModal && 
-        <AddEntryDialog
-          articleId = {articleId}
-          currParent = {commentId?? null}
-          // userJWT = {userJWT?? null}
-          // userId = {userId?? null}
-          queryName = {queryName}
-          onSuccess = {onAddSuccess}
-          onCancel = {onAddCancel}
-          //source = {source}
-          // userId = {userId}
-          />
-      }
-
-      <Col span={24}>
+    
         <div className={styles.Card} style={{padding: pad}}>
-          <div className={styles.title}>
-            <div lang='ru' style={{hyphens: "auto"}}>
+          {!ellipseAnswers && <div className={styles.title}>
+            <qheader className={styles.qheader} lang='ru' style={{hyphens: "auto"}} >
               {title}
-            </div>  
+            </qheader>  
             <div style={{
                           display: "flex", 
                           justifyContent: "flex-start",
@@ -129,18 +118,17 @@ const ANSWERS = answers.map(item=>{
                 {subbranch}
               </div>  
             </div>  
-          </div>
+          </div>}
           <div lang='ru' className={styles.contentStyle} style={{marginTop: pad}}>
             <Paragraph 
               ellipsis={
-                  ellipsis
-                    ? {
+                  {
                       rows: 5,
-                      expandable: true,
-                      symbol: moreStr,
+                      expandable: false,
+                     // symbol: moreStr,
+                     symbol: '',
                       tooltip: false,
                     }
-                    : false
                 }
                 style={{marginBottom: "0px"}}
                 >
@@ -154,67 +142,69 @@ const ANSWERS = answers.map(item=>{
                         width: "100%",
                         flexWrap: 'wrap',
                       }}
-          >
-            <div style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        marginTop: pad,
-                      }}
             >
-              <div
-                style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "flex-start",
-              }}
-              >
-                 <PublishedDate 
-                    style={{marginRight: "10px"}} 
-                  // width = {"170px"} 
-                    currDate = {currDate} 
-                    textColor = "#babec5"
-                    imageColor = "#babec5"
-                    imageStyle = {{
-                      fontSize: `19px`, 
-                      fontWeight: "450"
-                      }}
-                  />
-                  <div style={{fontWeight: "600", fontSize: "16px", marginRight: "10px", color: "#babec5",whiteSpace: "nowrap"}}>
-                    {authorName}
-                  </div> 
-              </div>
-
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent : "flex-start",
-                      alignItems: "center",
-                      flexWrap: 'nowrap',
-                      //marginTop: pad,
-                    
-                    }}
+                  <div style={{
+                              display: "flex",
+                              flexDirection: "column",
+                              marginTop: pad,
+                            }}
                   >
-                      <EnvironmentOutlined 
-                                    style={{
-                                    //  color : "#CED3DB", 
-                                      color: "#babec5",
-                                      fontSize: `19px`, 
-                                      fontWeight: "600",
-                                      //marginLeft: "10px"
-                                      }}/>
-                      <div  style={{
-                                    marginLeft: "5px", 
-                                    fontSize: "16px",
-                                    color: "#babec5",
-                                    whiteSpace: "nowrap",
-                                    textOverflow: "ellipsis",
+                        <div
+                          style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "flex-start",
+                        }}
+                        >
+                            <PublishedDate 
+                                style={{marginRight: "10px"}} 
+                              // width = {"170px"} 
+                                currDate = {currDate} 
+                                textColor = "#babec5"
+                                imageColor = "#babec5"
+                                imageStyle = {{
+                                  fontSize: `19px`, 
+                                  fontWeight: "450"
                                   }}
-                      >
-                        {cityName}
-                      </div>
-                   </div>     
-            </div> 
+                              />
+                            <div style={{fontWeight: "600", fontSize: "16px", marginRight: "10px", color: "#babec5",whiteSpace: "nowrap"}}>
+                              {authorName}
+                            </div> 
+                        </div>
+
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent : "flex-start",
+                            alignItems: "center",
+                            flexWrap: 'nowrap',
+                            //marginTop: pad,
+                          
+                          }}
+                        >
+                            <EnvironmentOutlined 
+                                          style={{
+                                          //  color : "#CED3DB", 
+                                            color: "#babec5",
+                                            fontSize: `19px`, 
+                                            fontWeight: "600",
+                                            //marginLeft: "10px"
+                                            }}/>
+                            <div  style={{
+                                          marginLeft: "5px", 
+                                          fontSize: "16px",
+                                          color: "#babec5",
+                                          whiteSpace: "nowrap",
+                                          textOverflow: "ellipsis",
+                                        }}
+                            >
+                              {cityName}
+                            </div>
+                        </div>     
+                    </div> 
             
+             
+
             <div
               style={{
                 display: "flex",
@@ -238,124 +228,70 @@ const ANSWERS = answers.map(item=>{
                   </span>}
                 </div>}
 
-            {/*   <button className={styles.answerBtnBorder} disabled={!userJWT } onClick = {onAnswerBtn}>
-                  {t('buttons.answer')}
-              </button> */}
-{/*               <Button type="primary" 
-                      ghost 
-                      style={{fontSize: "18px", lineHeight: '20px'}}
-                      
-                      >
-                {t('buttons.answer')}
-              </Button> */}
+
             </div>  
 
 
           </div>
+
+          {isExpert && ellipseAnswers && 
+             <div className={styles.answerCard} style={{marginTop: pad}}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    width: "100%",
+                    marginBottom: "20px",
+                  }}
+                >
+                   <span style={{fontSize: '20px', fontWeight: "600", lineHeight: '22px'}}>Ваш ответ</span>
+                   <Button type="primary" 
+                      ghost 
+                      style={{fontSize: "18px", lineHeight: '20px'}}
+                      >
+                      Опубликовать ответ
+                    </Button>
+                </div>
+
+                <TextArea
+                        autoSize={{
+                          minRows: 3,
+                          maxRows: 5,
+                        }}
+                     //   maxLength={150}
+                        size={theme.size}
+                        onChange={onAnswerChange}
+                        value={answerText}
+                      //  status={errorStatus && (!qBody||qBody==='') ? "error" : null}
+                  />
+             </div>}
                     
-          {/* {showChildren &&  */}
-          {ellipseAnswers &&
+          {showChildren && 
+        
           <div className={styles.answersBlock} style={{marginTop: pad, padding: '0px'}}>
             <div
               style={{
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
-                marginTop: pad,
               }}
             >
-              <p style={{fontSize: '20px', fontWeight: "600", lineHeight: '22px'}}>Ответы специалистов</p>
-              <span className={styles.ellipseAnswers}>
+              <span style={{fontSize: '20px', fontWeight: "600", lineHeight: '22px'}}>Ответы специалистов</span>
+              {!isExpert && <span className={styles.answers}>
                       <Plural count={childrenCount} i18nextPath="answers.plural" /> 
-                  </span>
+                  </span>}
             </div>
             {ANSWERS}
           </div>}
         </div>
-  </Col>
+
   </>
     )
   }
 
   //***************************************************************************************************** */
 
-  export const AddEntryDialog = ({questionId, onSuccess, onCancel}) => {
-
-
-    const {currentUser} = useUserContext();
-    const userJWT = currentUser.jwt;
-    const userId = currentUser.id;
-  
-
-    if (!userJWT) {
-      return null;
-    }
-
-    const queryClient = useQueryClient();
-    const [modalText, setModalText] = useState('');
-
-    const mutation = useMutation((newAnswer) =>
-    axios.post(`${process.env.NEXT_PUBLIC_API}/answers`, 
-                newAnswer, 
-                {
-                   headers: {
-                    Authorization: `Bearer ${userJWT}` }
-                }    
-              )
-    );
-
-    const onModalChange = (e) => {
-      setModalText(e.target.value);
-    };
-
-    const handleOk = () => {
-
-      const mutateValue = {
-        "data": {
-          "author": userId,
-          "text": modalText, 
-          "article": articleId,
-          "parent": currParent,
-          }
-        }
-
-    mutation.mutate(mutateValue,
-                      {
-                        onSuccess: () => {
-                         
-                          queryClient.invalidateQueries(["comments", articleId, currParent]);
-                          queryClient.invalidateQueries(["commentChildren", currParent]);
-                          onSuccess();
-                        }
-                      }
-      );
-    };
-  
-    return (
-      <Modal
-        visible={true}
-        title="Ваш комментарий"
-        onOk={handleOk}
-        onCancel={() => onCancel()}
-        footer={[
-          <Button key="cancel" 
-            onClick={() => onCancel()}
-            >
-            Отмена
-          </Button>,
-          <Button key="submit" type="primary" 
-            onClick={handleOk}
-            >
-            Сохранить
-          </Button>,
-          
-        ]}
-      >
-        <TextArea rows={4} onChange = {onModalChange} value = {modalText}/>
-      </Modal>
-
-    )
-  }
 
   export function AnswerCard ({author, date, text, pad}) {
 
