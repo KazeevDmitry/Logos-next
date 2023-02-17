@@ -56,8 +56,6 @@ export default function QuestionCard ({authorName,
   
   const userJWT = currentUser?.jwt;
   
-  const currDate = new Date(date);
-
   const cityName = theme.cities.find(city => city.id === authorCity)?.city;
 
   const p = theme?.gutters?.gorizontal[theme?.id];
@@ -114,9 +112,9 @@ const ANSWERS = answers.map(item=>{
               <div className={styles.branchLabel}>
                 {branch}
               </div>  
-              <div className={styles.branchLabel} style={{marginLeft: "5px"}}>
+              {subbranch && <div className={styles.branchLabel} style={{marginLeft: "5px"}}>
                 {subbranch}
-              </div>  
+              </div> } 
             </div>  
           </div>}
           <div lang='ru' className={styles.contentStyle} style={{marginTop: pad}}>
@@ -159,20 +157,21 @@ const ANSWERS = answers.map(item=>{
                             <PublishedDate 
                                 style={{marginRight: "10px"}} 
                               // width = {"170px"} 
-                                currDate = {currDate} 
+                                currDate = {date} 
                                 textColor = "#babec5"
                                 imageColor = "#babec5"
                                 imageStyle = {{
                                   fontSize: `19px`, 
                                   fontWeight: "450"
                                   }}
+                                format="DD MMM YYYY"  
                               />
                             <div style={{fontWeight: "600", fontSize: "16px", marginRight: "10px", color: "#babec5",whiteSpace: "nowrap"}}>
                               {authorName}
                             </div> 
                         </div>
 
-                        <div
+                        {cityName && <div
                           style={{
                             display: "flex",
                             justifyContent : "flex-start",
@@ -200,7 +199,7 @@ const ANSWERS = answers.map(item=>{
                             >
                               {cityName}
                             </div>
-                        </div>     
+                        </div>}     
                     </div> 
             
              

@@ -72,21 +72,15 @@ console.log("currBranch --------------------------------------------------------
         onSpecChange(value);
     }
 
-    const onBranchSelectChange =(e) => {
-        router.query.branch = e.target.value; 
-        router.query.page = 1;
-        const url = {
-            pathname: router.pathname,
-            query: router.query
-          }
-        router.push(url, undefined, { shallow: true });    
-    }
-
     const onBranchChange = (value) => {
-        
-
-        router.query.branch = value.branch_id;
-        router.query.subbranch = value.subbranch_id; 
+        if (!value.branch_id)
+            delete router.query.branch;
+        else
+            router.query.branch = value.branch_id;
+        if (!value.subbranch_id)
+            delete router.query.subbranch;    
+        else
+            router.query.subbranch = value.subbranch_id; 
         router.query.page = 1;
         const url = {
             pathname: router.pathname,
@@ -192,7 +186,7 @@ console.log("currBranch --------------------------------------------------------
                 </Button>
             </div>    }
             {theme.isDesktop &&
-                <div style={{fontSize: "25px", lineHeight: "27px", fontWeight: "600", marginBottom: pad}}> Фильтр </div>
+                <div style={{fontSize: "24px", lineHeight: "26px", fontWeight: "600", marginBottom: pad}}> Фильтр </div>
             }
             
 
@@ -294,13 +288,13 @@ console.log("currBranch --------------------------------------------------------
 
 export function AskQuestionSideBlock ({style}) {
 
-   
+   const router = useRouter();
     const theme = useThemeContext();  
     
     return (
         
        <div className={styles.specBlock} style={style}> 
-            <span style={{fontSize: "22px", fontWeight: "600",textAlign: "center"}}>
+            <span style={{fontSize: "24px", fontWeight: "600",textAlign: "center"}}>
                 Задайте бесплатный вопрос специалистам портала
             </span>
                 

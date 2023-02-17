@@ -14,7 +14,7 @@ export default function PageContainer (props) {
     const pad = `${gut}px`;
 
 return (
-    <div className={styles.container} style={{marginTop: pad}}>
+    <div className={styles.container} style={{marginTop: pad, marginBottom: pad}}>
         <Row gutter = {[gut, gut]} style={{width: `100%+${gorGutter}`}}>
           {props.children}
           </Row>

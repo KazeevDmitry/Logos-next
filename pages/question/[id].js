@@ -15,7 +15,7 @@ import { useThemeContext } from '../../src/context/themeContext';
 import { useUserContext } from '../../src/context/userContext';
 import PageContainer from '../../src/components/layouts/pageContainer';
 import PageHeader from '../../src/components/layouts/pageHeader';
-
+import UserImage from '../../src/components/userImage/userImage';
 import { createStrapiAxios } from '../../utils/strapi';
 import QuestionCard from '../../src/components/questionCard/questionCard';
 import {AnswerCard} from '../../src/components/questionCard/questionCard';
@@ -77,10 +77,10 @@ const questionId = question.id;
    
       const authorName = item.author.data.attributes.name;
       const authorSurname = item.author.data.attributes.surname?? '';
-      const authorAvatar = item.author.data.attributes.avatar.data.attributes.url?? '';
+      const authorAvatar = item.author.data.attributes.avatar?.data?.attributes?.url?? '';
       const authorCity = item.author.data.attributes.city;
-      const branchName = item.branch?.data?.attributes?.name?? '';
-      const subbranchName = item.subbranch?.data?.attributes?.name?? '';
+      const branchName = item.branch?.data?.attributes?.name?? null;
+      const subbranchName = item.subbranch?.data?.attributes?.name?? null;
       const description = item.description;
       const title = item.title;
       const date = item.publishedAt;
@@ -145,7 +145,7 @@ const [unsavedChanges, setUnsavedChanges] = useState(false);
             setIsExpert(false);    
             setShowChildren(true);
           }else {
-            setShowChildren(!currentUser.status === 1);
+            setShowChildren(currentUser.status !== 1);
             setIsExpert(currentUser.status === 1);
           }
         }
@@ -207,21 +207,37 @@ mutation.mutate(mutateValue,
 
 
 
+const backBtnText = "<< Все вопросы";
 
   return (
 
    
     <>
-     {/*  <section style={{minHeight: sectionMinHeigth, width: "100%",}}> */}
+  
         <PageHeader 
-          /* title={t('headers.experts')} */
-         // title={`Вопрос#${id}`}
          title={title}
-        />
-        <PageContainer>
-         
-        
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
+              height: "100%",
+            }}
+          >
+            <Button
+            type="primary"
+            ghost
+            onClick={() => router.push('/questions')}
+            >
+                {backBtnText}
+            </Button>
+          </div>
+        </PageHeader>
 
+        <PageContainer>
+  
                   <Col  xs={24} sm={24} md={16} lg={17} xl={18} 
                     //style={{padding: '0px'}}
                   > 
@@ -348,7 +364,21 @@ mutation.mutate(mutateValue,
                     
           {showChildren && 
           <>
-            {!isExpert && <div
+            {!isExpert && childrenCount === 0 && 
+              <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-end",
+                marginTop: pad
+              }}
+              >
+                 <span className={cardStyles.answers}>
+                    Нет ответов
+                  </span>
+              </div>}
+
+            {!isExpert && childrenCount > 0 && <div
             style={{
               display: "flex",
               alignItems: "center",
@@ -375,18 +405,28 @@ mutation.mutate(mutateValue,
                 <Col xs={0} sm={0} md={8} lg={7} xl={6} >
                    
                     <div className={styles.sideAskBlock} style={{padding: pad, }}> 
-                      <span className={styles.sideBlockHeader}>
-                          {`${authorName} ${authorSurname}`}
-                      </span>
-                    
-                      <div
+                      {/* npm  */}
+                      <div style={{display: "flex", alignItems: "center", marginBottom: "10px"}}>
+                        
+                        <UserImage
+                            image= {authorAvatar}
+                            online={false}
+                            width= {45}
+                          // username={username}
+                        />
+                        <div style={{display: "flex", flexDirection: "column", marginLeft: "10px"}}>
+                            <span style={{fontSize: "18px", lineHeight: "20px", fontWeight: '600'}}>{authorName}</span>
+                            <span style={{fontSize: "18px", lineHeight: "20px", fontWeight: '600'}}>{authorSurname}</span>
+                        </div>    
+                      </div>
+
+                     { cityName && <div
                           style={{
                             display: "flex",
                             justifyContent : "flex-start",
                             alignItems: "center",
                             flexWrap: 'nowrap',
-                            marginTop: "10px",
-                          
+                            marginBottom: "5px",
                           }}
                         >
                             <EnvironmentOutlined 
@@ -407,18 +447,27 @@ mutation.mutate(mutateValue,
                             >
                               {cityName}
                             </div>
-                        </div>  
+                        </div>}  
                         <PublishedDate 
-                                style={{fontSize: "18px", marginTop: "10px",}} 
+                                style={{fontSize: "18px",}} 
                               // width = {"170px"} 
-                                currDate = {currDate} 
+                                currDate = {date} 
                                 textColor = "darkgrey"
-                                imageColor = "darkgrey"
+                                //imgColor = "darkgrey"
                                 imageStyle = {{
                                   fontSize: `22px`, 
-                                  fontWeight: "500"
+                                  fontWeight: "500",
+                                  color: "darkgrey",
                                   }}
-                              />   
+                                dateTime={true}  
+                                format='DD MMM YYYY    hh:mm'
+                              />  
+                        <div className={cardStyles.branchLabel} style={{fontSize: "18px", textTransform: "none",fontWeight: "600", textAlign: "left", height: "2em", marginTop: pad}}>
+                          {branchName}
+                        </div>  
+                        {subbranchName && <div className={cardStyles.branchLabel} style={{fontSize: "18px", textTransform: "none",fontWeight: "200", textAlign: "left", marginTop: "5px", marginRight: pad}}>
+                          {subbranchName}
+                        </div>}   
                     </div>
 
                 {!isExpert && <AskQuestionSideBlock style= {{padding: pad, marginTop: pad}}/>}

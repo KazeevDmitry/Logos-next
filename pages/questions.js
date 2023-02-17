@@ -6,7 +6,7 @@ import { useQuery, dehydrate, QueryClient } from "react-query";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import styles from '../styles/Home.module.css'
-
+import Plural from '../utils/plural';
 import { useUserContext } from '../src/context/userContext';
 
 import { useTranslation } from 'react-i18next'
@@ -27,7 +27,7 @@ import UserCard from '../src/components/userCard/userCard';
 import QuestionCard from '../src/components/questionCard/questionCard';
 import MyPagination from '../src/components/pagination';
 import {AskQuestionSideBlock} from '../src/components/SideFilter/sideFilter'
-const PAGESIZE = 8;
+const PAGESIZE = 5;
 
 
 export default function Questions(
@@ -147,7 +147,13 @@ export default function Questions(
                     setPage = {setPage}
                   />
     
-      {total>PAGESIZE && <p>{`${total} специалистов`}</p>}
+      {total>PAGESIZE && <>
+     
+      <p >
+             <Plural count={total} i18nextPath="questions.plural" /> 
+       </p>
+       </>}
+      
     </div>
 )
  }

@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next'
 import axios from 'axios';
 import { createStrapiAxios } from '../utils/strapi';
 
-
+import Plural from '../utils/plural';
 import { Pagination, Row, Col } from 'antd'; 
 
 import SearchField from '../src/components/searchField/searchField';
@@ -129,7 +129,9 @@ export default function Experts({serverExperts}) {
                     setPage = {setPage}
                   />
     
-      {total>PAGESIZE && <p>{`${total} специалистов`}</p>}
+      {total>PAGESIZE &&
+       <p><Plural count={total} i18nextPath="questions.plural" /></p> 
+      }
     </div>
 )
  }
