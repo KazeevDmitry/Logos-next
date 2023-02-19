@@ -178,9 +178,11 @@ export default function Questions(
                     placeholder="Введите строку для поиска"
                     />  
                     {!THEME.isDesktop && <SideFilter show = {{
-                        city: true,
+                        city: false,
                         budget: false,
-                        branch: true}
+                        branch: true,
+                        showreset: false,
+                      }
                     }/>}
                 {/* <ExpertList /> */}
                

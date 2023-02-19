@@ -320,8 +320,8 @@ const ANSWERS = answers.map(item=>{
                     <span style={{color: "#5E6674", fontWeight: "400", fontSize: "16px", lineHeight: "16px"}}> {`г. ${cityName}`}</span>
                 </div>    
               </div>
-              <Button type="primary" ghost icon={<WechatOutlined />}>
-                Написать
+              <Button type="primary" ghost icon={<WechatOutlined />} style={{minWidth: "40px"}}>
+                {theme.id !== "xs" && theme.id !== "sm" ? "Написать" : ''}
               </Button>  
           </div>  
           <div lang='ru' className={styles.contentStyle} style={{marginLeft: '65px', marginTop: "15px", marginBottom: "15px"}}>

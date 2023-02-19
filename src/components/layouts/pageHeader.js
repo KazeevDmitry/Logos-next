@@ -3,12 +3,21 @@ import React from 'react';
 
 import styles from './pageHeader.module.less';
 import PageContainer from './pageContainer';
-import { Col } from 'antd';
+import { Row, Col } from 'antd';
+import {useThemeContext} from '../../context/themeContext';
 
 export default function PageHeader ({children, xs=0, sm=0, md=8, lg=7, xl=6, title}) {
+
+    const theme = useThemeContext();
+    
+    const gut = theme?.gutters?.gorizontal[theme?.id]?? 20;
+    const gorGutter = `${gut/2}px`;
+    
+
 return (
     <div style={{width: "100%", marginTop: "100px"}}>
-    <PageContainer>
+    <Row gutter = {[gut, gut]} style={{width: `100%+${gorGutter}`}}>
+   
         <Col
             xs={24-xs}
             sm={24-sm}
@@ -30,6 +39,6 @@ return (
         >
             {children}
         </Col>
-      </PageContainer>  
+        </Row>
       </div>
 )};      

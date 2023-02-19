@@ -5,7 +5,7 @@ import {useThemeContext} from '../../context/themeContext';
 
 import { TreeSelect } from 'antd';
 
-export default function BranchSelect({value, onChange, errorStatus}) {
+export default function BranchSelect({value, onChange, errorStatus, size}) {
 
     
 const {branches} = useThemeContext();
@@ -77,10 +77,10 @@ let treeData = [];
           placeholder="Начните ввод для поиска"
           treeDefaultExpandAll
           treeData={treeData}
-          size='large'
           onChange={onThisChange}
           status={errorStatus ? "error" : null}
           allowClear
+          size={size}
         />
       
       );

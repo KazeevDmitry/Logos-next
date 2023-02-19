@@ -130,7 +130,7 @@ export default function Experts({serverExperts}) {
                   />
     
       {total>PAGESIZE &&
-       <p><Plural count={total} i18nextPath="questions.plural" /></p> 
+       <p><Plural count={total} i18nextPath="experts.plural" /></p> 
       }
     </div>
 )

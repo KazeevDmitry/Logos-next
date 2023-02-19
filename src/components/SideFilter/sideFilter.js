@@ -174,19 +174,19 @@ console.log("currBranch --------------------------------------------------------
         <div className={styles.specBlock} style= {{padding: !theme.isDesktop ? "20px" : pad, marginBottom: pad}}>
             {!theme.isDesktop && <div className={styles.flexCont}>
                 <div className={styles.filterHeader}> Фильтр </div>
-                <Button 
+                {<Button 
                     size={theme?.size} 
                     //style={{width: "100%", marginTop: "30px"}}
                     type="primary" 
                     htmlType="button"
                     onClick = {onResetParams}
-                    
+                    ghost
                     >
                        Сбросить
-                </Button>
+                </Button>}
             </div>    }
             {theme.isDesktop &&
-                <div style={{fontSize: "24px", lineHeight: "26px", fontWeight: "600", marginBottom: pad}}> Фильтр </div>
+                <div style={{fontSize: "22px", lineHeight: "22px", fontWeight: "600", marginBottom: pad}}> Фильтр </div>
             }
             
 
@@ -240,6 +240,7 @@ console.log("currBranch --------------------------------------------------------
                       onChange={onBranchChange}
                       value={branchValue}
                       //value="налогообложение"
+                      size={theme.size}
                     />  
                 
             </>}
@@ -294,7 +295,7 @@ export function AskQuestionSideBlock ({style}) {
     return (
         
        <div className={styles.specBlock} style={style}> 
-            <span style={{fontSize: "24px", fontWeight: "600",textAlign: "center"}}>
+            <span style={{fontSize: "22px", lineHeight: "22px", fontWeight: "600",textAlign: "center"}}>
                 Задайте бесплатный вопрос специалистам портала
             </span>
                 
