@@ -232,7 +232,7 @@ console.log("currBranch --------------------------------------------------------
  */}
             {show.branch && <>
                 {/* { theme.isDesktop && <Divider/>} */}
-                <div className={styles.specBlockHeader}> 
+                <div className={styles.specBlockHeader} style = {{marginTop: "10px"}}> 
                     Отрасль права
                 </div>
                 

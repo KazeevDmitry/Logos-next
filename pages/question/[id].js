@@ -95,10 +95,11 @@ const questionId = question.id;
  const pad = `${p}px`;
 
 
-const ANSWERS = childrenArr.map(item=>{
+const ANSWERS = childrenArr.map((item, i)=>{
 
   return (
     <AnswerCard
+    key={i}
       author={item.attributes.author.data.attributes}
       text = {item.attributes.text}
       date={item.attributes.publishedAt}

@@ -113,7 +113,7 @@ export default function Home({circlePeople}) {
     const sendUser = {id: item.id, ...user, spec, rating};
 
     return (
-      <div style={{...circleStyles[i], position: "absolute"}}> 
+      <div key = {i} style={{...circleStyles[i], position: "absolute"}}> 
         <Link href='experts' >
           <UserImage
             image= {user ? user.avatar.data?.attributes?.url : ''} 

@@ -63,10 +63,11 @@ export default function QuestionCard ({authorName,
   const pad = `${p}px`;
 
 
-const ANSWERS = answers.map(item=>{
+const ANSWERS = answers.map((item, i)=>{
 
   return (
     <AnswerCard
+    key={i}
       author={item.attributes.author.data.attributes}
       text = {item.attributes.text}
       date={item.attributes.publishedAt}
@@ -152,6 +153,7 @@ const ANSWERS = answers.map(item=>{
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "flex-start",
+                          flexWrap: "wrap",
                         }}
                         >
                             <PublishedDate 

@@ -6,7 +6,7 @@ import { ThemeProvider } from '../src/context/themeContext';
 import {UserProvider} from '../src/context/userContext';
 import '../utils/i18n-init';
 import { useTranslation } from "react-i18next";
-
+import { useRouter } from 'next/router';
 import { ConfigProvider} from 'antd';
 import ru from 'antd/lib/locale/ru_RU';
 import en from 'antd/lib/locale/en_US';
@@ -21,6 +21,8 @@ moment.locale('ru')
 
 
 export default function MyApp({ Component, pageProps }) {
+
+  const [loading, setLoading] = useState(false);
 
   const { t, i18n } = useTranslation();
   const changeLanguage = (language) => {
@@ -39,6 +41,22 @@ export default function MyApp({ Component, pageProps }) {
 
    const queryClient = new QueryClient();
 
+   const router = useRouter();
+
+  useEffect(() => {
+    // Обработка начала загрузки
+    router.events.on("routeChangeStart", () => {
+      setLoading(true);
+      console.log('STRAT reute---------------------------------------------------------------');
+    });
+
+    // Обработка окончания загрузки
+    router.events.on("routeChangeComplete", () => {
+      setLoading(false);
+      console.log('END route---------------------------------------------------------------');
+    });
+  }, []);
+
   return (  
     <>
 
@@ -46,7 +64,7 @@ export default function MyApp({ Component, pageProps }) {
            <UserProvider>
            <QueryClientProvider client={queryClient}>
               <ConfigProvider locale={antdLocales(i18n.language)}>
-                <MainLayout>
+                <MainLayout loading={loading}>
                   <Component {...pageProps} /> 
                 </MainLayout>
               </ConfigProvider>  

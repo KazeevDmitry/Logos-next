@@ -15,7 +15,7 @@ export default function PageHeader ({children, xs=0, sm=0, md=8, lg=7, xl=6, tit
     
 
 return (
-    <div style={{width: "100%", marginTop: "100px"}}>
+    <div style={{width: "100%", marginTop: "100px", marginLeft: "auto", marginRight: "auto", maxWidth: "1400px"}}>
     <Row gutter = {[gut, gut]} style={{width: `100%+${gorGutter}`}}>
    
         <Col

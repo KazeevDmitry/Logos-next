@@ -13,7 +13,7 @@ import { createStrapiAxios } from '../../../utils/strapi';
 const CommentsList = ({parent, articleId, addEntry=false, onAddEntry}) => {
 
   const {currentUser} = useUserContext();
-  const userJWT = currentUser.jwt;
+  const userJWT = currentUser?.jwt;
   
 
   const {isSuccess,
@@ -54,7 +54,7 @@ const CommentsList = ({parent, articleId, addEntry=false, onAddEntry}) => {
        <CommentCard
           key = {id}
           commentId = {id}
-          username = {`${username} ${surname}`}
+          username = {`${username} ${surname ?? ''}`}
           userImage = {userImage}
           userOnline = {false}
           date={date}

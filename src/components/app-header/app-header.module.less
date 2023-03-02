@@ -31,7 +31,7 @@
     justify-content: space-between;
     align-items: center;
     flex-flow: row nowrap;
-    height: 70px;
+    height: 60px;
     width: 100%;
     z-index: 99;
   background-color: rgba(255, 255, 255, 1);
@@ -47,6 +47,7 @@
   width: 100%;
   // height: 135px;
   z-index: 99;
+ max-height: 60px;
   background-color: rgba(255, 255, 255, 1);
 }
 
@@ -361,3 +362,17 @@
 
 }
 
+.horizontalgradient {
+  background-image: linear-gradient(to right, white, @primary-color , white);
+  height: 100%;
+  width: 200px;
+  //border-radius: 15px;
+ // margin-top: 10px;
+ // background-color: red;
+  animation: nudge 1s linear infinite;
+}
+
+@keyframes nudge {
+  0% { transform: translatex(-100%); }
+  100% { transform: translatex(100vw); }
+}

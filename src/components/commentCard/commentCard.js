@@ -50,7 +50,7 @@ export default function CommentCard ({commentId,
   
   const moreStr = <span style={{color: "#0066FF", fontWeight: "600"}}>{`>>>>`}</span>;
   
-  const userJWT = currentUser.jwt;
+  const userJWT = currentUser?.jwt;
   
   const {isSuccess,
     isLoading,  
@@ -207,9 +207,7 @@ async function getComments(commentId) {
     const userId = currentUser.id;
   
 
-    if (!userJWT) {
-      return null;
-    }
+   
 
     const queryClient = useQueryClient();
     const [modalText, setModalText] = useState('');
@@ -251,6 +249,11 @@ async function getComments(commentId) {
       );
     };
   
+
+    if (!userJWT) {
+      return null;
+    }
+     
     return (
       <Modal
         visible={true}

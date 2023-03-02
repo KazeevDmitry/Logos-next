@@ -22,7 +22,7 @@ import { LogoutOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
 
-export default function AppHeader(props) 
+export default function AppHeader({loading}) 
 {
 
   const [ userMenuOpen, setUserMenuOpen ] = useState(false);
@@ -141,6 +141,10 @@ if (currentUser?.avatar)
   userImage = currentUser?.avatar?.url;
 }
 
+const logocolor = loading ? 'green' : "#1890ff";
+
+const padHeader = !loading ? '5px' : '0px';
+
    return (
     <>
         {!theme?.isDesktop && 
@@ -184,11 +188,13 @@ if (currentUser?.avatar)
           {/* //---------------------------------------------------------------------------------------------------------------------- */}
 
         {theme?.isDesktop &&
-          <header className={styles.mainHeader}>
+        <>
+       
+          <header className={styles.mainHeader} style={{paddingTop: '5px', paddingBottom: padHeader}}>
               <div className={styles.menu}>
                 <div className={styles.mainLogo}>
                   <Link href="/" >
-                    <a className={styles.logosHeader} style={{color: "#1890ff"}}> LogosEst </a>
+                    <a className={styles.logosHeader} style={{color: logocolor}}> LogosEst </a>
                   </Link>
                 </div>
 
@@ -254,7 +260,24 @@ if (currentUser?.avatar)
                 </div>  
               </div>
 
+              {loading && <div 
+             
+                style={{
+                  width: '100%',
+                  overflow: 'hidden',
+                  margin: '0',
+                  height: '5px',
+                }} 
+              >
+                <div className={styles.horizontalgradient}>
+
+                </div>
+             </div>}
+       
             </header>
+       {/*      {loading &&  */}
+        
+            </>  
 }
 
       {userMenuOpen&&theme?.isDesktop && <UserMenu
@@ -395,9 +418,9 @@ function UserMenuItems({items, onClick}){
   return (
     <div className={styles.userLinkBox}>
       {
-         items.map(({ to, name }) => (
-                  <Link href={to}>
-                    <a className={styles.menuLink} onClick={onClick}> { name } </a>
+         items.map(({ to, name }, i) => (
+                  <Link key={i} href={to}>
+                    <a key={name} className={styles.menuLink} onClick={onClick}> { name } </a>
                   </Link>
               ))
             }

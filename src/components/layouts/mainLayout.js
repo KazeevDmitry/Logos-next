@@ -9,7 +9,7 @@ import { Layout, } from 'antd';
 
 const { Content } = Layout;
 
-export default function MainLayout({ children }) {
+export default function MainLayout({ children, loading }) {
 
 
   const [sectionMinHeigth, setSectionMinHeigth] = useState(``); 
@@ -29,11 +29,12 @@ export default function MainLayout({ children }) {
     };
   }, []);
 
+  console.log('MainLayout loading---------------------------------------------------------------------------------------', loading);
 
   return (
     <>
     <Layout>
-      <AppHeader />
+      <AppHeader loading={loading}/>
       <Content className={styles.appContainer} style={{paddingLeft: theme?.appContainerPadding, paddingRight: theme?.appContainerPadding, minHeight: sectionMinHeigth}}>
         {children}  
       </Content>

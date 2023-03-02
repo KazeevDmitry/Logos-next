@@ -9,14 +9,16 @@ import { useTranslation } from 'react-i18next';
 
 export default function  NewsFilter({categoryArr}) {
 
+    const router = useRouter();
+    const theme = useThemeContext();  
+
     if (!categoryArr){
         return null;
     }
 
 
    // const {t} = useTranslation()
-        const router = useRouter();
-    const theme = useThemeContext();  
+       
         
     const {category} = router.query;
  

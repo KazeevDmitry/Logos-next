@@ -35,8 +35,6 @@ export default function PublishedDate({
 
     const wrapStyle={...style, color: textColor?? 'inherit'};
 
-    console.log("wrapStyle-----------------------------------------------", wrapStyle);
-    
     return(
         <div className={styles.wrapper} style={wrapStyle}>
             <div className={styles.dateWrapp}>
