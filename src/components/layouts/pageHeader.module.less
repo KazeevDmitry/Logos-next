@@ -60,6 +60,14 @@
     
 }
 
+.closeBtn {
+    
+    cursor: pointer;
+    color: black;
+    &:hover {
+      color: @primary-color;
+    }
+  }
 
 @media (max-width: 992px){
     
@@ -73,9 +81,9 @@
 @media (max-width: 767px){
     
     .flexContainer {
-        padding-bottom: 20px;
+        padding-right: 20px;
         padding-left: 20px;
-        
+        hyphens: none;
         color: white;
       //  margin-top: 100px;
     } 

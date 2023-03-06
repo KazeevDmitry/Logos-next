@@ -6,16 +6,23 @@ import PageContainer from './pageContainer';
 import { Row, Col } from 'antd';
 import {useThemeContext} from '../../context/themeContext';
 
-export default function PageHeader ({children, xs=0, sm=0, md=8, lg=7, xl=6, title}) {
+
+import {
+    CloseOutlined,
+  } from '@ant-design/icons';
+import { useRouter } from 'next/router';
+
+export default function PageHeader ({children, xs=0, sm=0, md=8, lg=7, xl=6, title, maxWidth='1400px', closeBtn =false}) {
 
     const theme = useThemeContext();
+    const router= useRouter();
     
     const gut = theme?.gutters?.gorizontal[theme?.id]?? 20;
     const gorGutter = `${gut/2}px`;
     
 
 return (
-    <div style={{width: "100%", marginTop: "100px", marginLeft: "auto", marginRight: "auto", maxWidth: "1400px"}}>
+    <div style={{width: "100%", marginTop: "100px", marginLeft: "auto", marginRight: "auto", maxWidth: maxWidth}}>
     <Row gutter = {[gut, gut]} style={{width: `100%+${gorGutter}`}}>
    
         <Col
@@ -37,7 +44,25 @@ return (
             lg={lg}
             xl={xl}
         >
-            {children}
+            {!closeBtn && children}
+            {closeBtn && <div style={{
+                            display: 'flex', 
+                            alignItems: 'flex-end', 
+                            justifyContent: 'flex-end',
+                            height: '100%'
+                        }}>
+              <div className={styles.closeBtn}
+              style={{borderRadius: '50%', 
+                      width: '25px', 
+                      height: '25px', 
+                      backgroundColor: 'white', 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'center'}} 
+              onClick={()=> router.back()}>
+                <CloseOutlined />
+              </div>
+          </div>    }
         </Col>
         </Row>
       </div>

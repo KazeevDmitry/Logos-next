@@ -29,7 +29,6 @@ export default function MainLayout({ children, loading }) {
     };
   }, []);
 
-  console.log('MainLayout loading---------------------------------------------------------------------------------------', loading);
 
   return (
     <>

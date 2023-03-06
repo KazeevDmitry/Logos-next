@@ -14,6 +14,8 @@ import Image from 'next/image'
 import { setCookie } from 'cookies-next'; 
 import { createStrapiAxios } from '../utils/strapi';
 
+import PageHeader from '../src/components/layouts/pageHeader';
+import PageContainer from '../src/components/layouts/pageContainer';
 
 import {
     
@@ -30,7 +32,7 @@ import { InfoCircleOutlined } from "@ant-design/icons";
 import { Form,
     Input,
     Button,
-    Modal,
+    Modal, Col,
     } from 'antd';
 
 
@@ -60,14 +62,13 @@ export default function Auth ({logIn = true}) {
     const myRef = useRef(null);
 
     const theme = useThemeContext();
+    const p = theme?.gutters?.gorizontal[theme?.id];
+
+    const pad = p<30 ? '30px' : `${p}px`;
   
     const router = useRouter();
 
-    console.log("router.query", router.query);
-
-
-        // const history = useHistory();
-                
+                  
         const onPassFocus = (i) => (e) => {
      
             let c = e.target.getBoundingClientRect();
@@ -106,8 +107,17 @@ export default function Auth ({logIn = true}) {
                 const JWT = res.data.jwt;
 
                 await createStrapiAxios(JWT)
-                .get(`/users/${res.data.user.id}?populate=avatar`)
-                .then((res) => setCurrentUser({...res.data, jwt: JWT}))
+                //.get(`/users/${res.data.user.id}?populate=avatar`)
+                .get(`/users/${res.data.user.id}?populate[0]=avatar&populate[1]=expert`)
+                .then((res) => {
+                    let isExp = false;
+                    if (res.data.expert && res.data.expert.id) {
+                        isExp = true;    
+                    }
+                    
+                    setCurrentUser({...res.data, jwt: JWT, isExpert : isExp});
+                    
+                })
                 .catch((error) => console.log('ERROR from /users/id------------', error));
 
                 //setCurrentUser({...res.data.user, jwt: res.data.jwt});
@@ -123,8 +133,15 @@ export default function Auth ({logIn = true}) {
                 console.log('An error occurred:', error);   
                     if (error.response?.status !== 500) 
                     {
-// handle ALL ERRORS but not only 500 status                          
+// handle ALL ERRORS but not only 500 status   
+                        if (error.response?.status === 400) {
+                            if (error.response?.data?.error?.message === 'Your account email is not confirmed') {
+                                setFormStatus({error: 'warn', text: 'Подтвердите вашу почту, перейдя по ссылке в письме.'});    
+                            }
+
+                        }else {
                             setFormStatus({error: 'error', text: 'ОШИБКА АВТОРИЗАЦИИ! Проверьте введенные данные.'});
+                        }
                     }
                     else {
                         setFormStatus({error: 'error', text: 'ОШИБКА ПЕРЕДАЧИ ДАННЫХ!'});
@@ -162,7 +179,7 @@ export default function Auth ({logIn = true}) {
 const onModalOk = () => {
     setModalOpen(false);
     onCloseBtn();
-}
+};
 
 useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -170,10 +187,28 @@ useEffect(() => {
     }
 }, []);
 
-
+const maxWidth = theme.id === 'xs' || theme.id === 'sm' ? '768px' : '350px';
+const bGcolor = theme.id === 'xs' || theme.id === 'sm' ? 'white' : '';
          
     return(
-        <div className={styles.sectionEnter} style={{minHeight: sectionMinHeigth}}>
+        //<div className={styles.sectionEnter} style={{minHeight: sectionMinHeigth}}>
+        <>
+
+<PageHeader 
+        /* title={t('headers.experts')} */
+          title="Вход"  
+          maxWidth={maxWidth}
+          closeBtn = {true}
+        >
+         
+        </PageHeader>
+     
+         <PageContainer 
+            maxWidth={maxWidth} 
+            bGcolor={bGcolor}
+         >  
+
+          <Col span = {24}>    
 
             <Modal
                 title="Восстановление пароля"
@@ -196,12 +231,9 @@ useEffect(() => {
                 <p>Отправлена ссылка, проверьте входящие сообщения</p>
             </Modal>  
             
-            <div className={styles.blockMain} ref={myRef}>
+            <div className={styles.blockMain} style={{padding: pad, maxWidth: '350px'}}>
 
-                <div className={styles.closeBtn} onClick={onCloseBtn}><CloseOutlined /></div>
-            
-                <h3 className={styles.title}>{logIn ? 'Вход' : 'Регистрация'}</h3>
-                    
+             
                     <Form
                         style={{width: '100%'}}
                         form={form}
@@ -274,9 +306,9 @@ useEffect(() => {
                             
                         </div>    
                         
-                        {formStatus.error === 'error' && <div
+                        {(formStatus.error === 'error' || formStatus.error === 'warn') && <div
                             text-align = {'left'} 
-                            style={{color: '#F44336', marginTop: '10pxs'}}
+                            style={{color: formStatus.error === 'error' ? '#F44336' : '#dd9211', marginTop: '10pxs'}}
                         >
                              {formStatus.text}   
                         </div>}
@@ -360,6 +392,8 @@ useEffect(() => {
                     </Form>
             </div>                    
 
-        </div>
+        </Col>
+        </PageContainer>
+        </>
     )
 }

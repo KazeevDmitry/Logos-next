@@ -34,6 +34,8 @@ export default function AppHeader({loading})
   const {currentUser, setCurrentUser} = useUserContext();
 
   const userJWT = currentUser?.jwt ?? null;
+
+const isExpert = currentUser?.isExpert;
   
   const { t, i18n } = useTranslation();
 
@@ -52,7 +54,6 @@ export default function AppHeader({loading})
     // setAskShow(true);
 
     axios.post('/api/logout').then((res) => {
-      console.log('Delete session cod ---------   ', res);
       setCurrentUser({})
       
     })
@@ -87,8 +88,8 @@ export default function AppHeader({loading})
 
   const PAGES = [
     {
-      name: 'Задать вопрос',
-      to: '/addquestion',
+      name: isExpert ? 'Задачи' : 'Задать вопрос',
+      to: isExpert ? '/tasks' : '/addquestion',
       
     },
     {
@@ -141,7 +142,6 @@ if (currentUser?.avatar)
   userImage = currentUser?.avatar?.url;
 }
 
-const logocolor = loading ? 'green' : "#1890ff";
 
 const padHeader = !loading ? '5px' : '0px';
 
@@ -161,7 +161,7 @@ const padHeader = !loading ? '5px' : '0px';
                   </Link>
                {!userJWT && (
                   <Button  htmlType="button"
-                  type = "ghost"
+                   ghost
                           style={{
                                   height: "30px",
                                   fontSize: "12px",
@@ -194,7 +194,7 @@ const padHeader = !loading ? '5px' : '0px';
               <div className={styles.menu}>
                 <div className={styles.mainLogo}>
                   <Link href="/" >
-                    <a className={styles.logosHeader} style={{color: logocolor}}> LogosEst </a>
+                    <a className={styles.logosHeader} style={{color: "#1890ff"}} > LogosEst </a>
                   </Link>
                 </div>
 
@@ -241,6 +241,7 @@ const padHeader = !loading ? '5px' : '0px';
                       <Link href={'/login'}>
                         <Button type="primary" htmlType="button"
                                 size = {theme.size}  
+                              
                                 style={{
                                         // width: '62%',
                                         marginLeft: '20px',

@@ -40,8 +40,14 @@ export const UserProvider = (props) => {
             }
 
             await createStrapiAxios(JWT)
-            .get(`/users/${user?.id}?populate=avatar`)
-            .then((res) => setCurrentUser({...res.data, jwt: JWT}))
+            .get(`/users/${user?.id}?populate[0]=avatar&populate[1]=expert`)
+            .then((res) => {
+                let isExp = false;
+                    if (res.data.expert && res.data.expert.id) {
+                        isExp = true;    
+                    }
+                setCurrentUser({...res.data, jwt: JWT, isExpert : isExp})
+            })
             .catch((error) => console.log('ERROR from /users/id------------', error));
             
             // let cU = await response?.data;

@@ -11,6 +11,11 @@ import {useUserContext} from '../src/context/userContext';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 
+import PageHeader from '../src/components/layouts/pageHeader';
+import PageContainer from '../src/components/layouts/pageContainer';
+
+import { useMutation } from 'react-query';
+
 
 import {
     
@@ -25,6 +30,7 @@ import{ Form,
     Button,
     Radio,
     Tooltip,
+    Col,
     } from 'antd';
 import { sendError } from 'next/dist/server/api-utils';
 
@@ -44,25 +50,37 @@ export default function Register () {
     const myRef = useRef(null);
 
 
-    const [sectionMinHeigth, setSectionMinHeigth] = useState(''); 
+    const [userJWT, setuserJWT] = useState(); 
 
     const theme = useThemeContext();
+    const p = theme?.gutters?.gorizontal[theme?.id];
+    const pad = p<20 ? '20px' : `${p}px`;
+
     const router = useRouter();
-     
+
     
     const onFinish = async (values) => {
 
             const {email, password, confirmpassword} = values;
+            const isExpert = clientStatus !== 1;
 
             if (password !== confirmpassword) {
                 setFormStatus({error: 'error', text: 'Пароли не совпадают!'});
                 return;
             }
              
-           const sendValues = {...values, username: email, status: clientStatus};
+           const sendValues = {...values, username: email};
+        
+           axios.post('/api/register', sendValues).then((res) => {
+                axios.post(`${process.env.NEXT_PUBLIC_API}/experts`, 
+                    {
+                    "data": {
+                      "user": res.data.user.id,
+                      }
+                    }, 
+                ).catch((e) => console.log('ОЩИБКА добавления записи эксперта----', e))
 
-            axios.post('/api/register', sendValues).then((res) => {
-                setCurrentUser({...res.data.user, jwt: res.data.jwt});
+                setCurrentUser({...res.data.user, jwt: res.data.jwt, isExpert: isExpert});
                 router.back();
               })
               .catch(error => {
@@ -98,22 +116,37 @@ export default function Register () {
 
         }
         
-        useEffect(() => {
+      /*   useEffect(() => {
             if (typeof window !== 'undefined') {
                 setSectionMinHeigth(`${document.documentElement.clientHeight-200}px`);
             }
-        }, []);
+        }, []); */
     
+
+        const maxWidth = theme.id === 'xs' || theme.id === 'sm' ? '768px' : '400px';
+        const bGcolor = theme.id === 'xs' || theme.id === 'sm' ? 'white' : '';
+
     return(
-        <div className={styles.sectionEnter} style={{minHeight:sectionMinHeigth}}>
-            
-            <div className={styles.blockMain} ref={myRef}>
+        <>
+      
+        <PageHeader 
+        /* title={t('headers.experts')} */
+          title="Регистрация"  
+          maxWidth={maxWidth}
+          closeBtn = {true}
+        >
+         
+        </PageHeader>
+     
+         <PageContainer 
+            maxWidth={maxWidth} 
+            bGcolor={bGcolor}
+         >  
 
-                <div className={styles.closeBtn} onClick={()=> router.back()}><CloseOutlined /></div>
-            
-                <h3 className={styles.title}>Регистрация</h3>
+          <Col span = {24}>    
+            <div className={styles.blockMain} style={{padding: pad, maxWidth: '400px'}}>
 
-                <div
+                        <div
                                     style={{display: 'flex', justifyContent: 'center', width: '100%'}}
                                 >     
                                 <Radio.Group  
@@ -196,6 +229,8 @@ export default function Register () {
                             <Tooltip 
                                 title="Сгенерировать случайный пароль"
                                 color='#2db7f5'
+                                placement="topLeft" 
+                                //arrow={mergedArrow}
                                // overlayClassName={styles.tooltip}
                                // overlayInnerStyle = {styles.tooltip}
                                 >
@@ -296,18 +331,12 @@ export default function Register () {
                     </Form>                    
             </div>                    
 
-                {/* <div className={styles.register}>
-                    {`${t('labels.haveAccount')}  `} 
-                    <Link 
-                        href="/auth" 
-                        className={styles.registerLink}>
-                            {t('links.login')}
-                    </Link>
-                </div> */}
 
-                
+        </Col>
+        </PageContainer>    
 
 
-        </div>
+     
+     </>
     )
 }

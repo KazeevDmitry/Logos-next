@@ -6,6 +6,8 @@ import { useQuery, useQueryClient, useMutation } from 'react-query';
 
 import {useThemeContext} from '../src/context/themeContext';
 import {useUserContext} from '../src/context/userContext';
+import PageHeader from '../src/components/layouts/pageHeader';
+import PageContainer from '../src/components/layouts/pageContainer';
 
 import { useRouter } from "next/router";
 import Link from 'next/link'
@@ -13,6 +15,7 @@ import{ Form,
   Input,
   Button,
   Popover,
+  Col,
   } from 'antd';
 
 import {
@@ -70,7 +73,7 @@ const { errorStatus,qTitle,qBody,qBranch } = stateValues;
 
     const pad = `${p}px`;
     const halfPad = `${p/2}px`;
-
+    const bGcolor = theme.id === 'xs' || theme.id === 'sm' ? 'white' : '';
 
     const onBranchChange = (value) => {
       const nV = value;
@@ -176,18 +179,32 @@ const { errorStatus,qTitle,qBody,qBranch } = stateValues;
   }, [unsavedChanges])
 
 
-  
-
+ const btnAndErrBlock ={
+  marginTop: theme.isDesktop ? pad : '30px',
+  display: "flex",
+  justifyContent: errorStatus ? "space-between" : "flex-start",
+};
 
       return (
+        <>
+        <PageHeader 
+        /* title={t('headers.experts')} */
+          title="Задайте вопрос юристам портала"  
+          maxWidth='900px'
+          closeBtn = {true}
+        >
+         
+        </PageHeader>
+     
+         <PageContainer maxWidth='900px'  bGcolor={bGcolor}>  
 
-         <div className={styles.layoutSection}> 
-       
+          <Col span = {24}>
+
           {!questionSaved && 
           <div className={styles.blockMain} style={{padding: pad}}>
-            <div className={styles.closeBtn} onClick={()=> router.back()}><CloseOutlined /></div>
+          {/*   <div className={styles.closeBtn} onClick={()=> router.back()}><CloseOutlined /></div>
             
-            <h3 className={styles.title}>Задайте вопрос юристам портала</h3>
+            <h3 className={styles.title}>Задайте вопрос юристам портала</h3> */}
          
                 <HelpLabel
                       title="Введите заголовок вопроса"
@@ -237,45 +254,32 @@ const { errorStatus,qTitle,qBody,qBranch } = stateValues;
                     <BranchSelect
                       onChange={onBranchChange}
                       errorStatus={errorStatus && qBranch.branch_id === null && qBranch.subbranch_id===null}
+                      size={theme.size}
                     />  
                   </HelpLabel> 
+                  {errorStatus && !theme.isDesktop &&
+                    <div style={btnAndErrBlock}>
+                      <ErrMessage/>
+                    </div>}
                   <div
-                  style={{
-                    marginTop: pad,
-                    display: "flex",
-                    justifyContent: errorStatus ? "space-between" : "flex-start",
-                  }}
+                  style={btnAndErrBlock}
                   >
                     <Button 
                       type="primary" 
                       htmlType="submit"
                       onClick={onFinish}
+                      size={theme.size}
+                      
                     >
                       ОПУБЛИКОВАТЬ ВОПРОС
                     </Button>
-                    { errorStatus &&
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                        }}
-                      >
-                        <StopTwoTone twoToneColor="#F44336"/>
-                        <div
-                            text-align = {'left'} 
-                            style={{
-                              color: '#F44336', 
-                              marginLeft:"5px",
-                            }}
-                            >
-                                Есть незаполненные поля! 
-                        </div>
-                        
-                      </div>
+                    { errorStatus && theme.isDesktop &&
+                     <ErrMessage/>
+              
                     }
 
                   </div>
+                  
           </div>  
           }
 
@@ -326,8 +330,10 @@ const { errorStatus,qTitle,qBody,qBranch } = stateValues;
 
             </div>
           }
-        
-        </div>
+          </Col>
+         </PageContainer>
+        {/* </div> */}
+        </>
       );
     };
 
@@ -372,4 +378,29 @@ const { errorStatus,qTitle,qBody,qBranch } = stateValues;
               {children}
           </div>
       );
+  }
+
+
+  function ErrMessage  () {
+    return(
+                     <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                        }}
+                      >
+                        <StopTwoTone twoToneColor="#F44336"/>
+                        <div
+                            text-align = {'left'} 
+                            style={{
+                              color: '#F44336', 
+                              marginLeft:"5px",
+                            }}
+                            >
+                                Есть незаполненные поля! 
+                        </div>
+                        
+                      </div>
+)            
   }

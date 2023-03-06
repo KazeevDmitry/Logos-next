@@ -19,7 +19,7 @@ import 'moment/locale/ru';
 
 import { createStrapiAxios } from '../utils/strapi';
 
-import { Col, Row, Select, Form, Button } from 'antd';
+import { Col, Row, Select, Form, Button, theme } from 'antd';
 import RatingBar from '../src/components/ratingbar/ratingbar';
 
 import MainLayout from '../src/components/layouts/mainLayout'
@@ -195,9 +195,7 @@ const userSpec = circleUser?.user?.spec?? '';
       </div>}   
 
           <div className={styles.contSection}>
-            <div style={{width: "100%", height: "90px"}}>
-
-            </div>
+            { THEME.isDesktop && <div style={{width: "100%", height: "105px"}}>   </div>}
               <InfoBlock
                 elements = {BESTSPECS}
                 linkTo = '/experts'

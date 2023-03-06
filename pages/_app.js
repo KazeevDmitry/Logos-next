@@ -47,13 +47,16 @@ export default function MyApp({ Component, pageProps }) {
     // Обработка начала загрузки
     router.events.on("routeChangeStart", () => {
       setLoading(true);
-      console.log('STRAT reute---------------------------------------------------------------');
+      
     });
 
     // Обработка окончания загрузки
     router.events.on("routeChangeComplete", () => {
       setLoading(false);
-      console.log('END route---------------------------------------------------------------');
+      
+    });
+    router.events.on('routeChangeError', () => {
+      setLoading(false);
     });
   }, []);
 
