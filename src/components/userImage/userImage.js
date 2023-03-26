@@ -77,7 +77,7 @@ export default function UserImage ({image, online, width, onClick, onMouseEnter,
             style={wrapDiv} 
             onClick={ onClick?? null}
             >
-            { image !== '' && 
+            { image && image !== '' && 
           
                                 <img style={imageStyle}
                                       src={userImage} 
@@ -88,7 +88,7 @@ export default function UserImage ({image, online, width, onClick, onMouseEnter,
                                   }
   
 
-            { image ==='' && <div 
+            { (!image || image ==='') && <div 
                                 className={styles.imageDiv} 
                                 style={{...imageStyle}}
                                 onMouseEnter={onMouseEnter?? null}

@@ -77,6 +77,8 @@ export default function Experts({serverExperts}) {
       const rating = item.attributes.rating?? 0;
       const description = item.attributes.description;
 
+        console.log('expert---------------------------------------------------------------------------', item);
+
       return(
         <>
          {/* <Col  xs={24} sm={12} md={12} lg={12} xl={12}  xxl={12}> */}

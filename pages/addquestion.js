@@ -5,7 +5,9 @@ import styles from '../styles/addquestion.module.less';
 import { useQuery, useQueryClient, useMutation } from 'react-query';
 
 import {useThemeContext} from '../src/context/themeContext';
-import {useUserContext} from '../src/context/userContext';
+import { useUserContext } from '../src/context/userContext';
+import { useNotifyContext } from '../src/context/notificationContext';
+
 import PageHeader from '../src/components/layouts/pageHeader';
 import PageContainer from '../src/components/layouts/pageContainer';
 
@@ -16,6 +18,7 @@ import{ Form,
   Button,
   Popover,
   Col,
+  notification, 
   } from 'antd';
 
 import {
@@ -35,14 +38,20 @@ import BranchSelect from '../src/components/branchSelect/branchSelect';
 
 export default function AddQuestion() {
 
-     const [sectionMinHeigth, setSectionMinHeigth] = useState(''); 
-    /*const [errorStatus, setErrorStatus] = useState(false);
-    const [qTitle, setQtitle] = useState('');
-    const [qBody, setQbody] = useState('');
-    const [qBranch, setQbranch] = useState({
-      branch_id: null,
-      subbranch_id: null,
-    }); */
+
+    const ee= <a > проба</a>;
+
+    const {infoNotification, successNotification} = useNotifyContext();
+ 
+  /* const [api, contextHolder] = notification.useNotification();
+
+  const openNotification = () => {
+    api.info({
+      message: `Вопрос опубликован!`,
+      description: ee,
+      placement : 'top',
+    });
+  };   */
 
     const [stateValues, setStateValues] = useState(
       {
@@ -113,10 +122,13 @@ const { errorStatus,qTitle,qBody,qBranch } = stateValues;
               )
     );
 
-    const onSuccess = () => {
+    const onSuccess = (value) => {
     
-      setUnsavedChanges(false);
-      setQuestionSaved(true);
+      
+      successNotification('Вопрос сохранен', 'Ожидайте ответа специалистов');
+      
+      router.push(`/question/${value.data.data.id}`);
+
     };
 
     const onFinish = () => {
@@ -127,6 +139,9 @@ const { errorStatus,qTitle,qBody,qBranch } = stateValues;
         setStateValues({...stateValues, errorStatus: true })
         return
       }
+
+      setUnsavedChanges(false);
+      
       const mutateValue = {
         "data": {
           "author": userId,
@@ -140,7 +155,7 @@ const { errorStatus,qTitle,qBody,qBranch } = stateValues;
 
       mutation.mutate(mutateValue,
                         { onError: (error, variables, context) => { console.log(`НЕ удалось отправить вопрос ${context.id}, Ошибка : ${error}`)},
-                          onSuccess: () => { onSuccess()},
+                          onSuccess: (value) => { onSuccess(value)},
                         }
                       );
       };
@@ -187,6 +202,7 @@ const { errorStatus,qTitle,qBody,qBranch } = stateValues;
 
       return (
         <>
+   
         <PageHeader 
         /* title={t('headers.experts')} */
           title="Задайте вопрос юристам портала"  
@@ -199,8 +215,7 @@ const { errorStatus,qTitle,qBody,qBranch } = stateValues;
          <PageContainer maxWidth='900px'  bGcolor={bGcolor}>  
 
           <Col span = {24}>
-
-          {!questionSaved && 
+          
           <div className={styles.blockMain} style={{padding: pad}}>
           {/*   <div className={styles.closeBtn} onClick={()=> router.back()}><CloseOutlined /></div>
             
@@ -281,55 +296,7 @@ const { errorStatus,qTitle,qBody,qBranch } = stateValues;
                   </div>
                   
           </div>  
-          }
-
-          {questionSaved &&
-            <div
-              className={styles.blockMain}
-              style={{width: "500px"}}
-            >
-              <div
-                style={{
-                  display:"flex",
-                  border: "1px solid lightgreen"  ,
-                  width: "100%",
-                  justifyContent: "flex-start",
-                  alignItems: "center",
-                  borderRadius: "10px",
-                  padding: halfPad,
-                }}
-              >
-                  <CheckOutlined 
-                     style={{fontSize: "70px", color: "lightgreen"}}
-                  />
-                  <div style={{
-                    fontSize: "24px",
-                    fontWeight: "450",
-                    width: "100%",
-                    textAlign: "center"
-                  }}>
-                    Вопрос опубликован!
-                  </div>
-              </div>
-              <div
-                style={{
-                  widrh:'100%',
-                  display: "flex",
-                  justifyContent: "space-between",
-                  marginTop: halfPad,
-                }}
-              >
-                  <Link href='/' passHref={true}>
-                    Главная страница
-                  </Link>
-                  <Link href='questions/me'>
-                    <a> Мои вопросы</a>
-                  </Link>
-  
-              </div>
-
-            </div>
-          }
+          
           </Col>
          </PageContainer>
         {/* </div> */}

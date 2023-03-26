@@ -13,6 +13,7 @@ import PublishedDate from '../../src/components/publishedDate/publishedDate';
 
 import { useThemeContext } from '../../src/context/themeContext';
 import { useUserContext } from '../../src/context/userContext';
+import { useNotifyContext } from '../../src/context/notificationContext';
 import PageContainer from '../../src/components/layouts/pageContainer';
 import PageHeader from '../../src/components/layouts/pageHeader';
 import UserImage from '../../src/components/userImage/userImage';
@@ -38,8 +39,10 @@ export default function Question({serverQuestion}) {
   
  const userId = currentUser?.id;
  const userJWT = currentUser?.jwt;
+
+
+ const {infoNotification, successNotification} = useNotifyContext();
  
-  const [sectionMinHeigth, setSectionMinHeigth] = useState(''); 
   const [showChildren, setShowChildren] = useState(false );
   const [answerText, setAnswerText]  = useState('');
   const [isExpert, setIsExpert]  = useState(false);
@@ -56,22 +59,22 @@ const theme=THEME;
   const {id} = router.query;
    
     const {isSuccess,
-           isLoading,  
+           isFetching,  
            data: {data: question = {}, meta: meta = null} = {} }  = useQuery(["question", id],
                                                 () => getQuestion(id),
                                               {
-                                                keepPreviousData: true,
+                                                keepPreviousData: false,
                                                 refetchOnMount: false,
                                                 refetchOnWindowFocus: false,
-                                                initialData: serverQuestion 
+                                                initialData: serverQuestion,
+                                                
                                               }
                                             );
 
 
   const total = meta?.pagination?.total?? 0;
 
-
- 
+console.log('IsFetching----------------------------------------------------------------------------', isFetching); 
 const item=question.attributes;
 const questionId = question.id;
    
@@ -146,8 +149,8 @@ const [unsavedChanges, setUnsavedChanges] = useState(false);
             setIsExpert(false);    
             setShowChildren(true);
           }else {
-            setShowChildren(currentUser.status !== 1);
-            setIsExpert(currentUser.status === 1);
+            setShowChildren(!currentUser.isExpert);
+            setIsExpert(currentUser.isExpert);
           }
         }
 }, [currentUser]);
@@ -155,6 +158,7 @@ const [unsavedChanges, setUnsavedChanges] = useState(false);
 const onSuccess =() => {
   setAnswerText('');
   setUnsavedChanges(false);
+  successNotification('Ответ опубликован!', '');
 }
 
 const onAnswerChange = (e) => {
@@ -193,9 +197,10 @@ if(!answerText || answerText==='') {
 
 mutation.mutate(mutateValue,
                   {
-                    onSuccess: () => {
+                    onSuccess: (data) => {
                      
                       queryClient.invalidateQueries(["question", id]);
+                      queryClient.setQueryData(["question", id], data);
                       
                       onSuccess();
                     },
@@ -255,8 +260,8 @@ const backBtnText = "<< Все вопросы";
                     }
 
 {/* ************************************************************************************************************************************************* */}    
-                  {isSuccess && currentUser && <>
-     
+                  {/* {isSuccess && currentUser && <> */}
+                    {currentUser && <>
  <div className={cardStyles.Card} style={{padding: pad, marginBottom: "40px"}}>
          
           <div lang='ru' className={styles.contentStyle} >
@@ -493,7 +498,7 @@ async function getQuestion(id) {
  .get(`/questions/${id}?populate=deep`)
  .then(res => res.data)
 
-
+console.log('res-------------------------------------', data);
  return (data) 
 
 };

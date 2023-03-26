@@ -72,13 +72,17 @@ export default function Register () {
            const sendValues = {...values, username: email};
         
            axios.post('/api/register', sendValues).then((res) => {
+            if (clientStatus !==1)
+            {
                 axios.post(`${process.env.NEXT_PUBLIC_API}/experts`, 
-                    {
-                    "data": {
-                      "user": res.data.user.id,
-                      }
-                    }, 
+                {
+                "data": {
+                  "user": res.data.user.id,
+                  }
+                }, 
                 ).catch((e) => console.log('ОЩИБКА добавления записи эксперта----', e))
+            }
+                
 
                 setCurrentUser({...res.data.user, jwt: res.data.jwt, isExpert: isExpert});
                 router.back();

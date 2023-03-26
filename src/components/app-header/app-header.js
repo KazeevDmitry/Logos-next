@@ -36,7 +36,9 @@ export default function AppHeader({loading})
   const userJWT = currentUser?.jwt ?? null;
 
 const isExpert = currentUser?.isExpert;
-  
+
+
+ 
   const { t, i18n } = useTranslation();
 
   const router = useRouter();

@@ -18,6 +18,7 @@ import {CaretDownOutlined, CaretUpOutlined, EnvironmentOutlined, WechatOutlined}
 
 import { useTranslation } from 'react-i18next';
 import {useUserContext} from '../../context/userContext';
+
 import {useThemeContext} from '../../context/themeContext';
 import { createStrapiAxios } from '../../../utils/strapi';
 import PublishedDate from '../publishedDate/publishedDate';
@@ -45,7 +46,8 @@ export default function QuestionCard ({authorName,
   
   const {currentUser} = useUserContext();
 
-  const isExpert = currentUser?.status === 1;
+
+  const isExpert = currentUser?.isExpert;
 
   const [showChildren, setShowChildren] = useState(ellipseAnswers && !isExpert);
   theme = useThemeContext();
@@ -62,6 +64,7 @@ export default function QuestionCard ({authorName,
 
   const pad = `${p}px`;
 
+ 
 
 const ANSWERS = answers.map((item, i)=>{
 
@@ -93,7 +96,7 @@ const ANSWERS = answers.map((item, i)=>{
   const onAnswerChange = (e) => {
     setAnswerText(e.target.value);    
   };
-
+ 
 //const answersStr = <Plural count={childrenCount} i18nextPath="answers.plural" />;
 
     return(
@@ -250,6 +253,7 @@ const ANSWERS = answers.map((item, i)=>{
                    <Button type="primary" 
                       ghost 
                       style={{fontSize: "18px", lineHeight: '20px'}}
+                      onClick={onAnswerSave}
                       >
                       Опубликовать ответ
                     </Button>
@@ -298,11 +302,11 @@ const ANSWERS = answers.map((item, i)=>{
 
     const theme = useThemeContext();
 
-    const userImage = author.avatar.data.attributes.url?? '';
+    const userImage = author.avatar?.data?.attributes?.url?? '';
     const userOnline = false;
     const username=  `${author.name} ${author.surname}`;
-    const spec = author.expert.data.attributes.specializations.data[0]?.attributes?.name?? '';
-    const cityName = theme.cities.find(city => city.id === author.city)?.city;
+    const spec = author.expert.data.attributes.specializations?.data[0]?.attributes?.name?? '';
+    const cityName = theme.cities.find(city => city.id === author.city)?.city?? '';
 
     return (
       <>
@@ -319,7 +323,7 @@ const ANSWERS = answers.map((item, i)=>{
                 <div className={styles.nameBox}>
                     <span style={{fontSize: "18px", lineHeight: "20px"}}>{username}</span>
                     <span style={{color: "#5E6674", fontWeight: "400", fontSize: "16px", lineHeight: "16px"}}> {spec}</span>
-                    <span style={{color: "#5E6674", fontWeight: "400", fontSize: "16px", lineHeight: "16px"}}> {`г. ${cityName}`}</span>
+                    <span style={{color: "#5E6674", fontWeight: "400", fontSize: "16px", lineHeight: "16px"}}> {`${cityName !== '' ? 'г.' : ''} ${cityName}`}</span>
                 </div>    
               </div>
               <Button type="primary" ghost icon={<WechatOutlined />} style={{minWidth: "40px"}}>

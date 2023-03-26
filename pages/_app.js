@@ -4,10 +4,11 @@ import React, { useEffect, useState } from 'react';
 import "../styles/antdVariables.less";
 import { ThemeProvider } from '../src/context/themeContext';
 import {UserProvider} from '../src/context/userContext';
+import { NoteProvider } from '../src/context/notificationContext';
 import '../utils/i18n-init';
 import { useTranslation } from "react-i18next";
 import { useRouter } from 'next/router';
-import { ConfigProvider} from 'antd';
+import { ConfigProvider, notification, } from 'antd';
 import ru from 'antd/lib/locale/ru_RU';
 import en from 'antd/lib/locale/en_US';
 
@@ -60,18 +61,25 @@ export default function MyApp({ Component, pageProps }) {
     });
   }, []);
 
+
   return (  
     <>
 
+
+
           <ThemeProvider>
            <UserProvider>
+           <NoteProvider>
            <QueryClientProvider client={queryClient}>
               <ConfigProvider locale={antdLocales(i18n.language)}>
                 <MainLayout loading={loading}>
-                  <Component {...pageProps} /> 
+                  
+                    <Component {...pageProps} /> 
+                  
                 </MainLayout>
               </ConfigProvider>  
               </QueryClientProvider>
+              </NoteProvider>
             </UserProvider>
           </ThemeProvider> 
           </>      
