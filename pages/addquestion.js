@@ -39,7 +39,6 @@ import BranchSelect from '../src/components/branchSelect/branchSelect';
 export default function AddQuestion() {
 
 
-    const ee= <a > проба</a>;
 
     const {infoNotification, successNotification} = useNotifyContext();
  
@@ -170,8 +169,21 @@ const { errorStatus,qTitle,qBody,qBranch } = stateValues;
 
     const [unsavedChanges, setUnsavedChanges] = useState(false);
 
+
   const warningText =
     'Есть несохраненные изменения, покинуть страницу?';
+
+    useEffect(() => {
+      if ( currentUser ) {
+          if (!Object.keys(currentUser).length) {
+            router.push('/login');
+          }else{
+            if (currentUser.isExpert)
+              router.push('/');
+          }
+        }
+}, [currentUser]);
+
 
   useEffect(() => {
     const handleWindowClose = (e) => {

@@ -14,7 +14,7 @@ import moment from 'moment';
 
 import { Col, Row, Pagination, Modal, Button,Input } from 'antd';
 
-import {CaretDownOutlined, CaretUpOutlined, EnvironmentOutlined, WechatOutlined} from '@ant-design/icons';
+import {CaretDownOutlined, CaretUpOutlined, EnvironmentOutlined, MessageOutlined} from '@ant-design/icons';
 
 import { useTranslation } from 'react-i18next';
 import {useUserContext} from '../../context/userContext';
@@ -22,6 +22,8 @@ import {useUserContext} from '../../context/userContext';
 import {useThemeContext} from '../../context/themeContext';
 import { createStrapiAxios } from '../../../utils/strapi';
 import PublishedDate from '../publishedDate/publishedDate';
+
+import parse from 'html-react-parser';
 
 let theme={};
 
@@ -62,11 +64,11 @@ export default function QuestionCard ({authorName,
 
   const p = theme?.gutters?.gorizontal[theme?.id];
 
-  const pad = `${p}px`;
+  const pad = `${p>15 ? p/2 : p}px`;
 
  
 
-const ANSWERS = answers.map((item, i)=>{
+/* const ANSWERS = answers.map((item, i)=>{
 
   return (
     <AnswerCard
@@ -77,7 +79,7 @@ const ANSWERS = answers.map((item, i)=>{
       pad={pad}
     />
   ) 
-});
+}); */
 
 
   const onAnswerBtn = () => {
@@ -102,8 +104,10 @@ const ANSWERS = answers.map((item, i)=>{
     return(
       <>
     
-        <div className={styles.Card} style={{padding: pad}}>
-          {!ellipseAnswers && <div className={styles.title}>
+        <div className={styles.Card} 
+           // style={{padding: pad}}
+            >
+          {!ellipseAnswers && <div className={styles.title} style={{padding: pad}}>
             <qheader className={styles.qheader} lang='ru' style={{hyphens: "auto"}} >
               {title}
             </qheader>  
@@ -121,7 +125,7 @@ const ANSWERS = answers.map((item, i)=>{
               </div> } 
             </div>  
           </div>}
-          <div lang='ru' className={styles.contentStyle} style={{marginTop: pad}}>
+          <div lang='ru' className={styles.contentStyle} style={{marginTop: pad, marginLeft: pad, marginRight: pad}}>
             <Paragraph 
               ellipsis={
                   {
@@ -137,18 +141,19 @@ const ANSWERS = answers.map((item, i)=>{
               {description}
             </Paragraph>
           </div>
-          <div style={{
+          <div className={styles.cardFooter} style={{
                         display: "flex",
                         justifyContent : "space-between",
                         alignItems: "base-line",
                         width: "100%",
                         flexWrap: 'wrap',
+                        padding: pad,
                       }}
             >
                   <div style={{
                               display: "flex",
                               flexDirection: "column",
-                              marginTop: pad,
+                           //   marginTop: pad,
                             }}
                   >
                         <div
@@ -214,23 +219,34 @@ const ANSWERS = answers.map((item, i)=>{
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "flex-end",
-                marginTop: pad,
+         //       marginTop: pad,
               }}
             >
               {!ellipseAnswers &&
-                <div 
+               <span className={styles.ellipseAnswers}
+                     style={{whiteSpace: "nowrap"}}
+               >
+                  <Plural count={childrenCount} i18nextPath="answers.plural" /> 
+              </span>
+               
+                }
+
+ {/* <div 
                 className={styles.ellipseAnswers}
                 style={{marginRight: pad, whiteSpace: "nowrap"}}>
+                 */} 
    
-                  {childrenCount>0 && 
+                  {/* {childrenCount>0 && 
                   <span >
                       <Plural count={childrenCount} i18nextPath="answers.plural" /> 
                   </span>}
                   {childrenCount==0 && 
                   <span >
                       Нет ответов
-                  </span>}
-                </div>}
+                  </span>} 
+                  </div>
+                  */}
+                
 
 
             </div>  
@@ -238,7 +254,7 @@ const ANSWERS = answers.map((item, i)=>{
 
           </div>
 
-          {isExpert && ellipseAnswers && 
+          {/* {isExpert && ellipseAnswers && 
              <div className={styles.answerCard} style={{marginTop: pad}}>
                 <div
                   style={{
@@ -270,9 +286,9 @@ const ANSWERS = answers.map((item, i)=>{
                         value={answerText}
                       //  status={errorStatus && (!qBody||qBody==='') ? "error" : null}
                   />
-             </div>}
+             </div>} */}
                     
-          {showChildren && 
+          {/* {showChildren && 
         
           <div className={styles.answersBlock} style={{marginTop: pad, padding: '0px'}}>
             <div
@@ -288,7 +304,7 @@ const ANSWERS = answers.map((item, i)=>{
                   </span>}
             </div>
             {ANSWERS}
-          </div>}
+          </div>} */}
         </div>
 
   </>
@@ -298,7 +314,7 @@ const ANSWERS = answers.map((item, i)=>{
   //***************************************************************************************************** */
 
 
-  export function AnswerCard ({author, date, text, pad}) {
+  export function AnswerCard ({author, date, text, pad, style}) {
 
     const theme = useThemeContext();
 
@@ -310,14 +326,14 @@ const ANSWERS = answers.map((item, i)=>{
 
     return (
       <>
-      <div className={styles.answerCard} style={{marginTop: pad}}>
+      <div className={styles.answerCard} style={style}>
         <div className={styles.userWrapper}>
               <div className={styles.leftUserBox}>
         
                 <UserImage
                     image= {userImage}
                     online={userOnline}
-                    width= {55}
+                    width= {35}
                    // username={username}
                 />
                 <div className={styles.nameBox}>
@@ -326,14 +342,15 @@ const ANSWERS = answers.map((item, i)=>{
                     <span style={{color: "#5E6674", fontWeight: "400", fontSize: "16px", lineHeight: "16px"}}> {`${cityName !== '' ? 'г.' : ''} ${cityName}`}</span>
                 </div>    
               </div>
-              <Button type="primary" ghost icon={<WechatOutlined />} style={{minWidth: "40px"}}>
-                {theme.id !== "xs" && theme.id !== "sm" ? "Написать" : ''}
+              <Button type="primary" ghost icon={<MessageOutlined />} style={{minWidth: "40px", borderRadius: '25%'}}>
+               {/*  {theme.id !== "xs" && theme.id !== "sm" ? "Написать" : ''} */}
+
               </Button>  
           </div>  
           <div lang='ru' className={styles.contentStyle} style={{marginLeft: '65px', marginTop: "15px", marginBottom: "15px"}}>
-              {text}
+              {parse(text)}
             </div>  
-          <div style={{display:"flex", justifyContent: "flex-start"}}>
+          <div style={{display:"flex", justifyContent: "flex-start", marginLeft: '15px', marginBottom: '15px'}}>
               <span style={{color: "#5E6674", fontWeight: "400", fontSize: "14px", lineHeight: "16px"}}>{moment(date).format('DD MMM YYYY    hh:mm')}</span>
             </div>  
       </div>

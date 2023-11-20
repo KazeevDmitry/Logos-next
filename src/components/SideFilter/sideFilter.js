@@ -186,7 +186,7 @@ console.log("currBranch --------------------------------------------------------
                 </Button>}
             </div>    }
             {theme.isDesktop &&
-                <div style={{fontSize: "22px", lineHeight: "22px", fontWeight: "600", marginBottom: pad}}> Фильтр </div>
+                <div style={{fontSize: "22px", lineHeight: "22px", fontWeight: "550", marginBottom: pad}}> Фильтр </div>
             }
             
 

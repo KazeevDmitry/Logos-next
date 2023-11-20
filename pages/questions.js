@@ -48,7 +48,7 @@ export default function Questions(
     const {isSuccess,
            isLoading,  
            data: {data: questions = [], meta: meta = null} = {} }  = useQuery(["questions", page, search, branch, subbranch],
-                                                () => getUsers({page, search, branch, subbranch}),
+                                                () => getQuestions({page, search, branch, subbranch}),
                                               {
                                                 keepPreviousData: true,
                                                 refetchOnMount: false,
@@ -230,7 +230,7 @@ export default function Questions(
   )
 }
 
-async function getUsers({page, search, branch, subbranch}) {
+async function getQuestions({page, search, branch, subbranch}) {
 
   let searchArr = []; 
 
@@ -247,16 +247,13 @@ async function getUsers({page, search, branch, subbranch}) {
 
   searchArr.push(`pagination[page]=${page}&pagination[pageSize]=${PAGESIZE}`);
   
-  //searchArr.push(`populate=%2A`);
-    
   searchArr.push(`sort[0]=publishedAt:desc`);
 
   let searchStr = searchArr.join("&");
 
   const data = await createStrapiAxios()
- //.get(`/experts?populate[0]=branches&populate[1]=specializations&populate[2]=user.avatar&${searchStr}`)
- //.get(`/questions?populate[0]=branch&populate[1]=subbranch&populate[2]=author&populate[3]=answers${searchStr}`)
- .get(`/questions?populate=deep&${searchStr}`)
+
+ .get(`/questions?populate=deep,2&${searchStr}`)
  .then(res => res.data)
 
 
@@ -274,7 +271,7 @@ export async function getServerSideProps(context) {
    }
 
    const {search, branch, subbranch} = context.query;
-   const data = await getUsers({page, search, branch, subbranch});
+   const data = await getQuestions({page, search, branch, subbranch});
 
   
    return { props: { serverQuestions: data } }  

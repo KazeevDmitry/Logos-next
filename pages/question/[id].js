@@ -6,6 +6,8 @@ import { useQuery, useMutation, useQueryClient } from "react-query";
 import { useRouter } from "next/router";
 
 import styles  from './question.module.less';
+//import "react-quill/dist/quill.core.css";
+//import "../../node_modules/react-quill/dist/quill.snow.css";
 
 import { Pagination, Row, Col, Button } from 'antd'; 
 
@@ -22,16 +24,20 @@ import QuestionCard from '../../src/components/questionCard/questionCard';
 import {AnswerCard} from '../../src/components/questionCard/questionCard';
 import SideFilter from '../../src/components/SideFilter/sideFilter';
 import {AskQuestionSideBlock} from '../../src/components/SideFilter/sideFilter';
+import Editor from '../../src/components/Editor/editor';
 
 import cardStyles from '../../src/components/questionCard/questionCard.module.less';
 import { Typography, Input } from 'antd';
 import Plural from '../../utils/plural';
 import {CaretDownOutlined, CaretUpOutlined, EnvironmentOutlined, StopTwoTone, InfoCircleOutlined} from '@ant-design/icons';
-
+//import ReactQuill from "react-quill";
+import dynamic from 'next/dynamic';
 import axios from 'axios';
 
 const { Paragraph } = Typography;
 const { TextArea } = Input;
+
+
 
 export default function Question({serverQuestion}) {
 
@@ -71,10 +77,22 @@ const theme=THEME;
                                               }
                                             );
 
+    const {isSuccess: answersSuccess,
+           isLoading: answersLoading,  
+           isFetching: answersFetching,
+           refetch,
+           data: {data: childrenArr = [], meta: answersMeta = {}} = {} }  = useQuery(["answers", id],
+                                                () => getAnswers(id),
+                                              {
+                                                keepPreviousData: true,
+                                                refetchOnMount: false,
+                                                refetchOnWindowFocus: false,
+                                                refetchInterval: 6000,
+                                              }
+                                            );
 
-  const total = meta?.pagination?.total?? 0;
+  const childrenCount = answersMeta?.pagination?.total?? 0;
 
-console.log('IsFetching----------------------------------------------------------------------------', isFetching); 
 const item=question.attributes;
 const questionId = question.id;
    
@@ -87,8 +105,9 @@ const questionId = question.id;
       const description = item.description;
       const title = item.title;
       const date = item.publishedAt;
-      const childrenArr=item.answers.data?? [];
-      const childrenCount = childrenArr.length;
+      //const childrenArr=item.answers.data?? [];
+     // const childrenArr = answers;
+    //  const childrenCount = totalAnswers;
 
       const cityName = theme.cities.find(city => city.id === authorCity)?.city;
       const currDate = new Date(date);
@@ -96,6 +115,7 @@ const questionId = question.id;
  const p = THEME?.gutters?.gorizontal[THEME?.id]?? 20;
 
  const pad = `${p}px`;
+ const mPad  = `-${p}px`;
 
 
 const ANSWERS = childrenArr.map((item, i)=>{
@@ -107,6 +127,7 @@ const ANSWERS = childrenArr.map((item, i)=>{
       text = {item.attributes.text}
       date={item.attributes.publishedAt}
       pad={pad}
+      style={{marginTop: pad}}
     />
   ) 
 });
@@ -159,11 +180,20 @@ const onSuccess =() => {
   setAnswerText('');
   setUnsavedChanges(false);
   successNotification('Ответ опубликован!', '');
+  refetch();
 }
 
-const onAnswerChange = (e) => {
+/* const onAnswerChange = (e) => {
   setAnswerText(e.target.value);   
   if (e.target.value !== ''){
+  setErrorStatus(false) 
+  setUnsavedChanges(true)
+}
+}; */
+
+const onAnswerChange = (value) => {
+  setAnswerText(value);   
+  if (value !== ''){
   setErrorStatus(false) 
   setUnsavedChanges(true)
 }
@@ -199,9 +229,8 @@ mutation.mutate(mutateValue,
                   {
                     onSuccess: (data) => {
                      
-                      queryClient.invalidateQueries(["question", id]);
-                      queryClient.setQueryData(["question", id], data);
-                      
+                      queryClient.invalidateQueries(["answers", id]);
+  
                       onSuccess();
                     },
                     onError: (e) => {
@@ -262,7 +291,7 @@ const backBtnText = "<< Все вопросы";
 {/* ************************************************************************************************************************************************* */}    
                   {/* {isSuccess && currentUser && <> */}
                     {currentUser && <>
- <div className={cardStyles.Card} style={{padding: pad, marginBottom: "40px"}}>
+ <div className={cardStyles.Card} style={{paddingTop: pad, paddingBottom: pad, marginBottom: "40px"}}>
          
           <div lang='ru' className={styles.contentStyle} >
           {/*   <Paragraph 
@@ -282,7 +311,7 @@ const backBtnText = "<< Все вопросы";
 
           {isExpert &&
           <>
-             <div className={cardStyles.answerCard} style={{marginTop: pad,}}>
+             <div className={cardStyles.yourAnswerCard} style={{marginTop: pad,}}>
                 <div
                   style={{
                     display: "flex",
@@ -323,7 +352,7 @@ const backBtnText = "<< Все вопросы";
                     </Button>
                 </div>
 
-                <TextArea
+                {/* <TextArea
                         autoSize={{
                           minRows: 3,
                           maxRows: 5,
@@ -333,12 +362,18 @@ const backBtnText = "<< Все вопросы";
                         onChange={onAnswerChange}
                         value={answerText}
                         status={errorStatus  ? "error" : null}
-                  />
+                  /> */}
+                    <Editor
+                value={answerText}
+                onChange={onAnswerChange}
+               /> 
              </div>
              
+             
+
             </> }
 
-            { isExpert && <div
+            { isExpert &&  <div
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -365,12 +400,12 @@ const backBtnText = "<< Все вопросы";
                     Нет ответов
                   </span>
                   
-                  }
+                  } 
                </div>}  
                     
           {showChildren && 
           <>
-            {!isExpert && childrenCount === 0 && 
+             {!isExpert && childrenCount === 0 && 
               <div
               style={{
                 display: "flex",
@@ -382,7 +417,7 @@ const backBtnText = "<< Все вопросы";
                  <span className={cardStyles.answers}>
                     Нет ответов
                   </span>
-              </div>}
+              </div>} 
 
             {!isExpert && childrenCount > 0 && <div
             style={{
@@ -397,7 +432,7 @@ const backBtnText = "<< Все вопросы";
                     <Plural count={childrenCount} i18nextPath="answers.plural" /> 
                 </span>
           </div>}        
-          <div className={cardStyles.answersBlock} style={{padding: '0px'}}>
+          <div className={cardStyles.answersBlock} style={{paddingLeft: '40px'}}>
             {ANSWERS}
           </div>
           </>}
@@ -495,10 +530,21 @@ async function getQuestion(id) {
 
  
   const data = await createStrapiAxios()
- .get(`/questions/${id}?populate=deep`)
+ /* .get(`/questions/${id}?populate[0]=author&populate[1]=branch&populate[2]=subbranch`) */
+ .get(`/questions/${id}?populate=deep, 3`)
  .then(res => res.data)
 
-console.log('res-------------------------------------', data);
+ return (data) 
+
+};
+
+async function getAnswers(id) {
+
+ 
+  const data = await createStrapiAxios()
+ .get(`/answers/?filters[question][id][$eq]=${id}&populate=deep,3&sort[0]=publishedAt:desc`)
+ .then(res => res.data)
+
  return (data) 
 
 };
@@ -514,3 +560,6 @@ export async function getServerSideProps(context) {
   
   return { props: { serverQuestion: data } }  
 }
+ 
+
+
