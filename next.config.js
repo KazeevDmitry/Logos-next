@@ -12,8 +12,7 @@ const nextConfig = {
 const withAntdLess = require('next-plugin-antd-less');
 
 module.exports = withAntdLess({
-  // optional: you can modify antd less variables directly here
-  modifyVars: {  },
+    
   // Or better still you can specify a path to a file 
   lessVarsFilePath: './styles/antdVariables.less',
   // optional
