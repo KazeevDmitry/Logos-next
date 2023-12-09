@@ -6,8 +6,7 @@ import { useQuery, useMutation, useQueryClient } from "react-query";
 import { useRouter } from "next/router";
 
 import styles  from './question.module.less';
-//import "react-quill/dist/quill.core.css";
-//import "../../node_modules/react-quill/dist/quill.snow.css";
+
 
 import { Pagination, Row, Col, Button } from 'antd'; 
 
@@ -24,13 +23,13 @@ import QuestionCard from '../../src/components/questionCard/questionCard';
 import {AnswerCard} from '../../src/components/questionCard/questionCard';
 import SideFilter from '../../src/components/SideFilter/sideFilter';
 import {AskQuestionSideBlock} from '../../src/components/SideFilter/sideFilter';
-import Editor from '../../src/components/Editor/editor';
+//import Editor from '../../src/components/Editor/editor';
 
 import cardStyles from '../../src/components/questionCard/questionCard.module.less';
 import { Typography, Input } from 'antd';
 import Plural from '../../utils/plural';
 import {CaretDownOutlined, CaretUpOutlined, EnvironmentOutlined, StopTwoTone, InfoCircleOutlined} from '@ant-design/icons';
-//import ReactQuill from "react-quill";
+
 import dynamic from 'next/dynamic';
 import axios from 'axios';
 

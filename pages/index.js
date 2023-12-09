@@ -472,8 +472,8 @@ function InfoBlock ({ elements, linkTo, headerT, linkT}) {
         <div className={styles.headerContainer} style = {headerStyle}>
             <div className={styles.headText}>{t(headerT)}</div>
             {THEME?.isDesktop && 
-              <Link href={linkTo}>
-                <a  className={styles.headLink}>{t(linkT)}</a>
+              <Link href={linkTo}
+                  className={styles.headLink}>{t(linkT)}
               </Link>}
         </div>
 

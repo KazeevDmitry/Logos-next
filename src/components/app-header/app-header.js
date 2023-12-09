@@ -158,8 +158,8 @@ const padHeader = !loading ? '5px' : '0px';
                     <div className={styles.menuDash}></div>
                </div>
 
-               <Link href='/'>
-                 <a className={styles.logosHeader}>LogosEst</a>
+               <Link href='/' className={styles.logosHeader}>
+                 LogosEst
                   </Link>
                {!userJWT && (
                   <Button  htmlType="button"
@@ -195,8 +195,8 @@ const padHeader = !loading ? '5px' : '0px';
           <header className={styles.mainHeader} style={{paddingTop: '5px', paddingBottom: padHeader}}>
               <div className={styles.menu}>
                 <div className={styles.mainLogo}>
-                  <Link href="/" >
-                    <a className={styles.logosHeader} style={{color: "#1890ff"}} > LogosEst </a>
+                  <Link href="/" 
+                     className={styles.logosHeader} style={{color: "#1890ff"}} > LogosEst 
                   </Link>
                 </div>
 
@@ -313,10 +313,9 @@ function NavLink({ children, href, style }) {
   return (
     <Link href = {href}
         
-      >
-        <a style={style} className={styles.menuLink + ' '+ (match ? styles.activeMenu : '')}>
+       style={style} className={styles.menuLink + ' '+ (match ? styles.activeMenu : '')}>
           {children}
-        </a>
+      
         
       </Link>
        
@@ -422,8 +421,8 @@ function UserMenuItems({items, onClick}){
     <div className={styles.userLinkBox}>
       {
          items.map(({ to, name }, i) => (
-                  <Link key={i} href={to}>
-                    <a key={name} className={styles.menuLink} onClick={onClick}> { name } </a>
+                  <Link key={i} href={to}
+                    className={styles.menuLink} onClick={onClick}> { name } 
                   </Link>
               ))
             }

@@ -320,10 +320,10 @@ export default function Register () {
                                 href="/login" 
                                 passHref={true}
                                 replace={true}
+                                className={styles.registerLink} 
                                 >
-                                <a className={styles.registerLink}>
+
                                     {"ВХОД >>"}
-                                    </a>
 
                             </Link>
                         </div>

@@ -333,11 +333,9 @@ const bGcolor = theme.id === 'xs' || theme.id === 'sm' ? 'white' : '';
                                 href="/register" 
                                 passHref={true}
                                 replace={true}
+                                className={styles.registerLink}
                                 >
-                                <a className={styles.registerLink}>
-                                    {'РЕГИСТРАЦИЯ >>'}
-                                    </a>
-
+                                  {'РЕГИСТРАЦИЯ >>'}
                             </Link>
                         </div>
 

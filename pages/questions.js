@@ -99,8 +99,8 @@ export default function Questions(
         
          <Col  xs={24} sm={24} md={24} lg={24} xl={24}  xxl={24}>
 
-         <Link href={`/question/${item.id}`} > 
-          <a style={{ color: 'black', cursor: "pointer" }}>
+         <Link href={`/question/${item.id}`} style={{ color: 'black', cursor: "pointer" }}> 
+          
             <QuestionCard
                authorName={`${authorName} ${authorSurname}`}
                //authorAvatar = {authorAvatar}
@@ -114,7 +114,7 @@ export default function Questions(
                title={title}
                answers={childrenArr}
              />
-             </a>
+          
           </Link>
       
         </Col>
