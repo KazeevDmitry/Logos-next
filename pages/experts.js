@@ -1,7 +1,7 @@
 
 import React, { useEffect } from 'react';
 
-import { useQuery, dehydrate, QueryClient } from "react-query";
+import { useQuery } from "react-query";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import styles from '../styles/Home.module.css'
@@ -76,8 +76,6 @@ export default function Experts({serverExperts}) {
       const spec = item.attributes.specializations?.data[0]?.attributes?.name?? '';
       const rating = item.attributes.rating?? 0;
       const description = item.attributes.description;
-
-        console.log('expert---------------------------------------------------------------------------', item);
 
       return(
         <>
