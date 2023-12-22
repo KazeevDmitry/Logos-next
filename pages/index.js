@@ -34,8 +34,10 @@ export default function Home({circlePeople}) {
   /// TODO: MOVE
   // Handshake required, token will be verified against strapi
   (function () {
+    // ТУТ НАДО УКАЗАТЬ АДРЕС СЕРВЕРА STRAPI!!!!
     const socket = io("http://localhost:1337/", {
-      path: "/sockettest/",
+      //ТУТ РОУТЕР КОНТРОЛЛЕРА ГДЕ ПРОПИСАН СОКЕТ  СТРАПИ
+      path: "/socket/",
       query: {
         token,
       },
