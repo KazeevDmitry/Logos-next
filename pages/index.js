@@ -31,6 +31,33 @@ let THEME ={};
 
 export default function Home({circlePeople}) {
 
+  /// TODO: MOVE
+  // Handshake required, token will be verified against strapi
+  (function () {
+    const socket = io("http://localhost:1337/", {
+      path: "/sockettest/",
+      query: {
+        token,
+      },
+    });
+
+    socket.emit("subscribe", "test"); // article is the room which the client joins
+    socket.emit("subscribe", "testROOM"); // custom room
+
+    socket.on("find", (data) => {
+      //do something
+      console.log('updafindte')
+    });
+    socket.on("update", (data) => {
+      // do something
+      console.log('update')
+    });
+
+    socket.on("myevent", (data) => {
+      console.log('anyevent')
+    });
+  })();
+
   THEME = useThemeContext();
 
   
