@@ -1,73 +1,62 @@
 import React from 'react';
 import { useState, useContext } from 'react';
 import { useParams } from "react-router-dom";
-import { ThemeContext } from '../../Providers/themeContext';
-import ReactDom from 'react-dom';
+import { useThemeContext } from '../../src/context/themeContext';
+import { useUserContext } from '../../src/context/userContext';
 import { useTranslation } from 'react-i18next';
+
 import styles from './expertInfo.module.less';
 
 import axios from 'axios';
 import { useQuery, useQueryClient, useMutation } from "react-query";
-
 import { Tabs, Row, Col, Space, Spin, Image } from 'antd';
 import { MinusCircleTwoTone, PlusCircleTwoTone, DeleteTwoTone } from '@ant-design/icons';
 import cup from './icons/cup.svg';
 import cupBig from './icons/cupBig.svg';
-import PageHeader from '../layout/pageHeader';
-import PageContainer from '../layout/pageContainer';
-// import servicesArr from '../../directories/prices.json';
-// import kategoryArr from '../../directories/kategory.json';
-// import valuesArr from '../../directories/expertInfo.json';
-import RatingBar from '../ratingbar/ratingbar';
-import Feedbacks from '../feedbacks/feedbacks';
-import SideFeedbacks from '../feedbacks/sideFeedbacks';
+
+import PageContainer from '../../src/components/layouts/pageContainer';
+import PageHeader from '../../src/components/layouts/pageHeader';
+
+import { useRouter } from "next/router";
+import { createStrapiAxios } from '../../utils/strapi';
+
+import RatingBar from '../../src/components/ratingbar/ratingbar';
+import Feedbacks from '../../src/components/feedbacks/feedbacks';
+import SideFeedbacks from '../../src/components/feedbacks/sideFeedbacks';
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------------
-import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
-import { Carousel } from 'react-responsive-carousel';
+//import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+//import { Carousel } from 'react-responsive-carousel';
 //----------------------------------------------------------------------------------------------------------------------------------------------------------
 
 import UserImage from '../userImage/userImage';
 import Icons from '../../Utils/icons';
 
 import human from './icons/human.svg';
-import arrowLeft from './icons/arrow_left.svg';
-import arrowRight from './icons/arrow_right.svg';
-import speech from './icons/speechblue.svg';
-import plus from './icons/plus.svg';
-
-// import humanArr from '../../directories/cotractors.json';
-// import diplomArr from '../../directories/diploms.json';
-// import educationArr from '../../directories/education.json';
 
 import diplom from './img/diploma-7.jpg';
 
-// import cityInitObj from '../../directories/russia.json'; //-----------------------------------------------------------------------------------------------
-
-// const CITYOBJ = cityInitObj.map((item, index) => {
-//   const { region, city } = item;
-//   const newitem = { id: index, region, city };
-//   return newitem;
-// });
-// //--------------------------------------------------------------------------------------------------------------------------------------------------------
 
 export default function ExpertInfo () {
 
     const { t } = useTranslation();
-    const theme = useContext(ThemeContext);
-    const CITYOBJ = theme?.cities;
+    const theme = useThemeContext();
+    const router = useRouter();
+    
+    const expertId = router.query.id;
+
+    //const cityName = theme.cities.find(city => city.id === user.city)?.city;
 
     const p = theme?.gutters.gorizontal[theme?.id];
 
     const pad = `${p}px`;
-
-    const { expertId } = useParams();
-  
+   
     const { TabPane } = Tabs;
     const [activeKey, setKey] = useState('1');
+
     const handleClick = (key) => {
       setKey(`${key}`);
-      console.log({activeKey});
+  //    console.log({activeKey});
     }
 
     const [values, setValues] = useState();

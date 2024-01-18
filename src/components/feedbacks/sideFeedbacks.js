@@ -1,56 +1,32 @@
-import React, {useState, useEffect, useContext} from 'react';
-import axios from 'axios';
-import { useQuery, useQueryClient } from "react-query";
+import React from 'react';
 import { Spin, Row, Col } from 'antd';
-import { useSearchParams, useParams, useLocation } from 'react-router-dom';
-import { ThemeContext } from '../../Providers/themeContext';
-import FeedbackCard from './feedbackCard';
+import {useThemeContext} from '../../context/themeContext';
+//import FeedbackCard from './feedbackCard';
 import { useTranslation } from 'react-i18next';
 import styles from './sideFeedbacks.module.less';
-import Icons from '../../Utils/icons';
-import Plural from '../../Utils/plural';
+import Plural from '../../../utils/plural';
+import { StarOutlined } from '@ant-design/icons';
 
 
+export default  function SideFeedbacks ({feedbacks=[], isDataFetching=false}) {
 
-export default  function SideFeedbacks ({userId}) {
-
-  const theme = useContext(ThemeContext);
+  const theme = useThemeContext();
 
 
-    const pad = `${theme?.gutters.vertical[theme.id]}px`;
+    const pad = `${theme?.gutters?.vertical[theme.id]}px`;
 
   const {t} = useTranslation();
  
-  const api = {
-    feedbacks: () => axios.get(`${process.env.REACT_APP_API}/feedbacks?_where[task.performer.id]=${userId}`),
-        
-  };
 
-
-const {isFetching: QFetch, 
-        isLoading: QLoading,
-        data: { data: feedbacks = [] } = {} } = useQuery(`sideFeedbacks${userId}`, api.feedbacks,{refetchOnWindowFocus: true }) ;
-
-
-
-
-  if (QFetch||QLoading) {
-    return (
-        <div className={styles.block} style={{padding: pad, height: "150px"}}>
-            <div style={{display: "flex", justifyContent: "center", alignItems: "center", width: "100%"}}><Spin size = 'large'/></div>
-      </div>
-    )
-  }
 
   const count = feedbacks.length> 0 ? feedbacks.length : 1;
 
 let ratings = [];
 
-ratings.push({num: 5, rating: feedbacks.filter(item => item.rating === 5).length});
-ratings.push({num: 4, rating: feedbacks.filter(item => item.rating === 4).length});
-ratings.push({num: 3, rating: feedbacks.filter(item => item.rating === 3).length});
-ratings.push({num: 2, rating: feedbacks.filter(item => item.rating === 2).length});
-ratings.push({num: 1, rating: feedbacks.filter(item => item.rating === 1).length});
+
+for (let i = 5; i > 0; i--) {
+    ratings.push({num: i, rating: feedbacks.filter(item => item.attributes.stars === i).length});
+  }
 
 const ratingBars = ratings.map(item => {
 
@@ -59,7 +35,7 @@ const ratingBars = ratings.map(item => {
     const proc = (100*rating/count).toFixed(1)
 
     return (
-        <Row gutter={[10, 10]} style={{marginTop: "15px", width: "100%"}} align="middle">
+         <Row gutter={[10, 10]} style={{marginTop: "15px", width: "100%"}} align="middle">
             <Col flex="20px">
                 <span>{num}</span>
             </Col>
@@ -68,20 +44,24 @@ const ratingBars = ratings.map(item => {
                     <div style={{width: bar, height: "3px", backgroundColor: "#0066FF"}}> </div>
                 </div>
             </Col>
-            <Col flex="55px">
-                <div style={{width: "100%", textAlign: "left"}}>
+            <Col flex="30px" style={{paddingRight: '0px'}}>
+
+                <div style={{width: "100%", textAlign: "right"}}>
                     <span >{`${proc}%`}</span>
                 </div>
             </Col>
-        </Row>
+        </Row> 
+
+
     )
 });
+const initialValue = 0;
+const summRating = ratings.reduce(
+    (acc, item) => acc + item.num*item.rating, initialValue
+  );
 
-    let summRating = 0;
 
-    feedbacks.forEach(element => summRating =  summRating + element.rating );
-
-   const avgProc = (summRating/count).toFixed(1);
+const avgProc = (summRating/count).toFixed(1);
 
     return(
    
@@ -89,15 +69,15 @@ const ratingBars = ratings.map(item => {
                 <div className={styles.blockHeader}> 
                     <span>{t('labels.feedbacks')}</span>
                     <div className={styles.prockHeader} >
-                    <Icons.Star color = "#F44336"/>
-                        <span> {avgProc}</span>
+                    <StarOutlined style = {{color : "#F44336"}}/>
+                        <span style = {{color : "#F44336"}}> {avgProc}</span>
                     </div>
                 </div>
                 {ratingBars}
                 <span 
                     style={{marginTop: "30px",  color : count > 0 ? "#0066FF" : "#CED3DB"}}
                 >
-                    <Plural count={count} i18nextPath="reviews.plural" />
+                    <Plural count={feedbacks.length} i18nextPath="reviews.plural" />
                 </span>
             </div>
     )     

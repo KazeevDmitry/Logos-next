@@ -4,7 +4,8 @@ import React, { useEffect } from 'react';
 import { useQuery } from "react-query";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import styles from '../styles/Home.module.css'
+import Link from 'next/link';
+import styles from '../styles/experts.module.less'
 
 import { useUserContext } from '../src/context/userContext';
 
@@ -76,14 +77,17 @@ export default function Experts({serverExperts}) {
       const spec = item.attributes.specializations?.data[0]?.attributes?.name?? '';
       const rating = item.attributes.rating?? 0;
       const description = item.attributes.description;
+      const userId = item.id;
 
       return(
-        <>
-         {/* <Col  xs={24} sm={12} md={12} lg={12} xl={12}  xxl={12}> */}
+        
          <Col key={i}  xs={24} sm={24} md={24} lg={24} xl={24}  xxl={24}>
 {/* 
         <Link href="/experts" passHref = {true}> */}  {/* use id from item for href */}
-           <a style={{ color: 'black' }}>
+           <Link href={`/expert/${userId}`} 
+                  //className={styles.expertsLink} 
+                  style={{ color: 'black', cursor: "pointer" }}> 
+           
              <ExpertCard
                username={user.name}
                surname={user.surname}
@@ -97,11 +101,11 @@ export default function Experts({serverExperts}) {
                branches={itenBranchesArr}
                description={description}
              />
-           </a>  
+           
+           </Link>  
         
         </Col>
-
-        </>
+        
       )
     });
     
@@ -248,6 +252,5 @@ export async function getServerSideProps(context) {
 
   const data = await getUsers({page, search, branch, specialization, city});
 
-  
   return { props: { serverExperts: data } }  
 }

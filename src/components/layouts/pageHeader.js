@@ -33,7 +33,7 @@ return (
             xl={24-xl}
         >
         <div className={styles.flexContainer}>
-          <h3 lang='ru' className={styles.headText}>{title}</h3>
+          <h1 lang='ru' className={styles.headText}>{title}</h1>
         
         </div> 
         </Col> 

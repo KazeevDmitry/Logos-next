@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { useState } from 'react';
 import styles from './expertCard.module.less';
 import checkedSvg from './icons/checked.svg';
 import UserImage from '../userImage/userImage';
@@ -16,9 +16,18 @@ export default function ExpertCard({username, surname, image, stars, reviews = '
 
   const  THEME = useThemeContext();
 
+  const hoverStyle = {  
+    active : {marginLeft: '-2px', marginTop: '-2px', boxShadow: '2px 3px 4px rgba(0, 0, 0, 0.2)'},
+    noneActive : {margin: '0px'},
+  }
+
+  const [shadowStyle, setShadowStyle] = useState(hoverStyle.noneActive);
+
     const cHeight = THEME?.id === "xxl" || THEME?.id === "xl" ? 150 : THEME?.id === "xs" ? 80 : 110;
     const cardHeight = THEME?.id !== "xs" ? "150px" : "130px";
 
+   const onMouseEnter = () => setShadowStyle(hoverStyle.active);
+   const onMouseLeave = () => setShadowStyle(hoverStyle.noneActive);
 
     const branchDivs = branches.map((item, i) => 
  
@@ -34,8 +43,11 @@ export default function ExpertCard({username, surname, image, stars, reviews = '
     return (
       
         <div className={styles.card}
-        //   style ={{height: cardHeight}}
+           style ={shadowStyle}
+           onMouseEnter={onMouseEnter}
+           onMouseLeave= {onMouseLeave}
         >
+
           <Row gutter={[20, 40]} 
             justify= "center" align = "middle" 
             
