@@ -1,9 +1,9 @@
 import React, {useState, useEffect, useContext} from 'react';
-import axios from 'axios';
-import { useQuery, useQueryClient } from "react-query";
-import { Spin, Row, Pagination } from 'antd';
-import { useSearchParams, useParams, useLocation } from 'react-router-dom';
-import { ThemeContext } from '../../Providers/themeContext';
+
+import { Row, Pagination } from 'antd';
+import { useThemeContext } from '../../context/themeContext';
+
+
 import FeedbackCard from './feedbackCard';
 
 
@@ -16,17 +16,14 @@ import FeedbackCard from './feedbackCard';
 // });
 // //--------------------------------------------------------------------------------------------------------------------------------------------------------
 
-export default  function Feedbacks ({userId}) {
+export default  function Feedbacks ({feedbacks}) {
 
   const [ currPage, setCurrPage ] = useState(1);
 
-  const theme = useContext(ThemeContext);
+  const theme = useThemeContext();
 
-  const location = useLocation();
+  const count = feedbacks.lenght?? 1;
 
-  const queryClient = useQueryClient();
-
-    
   const showStep = 6;
 
   const setCurrentPage = (page) => {
@@ -34,49 +31,17 @@ export default  function Feedbacks ({userId}) {
       setCurrPage(page);
   };
 
-  const queryName = `feedbacks${currPage}${userId}`;
-
-  useEffect(() => {
-    setCurrPage(1);
-    
-    queryClient.invalidateQueries(queryName);
-    
-  }, [location]);
-
-
-
- 
-  const api = {
-    feedbacks: () => axios.get(`${process.env.REACT_APP_API}/feedbacks?_where[task.performer.id]=${userId}&_limit=${showStep}&_start=${(currPage-1)*showStep}&_sort=created_at:DESC`),
-   
-     count: () => axios.get(`${process.env.REACT_APP_API}/feedbacks/count?_where[task.performer.id]=${userId}&_limit=${showStep}&_start=${(currPage-1)*showStep}`),
-   
-  };
-
-
-const {isFetching: QFetch, 
-        isLoading: QLoading,
-        data: { data: feedbacks = [] } = {} } = useQuery(queryName, api.feedbacks,{refetchOnWindowFocus: true }) ;
-
-
-const {isFetching: CFetch, 
-        isLoading: CLoading,
-        data: { data: count = 0 } = {} } = useQuery(`Count${queryName}`, api.count,{refetchOnWindowFocus: false }) ;
-
-
-  if (QFetch||QLoading||CFetch||CLoading) {
-    return (
-      <div style={{display: "flex", justifyContent: "center", alignItems: "center", width: "100%", marginTop: "150px"}}><Spin size = 'large'/></div>
-    )
-  }
 
 const gutter = `${theme?.gutters.vertical[theme.id]}px`;
 
     const cards = feedbacks.map ((item) => {
 
+      console.log('feedback for card---------------------------------------------', item.attributes);
         return(
             
-                <FeedbackCard feedback={item}/>
+               <FeedbackCard feedback={item.attributes}/> 
+              
+               
         )
 });
 

@@ -9,7 +9,7 @@ export default function Footer () {
           <div className={styles.blockCopyright}>
             <div className={styles.logo}></div>
             <div className={styles.copyright}>
-              © 2022 Logos — агрегатор юридических услуг. Все права защищены
+              © Logos — агрегатор юридических услуг. Все права защищены
             </div>
             {/* <a href="/" className={styles.confidentialLink}>
               Политика конфиденциальности

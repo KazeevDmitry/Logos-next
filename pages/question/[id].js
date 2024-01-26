@@ -182,21 +182,14 @@ const onSuccess =() => {
   refetch();
 }
 
-/* const onAnswerChange = (e) => {
+ const onAnswerChange = (e) => {
   setAnswerText(e.target.value);   
   if (e.target.value !== ''){
   setErrorStatus(false) 
   setUnsavedChanges(true)
 }
-}; */
+}; 
 
-const onAnswerChange = (value) => {
-  setAnswerText(value);   
-  if (value !== ''){
-  setErrorStatus(false) 
-  setUnsavedChanges(true)
-}
-};
 
 const mutation = useMutation((newAnswers) =>
 axios.post(`${process.env.NEXT_PUBLIC_API}/answers`, 
@@ -290,7 +283,7 @@ const backBtnText = "<< Все вопросы";
 {/* ************************************************************************************************************************************************* */}    
                   {/* {isSuccess && currentUser && <> */}
                     {currentUser && <>
- <div className={cardStyles.Card} style={{paddingTop: pad, paddingBottom: pad, marginBottom: "40px"}}>
+ <div className={cardStyles.Card} style={{padding: pad, marginBottom: "40px"}}>
          
           <div lang='ru' className={styles.contentStyle} >
           {/*   <Paragraph 
@@ -351,7 +344,7 @@ const backBtnText = "<< Все вопросы";
                     </Button>
                 </div>
 
-                {/* <TextArea
+                 <TextArea
                         autoSize={{
                           minRows: 3,
                           maxRows: 5,
@@ -361,11 +354,11 @@ const backBtnText = "<< Все вопросы";
                         onChange={onAnswerChange}
                         value={answerText}
                         status={errorStatus  ? "error" : null}
-                  /> */}
-                    <Editor
+                  /> 
+             {/*        <Editor
                 value={answerText}
                 onChange={onAnswerChange}
-               /> 
+               />  */}
              </div>
              
              
