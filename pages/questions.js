@@ -200,7 +200,7 @@ export default function Questions(
                   </Row>
                  
                   </div>}
-        {isLoading && <div style={{color: "red"}}>LOADING</div>}
+     
 
                 {pagination()}
                 </Col>

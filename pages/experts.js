@@ -79,6 +79,8 @@ export default function Experts({serverExperts}) {
       const description = item.attributes.description;
       const userId = item.id;
 
+
+      console.log('expert fron experts-----------------------------------------------------------------', item);
       return(
         
          <Col key={i}  xs={24} sm={24} md={24} lg={24} xl={24}  xxl={24}>

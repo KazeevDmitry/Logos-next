@@ -110,7 +110,7 @@ export default function Home({circlePeople}) {
 
     const topt = circleStyles[i].toptolltip;
     const user = item.attributes.user.data.attributes;
-    const spec = item.attributes.specializations.data[0]?.attributes?.name?? '';
+    const spec = item.attributes.specializations?.data[0]?.attributes?.name?? '';
     const rating = item.attributes.rating;
     const sendUser = {id: item.id, ...user, spec, rating};
 
