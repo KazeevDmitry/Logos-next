@@ -38,7 +38,7 @@ export default function Experts({serverExperts}) {
 
 
   const router = useRouter();
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(1); 
 
   const {search, branch, specialization, city} = router.query;
    
@@ -72,8 +72,8 @@ export default function Experts({serverExperts}) {
     EXPERTS = experts.map((item, i) => {
   
       const itenBranchesArr = item.attributes.branches.data;
-      const user = item.attributes.user.data.attributes;
-      const cityName = THEME.cities.find(city => city.id === user.city)?.city;
+      const user = item.attributes.user?.data?.attributes;
+      const cityName = THEME.cities.find(city => city.id === user?.city)?.city;
       const spec = item.attributes.specializations?.data[0]?.attributes?.name?? '';
       const rating = item.attributes.rating?? 0;
       const description = item.attributes.description;
@@ -91,8 +91,8 @@ export default function Experts({serverExperts}) {
                   style={{ color: 'black', cursor: "pointer" }}> 
            
              <ExpertCard
-               username={user.name}
-               surname={user.surname}
+               username={user?.name?? ''}
+               surname={user?.surname?? ''}
                stars = {4} //временно---------------------------------------------------------------------------------
                  reviews={18} //временно--------------------------------------------------------------------------------------
                cups={rating}

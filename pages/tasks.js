@@ -75,6 +75,10 @@ export default function Tasks( {serverTasks} ) {
   let TASKS = [];
   let total = 0;
 
+  const onAddTask=()=>{
+    console.log('add task-----------------------------------------------------------------------------');
+  };
+
  if (isSuccess) {
 
     total = meta?.pagination?.total?? 0;
@@ -96,9 +100,7 @@ export default function Tasks( {serverTasks} ) {
               status,
               slug,
             } = itemData;
-      
-              console.log('itemData ----------------------------------------------------------------------------', itemData);
-
+    
       const cityName = THEME.cities.find(city => city.id === itemData.city)?.city;
       
       const responses = itemData.responses.data;
@@ -124,11 +126,6 @@ export default function Tasks( {serverTasks} ) {
                        (!!responses.find(item => item.user === userId) ? "youRespond" : 
                        (!!performer.data && status !== "confirmed" && userId !== performerId ? "hasPerformer" : '' ))))); 
    
-     console.log('authorStataus-------------------------------------------------------', authorStatus);
-
-
-
-
       return(
         <>
         
@@ -189,7 +186,7 @@ export default function Tasks( {serverTasks} ) {
       {total>PAGESIZE && <>
      
       <p >
-             <Plural count={total} i18nextPath="questions.plural" /> 
+             <Plural count={total} i18nextPath="tasks.plural" /> 
        </p>
        </>}
       
@@ -206,7 +203,19 @@ export default function Tasks( {serverTasks} ) {
         <PageHeader 
           /* title={t('headers.experts')} */
           title="Задачи"  
-        />
+        >
+          <div style={{display: "flex", justifyContent: "center", width: "100%"}}>
+            <Button 
+              size={THEME?.size} 
+              //style={{width: "100%", marginTop: "30px"}}
+              type="primary" 
+              htmlType="button"
+              onClick = {onAddTask}
+            >
+            Создать задачу +
+            </Button>
+          </div>  
+          </PageHeader>
         <PageContainer>
          
                  <Col  xs={24} sm={24} md={16} lg={17} xl={18} >

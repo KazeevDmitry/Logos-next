@@ -106,7 +106,12 @@ const userTitle = <>
                    <div>
                        <span>{name} {surname}</span>
                    </div>
-                   <Space style={{width: "100%", display:'flex', justifyContent:'space-between'}}>
+                   <Space style={{
+                                    width: "100%", 
+                                    display:'flex', 
+                                    justifyContent:'space-between',
+                                    marginTop: '10px',
+                                    }}>
 
                     <div style={ {
                          display: 'flex',
@@ -122,7 +127,11 @@ const userTitle = <>
                               fontWeight: "600"
                               }}/>
                    
-                       <div style={{ fontSize: '22px', color: 'grey', marginLeft: '10px'}}>
+                       <div style={{ 
+                                    fontSize: '22px', 
+                                    color: 'grey', 
+                                    marginLeft: '10px',
+                                    }}>
                            {cityName}
                        </div>
 

@@ -29,7 +29,7 @@ export default function TaskCard ({title,
                                        responsesAvatars, 
                                        userOnline=false, 
                                        authorStatus, 
-                                       branches,
+                                       branches=[],
                                        specialization,
                                        marginTop,
                                        expandedText = false,
@@ -59,8 +59,6 @@ const p = theme?.gutters?.gorizontal[theme?.id]?? 20;
     })
 
     const respCount = responsesAvatars.length;
-
-    console.log('branches from card------------------------------------------------', branches);
 
     let aStatusStyle = {};
     let aStatusText = '';
@@ -203,8 +201,6 @@ return(
 
 export function ResponseImages ({responses=[], width = 45}) {
 
-  console.log('responses-------------------------------------------------------------------------------------', responses);
-  
   const images = responses.slice(0,4).map((avatar) => {
       
       return (
@@ -213,7 +209,6 @@ export function ResponseImages ({responses=[], width = 45}) {
                   image= {avatar}
                   online={false}
                   width= {width}
-                  username={''}
           />  
          </div>
       )

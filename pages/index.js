@@ -110,9 +110,10 @@ export default function Home({circlePeople}) {
 
     const topt = circleStyles[i].toptolltip;
     const user = item.attributes.user.data.attributes;
-    const spec = item.attributes.specializations?.data[0]?.attributes?.name?? '';
+    const spec = user.expert?.data.attributes?.specialization?.data?.attributes.name?? '';
     const rating = item.attributes.rating;
     const sendUser = {id: item.id, ...user, spec, rating};
+
 
     return (
       <div key = {i} style={{...circleStyles[i], position: "absolute"}}> 
@@ -140,7 +141,7 @@ export default function Home({circlePeople}) {
 
    
    const cityName = THEME.cities.find(city => city.id === user.city)?.city;
-   const spec = item.attributes.specializations?.data[0]?.attributes?.name?? '';
+   const spec = user.expert?.data.attributes?.specialization?.data?.attributes.name?? '';
    const rating = item.attributes.rating;
 
    return (
@@ -262,7 +263,12 @@ function LittleCard({ username, surname, spec, stars=0, reviews = 0, cups=0, top
   return (
          
       <div className={styles.littleCard} style={{left: `${left}px`, top: `${top}px`}} >
-            <div className={styles.gridElement}> 
+            <div 
+              className={styles.gridElement} 
+              style={{
+                fontSize: '18px',
+                fontWeight: '600',
+              }}> 
               {nameStr} 
             </div>
             {/* <div className={styles.gridElement}> 
@@ -494,8 +500,8 @@ export async function getServerSideProps() {
   
   const res = await createStrapiAxios()
  
-    .get(`/experts?populate[0]=branches&populate[1]=specializations&populate[2]=user.avatar&pagination[page]=1&pagination[pageSize]=15&sort[0]=rating:desc&filters[rating][$null]`)
-
+    //.get(`/experts?populate[0]=branches&populate[1]=specializations&populate[2]=user.avatar&pagination[page]=1&pagination[pageSize]=15&sort[0]=rating:desc&filters[rating][$null]`)
+    .get(`/experts?populate[0]=branches&populate[1]=specializations&populate[2]=user.avatar&populate[3]=user.expert.specialization&pagination[page]=1&pagination[pageSize]=15&sort[0]=rating:desc&filters[rating][$null]`)
   const data = await res.data.data;
 
   
