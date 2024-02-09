@@ -22,7 +22,8 @@ import { ReactComponent as CheckCircleFill } from './checkCircleFill.svg';
 import { ReactComponent as ScrollTop } from './chevron-double-up.svg';
 import { ReactComponent as CitySvg } from './location.svg';
 import { ReactComponent as Check } from './check.svg';
-import { ReactComponent as Pencil } from './pencil-fill.svg';
+//import { ReactComponent as Pencil } from './pencil-fill.svg';
+import Pencil from './pencil-fill.svg';
 import { ReactComponent as Watch } from './watch.svg';
 import { ReactComponent as Camera } from './camera.svg';
 

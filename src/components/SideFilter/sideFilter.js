@@ -29,7 +29,7 @@ export default function  SideFilter({show = {
     
     const {branch, specialization, city, budgetmin, budgetmax, contractual, subbranch} = router.query;
  
-    const budget = !contractual && budgetmin !== null && budgetmax !==null  ? {inp1: budgetmin, inp2: budgetmax} : null; 
+    const budget = !contractual && budgetmin && budgetmax ? {inp1: budgetmin, inp2: budgetmax} : null; 
 
     // BRANCHES.map((item) => {
     //     if()
@@ -52,7 +52,7 @@ export default function  SideFilter({show = {
                 }
             }
         setBranchValue(currBranchValue);
-console.log("currBranch ----------------------------------------------------------------------------", currBranchValue);               
+        
       }, [theme]);
 
 
@@ -232,7 +232,12 @@ console.log("currBranch --------------------------------------------------------
  */}
             {show.branch && <>
                 {/* { theme.isDesktop && <Divider/>} */}
-                <div className={styles.specBlockHeader} style = {{marginTop: "10px"}}> 
+                <div className={styles.specBlockHeader} 
+                    style = {{
+                        marginTop: "30px",
+                        borderTop: "1px solid lightgrey",
+                        paddingTop: "20px",
+                        }}> 
                     Отрасль права
                 </div>
                 
@@ -246,7 +251,12 @@ console.log("currBranch --------------------------------------------------------
             </>}
             {show.budget && <>
                 {/* {theme.isDesktop && <Divider/>} */}
-                <div className={styles.specBlockHeader}> 
+                <div className={styles.specBlockHeader} 
+                     style = {{
+                        marginTop: "30px",
+                        borderTop: "1px solid lightgrey",
+                        paddingTop: "20px",
+                        }}> 
                     {t('labels.budget')}
                 </div>
                 <InputSlider

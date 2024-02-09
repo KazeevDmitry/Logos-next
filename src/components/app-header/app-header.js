@@ -90,9 +90,10 @@ const isExpert = currentUser?.isExpert;
 
   const PAGES = [
     {
-      name: isExpert ? 'Задачи' : 'Задать вопрос',
-      to: isExpert ? '/tasks' : '/addquestion',
-      
+    /*   name: isExpert ? 'Задачи' : 'Задать вопрос',
+      to: isExpert ? '/tasks' : '/addquestion', */
+      name: t('header.menu.0'),
+      to: '/tasks', 
     },
     {
       name: t('header.menu.1'),

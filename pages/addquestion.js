@@ -178,8 +178,8 @@ const { errorStatus,qTitle,qBody,qBranch } = stateValues;
           if (!Object.keys(currentUser).length) {
             router.push('/login');
           }else{
-            if (currentUser.isExpert)
-              router.push('/');
+          //  if (currentUser.isExpert)
+          //    router.push('/');   ВРЕМЕННО УБРАЛ------------------------------------------------------------------------------------------------------------------
           }
         }
 }, [currentUser]);

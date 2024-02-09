@@ -11,7 +11,7 @@ import { Input } from 'antd';
 import styles from './input-slider.module.less';
 
 
-export default function InputSlider({value = {inp1: 0, inp2: 0}, maxValues, step, onChange, disabled=false}) {
+export default function InputSlider({value = {inp1: 0, inp2: 0}, maxValues=[1000, 500000], step, onChange, disabled=false}) {
       
     const theme = useThemeContext();
 
@@ -59,7 +59,7 @@ export default function InputSlider({value = {inp1: 0, inp2: 0}, maxValues, step
           max={maxValues[1]}
           onBlur={onLeaveInput}
           onChange={onValueChange}
-          value={value !== null ? value.inp1 : maxValues[0]}
+          value={value ? value.inp1 : maxValues[0]}
           disabled = {disabled}
         />
 
@@ -70,14 +70,14 @@ export default function InputSlider({value = {inp1: 0, inp2: 0}, maxValues, step
           max={maxValues[1]}
           onBlur={onLeaveInput}
           onChange={onValueChange}
-          value={value !== null ? value.inp2 : maxValues[1]}
+          value={value ? value.inp2 : maxValues[1]}
           disabled = {disabled}
         />
         <div className={styles.sliderBlock}>
           <Slider
             range
             tooltipVisible={false}
-            value={value !== null ? Object.values(value) : maxValues}
+            value={value ? Object.values(value) : maxValues}
             min={maxValues[0]}
             max={maxValues[1]}
             step={step}

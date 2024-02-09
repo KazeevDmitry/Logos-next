@@ -82,10 +82,10 @@ export default function Questions(
 
     QUESTIONS = questions.map((item, i) => {
   
-      const authorName = item.attributes.author.data.attributes.name;
-      const authorSurname = item.attributes.author.data.attributes.surname?? '';
+      const authorName = item.attributes.author?.data?.attributes?.name?? '';
+      const authorSurname = item.attributes.author?.data?.attributes?.surname?? '';
      // const authorAvatar = item.attributes.author.data.attributes.avatar.data.attributes.url?? '';
-      const authorCity = item.attributes.author.data.attributes.city;
+      const authorCity = item.attributes.author.data?.attributes?.city;
       const branchName = item.attributes.branch?.data?.attributes?.name?? '';
       const subbranchName = item.attributes.subbranch?.data?.attributes?.name?? '';
       const description = item.attributes.description;
@@ -200,7 +200,7 @@ export default function Questions(
                   </Row>
                  
                   </div>}
-        {isLoading && <div style={{color: "red"}}>LOADING</div>}
+     
 
                 {pagination()}
                 </Col>
