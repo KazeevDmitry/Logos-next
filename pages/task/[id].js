@@ -22,7 +22,7 @@ import { Image, Spin, Row, Col, Button, Modal, Form, Input } from 'antd';
 
 
 
-import TaskInfo, { SideTaskInfo } from './taskInfo';
+import TaskInfo, { SideTaskInfo } from '../../src/components/taskInfo/taskInfo';
 
 
 

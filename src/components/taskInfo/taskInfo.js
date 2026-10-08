@@ -3,20 +3,20 @@ import React, { useContext, useState } from 'react';
 import Link from 'next/link';
 import styles from './taskInfo.module.less';
 import { Divider } from 'antd';
-import PublishedDate from '../../src/components/publishedDate/publishedDate';
+import PublishedDate from '../publishedDate/publishedDate';
 
-import { useThemeContext } from '../../src/context/themeContext';
-import { useUserContext } from '../../src/context/userContext';
+import { useThemeContext } from '../../context/themeContext';
+import { useUserContext } from '../../context/userContext';
 import moment from 'moment';
-import UserImage from '../../src/components/userImage/userImage';
-import RatingBar from '../../src/components/ratingbar/ratingbar';
+import UserImage from '../userImage/userImage';
+import RatingBar from '../ratingbar/ratingbar';
 import { Typography, Row, Col, Button } from 'antd';
 //import Icons from '../../Utils/icons';
-import Plural from '../../utils/plural';
+import Plural from '../../../utils/plural';
 import { useTranslation } from 'react-i18next';
 
-import { ResponseCard } from '../../src/components/commentCard/commentCard';
-import {ResponseImages} from '../../src/components/taskCard/taskCard';
+import { ResponseCard } from '../commentCard/commentCard';
+import {ResponseImages} from '../taskCard/taskCard';
 
 import {EnvironmentOutlined} from '@ant-design/icons';
 

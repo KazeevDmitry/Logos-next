@@ -41,7 +41,8 @@ export default function MyApp({ Component, pageProps }) {
 
    // const [queryClient] = useState(() => new QueryClient());
 
-   const queryClient = new QueryClient();
+   // one client for the app's lifetime; a new one per render would drop the cache
+   const [queryClient] = useState(() => new QueryClient());
 
    const router = useRouter();
 

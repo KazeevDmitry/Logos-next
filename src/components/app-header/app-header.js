@@ -171,7 +171,7 @@ const padHeader = !loading ? '5px' : '0px';
                                   marginRight: "30px",
                                   borderRadius: "4px"
                                 }}
-                          onClick={()=> router.push('/auth')}
+                          onClick={()=> router.push('/login')}
                           >
                           {t('buttons.mobileheaderBtn')}
                   </Button>
