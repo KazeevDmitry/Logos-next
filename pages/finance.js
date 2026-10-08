@@ -6,9 +6,9 @@ import { useQuery } from 'react-query';
 import { finance } from '../lib/api';
 import { withAuth } from '../lib/withAuth';
 import AccountLayout from '../src/components/account/accountLayout';
+import { roubles } from '../utils/money';
 
 const PAGE_SIZE = 10;
-export const roubles = (amount) => `${amount.toLocaleString('ru-RU')} ₽`;
 
 /** The API's ledger transaction types in the user's words. */
 const TYPES = {

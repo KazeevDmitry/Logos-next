@@ -2,6 +2,7 @@ import { Button, Popconfirm } from 'antd';
 import { useState } from 'react';
 import { tasks } from '../../../lib/api';
 import { errorMessage } from '../../../lib/api/client';
+import { taskPrice } from '../taskCard/taskStatus';
 import { useNotifyContext } from '../../context/notificationContext';
 
 /**
@@ -56,7 +57,8 @@ const DONE = {
 const HINTS = {
   youAuthor: {
     ASSIGNED: 'Ждём, пока исполнитель подтвердит участие.',
-    AWAITING_PAYMENT: 'Исполнитель подтвердил участие. Оплатите задачу, чтобы он приступил к работе.',
+    AWAITING_PAYMENT:
+      'Исполнитель подтвердил участие. Оплатите задачу, чтобы он приступил к работе: деньги будут зарезервированы и перейдут исполнителю после приёмки.',
     IN_PROGRESS: 'Исполнитель работает над задачей.',
     REVIEW: 'Исполнитель сдал работу. Примите её или верните на доработку.',
     DISPUTED: 'Спор рассматривает администратор.',
@@ -91,6 +93,30 @@ export function useTaskAction(taskId, refresh) {
   return { run, running };
 }
 
+/** Starts the payment for a task and sends the author to the provider's payment page. */
+function PayButton({ task, size }) {
+  const { infoNotification } = useNotifyContext();
+  const [busy, setBusy] = useState(false);
+
+  const pay = async () => {
+    setBusy(true);
+    try {
+      const payment = await tasks.fund(task.id);
+      // Leaving the site: the provider returns the customer to /payments/<id>/return.
+      window.location.assign(payment.confirmationUrl);
+    } catch (e) {
+      infoNotification('Не получилось начать оплату', errorMessage(e));
+      setBusy(false);
+    }
+  };
+
+  return (
+    <Button type="primary" size={size} loading={busy} onClick={pay} style={{ width: '100%' }}>
+      Оплатить {taskPrice(task)}
+    </Button>
+  );
+}
+
 /** The buttons and the hint for the caller's role in the task's current status. */
 export default function TaskActions({ task, refresh, size, children }) {
   const { run, running } = useTaskAction(task.id, refresh);
@@ -105,6 +131,7 @@ export default function TaskActions({ task, refresh, size, children }) {
     <div style={{ display: 'grid', gap: '10px' }}>
       {hint && <div style={{ color: '#5E6674' }}>{hint}</div>}
       {children}
+      {task.viewerStatus === 'youAuthor' && task.status === 'AWAITING_PAYMENT' && <PayButton task={task} size={size} />}
       {actions.map(({ action, label, confirm, danger, primary }) => {
         const button = (
           <Button
