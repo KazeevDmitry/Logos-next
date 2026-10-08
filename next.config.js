@@ -1,38 +1,33 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactStrictMode: true,
-  swcMinify: true,
-  // env:{
-  //   REACT_APP_API: process.env.REACT_APP_API
-  //   }
- 
-}
-
-
 const withAntdLess = require('next-plugin-antd-less');
 
+/** Where the NestJS API listens, as seen from this server (not from the browser). */
+const API = process.env.API_INTERNAL_URL ?? 'http://localhost:4000';
+
+/** @type {import('next').NextConfig} */
 module.exports = withAntdLess({
-    
-  // Or better still you can specify a path to a file 
   lessVarsFilePath: './styles/antdVariables.less',
-  // optional
   lessVarsFilePathAppendToEndOfContent: false,
-  // optional https://github.com/webpack-contrib/css-loader#object
   cssLoaderOptions: {},
- 
-    i18n: {
-      locales: ['ru'],
-      defaultLocale: 'ru',
-    },
- 
-  
-  // Other Config Here...
 
   reactStrictMode: true,
   swcMinify: true,
+
+  i18n: {
+    locales: ['ru'],
+    defaultLocale: 'ru',
+  },
+
+  // The browser talks to the API through this site's own origin, so the
+  // session cookies are first-party and no CORS setup is needed. In
+  // production the reverse proxy does the same routing before Next sees it.
+  async rewrites() {
+    return [
+      { source: '/api/v1/:path*', destination: `${API}/api/v1/:path*`, locale: false },
+      { source: '/uploads/:path*', destination: `${API}/uploads/:path*`, locale: false },
+    ];
+  },
 
   webpack(config) {
     return config;
   },
-
 });

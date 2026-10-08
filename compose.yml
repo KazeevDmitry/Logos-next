@@ -5,6 +5,10 @@ services:
       context: .
       target: dev
     # Next.js reads .env / .env.local from the mounted source itself.
+    environment:
+      # The API container of ../Logos-api, reached through the host.
+      API_INTERNAL_URL: http://host.docker.internal:4000
+      NEXT_PUBLIC_WS_URL: http://localhost:4000
     ports:
       - "3000:3000"
     volumes:
