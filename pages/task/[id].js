@@ -13,6 +13,7 @@ import { AuthorLine, BranchPills } from '../../src/components/questionCard/quest
 import RespondModal from '../../src/components/task/respondModal';
 import ResponseCard from '../../src/components/task/responseCard';
 import TaskActions, { useTaskAction } from '../../src/components/task/taskActions';
+import TaskFeedback from '../../src/components/task/taskFeedback';
 import TaskTimeline from '../../src/components/task/taskTimeline';
 import { taskPrice, TaskStatusPill, ViewerStatusPill } from '../../src/components/taskCard/taskStatus';
 import { useNotifyContext } from '../../src/context/notificationContext';
@@ -108,6 +109,13 @@ export default function TaskPage({ serverTask }) {
             <div style={{ color: '#5E6674', marginBottom: '8px' }}>Заказчик</div>
             <AuthorLine user={task.author} size={50} />
           </div>
+
+          {task.status === 'COMPLETED' && (
+            <div style={{ ...block, padding: pad, marginTop: pad }}>
+              <h2 style={{ fontSize: '24px', fontWeight: 500 }}>Отзыв заказчика</h2>
+              <TaskFeedback task={task} onDone={refresh} />
+            </div>
+          )}
 
           {(isAuthor || hasOwnOffer) && (
             <div style={{ marginTop: pad }}>
