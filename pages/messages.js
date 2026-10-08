@@ -1,0 +1,103 @@
+import { ArrowLeftOutlined } from '@ant-design/icons';
+import { Col, Empty, Spin } from 'antd';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useCallback } from 'react';
+import { useQuery, useQueryClient } from 'react-query';
+import { chat } from '../lib/api';
+import { withAuth } from '../lib/withAuth';
+import ConversationList, { companionName } from '../src/components/chat/conversationList';
+import Thread from '../src/components/chat/thread';
+import PageContainer from '../src/components/layouts/pageContainer';
+import PageHeader from '../src/components/layouts/pageHeader';
+import UserImage from '../src/components/userImage/userImage';
+import { useThemeContext } from '../src/context/themeContext';
+
+const panel = { background: 'white', borderRadius: '10px', overflow: 'hidden' };
+const HEIGHT = 'max(420px, calc(100vh - 300px))';
+
+/**
+ * Chats between a customer and the experts who responded to their tasks.
+ * The open chat is in the URL (?chat=<id>), which is what notices link to.
+ * On a phone the list and the open chat take the screen in turn.
+ */
+function MessagesPage({ user }) {
+  const theme = useThemeContext();
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  const { data: conversations, isLoading } = useQuery(['chat', 'conversations'], () => chat.conversations(), {
+    refetchOnWindowFocus: false,
+  });
+  const activeId = Number(router.query.chat) || null;
+  const active = conversations?.find((conversation) => conversation.id === activeId) ?? null;
+
+  const select = (id) => router.push({ pathname: '/messages', query: id ? { chat: id } : {} }, undefined, { shallow: true });
+  const refreshChats = useCallback(() => queryClient.invalidateQueries('chat'), [queryClient]);
+
+  const showList = theme.isDesktop || !active;
+  const showThread = theme.isDesktop || Boolean(active);
+
+  return (
+    <>
+      <PageHeader title="Сообщения" />
+      <PageContainer>
+        {isLoading && (
+          <Col span={24} style={{ textAlign: 'center' }}>
+            <Spin size="large" />
+          </Col>
+        )}
+        {conversations?.length === 0 && (
+          <Col span={24}>
+            <Empty
+              style={{ margin: '60px 0' }}
+              description="Диалогов пока нет. Чат открывается, когда эксперт откликается на задачу."
+            />
+          </Col>
+        )}
+        {conversations?.length > 0 && showList && (
+          <Col xs={24} sm={24} md={24} lg={8} xl={7}>
+            <div style={{ ...panel, maxHeight: theme.isDesktop ? HEIGHT : undefined, overflowY: 'auto' }}>
+              <ConversationList conversations={conversations} activeId={activeId} viewerId={user.id} onSelect={select} />
+            </div>
+          </Col>
+        )}
+        {conversations?.length > 0 && showThread && (
+          <Col xs={24} sm={24} md={24} lg={16} xl={17}>
+            <div style={{ ...panel, height: HEIGHT, display: 'flex', flexDirection: 'column' }}>
+              {active ? (
+                <>
+                  <div style={{ display: 'flex', gap: '12px', alignItems: 'center', padding: '12px 16px', borderBottom: '1px solid #EEF0F4' }}>
+                    {!theme.isDesktop && (
+                      <button
+                        type="button"
+                        aria-label="К списку диалогов"
+                        onClick={() => select(null)}
+                        style={{ border: 'none', background: 'none', cursor: 'pointer', padding: '6px' }}
+                      >
+                        <ArrowLeftOutlined />
+                      </button>
+                    )}
+                    <UserImage image={active.companion.avatarUrl ?? ''} width={40} />
+                    <div style={{ minWidth: 0 }}>
+                      <b>{companionName(active.companion)}</b>
+                      <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        <Link href={`/task/${active.task.id}`}>{active.task.title}</Link>
+                      </div>
+                    </div>
+                  </div>
+                  <Thread key={active.id} conversationId={active.id} viewerId={user.id} onRead={refreshChats} />
+                </>
+              ) : (
+                <div style={{ margin: 'auto', color: '#5E6674' }}>
+                  {activeId ? 'Диалог не найден' : 'Выберите диалог слева'}
+                </div>
+              )}
+            </div>
+          </Col>
+        )}
+      </PageContainer>
+    </>
+  );
+}
+
+export default withAuth(MessagesPage);
