@@ -1,112 +1,54 @@
-import React from 'react';
+import { Button } from 'antd';
+import { useRouter } from 'next/router';
+import { useThemeContext } from '../../context/themeContext';
 import styles from './sideFilter.module.less';
-import {useThemeContext} from '../../context/themeContext';
-import { Button, Radio, Space, Divider, Checkbox } from 'antd';
-import CityInput from '../cityInput/cityInput'; 
-import InputSlider from '../input-slider/input-slider';
-import { useRouter } from "next/router";
-import { useTranslation } from 'react-i18next';
 
-export default function  NewsFilter({categoryArr}) {
+/** News rubrics. The chosen one is kept in the URL as ?category=<slug>. */
+export default function NewsFilter({ categories = [] }) {
+  const router = useRouter();
+  const theme = useThemeContext();
+  const { category } = router.query;
 
-    const router = useRouter();
-    const theme = useThemeContext();  
+  const select = (slug) => {
+    const query = { ...router.query, page: 1 };
+    if (slug) query.category = slug;
+    else delete query.category;
+    router.push({ pathname: router.pathname, query }, undefined, { shallow: true });
+  };
 
-    if (!categoryArr){
-        return null;
-    }
+  if (categories.length === 0) {
+    return null;
+  }
+  const pad = `${theme?.gutters?.gorizontal?.[theme?.id] ?? 20}px`;
+  const allNews = (style) => (
+    <Button size={theme?.size} style={style} type="primary" htmlType="button" onClick={() => select(null)}>
+      Все новости
+    </Button>
+  );
 
-
-   // const {t} = useTranslation()
-       
-        
-    const {category} = router.query;
- 
-    const onChange = (value) => {
-        
-        router.query.category = value; 
-        router.query.page = 1;
-        const url = {
-            pathname: router.pathname,
-            query: router.query
-          }
-        router.push(url, undefined, { shallow: true });
-    };
-
-    
-
-    const onResetParams = () => {
-
-         delete router.query.category
-         router.query.page = 1;
-     
-         const url = {
-            pathname: router.pathname,
-            query: router.query
-          }
-        router.push(url, undefined, { shallow: true });
-            
-        
-    };
-
-
-    const categories = categoryArr.map((item, i) => {
-
-        const slug = item.attributes.slug;
-
-        return (
- 
-            <div 
-                key = {item.id}
-                className={slug===category ? styles.arbitr + ' ' + styles.activeKatg : styles.arbitr}
-                onClick={() => onChange(slug)}
-               
-                >
-                    {item.attributes.name.toUpperCase()}
-            </div>
-        )
-    });
-
-    const pad = `${theme?.gutters?.gorizontal[theme?.id]}px`;
-
-      return (
-
-        <div className={styles.specBlock} style= {{padding: !theme.isDesktop ? "20px" : pad, marginBottom: pad}}>
-            {!theme.isDesktop && <div className={styles.flexCont}>
-                <div className={styles.filterHeader}> Категории </div>
-                <Button 
-                    size={theme?.size} 
-                    //style={{width: "100%", marginTop: "30px"}}
-                    type="primary" 
-                    htmlType="button"
-                    onClick = {onResetParams}
-                    
-                    >
-                       Все новости
-                </Button>
-            </div>    }
-            
-        
-               {theme.isDesktop && <div className={styles.specBlockHeader}> 
-                    Категории
-                </div>}
-               
-               {categories}
-            
-            
-            {theme.isDesktop && <Button 
-                size={theme?.size} 
-                style={{width: "100%", marginTop: "30px"}}
-                type="primary" 
-                htmlType="button"
-                onClick = {onResetParams}
-                
-                >
-                    Все новости
-            </Button>}
-                        
+  return (
+    <div className={styles.specBlock} style={{ padding: theme.isDesktop ? pad : '20px', marginBottom: pad }}>
+      {theme.isDesktop ? (
+        <div className={styles.specBlockHeader}>Категории</div>
+      ) : (
+        <div className={styles.flexCont}>
+          <div className={styles.filterHeader}>Категории</div>
+          {allNews()}
         </div>
-       
-      )
-
+      )}
+      {categories.map((item) => (
+        <div
+          key={item.id}
+          role="button"
+          tabIndex={0}
+          className={item.slug === category ? `${styles.arbitr} ${styles.activeKatg}` : styles.arbitr}
+          onClick={() => select(item.slug)}
+          onKeyDown={(e) => e.key === 'Enter' && select(item.slug)}
+        >
+          {item.name.toUpperCase()}
+        </div>
+      ))}
+      {theme.isDesktop && allNews({ width: '100%', marginTop: '30px' })}
+    </div>
+  );
 }

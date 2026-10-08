@@ -1,86 +1,66 @@
-import React from 'react';
-import styles from './newsCard.module.less';
 import { Col } from 'antd';
-import PublishedDate from '../publishedDate/publishedDate';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useThemeContext } from '../../context/themeContext';
+import PublishedDate from '../publishedDate/publishedDate';
+import styles from './newsCard.module.less';
 
-export default function NewsCard ({title, slug, image, published_at, cnt, catgName, showCatg=true, catgSlug}) {
+/** Background for an article without a cover image. */
+const NO_COVER = 'linear-gradient(135deg, #1667d9 0%, #1cd3d9 100%)';
 
+/**
+ * One article tile. `article` is the API's ArticleSummaryDto; `cnt` is the
+ * antd column span (of 24) the tile takes.
+ */
+export default function NewsCard({ article, cnt = 8, showCatg = true }) {
+  const background = article.imageUrl
+    ? `linear-gradient(rgba(0,0,0,.15), rgba(0,0,0,.55)), url(${article.imageUrl})`
+    : NO_COVER;
 
-    const currDate = new Date(published_at);
-    const artImage = `url(${process.env.NEXT_PUBLIC_UPLOADS_API}${image})`;
-   
-return(
+  return (
     <Col span={cnt}>
-
-        <Link href={`/article/${slug}?category=${catgSlug}`} style={{ color: 'white', cursor: "pointer" }}> 
-          <div lang="ru"
-            className={styles.card}
-            style={{
-              //backgroundImage: `${artImage}`
-              backgroundImage: artImage,
-              hyphens: "auto",
-              backgroundSize: 'cover',
-              cursor: "pointer",
-            }}>
-
-            {showCatg && catgName && <div className={styles.catglabel}>
-                {catgName.toUpperCase()}
-            </div>}
-            
-            <h5 className={styles.title}
-                style={{ zIndex: 1, cursor: "pointer" }}
-             >
-                  { title } 
-            </h5>
-           
-            <PublishedDate style={{marginLeft: "20px"}} width = {"170px"} currDate = {currDate} textColor = "white"/>
-          </div>
-          </Link >
-    </Col>      
-  )
+      <Link href={`/article/${article.slug}`} style={{ color: 'white', cursor: 'pointer' }}>
+        <div
+          lang="ru"
+          className={styles.card}
+          style={{ backgroundImage: background, hyphens: 'auto', backgroundSize: 'cover', backgroundPosition: 'center' }}
+        >
+          {showCatg && article.category && (
+            <div className={styles.catglabel}>{article.category.name.toUpperCase()}</div>
+          )}
+          <h5 className={styles.title} style={{ zIndex: 1 }}>
+            {article.title}
+          </h5>
+          {article.publishedAt && (
+            <PublishedDate style={{ marginLeft: '20px' }} currDate={new Date(article.publishedAt)} textColor="white" />
+          )}
+        </div>
+      </Link>
+    </Col>
+  );
 }
 
-export function PartnerNewsCard ({title, url, image}) {
+/** Compact row for the "partner news" side block. */
+export function PartnerNewsCard({ article }) {
+  const theme = useThemeContext();
+  const pad = theme.isDesktop ? `${theme?.gutters?.gorizontal?.[theme?.id] ?? 20}px` : '20px';
 
-const THEME = useThemeContext();
-
-  const gutter = THEME?.gutters?.gorizontal[THEME?.id];
-
- const pad = `${gutter}px`;
-
-
-  const artImage = `${process.env.NEXT_PUBLIC_UPLOADS_API}${image}`;
-
-
-  return(
-  <Link href={url?? ''} style={{ color: 'black', cursor: "pointer" }}> 
-          <div
-            className={styles.partnerCard}
-            style={{
-                //    marginLeft: !THEME.isDesktop ? "20px" : pad,
-                //    marginRight: !THEME.isDesktop ? "20px" : pad, 
-                    paddingLeft: !THEME.isDesktop ? "20px" : pad, 
-                    paddingRight: !THEME.isDesktop ? "20px" : pad,
-                  //  width: `100%+${gutter*2}px`,
-                  }}
-            >
-             <div className={styles.flexCont}>
-             
-                 <img
-                 style={{width:"70px", height: "45px"}}
-                src={artImage}
-                alt="..."
-                /> 
-             </div>
-             <div lang = "ru" className={styles.flexCont} style={{marginLeft:pad, textAlign: "left", hyphens: "auto"}}>
-                {/* <p style={{textAlign: "left", hyphens: "auto"}}> */}
-                  {title}
-               {/*  </p> */}
-             </div>
+  return (
+    <Link href={`/article/${article.slug}`} style={{ color: 'black', cursor: 'pointer' }}>
+      <div className={styles.partnerCard} style={{ paddingLeft: pad, paddingRight: pad }}>
+        {article.imageUrl && (
+          <div className={styles.flexCont}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img style={{ width: '70px', height: '45px', objectFit: 'cover' }} src={article.imageUrl} alt="" />
           </div>
-          </Link >
-  )          
+        )}
+        <div
+          lang="ru"
+          className={styles.flexCont}
+          style={{ marginLeft: article.imageUrl ? pad : 0, textAlign: 'left', hyphens: 'auto' }}
+        >
+          {article.title}
+        </div>
+      </div>
+    </Link>
+  );
 }
