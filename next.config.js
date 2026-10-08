@@ -14,6 +14,10 @@ module.exports = withAntdLess({
   reactStrictMode: true,
   swcMinify: true,
 
+  // `make build` checks the production build while `make up` is running;
+  // a separate output folder keeps it from overwriting the dev server's files.
+  distDir: process.env.NEXT_DIST_DIR ?? '.next',
+
   i18n: {
     locales: LOCALES,
     defaultLocale: 'ru',

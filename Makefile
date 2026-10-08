@@ -20,8 +20,8 @@ lint:
 format:
 	$(RUN) yarn format
 
-build:
-	$(RUN) yarn build
+build: ## production build into .next-check, safe to run next to the dev server
+	docker compose run --rm -e NEXT_DIST_DIR=.next-check web yarn build
 
 shell:
 	$(RUN) bash
