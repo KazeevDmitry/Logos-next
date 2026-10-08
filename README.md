@@ -1,34 +1,34 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# LogosEst — frontend
 
-## Getting Started
+Next.js 14 (pages router), React 18, Ant Design 4, react-query.
 
-First, run the development server:
+## Everything runs in Docker
+
+The host needs only `git`, `docker` and `make`. Do not run `yarn` or `node` on the host: dependencies live in a Docker volume built for Node 20.
 
 ```bash
-npm run dev
-# or
-yarn dev
+cp .env.example .env.local   # then fill in the values
+make up                      # dev server with hot reload on http://localhost:3000
+make logs
+make down
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+| Command        | What it does                                   |
+| -------------- | ---------------------------------------------- |
+| `make lint`    | ESLint                                         |
+| `make format`  | Prettier, write changes                        |
+| `make build`   | Production build                               |
+| `make install` | Reinstall dependencies after `package.json` changes |
+| `make shell`   | Shell inside the container                     |
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+Each target is a thin wrapper around `docker compose run --rm web …`; to add a package use `docker compose run --rm web yarn add <name>`.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+Environment variables go in `.env.local`. Do not create a file named `.env`: Docker Compose reads it for its own settings.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## Layout
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- `pages/` — routes
+- `src/components/` — UI components
+- `src/context/` — theme, user and notification contexts
+- `utils/` — helpers, icons, locales (`utils/Locales/ru.js`, `en.js`)
+- `styles/` — global styles and Ant Design variables (`antdVariables.less`)
