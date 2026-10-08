@@ -16,6 +16,7 @@ import {useUserContext} from '../../context/userContext';
 
 import UserImage from "../userImage/userImage";
 import NotificationBell from "./notificationBell";
+import MessagesLink from "./messagesLink";
 
 import { LogoutOutlined } from "@ant-design/icons";
 
@@ -172,6 +173,7 @@ const padHeader = !loading ? '5px' : '0px';
                 )}
                {userJWT &&
                 <div style={{marginRight: "30px", display: "flex", alignItems: "center", gap: "14px", color: "white"}}>
+                  <MessagesLink size={20} />
                   <NotificationBell size={20} />
                   <UserImage
                       image= {userImage}
@@ -216,7 +218,7 @@ const padHeader = !loading ? '5px' : '0px';
                   <div className={styles.toolBar} style={{fontSize: '16px'}}>
 
                     <div className={styles.userBox}  style={{fontSize: '16px'}}>
-                      {userJWT && <span style={{marginRight: "18px"}}><NotificationBell /></span>}
+                      {userJWT && <span style={{marginRight: "18px", display: "flex", alignItems: "center", gap: "10px"}}><MessagesLink /><NotificationBell /></span>}
                       {userJWT && <div className={styles.imageClazz} onClick={callUserMenu}>
                                         <UserImage
                                             image= {userImage}

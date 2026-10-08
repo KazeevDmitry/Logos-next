@@ -3,6 +3,7 @@ import { Button, Result, Spin } from 'antd';
 import moment from 'moment';
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { chat } from '../../../lib/api';
+import { useSocketEvent } from '../../context/socketContext';
 
 const PAGE = 30;
 
@@ -74,6 +75,15 @@ export default function Thread({ conversationId, viewerId, onRead }) {
       cancelled = true;
     };
   }, [conversationId, markRead]);
+
+  // Pushed by the server for both sides, so the sender's other tabs follow too.
+  useSocketEvent('message:new', (message) => {
+    if (message.conversationId !== conversationId || state !== 'ready') return;
+    setMessages((current) => (current.some((item) => item.id === message.id) ? current : [...current, message]));
+    if (message.senderId !== viewerId) {
+      markRead();
+    }
+  });
 
   const lastId = messages[messages.length - 1]?.id;
   useLayoutEffect(() => {

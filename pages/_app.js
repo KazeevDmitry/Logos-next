@@ -6,6 +6,7 @@ import "../styles/antdVariables.less";
 import { ThemeProvider } from '../src/context/themeContext';
 import {UserProvider} from '../src/context/userContext';
 import { NoteProvider } from '../src/context/notificationContext';
+import { SocketProvider } from '../src/context/socketContext';
 import '../utils/i18n-init';
 import { useTranslation } from "react-i18next";
 import { useRouter } from 'next/router';
@@ -72,13 +73,15 @@ export default function MyApp({ Component, pageProps }) {
           <QueryClientProvider client={queryClient}>
             <ThemeProvider>
               <UserProvider>
-                <NoteProvider>
-                  <ConfigProvider locale={antdLocales(i18n.language)}>
-                    <MainLayout loading={loading}>
-                      <Component {...pageProps} />
-                    </MainLayout>
-                  </ConfigProvider>
-                </NoteProvider>
+                <SocketProvider>
+                  <NoteProvider>
+                    <ConfigProvider locale={antdLocales(i18n.language)}>
+                      <MainLayout loading={loading}>
+                        <Component {...pageProps} />
+                      </MainLayout>
+                    </ConfigProvider>
+                  </NoteProvider>
+                </SocketProvider>
               </UserProvider>
             </ThemeProvider>
           </QueryClientProvider> 
