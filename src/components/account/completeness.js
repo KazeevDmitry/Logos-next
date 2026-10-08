@@ -33,7 +33,7 @@ export function useCompleteness() {
       { text: 'Указать опыт работы', done: expert?.experience !== null && expert?.experience !== undefined, href: '/personalaccount/expert' },
       { text: 'Выбрать специализацию и отрасли права', done: Boolean(expert?.specializations.length && expert?.branches.length), href: '/personalaccount/expert' },
       { text: 'Добавить услуги и цены', done: Boolean(expert?.services.length), href: '/personalaccount/services' },
-      { text: 'Добавить образование', done: Boolean(expert?.educations.length) },
+      { text: 'Добавить образование', done: Boolean(expert?.educations.length), href: '/personalaccount/education' },
       { text: 'Подтвердить личность', done: Boolean(expert?.verified) },
     );
   }

@@ -11,6 +11,7 @@ const MENU = [
   { key: '/personalaccount/profile', label: 'Личные данные' },
   { key: '/personalaccount/expert', label: 'Профиль эксперта', expert: true },
   { key: '/personalaccount/services', label: 'Услуги и цены', expert: true },
+  { key: '/personalaccount/education', label: 'Образование', expert: true },
   { key: '/personalaccount/expert', label: 'Стать экспертом', customer: true },
   { key: '/mytasks', label: 'Мои задачи' },
   { key: '/myresponses', label: 'Мои отклики', expert: true },
