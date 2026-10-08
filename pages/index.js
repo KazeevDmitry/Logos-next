@@ -1,5 +1,6 @@
 import { Button, Col, Form, Row } from 'antd';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { experts as expertsApi } from '../lib/api';
@@ -152,11 +153,21 @@ function LittleCard({ expert, top, left }) {
 /** The search box that overlaps the hero: "looking for a task" / "looking for an expert". */
 function MainTabs() {
   const theme = useThemeContext();
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState(1);
   const lookingForTask = activeTab === 1;
 
-  const onFinish = (values) => {
-    console.log('search', values);
+  /** Opens the task or expert list with the chosen filters in the URL, where SideFilter reads them. */
+  const onFinish = ({ city, spec, budget, branch }) => {
+    const query = {};
+    if (city) query.city = city;
+    if (spec) query.specialization = spec;
+    if (lookingForTask && budget) {
+      query.budgetmin = budget.inp1;
+      query.budgetmax = budget.inp2;
+    }
+    if (!lookingForTask && branch) query.branch = branch;
+    router.push({ pathname: lookingForTask ? '/tasks' : '/experts', query });
   };
 
   const tabClass = (tab, base) => (activeTab === tab ? `${base} ${styles.activeTab}` : base);
