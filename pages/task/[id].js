@@ -12,6 +12,7 @@ import PageHeader from '../../src/components/layouts/pageHeader';
 import { AuthorLine, BranchPills } from '../../src/components/questionCard/questionCard';
 import RespondModal from '../../src/components/task/respondModal';
 import ResponseCard from '../../src/components/task/responseCard';
+import TaskActions, { useTaskAction } from '../../src/components/task/taskActions';
 import { taskPrice, TaskStatusPill, ViewerStatusPill } from '../../src/components/taskCard/taskStatus';
 import { useNotifyContext } from '../../src/context/notificationContext';
 import { useThemeContext } from '../../src/context/themeContext';
@@ -43,15 +44,17 @@ export default function TaskPage({ serverTask }) {
     refetchOnWindowFocus: false,
   });
 
-  if (!task) {
-    return <Result status="404" title="Задача не найдена" style={{ marginTop: '120px' }} />;
-  }
-
   const refresh = () => {
     queryClient.invalidateQueries(['task', id]);
     queryClient.invalidateQueries(['responses', id]);
     queryClient.invalidateQueries('tasks');
   };
+  const { run: runAction, running } = useTaskAction(id, refresh);
+
+  if (!task) {
+    return <Result status="404" title="Задача не найдена" style={{ marginTop: '120px' }} />;
+  }
+
   const canRespond = task.status === 'OPEN' && isExpert && task.viewerStatus === null;
   const withdraw = async () => {
     await tasks.withdrawResponse(id);
@@ -119,7 +122,15 @@ export default function TaskPage({ serverTask }) {
                   response={response}
                   chosen={task.performer?.expertId === response.expert.expertId}
                   actions={
-                    !isAuthor && task.status === 'OPEN' ? (
+                    isAuthor && task.status === 'OPEN' ? (
+                      <Button
+                        type="primary"
+                        loading={running === 'choose'}
+                        onClick={() => runAction('choose', { responseId: response.id })}
+                      >
+                        Выбрать исполнителем
+                      </Button>
+                    ) : !isAuthor && task.status === 'OPEN' ? (
                       <Button onClick={withdraw}>Отозвать отклик</Button>
                     ) : null
                   }
@@ -180,6 +191,7 @@ export default function TaskPage({ serverTask }) {
                   Откликаться могут эксперты. <Link href="/personalaccount/expert">Стать экспертом</Link>
                 </span>
               )}
+              <TaskActions task={task} refresh={refresh} size={theme?.size} />
               {isAuthor && task.status === 'OPEN' && (
                 <Link href={`/task/${task.id}/edit`}>
                   <Button size={theme?.size} style={{ width: '100%' }}>
