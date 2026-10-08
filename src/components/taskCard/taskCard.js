@@ -51,7 +51,7 @@ const p = theme?.gutters?.gorizontal[theme?.id]?? 20;
 
         return (
 
-            <div className={styles.branchLabel}>
+            <div key={item.id} className={styles.branchLabel}>
                 {item.attributes?.name?? ''}
             </div>
 
@@ -201,10 +201,10 @@ return(
 
 export function ResponseImages ({responses=[], width = 45}) {
 
-  const images = responses.slice(0,4).map((avatar) => {
+  const images = responses.slice(0,4).map((avatar, i) => {
       
       return (
-          <div style={{display:"inline-block", marginLeft: "-20px", zIndex: "1"}}>
+          <div key={i} style={{display:"inline-block", marginLeft: "-20px", zIndex: "1"}}>
               <UserImage 
                   image= {avatar}
                   online={false}

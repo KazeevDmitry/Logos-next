@@ -288,7 +288,7 @@ export async function getServerSideProps(context) {
 
 const branchesLabels = branches.map(item => {
     return (
-        <span className={styles.lawType} style={{fontSize: "14px"}}>{item.attributes?.name?? '----not found----'}</span>
+        <span key={item.id} className={styles.lawType} style={{fontSize: "14px"}}>{item.attributes?.name?? '----not found----'}</span>
     )
 });
 

@@ -35,7 +35,7 @@ const ratingBars = ratings.map(item => {
     const proc = (100*rating/count).toFixed(1)
 
     return (
-         <Row gutter={[10, 10]} style={{marginTop: "15px", width: "100%"}} align="middle">
+         <Row key={num} gutter={[10, 10]} style={{marginTop: "15px", width: "100%"}} align="middle">
             <Col flex="20px">
                 <span>{num}</span>
             </Col>

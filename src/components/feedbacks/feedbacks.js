@@ -39,7 +39,7 @@ const gutter = `${theme?.gutters.vertical[theme.id]}px`;
       console.log('feedback for card---------------------------------------------', item.attributes);
         return(
             
-               <FeedbackCard feedback={item.attributes}/> 
+               <FeedbackCard key={item.id} feedback={item.attributes}/> 
               
                
         )

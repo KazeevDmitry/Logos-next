@@ -61,7 +61,7 @@ const p = theme?.gutters?.gorizontal[theme?.id]?? 20;
         
         return (
 
-            <div className={styles.branchLabel}>
+            <div key={item.id} className={styles.branchLabel}>
                 {item.attributes.name}
             </div>
 
@@ -71,7 +71,7 @@ const p = theme?.gutters?.gorizontal[theme?.id]?? 20;
 
     const files = documents.map(item => {
         return (
-            <Col span = {8}>
+            <Col key={item.id ?? item.name} span = {8}>
                 <div className={styles.files}>
                     {item.name}
                 </div>
