@@ -41,7 +41,7 @@ export function FormError({ children }) {
 export const passwordRules = [
   { required: true, message: 'Введите пароль' },
   { min: 8, message: 'Не короче 8 символов' },
-  { pattern: /\p{L}/u, message: 'Нужна хотя бы одна буква' },
+  { pattern: /[A-Za-zА-Яа-яЁё]/, message: 'Нужна хотя бы одна буква' },
   { pattern: /\d/, message: 'Нужна хотя бы одна цифра' },
 ];
 
