@@ -34,7 +34,7 @@ export function useCompleteness() {
       { text: 'Выбрать специализацию и отрасли права', done: Boolean(expert?.specializations.length && expert?.branches.length), href: '/personalaccount/expert' },
       { text: 'Добавить услуги и цены', done: Boolean(expert?.services.length), href: '/personalaccount/services' },
       { text: 'Добавить образование', done: Boolean(expert?.educations.length), href: '/personalaccount/education' },
-      { text: 'Подтвердить личность', done: Boolean(expert?.verified) },
+      { text: 'Подтвердить личность', done: Boolean(expert?.verified), href: '/personalaccount/verification' },
     );
   }
   const done = checks.filter((check) => check.done).length;
