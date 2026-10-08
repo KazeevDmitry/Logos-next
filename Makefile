@@ -11,8 +11,8 @@ down:
 logs:
 	docker compose logs -f web
 
-install: ## run after changing package.json
-	$(RUN) yarn install
+install: ## run once after cloning and after changing package.json
+	$(RUN) yarn install --frozen-lockfile
 
 lint:
 	$(RUN) yarn lint

@@ -4,7 +4,7 @@ Next.js 14 (pages router), React 18, Ant Design 4, react-query.
 
 ## Everything runs in Docker
 
-The host needs only `git`, `docker` and `make`. Do not run `yarn` or `node` on the host: dependencies live in a Docker volume built for Node 20.
+The host needs only `git`, `docker` and `make`. Do not run `yarn` or `node` on the host. `node_modules` appears in the project folder so your editor can resolve imports, but it is installed by the container for Node 20 on Linux.
 
 ```bash
 cp .env.example .env.local   # then fill in the values
