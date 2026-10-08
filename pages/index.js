@@ -1,509 +1,266 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/mainPage.module.less'
-
-import Link from 'next/link'
-
-import {useThemeContext} from '../src/context/themeContext'
-import {useUserContext} from '../src/context/userContext'
-
-import { useTranslation } from 'react-i18next'
-import UserCircle from '../src/components/userCircle/userCircle';
-import UserImage from '../src/components/userImage/userImage';
-import PageHeader from '../src/components/layouts/pageHeader';
-import PageContainer from '../src/components/layouts/pageContainer';
-import UserCard from '../src/components/userCard/userCard';
-
-import moment from 'moment';
-import 'moment/locale/ru';
-
-import { createStrapiAxios } from '../utils/strapi';
-
-import { Col, Row, Select, Form, Button, theme } from 'antd';
-import RatingBar from '../src/components/ratingbar/ratingbar';
-
-import MainLayout from '../src/components/layouts/mainLayout'
-import { useState } from 'react'
+import { Button, Col, Form, Row } from 'antd';
+import Link from 'next/link';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { experts as expertsApi } from '../lib/api';
+import { createApi } from '../lib/api/client';
 import CityInput from '../src/components/cityInput/cityInput';
 import InputSlider from '../src/components/input-slider/input-slider';
+import PageContainer from '../src/components/layouts/pageContainer';
+import PageHeader from '../src/components/layouts/pageHeader';
+import RatingBar from '../src/components/ratingbar/ratingbar';
+import UserCard from '../src/components/userCard/userCard';
+import UserImage from '../src/components/userImage/userImage';
+import { useThemeContext } from '../src/context/themeContext';
+import styles from '../styles/mainPage.module.less';
 
-let THEME ={};
+/** Shown in the promo text until the platform has a real figure worth quoting. */
+const USERS_COUNT = 1000;
+const CIRCLES = 6;
+const BEST_COUNT = 9;
 
-export default function Home({circlePeople}) {
+/** Where each of the six floating avatars sits in the hero, and its size class. */
+const CIRCLE_SLOTS = [
+  { top: '44%', right: '16%', size: 'big', tooltipAbove: true },
+  { top: '21.8%', right: '6%', size: 'big' },
+  { top: '9%', right: '16.5%', size: 'mid' },
+  { top: '27%', right: '26%', size: 'mid' },
+  { top: '12%', right: '33.5%', size: 'small' },
+  { top: '42%', right: '38%', size: 'small' },
+];
 
+const specOf = (expert) => expert.specializations[0]?.name ?? '';
 
-
-  THEME = useThemeContext();
-
-  
-  /* const currentUser = useUserContext();
-
-  const {t} = useTranslation(); */
-
-  
-  const [showLittleCard, setshowLittleCard] = useState();
-  const [circleUser, setCircleUser] = useState(null);
-
- 
-  const res = `-${THEME?.appContainerPadding}px`;
-
-  const bigCircle = THEME.size === "middle" ? "100px" : (THEME.id === "xl" ? "130px" : "150px");
-  const midlCircle = THEME.size === "middle" ? "80px" : (THEME.id === "xl" ? "100px" : "120px");
-  const smallCircle = THEME.size === "middle" ? "60px" : (THEME.id === "xl" ? "80px" : "100px");
-
-  const circleStyles = [
-    {
-      top: "44%",
-      right: "16%",
-      width: bigCircle,
-      toptolltip: true,
-    },
-    {
-      top: "21.8%",
-      right: "6%",
-      width: bigCircle,
-    },
-    {
-      top: "9%", 
-      right: "16.5%",
-      width: midlCircle,
-    },
-    {
-      top: "27%",
-      right: "26%",
-      width: midlCircle,
-    },
-    {
-      top: "12%",
-      right: "33.5%",
-      width: smallCircle,
-    },
-    {
-      top: "42%",
-      right: "38%",
-      width: smallCircle,
-    },
-    
-  ];
-
-  const onMouseEnter = (user, topt) => (e) => {
-    let c = e.target.getBoundingClientRect();
-
-  
-      const left = Math.round(c.left - 300 + c.width * 0.2 + window.pageXOffset);
-      const top = !topt ? Math.round(c.bottom -60 + window.pageYOffset - c.height * 0.2) :
-        Math.round(c.top -160 + window.pageYOffset + c.height * 0.2);
-      
-
-
-    setCircleUser({user, left, top});
-    setshowLittleCard(true);
-
-  };
-
-  const onMouseLeave = () => {
-    setshowLittleCard(false);
-    setCircleUser(null);
-  }
-
-  const circleUsers = circlePeople.slice(0, 6).map((item, i) => {
-
-    const topt = circleStyles[i].toptolltip;
-    const user = item.attributes.user.data.attributes;
-    const spec = user.expert?.data.attributes?.specialization?.data?.attributes.name?? '';
-    const rating = item.attributes.rating;
-    const sendUser = {id: item.id, ...user, spec, rating};
-
-
-    return (
-      <div key = {i} style={{...circleStyles[i], position: "absolute"}}> 
-        <Link href='experts' >
-          <UserImage
-            image= {user ? user.avatar.data?.attributes?.url : ''} 
-            width= {circleStyles[i].width}
-            onMouseEnter = {onMouseEnter(sendUser, topt)} 
-            onMouseLeave = {onMouseLeave}
-            style={{cursor: "pointer"}}
-          />
-        </Link> 
-      </div>
-    )
-  });
-
-  let cnt = 15;
-  if (THEME?.id === "sm"||THEME?.id === "md" ) {
-    cnt= 14;
-  }
-
- const BESTSPECS = circlePeople.slice(6,cnt).map((item) => {
-   
-   const user = item.attributes.user.data.attributes;
-
-   
-   const cityName = THEME.cities.find(city => city.id === user.city)?.city;
-   const spec = user.expert?.data.attributes?.specialization?.data?.attributes.name?? '';
-   const rating = item.attributes.rating;
-
-   return (
-     <>
-     <Col  xs={24} sm={12} md={12} lg={8} xl={8}  xxl={8}>
-{/* 
-         <Link href="/experts" passHref = {true}> */}  {/* use id from item for href */}
-            <a style={{ color: 'black' }}>
-              <UserCard
-                username={user.name}
-                surname={user.surname}
-                stars = {4} //временно---------------------------------------------------------------------------------
-                  reviews={18} //временно--------------------------------------------------------------------------------------
-                cups={rating}
-                spec={spec}
-                image = {user ? user.avatar?.data?.attributes?.url : ''}
-                online = {"true"}
-                cityName={cityName}
-              />
-            </a>  
-         {/* </Link> */}
-     </Col>
-     </>
-   )
- });
-
-
-const USERS_COUNT= 1000;
-
-const userSpec = circleUser?.user?.spec?? '';
-
-  return (
-    <>
-     <MobyleMainHeader/>
-      {THEME.isDesktop && 
-      <div className={styles.sectionPromo} style={{marginLeft: res, marginRight: res, padding: `0px ${THEME?.appContainerPadding}px`}}> 
-   
-        <div className={styles.txtWrapper} style={{marginLeft: `6%-${THEME?.appContainerPadding}px`, height: "100%"}}>
-              <Promo count={USERS_COUNT} />
-        </div>  
-        {circleUsers}
-        {showLittleCard && 
-          <LittleCard
-              username={circleUser.user.name}
-              surname={circleUser.user.surname}
-              top = {circleUser.top}
-              left={circleUser.left}
-              stars = {4} //временно---------------------------------------------------------------------------------
-              reviews={18} //временно--------------------------------------------------------------------------------------
-              cups={circleUser.user.rating}
-              spec={userSpec} 
-          />}
-        <MainTabs/>  
-      </div>}   
-
-          <div className={styles.contSection}>
-            { THEME.isDesktop && <div style={{width: "100%", height: "105px"}}>   </div>}
-              <InfoBlock
-                elements = {BESTSPECS}
-                linkTo = '/experts'
-                headerT = 'main.top.title'
-                linkT = 'links.allExperts'
-              /> 
-          </div>
-        
-     
-    </>
-  )
-}
-
-
-function MobyleMainHeader({ count }) {
-  
-  const {t, i18n} = useTranslation();
-  if (THEME?.isDesktop) {
-    return null;
-  }
-
-  return (
-    <>
-      <PageHeader title={t('main.promo.title')}>
-        <div className={styles.promoLabel}>
-          <p>
-            { t('main.promo.subtitle', { count }) }
-          </p>
-        </div>
-        </PageHeader> 
-
-        <MainTabs/>
-       
-    </>
-  )
-} 
-
-function Promo({ count }) {
+export default function Home({ topExperts }) {
+  const theme = useThemeContext();
   const { t } = useTranslation();
+  const [hovered, setHovered] = useState(null);
+
+  const compact = theme.size === 'middle';
+  const sizes = {
+    big: compact ? 100 : theme.id === 'xl' ? 130 : 150,
+    mid: compact ? 80 : theme.id === 'xl' ? 100 : 120,
+    small: compact ? 60 : theme.id === 'xl' ? 80 : 100,
+  };
+
+  const onMouseEnter = (expert, tooltipAbove) => (e) => {
+    const box = e.target.getBoundingClientRect();
+    const left = Math.round(box.left - 300 + box.width * 0.2 + window.pageXOffset);
+    const top = tooltipAbove
+      ? Math.round(box.top - 160 + window.pageYOffset + box.height * 0.2)
+      : Math.round(box.bottom - 60 + window.pageYOffset - box.height * 0.2);
+    setHovered({ expert, left, top });
+  };
+
+  const bleed = `-${theme?.appContainerPadding}px`;
+  const bestExperts = topExperts.slice(CIRCLES, CIRCLES + BEST_COUNT);
 
   return (
     <>
-      <h1 className={styles.promoHeader}>
-        { t('main.promo.title') }
-      </h1>
-      <div className={styles.promoLabel}>
-        <p>
-          { t('main.promo.subtitle', { count }) }
-        </p>
+      {!theme.isDesktop && (
+        <>
+          <PageHeader title={t('main.promo.title')}>
+            <div className={styles.promoLabel}>
+              <p>{t('main.promo.subtitle', { count: USERS_COUNT })}</p>
+            </div>
+          </PageHeader>
+          <MainTabs />
+        </>
+      )}
+
+      {theme.isDesktop && (
+        <div
+          className={styles.sectionPromo}
+          style={{ marginLeft: bleed, marginRight: bleed, padding: `0px ${theme?.appContainerPadding}px` }}
+        >
+          <div className={styles.txtWrapper} style={{ height: '100%' }}>
+            <h1 className={styles.promoHeader}>{t('main.promo.title')}</h1>
+            <div className={styles.promoLabel}>
+              <p>{t('main.promo.subtitle', { count: USERS_COUNT })}</p>
+            </div>
+          </div>
+
+          {topExperts.slice(0, CIRCLES).map((expert, i) => {
+            const slot = CIRCLE_SLOTS[i];
+            return (
+              <div key={expert.id} style={{ position: 'absolute', top: slot.top, right: slot.right }}>
+                <Link href={`/expert/${expert.id}`} aria-label={`${expert.user.name} ${expert.user.surname ?? ''}`}>
+                  <UserImage
+                    image={expert.user.avatarUrl ?? ''}
+                    width={sizes[slot.size]}
+                    onMouseEnter={onMouseEnter(expert, slot.tooltipAbove)}
+                    onMouseLeave={() => setHovered(null)}
+                    style={{ cursor: 'pointer' }}
+                  />
+                </Link>
+              </div>
+            );
+          })}
+
+          {hovered && <LittleCard expert={hovered.expert} top={hovered.top} left={hovered.left} />}
+          <MainTabs />
+        </div>
+      )}
+
+      <div className={styles.contSection}>
+        {theme.isDesktop && <div style={{ width: '100%', height: '105px' }} />}
+        {bestExperts.length > 0 && (
+          <InfoBlock title={t('main.top.title')} linkTo="/experts" linkText={t('links.allExperts')}>
+            {bestExperts.map((expert) => (
+              <Col key={expert.id} xs={24} sm={12} md={12} lg={8} xl={8} xxl={8}>
+                <Link href={`/expert/${expert.id}`} style={{ color: 'black' }}>
+                  <UserCard
+                    username={expert.user.name}
+                    surname={expert.user.surname ?? ''}
+                    stars={expert.starsAvg}
+                    reviews={expert.reviewsCount}
+                    cups={expert.rating}
+                    spec={specOf(expert)}
+                    image={expert.user.avatarUrl ?? ''}
+                    cityName={expert.user.city?.name ?? ''}
+                  />
+                </Link>
+              </Col>
+            ))}
+          </InfoBlock>
+        )}
       </div>
     </>
-  )
+  );
 }
 
-
-
-function LittleCard({ username, surname, spec, stars=0, reviews = 0, cups=0, top, left }){
- 
-  const nameStr = `${username} ${surname}`;
-  
-  
+/** The small card that follows the pointer over a hero avatar. */
+function LittleCard({ expert, top, left }) {
   return (
-         
-      <div className={styles.littleCard} style={{left: `${left}px`, top: `${top}px`}} >
-            <div 
-              className={styles.gridElement} 
-              style={{
-                fontSize: '18px',
-                fontWeight: '600',
-              }}> 
-              {nameStr} 
-            </div>
-            {/* <div className={styles.gridElement}> 
-              {cityName} 
-            </div> */}
-            <div
-              className={styles.gridElement}
-              style={{fontSize: "16px", fontWeight: "250", marginTop: "10px", marginBottom: "10px"}}
-            >
-              {spec}
-            </div>
-            <div style={{width: "100%"}}>
-                    <RatingBar
-                        stars = {stars}
-                        cups = {cups}
-                        reviews = {reviews}
-                    />
-                  </div>
-        </div>
- 
-
-  )
-}
-
-
-
-function MainTabs () {
-
-  const [activeTab, setActiveTab] = useState(1);
-
-  const {t} = useTranslation();
-  
-  
-  const tabStyle1 =
-  activeTab === 1
-    ? styles.tabCls1 + ' ' + styles.activeTab
-    : styles.tabCls1;
-const tabStyle2 =
-  activeTab === 2
-    ? styles.tabCls2 + ' ' + styles.activeTab
-    : styles.tabCls2;
-const tabTextStyle1 =
-  activeTab === 1
-    ? styles.activeTab + ' ' + styles.tabText
-    : styles.tabText;
-const tabTextStyle2 =
-  activeTab === 2
-    ? styles.activeTab + ' ' + styles.tabText
-    : styles.tabText;
-
-  const onFinish = (values) => 
-  {
-    const {city, spec, budget} = values;
-
-    let searchArr = [];
-    if (budget) {
-        searchArr.push(`budgetmin=${budget.inp1}&budgetmax=${budget.inp2}`);
-    }
-    if (city) {
-      searchArr.push(`city=${city}`);
-    }
-    if (spec) {
-      searchArr.push(`specialization=${spec}`);
-     }
-
-     let searchStr = searchArr.join("&");
-   //  navigate(`tasks?${searchStr}`);
-   console.log('searchStr-------------------------------', searchStr);
-   
-  };
-      
-    const thirdBlock = [];
-    let btnName = '';
-    let contPadding = "35px";
-
-    if (activeTab === 1) {
-      
-      thirdBlock.push(
-        <Form.Item
-        name="budget"
-        label= "Бюджет"
-        style={{marginRight: "0px", marginBottom: "0px"}}
+    <div className={styles.littleCard} style={{ left: `${left}px`, top: `${top}px` }}>
+      <div className={styles.gridElement} style={{ fontSize: '18px', fontWeight: '600' }}>
+        {expert.user.name} {expert.user.surname ?? ''}
+      </div>
+      <div
+        className={styles.gridElement}
+        style={{ fontSize: '16px', fontWeight: '250', marginTop: '10px', marginBottom: '10px' }}
       >
-        <InputSlider
-          maxValues={[1000, 500000]}
-          step={1000}
-        
-        />
-        </Form.Item>
-      );
-      btnName = "Найти задачу";
-    } else {
-      // thirdBlock.push(
-      //   <span className={styles.inTabSpan}>Категории права</span>
-      // );
-
-      thirdBlock.push(
-        <Form.Item
-        name="category"
-        label="Отрасль права"
-        style={{marginRight: "0px", marginBottom: "25px", width: "100%"}}
-        >
-          <CityInput marker="catg" />
-        </Form.Item>  
-      );
-
-      btnName = "Найти исполнителя";
-      contPadding = "50px";
-    }
-
-const s1 = THEME?.isDesktop ? "Ищу задачу": "Задачи";
-const s2 = THEME?.isDesktop ? "Ищу исполнителя": "Эксперты";
-
-
-    return (
-      <div className={styles.tabBox}>   
-                <div id="tab1" className={tabStyle1}
-                    onClick = {() => setActiveTab(1)}
-                >
-                    <span id="sp1" className={tabTextStyle1}
-                    >{s1}</span>
-                </div>
-                <div id="tab2" className={tabStyle2} onClick = {() => setActiveTab(2)}>
-                  <span  id="sp2" className={tabTextStyle2}
-                    >{s2}</span>
-                </div>
-        <Form
-                name="tabcontent"
-                layout="vertical"
-                
-                style={{width: "100%"}}
-                onFinish={onFinish}
-                initialValues={{
-                  budget: {inp1: 1000, inp2: 500000},
-                }}
-              >  
-        <Row 
-          gutter = {[{xs: 10, sm: 10, md: 15, lg: 20, xl: 30,  xxl: 40}, {xs: 10, sm: 10, md: 15, lg: 20, xl: 30,  xxl: 40}]} 
-          // gutter = {theme?.gutters.vertical, theme?.gutters.gorizontal}
-          className={styles.tabContentBox}
-          style={{marginLeft: "0px", marginRight: "0px", paddingBottom: contPadding}}
-          >
-                
-            <TabCol>
-              <Form.Item
-                name="city"
-                label="Город"
-                style={{marginRight: "0px", marginBottom: "0px", width: "100%"}}
-              >
-                
-                <CityInput />
-              </Form.Item>  
-            </TabCol>
-            <TabCol>
-              <Form.Item
-                name="spec"
-                label="Специализация"
-                style={{marginRight: "0px", marginBottom: "0px", width: "100%"}}
-              >
-                <CityInput marker="spec"/>
-              </Form.Item>  
-              </TabCol>
-            <TabCol>{thirdBlock}</TabCol>
-            <TabCol>
-              <Button 
-                size={THEME?.size} 
-                style={{width: "100%", marginTop: "33px"}}
-                type="primary" 
-                htmlType="submit"
-              >{btnName}</Button>
-            </TabCol>
-   
-        </Row>
-        </Form>
-      </div>  
-    );
-  
+        {specOf(expert)}
+      </div>
+      <div style={{ width: '100%' }}>
+        <RatingBar stars={expert.starsAvg} cups={expert.rating} reviews={expert.reviewsCount} />
+      </div>
+    </div>
+  );
 }
 
+/** The search box that overlaps the hero: "looking for a task" / "looking for an expert". */
+function MainTabs() {
+  const theme = useThemeContext();
+  const [activeTab, setActiveTab] = useState(1);
+  const lookingForTask = activeTab === 1;
 
-function TabCol ({children}) {
+  const onFinish = (values) => {
+    console.log('search', values);
+  };
+
+  const tabClass = (tab, base) => (activeTab === tab ? `${base} ${styles.activeTab}` : base);
+
   return (
-    <Col  xs={24} sm={12} md={6} lg={6} xl={6} >
-          <div className={styles.inTabBox}>
-            {children}
-          </div>
-        </Col>
-  )
+    <div className={styles.tabBox}>
+      <div className={tabClass(1, styles.tabCls1)} onClick={() => setActiveTab(1)}>
+        <span className={tabClass(1, styles.tabText)}>{theme?.isDesktop ? 'Ищу задачу' : 'Задачи'}</span>
+      </div>
+      <div className={tabClass(2, styles.tabCls2)} onClick={() => setActiveTab(2)}>
+        <span className={tabClass(2, styles.tabText)}>{theme?.isDesktop ? 'Ищу исполнителя' : 'Эксперты'}</span>
+      </div>
+      <Form
+        name="tabcontent"
+        layout="vertical"
+        style={{ width: '100%' }}
+        onFinish={onFinish}
+        initialValues={{ budget: { inp1: 1000, inp2: 500000 } }}
+      >
+        <Row
+          gutter={[
+            { xs: 10, sm: 10, md: 15, lg: 20, xl: 30, xxl: 40 },
+            { xs: 10, sm: 10, md: 15, lg: 20, xl: 30, xxl: 40 },
+          ]}
+          className={styles.tabContentBox}
+          style={{ marginLeft: '0px', marginRight: '0px', paddingBottom: lookingForTask ? '35px' : '50px' }}
+        >
+          <TabCol>
+            <Form.Item name="city" label="Город" style={{ marginBottom: '0px', width: '100%' }}>
+              <CityInput />
+            </Form.Item>
+          </TabCol>
+          <TabCol>
+            <Form.Item name="spec" label="Специализация" style={{ marginBottom: '0px', width: '100%' }}>
+              <CityInput marker="spec" />
+            </Form.Item>
+          </TabCol>
+          <TabCol>
+            {lookingForTask ? (
+              <Form.Item name="budget" label="Бюджет" style={{ marginBottom: '0px' }}>
+                <InputSlider maxValues={[1000, 500000]} step={1000} />
+              </Form.Item>
+            ) : (
+              <Form.Item name="branch" label="Отрасль права" style={{ marginBottom: '25px', width: '100%' }}>
+                <CityInput marker="catg" />
+              </Form.Item>
+            )}
+          </TabCol>
+          <TabCol>
+            <Button size={theme?.size} style={{ width: '100%', marginTop: '33px' }} type="primary" htmlType="submit">
+              {lookingForTask ? 'Найти задачу' : 'Найти исполнителя'}
+            </Button>
+          </TabCol>
+        </Row>
+      </Form>
+    </div>
+  );
 }
 
-function InfoBlock ({ elements, linkTo, headerT, linkT}) {
-  const {t} = useTranslation();
+function TabCol({ children }) {
+  return (
+    <Col xs={24} sm={12} md={6} lg={6} xl={6}>
+      <div className={styles.inTabBox}>{children}</div>
+    </Col>
+  );
+}
 
-  const headerStyle = THEME?.isDesktop ? {
-    paddingLeft: "0px",
-    paddingRight: "0px",
-    marginTop: "70px",
-    fontSize: "44px"
-        
-    } : {
-        paddingLeft: "10px",
-        paddingRight: "10px",
-        marginTop: "50px",
-        fontSize: "32px"
-    }
+function InfoBlock({ title, linkTo, linkText, children }) {
+  const theme = useThemeContext();
+  const headerStyle = theme?.isDesktop
+    ? { paddingLeft: '0px', paddingRight: '0px', marginTop: '70px', fontSize: '44px' }
+    : { paddingLeft: '10px', paddingRight: '10px', marginTop: '50px', fontSize: '32px' };
 
-    return(
+  return (
     <>
-        <div className={styles.headerContainer} style = {headerStyle}>
-            <div className={styles.headText}>{t(headerT)}</div>
-            {THEME?.isDesktop && 
-              <Link href={linkTo}
-                  className={styles.headLink}>{t(linkT)}
-              </Link>}
-        </div>
-
+      <div className={styles.headerContainer} style={headerStyle}>
+        <div className={styles.headText}>{title}</div>
+        {theme?.isDesktop && (
+          <Link href={linkTo} className={styles.headLink}>
+            {linkText}
+          </Link>
+        )}
+      </div>
       <PageContainer>
-        {elements}  
-        {!THEME?.isDesktop && <Link href={linkTo} className={styles.headLink} style={{marginLeft: "auto", marginRight: "auto", marginTop: "20px"}}>{t(linkT)}</Link>}
-      </PageContainer> 
-    
-    </>    
-    )
+        {children}
+        {!theme?.isDesktop && (
+          <Link
+            href={linkTo}
+            className={styles.headLink}
+            style={{ marginLeft: 'auto', marginRight: 'auto', marginTop: '20px' }}
+          >
+            {linkText}
+          </Link>
+        )}
+      </PageContainer>
+    </>
+  );
 }
 
-
-export async function getServerSideProps() {
- 
-  
-  const res = await createStrapiAxios()
- 
-    //.get(`/experts?populate[0]=branches&populate[1]=specializations&populate[2]=user.avatar&pagination[page]=1&pagination[pageSize]=15&sort[0]=rating:desc&filters[rating][$null]`)
-    .get(`/experts?populate[0]=branches&populate[1]=specializations&populate[2]=user.avatar&populate[3]=user.expert.specialization&pagination[page]=1&pagination[pageSize]=15&sort[0]=rating:desc&filters[rating][$null]`)
-  const data = await res.data.data;
-
-  
-  return { props: { circlePeople: data } }
+export async function getServerSideProps(context) {
+  try {
+    return { props: { topExperts: await expertsApi.top(CIRCLES + BEST_COUNT, createApi(context)) } };
+  } catch {
+    // The page still renders its static parts if the API is unreachable.
+    return { props: { topExperts: [] } };
+  }
 }
