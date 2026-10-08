@@ -5,7 +5,7 @@ import styles from './pageContainer.module.less';
 import { Row } from 'antd';
 import {useThemeContext} from '../../context/themeContext';
 
-export default function PageContainer ({children, maxWidth='1400px', bGcolor=''}) {
+export default function PageContainer ({children, maxWidth='1400px', bGcolor}) {
     
     const theme = useThemeContext();
 
