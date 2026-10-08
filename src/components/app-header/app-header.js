@@ -1,13 +1,11 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import axios from "axios";
 
 import AskModal from "../askModal/askModal";
 import Icons from "../../../utils/icons";
 import { useTranslation } from 'react-i18next';
 
-import { createStrapiAxios } from '../../../utils/strapi';
 
 import styles from "./app-header.module.less";
 
@@ -31,11 +29,12 @@ export default function AppHeader({loading})
   const [ curAvatar, setcurAvatar ] = useState();
 
 
-  const {currentUser, setCurrentUser} = useUserContext();
+  const {currentUser, logout} = useUserContext();
 
-  const userJWT = currentUser?.jwt ?? null;
+  // Truthy when someone is signed in (the session itself is in httpOnly cookies).
+  const userJWT = currentUser ? true : null;
 
-const isExpert = currentUser?.isExpert;
+const isExpert = currentUser?.role === 'EXPERT';
 
 
  
@@ -55,10 +54,7 @@ const isExpert = currentUser?.isExpert;
   const onUserLeave = () => {
     // setAskShow(true);
 
-    axios.post('/api/logout').then((res) => {
-      setCurrentUser({})
-      
-    })
+    logout();
     setUserMenuOpen(!userMenuOpen);
   };
 
@@ -140,10 +136,7 @@ const isExpert = currentUser?.isExpert;
 
   let userImage='';
 
-if (currentUser?.avatar)
- {
-  userImage = currentUser?.avatar?.url;
-}
+userImage = currentUser?.avatarUrl ?? '';
 
 
 const padHeader = !loading ? '5px' : '0px';
