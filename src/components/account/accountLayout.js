@@ -16,6 +16,7 @@ const MENU = [
   { key: '/personalaccount/expert', label: 'Стать экспертом', customer: true },
   { key: '/mytasks', label: 'Мои задачи' },
   { key: '/myresponses', label: 'Мои отклики', expert: true },
+  { key: '/personalaccount/settings', label: 'Настройки' },
 ];
 
 export const accountBlock = { background: 'white', borderRadius: '10px' };

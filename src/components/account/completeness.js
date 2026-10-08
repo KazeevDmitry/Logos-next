@@ -21,7 +21,7 @@ export function useCompleteness() {
   }
 
   const checks = [
-    { text: 'Подтвердить e-mail', done: currentUser.emailVerified },
+    { text: 'Подтвердить e-mail', done: currentUser.emailVerified, href: '/personalaccount/settings' },
     { text: 'Указать фамилию', done: Boolean(currentUser.surname), href: '/personalaccount/profile' },
     { text: 'Добавить фотографию', done: Boolean(currentUser.avatarUrl), href: '/personalaccount/profile' },
     { text: 'Указать город', done: Boolean(currentUser.city), href: '/personalaccount/profile' },
