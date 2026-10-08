@@ -1,63 +1,107 @@
-import { useThemeContext } from "../../context/themeContext";
-import { Select } from "antd";
+import { Select } from 'antd';
+import { useEffect, useRef, useState } from 'react';
+import { reference } from '../../../lib/api';
+import { useThemeContext } from '../../context/themeContext';
+import { useBranches, useCity, useSpecializations } from '../../hooks/useReference';
 
+const SEARCH_DELAY_MS = 250;
 
+/**
+ * City picker with server-side search over ~2500 Russian cities.
+ * `value` is a city id; with nothing typed it offers the largest cities.
+ */
+export function CitySelect({ value, onChange, width = '100%', placeholder = 'Начните вводить город' }) {
+  const theme = useThemeContext();
+  const selected = useCity(value);
+  const [options, setOptions] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const timer = useRef();
+  const latest = useRef(0);
 
-export default function CityInput({value, onChange, marker="city", width="100%", placeholder}) {
-   
-    const theme = useThemeContext();
- 
-    
- 
-    const SPECIALIZATION = theme?.spec?? [];
-    const CITYOBJ = theme?.cities?? [];
-    const BRANCHES = theme?.branches?? [];
-    const PAYMENTS = theme?.payments?? [];
- 
+  const load = (search) => {
+    const request = ++latest.current;
+    setLoading(true);
+    reference
+      .cities(search)
+      .then((cities) => {
+        // Ignore answers that arrive after a newer search was started.
+        if (request === latest.current) {
+          setOptions(cities);
+        }
+      })
+      .catch(() => undefined)
+      .finally(() => request === latest.current && setLoading(false));
+  };
 
-   const onThisChange = (newvalue) => {
- 
-      onChange?.(newvalue);
-   };
- 
-   const elements = marker === "spec" ? 
-   SPECIALIZATION.map((item) => 
-       <Select.Option key={item.id} value={+item.id}>{item.attributes.name}</Select.Option>
-     ) : (marker ===  "city" ? 
-     CITYOBJ.map(( item, index) => {
-       const { region, city } = item;
-       const cityStr = `${city}  ${region}`;
-       return(
-        <Select.Option key={index} value={+item.id} title ={cityStr}>{city}</Select.Option>
-       );
-     }
-     ) : (marker === "payment" ? PAYMENTS.map((item) => {
-        return <Select.Option key={item.id} value={+item.id}>{item.attributes.name}</Select.Option>;
-      }) : 
-      BRANCHES.map((item) => {
-        
-        return <Select.Option key={item.id} value={+item.id}>{item.attributes.name}</Select.Option>;
-       }))
-     );
- 
-   return (
-     <Select
-       showSearch
-       style = {{width: width}}
-       placeholder={placeholder?? ''}
-       optionFilterProp="children"
-       value={value ? +value : null}
-       onChange={onThisChange}
-       size={theme?.size}
-       filterOption={(input, option) =>
-         option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-       }
-       filterSort={(optionA, optionB) =>
-         optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
-       }
-     
-     >
-       { elements }
-     </Select>
-   );
- }
+  useEffect(() => {
+    load('');
+    return () => clearTimeout(timer.current);
+  }, []);
+
+  const onSearch = (text) => {
+    clearTimeout(timer.current);
+    timer.current = setTimeout(() => load(text), SEARCH_DELAY_MS);
+  };
+
+  // The selected city may not be among the current search results.
+  const shown = selected && !options.some((city) => city.id === selected.id) ? [selected, ...options] : options;
+
+  return (
+    <Select
+      showSearch
+      allowClear
+      filterOption={false}
+      style={{ width }}
+      size={theme?.size}
+      placeholder={placeholder}
+      value={value ? Number(value) : undefined}
+      loading={loading}
+      onSearch={onSearch}
+      onChange={(id) => onChange?.(id ?? null)}
+      notFoundContent={loading ? 'Ищем…' : 'Город не найден'}
+    >
+      {shown.map((city) => (
+        <Select.Option key={city.id} value={city.id} title={`${city.name}, ${city.region}`}>
+          {city.name}
+          <span style={{ color: '#5E6674', fontSize: '13px' }}> · {city.region}</span>
+        </Select.Option>
+      ))}
+    </Select>
+  );
+}
+
+/** Plain select over a short reference list of { id, name }. */
+function ReferenceSelect({ items, value, onChange, width, placeholder }) {
+  const theme = useThemeContext();
+  return (
+    <Select
+      showSearch
+      allowClear
+      optionFilterProp="children"
+      style={{ width }}
+      size={theme?.size}
+      placeholder={placeholder ?? ''}
+      value={value ? Number(value) : undefined}
+      onChange={(id) => onChange?.(id ?? null)}
+    >
+      {items.map((item) => (
+        <Select.Option key={item.id} value={item.id}>
+          {item.name}
+        </Select.Option>
+      ))}
+    </Select>
+  );
+}
+
+/**
+ * One entry point for the three pickers used in filters and forms:
+ * marker "city" (default), "spec" (specialization) or "catg" (branch of law).
+ */
+export default function CityInput({ marker = 'city', width = '100%', ...props }) {
+  const specializations = useSpecializations();
+  const branches = useBranches();
+  if (marker === 'city') {
+    return <CitySelect width={width} {...props} />;
+  }
+  return <ReferenceSelect items={marker === 'spec' ? specializations : branches} width={width} {...props} />;
+}

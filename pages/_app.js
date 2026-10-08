@@ -69,21 +69,19 @@ export default function MyApp({ Component, pageProps }) {
 
 
 
-          <ThemeProvider>
-           <UserProvider>
-           <NoteProvider>
-           <QueryClientProvider client={queryClient}>
-              <ConfigProvider locale={antdLocales(i18n.language)}>
-                <MainLayout loading={loading}>
-                  
-                    <Component {...pageProps} /> 
-                  
-                </MainLayout>
-              </ConfigProvider>  
-              </QueryClientProvider>
-              </NoteProvider>
-            </UserProvider>
-          </ThemeProvider> 
+          <QueryClientProvider client={queryClient}>
+            <ThemeProvider>
+              <UserProvider>
+                <NoteProvider>
+                  <ConfigProvider locale={antdLocales(i18n.language)}>
+                    <MainLayout loading={loading}>
+                      <Component {...pageProps} />
+                    </MainLayout>
+                  </ConfigProvider>
+                </NoteProvider>
+              </UserProvider>
+            </ThemeProvider>
+          </QueryClientProvider> 
           </>      
 
             )

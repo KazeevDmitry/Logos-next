@@ -1,87 +1,58 @@
-import React, { useRef, useEffect, useState } from 'react';
-
-
-import {useThemeContext} from '../../context/themeContext';
-
 import { TreeSelect } from 'antd';
+import { useBranches } from '../../hooks/useReference';
 
-export default function BranchSelect({value, onChange, errorStatus, size}) {
+const branchKey = (id) => `b${id}`;
+const subbranchKey = (id) => `s${id}`;
 
-    
-const {branches} = useThemeContext();
+/**
+ * Tree picker of branches of law and their sub-branches.
+ *
+ * `value` and `onChange` use { branch_id, subbranch_id }; choosing a
+ * sub-branch also reports the branch it belongs to.
+ */
+export default function BranchSelect({ value, onChange, errorStatus, size }) {
+  const branches = useBranches();
 
-let treeData = [];
+  const treeData = branches.map((branch) => ({
+    value: branchKey(branch.id),
+    title: branch.name.toUpperCase(),
+    children: branch.subbranches.map((sub) => ({ value: subbranchKey(sub.id), title: sub.name })),
+  }));
 
-   (branches || []).map(item => {
-        
-        const value=item.attributes.name;
-        let children = [];
-        item.attributes.subbranches.data.map(sub => {
-                const subBr = {value: sub.attributes.name,  title: sub.attributes.name};
-                children = [...children, subBr];
-                })
-        const itemData =  {
-            value : value,
-            title : value.toUpperCase(),
-            children: children
-        }       
-        treeData=[...treeData, itemData]
-        });
+  const selected = value?.subbranch_id
+    ? subbranchKey(value.subbranch_id)
+    : value?.branch_id
+      ? branchKey(value.branch_id)
+      : undefined;
 
+  const onThisChange = (key) => {
+    if (!key) {
+      onChange?.({ branch_id: null, subbranch_id: null });
+      return;
+    }
+    const id = Number(key.slice(1));
+    if (key.startsWith('b')) {
+      onChange?.({ branch_id: id, subbranch_id: null });
+      return;
+    }
+    const parent = branches.find((branch) => branch.subbranches.some((sub) => sub.id === id));
+    onChange?.({ branch_id: parent?.id ?? null, subbranch_id: id });
+  };
 
-    
-
-      const [thisValue, setValue] = useState(value);
-
-      useEffect(() => {
-        setValue(value)
-      }, [value]);
-
-      const onThisChange = (newValue) => {
-
-        let brId = null;
-        brId = branches.find(item => item.attributes.name === newValue)?.id?? null;
-        let subID = null;
-        if (!brId) {
-            branches.map(item => {
-                const bb = item.attributes.subbranches.data.find(sub => sub.attributes.name === newValue);
-                if (bb) {
-                    subID=bb.id;
-                    brId=item.id;
-                }
-        }
-            
-        )};
-       const res = {branch_id: brId, subbranch_id: subID};
-       
-       onChange(res);
-
-        setValue(newValue);
-
-     };
-
-
-
-     return (
-              
-        <TreeSelect
-          showSearch
-          style={{
-            width: '100%',
-          }}
-          value={thisValue}
-          dropdownStyle={{
-            maxHeight: 400,
-            overflow: 'auto',
-          }}
-          placeholder="Начните ввод для поиска"
-          treeDefaultExpandAll
-          treeData={treeData}
-          onChange={onThisChange}
-          status={errorStatus ? "error" : null}
-          allowClear
-          size={size}
-        />
-      
-      );
-    };
+  return (
+    <TreeSelect
+      showSearch
+      allowClear
+      treeDefaultExpandAll
+      treeNodeFilterProp="title"
+      style={{ width: '100%' }}
+      dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+      placeholder="Начните ввод для поиска"
+      treeData={treeData}
+      value={selected}
+      onChange={onThisChange}
+      status={errorStatus ? 'error' : undefined}
+      size={size}
+    />
+  );
+}
