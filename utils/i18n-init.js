@@ -1,31 +1,22 @@
-// TODO: rethink later
-import i18n from "i18next";
-import LanguageDetector from "i18next-browser-languagedetector";
-import { initReactI18next } from "react-i18next";
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
 
 import en from './Locales/en';
 import ru from './Locales/ru';
 
-i18n
-  .use(LanguageDetector)
-  .use(initReactI18next)
-  .init({
-    resources: {
-      en: {
-        // not sure, but anyway use spread syntax to remove links
-        translations: { ...en },
-      },
-      ru: {
-        translations: { ...ru },
-      }
-    },
-    // fallbackLng: 'en',
-    fallbackLng: 'ru',
-    debug: true,
-
-    // have a common namespace used around the full app
-    ns: ['translations'],
-    defaultNS: 'translations',
-  });
+// The site is published in Russian only (see `i18n.locales` in next.config.js).
+// The language is fixed rather than detected from the browser: detection ran
+// only on the client, so a visitor with an English browser got Russian HTML
+// from the server and English text after hydration, which broke hydration.
+i18n.use(initReactI18next).init({
+  resources: {
+    en: { translations: { ...en } },
+    ru: { translations: { ...ru } },
+  },
+  lng: 'ru',
+  fallbackLng: 'ru',
+  ns: ['translations'],
+  defaultNS: 'translations',
+});
 
 export default i18n;

@@ -54,7 +54,7 @@ export default function Home({ topExperts }) {
   };
 
   const bleed = `-${theme?.appContainerPadding}px`;
-  const bestExperts = topExperts.slice(CIRCLES, CIRCLES + BEST_COUNT);
+  const bestExperts = topExperts.slice(0, BEST_COUNT);
 
   return (
     <>
@@ -269,7 +269,7 @@ function InfoBlock({ title, linkTo, linkText, children }) {
 
 export async function getServerSideProps(context) {
   try {
-    return { props: { topExperts: await expertsApi.top(CIRCLES + BEST_COUNT, createApi(context)) } };
+    return { props: { topExperts: await expertsApi.top(Math.max(CIRCLES, BEST_COUNT), createApi(context)) } };
   } catch {
     // The page still renders its static parts if the API is unreachable.
     return { props: { topExperts: [] } };
