@@ -22,10 +22,10 @@ export function useCompleteness() {
 
   const checks = [
     { text: 'Подтвердить e-mail', done: currentUser.emailVerified },
-    { text: 'Указать фамилию', done: Boolean(currentUser.surname) },
-    { text: 'Добавить фотографию', done: Boolean(currentUser.avatarUrl) },
-    { text: 'Указать город', done: Boolean(currentUser.city) },
-    { text: 'Указать телефон', done: Boolean(currentUser.phone) },
+    { text: 'Указать фамилию', done: Boolean(currentUser.surname), href: '/personalaccount/profile' },
+    { text: 'Добавить фотографию', done: Boolean(currentUser.avatarUrl), href: '/personalaccount/profile' },
+    { text: 'Указать город', done: Boolean(currentUser.city), href: '/personalaccount/profile' },
+    { text: 'Указать телефон', done: Boolean(currentUser.phone), href: '/personalaccount/profile' },
   ];
   if (isExpert) {
     checks.push(

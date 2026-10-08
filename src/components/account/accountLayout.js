@@ -8,6 +8,7 @@ import PageHeader from '../layouts/pageHeader';
 /** Sections of the personal account. `expert` ones are shown to experts only. */
 const MENU = [
   { key: '/personalaccount', label: 'Обзор' },
+  { key: '/personalaccount/profile', label: 'Личные данные' },
   { key: '/mytasks', label: 'Мои задачи' },
   { key: '/myresponses', label: 'Мои отклики', expert: true },
 ];
