@@ -1,130 +1,73 @@
-import React from 'react';
-import { useState } from 'react';
-import styles from './expertCard.module.less';
-import checkedSvg from './icons/checked.svg';
-import UserImage from '../userImage/userImage';
-import { Row, Col } from 'antd'
+import { EnvironmentOutlined, SafetyCertificateOutlined } from '@ant-design/icons';
+import { Col, Row, Tooltip, Typography } from 'antd';
+import { useThemeContext } from '../../context/themeContext';
 import RatingBar from '../ratingbar/ratingbar';
-import {useThemeContext} from '../../context/themeContext';
-import { Typography } from 'antd';
+import UserImage from '../userImage/userImage';
+import styles from './expertCard.module.less';
 
-import {EnvironmentOutlined} from '@ant-design/icons';
+/** One expert in the catalogue. `expert` is the API's ExpertDto. */
+export default function ExpertCard({ expert }) {
+  const theme = useThemeContext();
+  const { user } = expert;
+  const avatarSize = theme?.id === 'xxl' || theme?.id === 'xl' ? 150 : theme?.id === 'xs' ? 80 : 110;
 
-const { Paragraph } = Typography;
+  return (
+    <div className={`${styles.card} ${styles.hoverable ?? ''}`}>
+      <Row gutter={[20, 40]} justify="center" align="middle" wrap={false} style={{ width: '100%', height: '100%' }}>
+        <Col flex={`${avatarSize}px`} style={{ paddingLeft: '0px' }}>
+          <UserImage image={user.avatarUrl ?? ''} width={avatarSize} />
+        </Col>
 
-export default function ExpertCard({username, surname, image, stars, reviews = '0', cups, spec, online, cityName, branches, description}){
+        <Col flex="auto" style={{ height: '100%' }}>
+          <div className={styles.inCardBlock}>
+            <div className={`${styles.wrapBlock} ${styles.branchWrap}`} style={{ marginBottom: '15px' }}>
+              <div className={styles.specname} style={{ marginRight: '20px', marginBottom: '10px' }}>
+                {user.name} {user.surname ?? ''}
+                {expert.verified && (
+                  <Tooltip title="Документы проверены">
+                    <SafetyCertificateOutlined style={{ color: '#32D69B', marginLeft: '8px' }} />
+                  </Tooltip>
+                )}
+              </div>
+              <div className={styles.special} style={{ fontSize: '16px' }}>
+                {expert.specializations.map((spec) => spec.name).join(', ')}
+              </div>
+            </div>
 
-  const  THEME = useThemeContext();
+            {theme.isDesktop && (
+              <div className={styles.wrapBlock}>
+                {expert.branches.map((branch) => (
+                  <div key={branch.id} className={styles.branch}>
+                    {branch.name.toUpperCase()}
+                  </div>
+                ))}
+              </div>
+            )}
 
-  const hoverStyle = {  
-    active : {marginLeft: '-2px', marginTop: '-2px', boxShadow: '2px 3px 4px rgba(0, 0, 0, 0.2)'},
-    noneActive : {margin: '0px'},
-  }
+            {expert.description && theme.isDesktop && (
+              <Typography.Paragraph style={{ marginBottom: '0px' }} ellipsis={{ rows: 2, tooltip: false }}>
+                {expert.description}
+              </Typography.Paragraph>
+            )}
 
-  const [shadowStyle, setShadowStyle] = useState(hoverStyle.noneActive);
-
-    const cHeight = THEME?.id === "xxl" || THEME?.id === "xl" ? 150 : THEME?.id === "xs" ? 80 : 110;
-    const cardHeight = THEME?.id !== "xs" ? "150px" : "130px";
-
-   const onMouseEnter = () => setShadowStyle(hoverStyle.active);
-   const onMouseLeave = () => setShadowStyle(hoverStyle.noneActive);
-
-    const branchDivs = branches.map((item, i) => 
- 
-    <div 
-        key = {item.id}
-        className={styles.branch}
-        >
-            {item.attributes.name.toUpperCase()}
+            <div className={styles.wrapBlock} style={{ justifyContent: 'space-between' }}>
+              <div className={styles.cityBlock} style={{ marginTop: '10px' }}>
+                {user.city && (
+                  <>
+                    <EnvironmentOutlined style={{ fontSize: '19px', fontWeight: '600' }} />
+                    <div className={styles.occupation} style={{ marginLeft: '10px', fontSize: '15px' }}>
+                      {user.city.name}
+                    </div>
+                  </>
+                )}
+              </div>
+              <div style={{ width: '100%', maxWidth: '200px', marginTop: '10px' }}>
+                <RatingBar stars={expert.starsAvg} cups={expert.rating} reviews={expert.reviewsCount} fontSize={15} />
+              </div>
+            </div>
+          </div>
+        </Col>
+      </Row>
     </div>
-);
-    
-
-    return (
-      
-        <div className={styles.card}
-           style ={shadowStyle}
-           onMouseEnter={onMouseEnter}
-           onMouseLeave= {onMouseLeave}
-        >
-
-          <Row gutter={[20, 40]} 
-            justify= "center" align = "middle" 
-            
-            wrap={false}
-            style={{width: "100%", height: "100%"}}
-          >
-  
-            <Col flex={`${cHeight}px`}
-              style={{paddingLeft: "0px"}}
-            >
-             
-       
-                  <UserImage
-                  image= {image}
-                  online={online}
-                   width= {cHeight}
-             
-              />
-            
-            </Col>
-  
-            <Col flex="auto" style = {{height: "100%"}}>
-                <div className={styles.inCardBlock}>
-                    <div className={styles.wrapBlock +' '+ styles.branchWrap} style={{marginBottom: "15px"}}>
-                      <div className={styles.specname} style={{marginRight:"20px", marginBottom: '10px'}}>
-                        {`${username} ${surname}`}
-                       </div>
-                      <div className={styles.special} style={{fontSize: "16px"}}>{spec}</div> 
-                    </div>
-                    {THEME.isDesktop && <div className={styles.wrapBlock}>
-                      {branchDivs}
-                    </div>}
-                    
-                    {description && THEME.isDesktop && 
-                      <div >
-                        <Typography.Paragraph 
-                          style={{marginBottom: "0px"}}
-                          ellipsis={
-                            {
-                                rows: 2,
-                              //  expandable: true,
-                              //  symbol: moreStr,
-                                tooltip: false,
-                              }
-                          
-                          }>
-                        {description}
-                        </Typography.Paragraph>
-                      </div>  }
-
-                    <div className={styles.wrapBlock} style={{justifyContent: "space-between"}}>
-                      <div className={styles.cityBlock} style={{ marginTop: "10px"}}>
-                        <EnvironmentOutlined 
-                            style={{
-                              //color : cups > 0 ? "#F4B336" : "#CED3DB", 
-                              fontSize: `19px`, 
-                              fontWeight: "600"
-                              }}/>
-                        <div className={styles.occupation} style={{marginLeft: "10px", fontSize: "15px"}}>{cityName}</div>
-                      </div>  
-    
-                      <div style={{width: "100%", maxWidth: "200px", marginTop: "10px"}}>
-                        <RatingBar
-                            stars = {stars}
-                            cups = {cups}
-                            reviews = {reviews}
-                            fontSize = {15}
-                        />
-                      </div>
-                    </div>
-                    
-                    
-                </div>
-            </Col>      
-          </Row>  
-        </div>  
-  
-    );
-  }
-  
+  );
+}
