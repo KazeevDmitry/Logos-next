@@ -6,6 +6,7 @@ import { useQuery } from 'react-query';
 import { finance } from '../lib/api';
 import { withAuth } from '../lib/withAuth';
 import AccountLayout from '../src/components/account/accountLayout';
+import Payouts from '../src/components/finance/payouts';
 import { roubles } from '../utils/money';
 
 const PAGE_SIZE = 10;
@@ -53,6 +54,7 @@ function FinancePage() {
       ) : (
         <Spin />
       )}
+      {balance && <Payouts available={balance.available} />}
 
       <h2 style={{ fontSize: '20px', fontWeight: 500, marginTop: '36px' }}>История операций</h2>
       {isLoading && <Spin />}
