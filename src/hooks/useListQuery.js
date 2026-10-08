@@ -47,7 +47,8 @@ export function listParams(query, filters = {}, pageSize = 10) {
 export function useListQuery(name, fetcher, { filters, pageSize = 10, serverData } = {}) {
   const router = useRouter();
   const params = listParams(router.query, filters, pageSize);
-  const key = [name, params];
+  // `name` may be a key prefix (['tasks', 'mine']) so related lists are invalidated together.
+  const key = [...[name].flat(), params];
   const firstKey = useRef(JSON.stringify(key));
   const isFirst = firstKey.current === JSON.stringify(key);
 
