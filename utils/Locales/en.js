@@ -28,6 +28,9 @@ export default {
   answers: {
     plural: [ 'answers' ],
   },
+  tasks: {
+    plural: ['task'],
+  },
   responses: {
     plural: [ 'responses' ],
   },
