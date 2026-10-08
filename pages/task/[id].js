@@ -13,6 +13,7 @@ import { AuthorLine, BranchPills } from '../../src/components/questionCard/quest
 import RespondModal from '../../src/components/task/respondModal';
 import ResponseCard from '../../src/components/task/responseCard';
 import TaskActions, { useTaskAction } from '../../src/components/task/taskActions';
+import TaskTimeline from '../../src/components/task/taskTimeline';
 import { taskPrice, TaskStatusPill, ViewerStatusPill } from '../../src/components/taskCard/taskStatus';
 import { useNotifyContext } from '../../src/context/notificationContext';
 import { useThemeContext } from '../../src/context/themeContext';
@@ -200,6 +201,10 @@ export default function TaskPage({ serverTask }) {
                 </Link>
               )}
             </div>
+          </div>
+          <div style={{ ...block, padding: pad, marginTop: pad }}>
+            <div style={{ fontWeight: 500, marginBottom: '16px' }}>Ход задачи</div>
+            <TaskTimeline task={task} />
           </div>
         </Col>
       </PageContainer>
