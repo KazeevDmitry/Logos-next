@@ -1,412 +1,217 @@
-import React, {useState } from 'react';
-
-import { useQuery } from "react-query";
-import { Image as AntImage, Tabs, Space, Spin, Row, Col, Button } from 'antd';
-
-import styles from '././expertInfo.module.less';
-
-import { useThemeContext } from '../../src/context/themeContext';
-import { useUserContext } from '../../src/context/userContext';
+import { EnvironmentOutlined, SafetyCertificateOutlined, TrophyOutlined, UserOutlined } from '@ant-design/icons';
+import { Col, Result, Row, Space, Tabs, Tooltip } from 'antd';
+import { useRouter } from 'next/router';
+import { useTranslation } from 'react-i18next';
+import { useQuery } from 'react-query';
+import { experts } from '../../lib/api';
+import { createApi } from '../../lib/api/client';
+import Feedbacks from '../../src/components/feedbacks/feedbacks';
+import SideFeedbacks from '../../src/components/feedbacks/sideFeedbacks';
 import PageContainer from '../../src/components/layouts/pageContainer';
 import PageHeader from '../../src/components/layouts/pageHeader';
-import { useTranslation } from 'react-i18next';
-import { useRouter } from "next/router";
-import { createStrapiAxios } from '../../utils/strapi';
-import Image  from 'next/image';
 import UserImage from '../../src/components/userImage/userImage';
-import {EnvironmentOutlined, UserOutlined} from '@ant-design/icons';
-import { TrophyOutlined, StarOutlined } from '@ant-design/icons';
-import SideFeedbacks from '../../src/components/feedbacks/sideFeedbacks';
-import Feedbacks from '../../src/components/feedbacks/feedbacks';
+import { useThemeContext } from '../../src/context/themeContext';
+import styles from './expertInfo.module.less';
 
+const plural = (n, one, few, many) => {
+  const mod10 = n % 10;
+  const mod100 = n % 100;
+  if (mod10 === 1 && mod100 !== 11) return one;
+  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return few;
+  return many;
+};
 
-//import RatingBar from '../../src/components/ratingbar/ratingbar';
-//import Feedbacks from '../../src/components/feedbacks/feedbacks';
-//import SideFeedbacks from '../../src/components/feedbacks/sideFeedbacks';
+export default function ExpertPage({ serverExpert }) {
+  const { t } = useTranslation();
+  const theme = useThemeContext();
+  const router = useRouter();
+  const expertId = Number(router.query.id);
 
+  const { data: expert } = useQuery(['expert', expertId], () => experts.get(expertId), {
+    initialData: serverExpert ?? undefined,
+    enabled: Number.isFinite(expertId),
+    refetchOnWindowFocus: false,
+    staleTime: 30_000,
+  });
+  // Only the star distribution is needed here; the list itself is loaded by <Feedbacks>.
+  const { data: reviews } = useQuery(
+    ['feedbacks', expertId, 'summary'],
+    () => experts.feedbacks(expertId, { pageSize: 1 }),
+    { enabled: Boolean(expert), refetchOnWindowFocus: false },
+  );
 
-export default function ExpertInfo ({serverExpert}) {
-
-    const { t } = useTranslation();
-    const theme = useThemeContext();
-    const router = useRouter();
-    
-    const expertId = router.query.id;
-
-
-    //const cityName = theme.cities.find(city => city.id === user.city)?.city;
-
- //   const p = theme?.gutters.gorizontal[theme?.id];
-
-   // const pad = `${p}px`;
-   
-    const { TabPane } = Tabs;
-    const [activeKey, setKey] = useState('1');
-
-
-  const {isSuccess,
-    isLoading,  
-    isFetching,
-    isError,
-    data: { data: expert = {} , meta: meta = null} = {} }  = useQuery(["expert", expertId],
-                                         () => getExpert(expertId),
-                                       {
-                                         keepPreviousData: true,
-                                         refetchOnMount: false,
-                                         refetchOnWindowFocus: false,
-                                         initialData: serverExpert 
-                                       }
-                                     ); 
-
-
-   /*  const handleClick = (key) => {
-      setKey(`${key}`);
-  //    console.log({activeKey});
-    }
- */
-    const exp = expert.attributes;
-    const name = exp.user?.data?.attributes?.name;
-    const surname = exp.user?.data?.attributes?.surname;
-    const username = `${name} ${surname}`;
-    const feedbacks = exp.feedbacks?.data;
-    const userImage = exp.user?.data?.attributes?.avatar?.data?.attributes?.url?? '';
-    const cRating = exp.rating;
-    
-    const cityName = theme.cities.find(city => city.id === exp.user?.data?.attributes?.city)?.city;
-
-    console.log('expert--------------------------', expert);
-
-if (isLoading || isFetching) {
-    return
-}
-
-if (isError) {
-    console.log('error in expert query (useQuery())');
-    return
-}
-
-const feedBacksBlock = <>
-    <Feedbacks
-        feedbacks={feedbacks}
-    >
-
-    </Feedbacks>
-</>
-
-const userTitle = <>  
-        <Space>
-             <UserImage
-                  image= {userImage}
-                      online={false}
-                      width= {200}
-                      username={username}
-                       />       
-                    
-               <div style={{margin:'0 0 20px 20px'}}>
-                   <div>
-                       <span>{name} {surname}</span>
-                   </div>
-                   <Space style={{
-                                    width: "100%", 
-                                    display:'flex', 
-                                    justifyContent:'space-between',
-                                    marginTop: '10px',
-                                    }}>
-
-                    <div style={ {
-                         display: 'flex',
-                         flexDirection: 'row',
-                         justifyContent: 'flex-start',
-                         alignItems: 'center',
-                        }}>
-
-                        <EnvironmentOutlined 
-                            style={{
-                              color : 'grey', 
-                              fontSize: `24px`, 
-                              fontWeight: "600"
-                              }}/>
-                   
-                       <div style={{ 
-                                    fontSize: '22px', 
-                                    color: 'grey', 
-                                    marginLeft: '10px',
-                                    }}>
-                           {cityName}
-                       </div>
-
-                       </div>
-
-                       {/* <div>
-                           <RatingBar
-                               stars = {values.stars}
-                               cups = {values.cups}
-                               reviews = {values.reviews}
-                           />
-                       </div> */}
-                   </Space>
-                </div>
-        </Space>
-        </>;
-
-const tabItems = [
-    {
-      key: '1',
-      label: t('labels.information'),
-      children: <Info expert={expert}/>,
-    },
-    {
-      key: '2',
-      label: t('labels.feedbacks'),
-      children: feedBacksBlock,
-    },
-  ];
-
-  const p = theme?.gutters?.gorizontal[theme?.id];
-
-  const pad = `${p}px`;
-
-
-    return(
-        <>
-
-        <PageHeader title= {userTitle}>
-            <div style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                width: '100%',
-                height: '100%',    
-            }}>
-                <Button style={{marginTop: 'auto', marginBottom: 'auto', marginLeft: 'auto', marginRight: 'auto', }}>НАПИСАТЬ В ЧАТ</Button>
-            </div>
-        </PageHeader>
-
-        <PageContainer>
-            <Col xs={0} sm={0} md={18} lg={18} xl={18}>
-               
-               
-                    <Tabs  defaultActiveKey="1" 
-                     items={tabItems} 
-                       // onChange={onChange} 
-                     //style={{marginTop:'40px'}}
-                      />
-               
-                
-            </Col>
-
-            <Col xs={0} sm={0} md={6} lg={6} xl={6}>
-                <Row gutter = {[pad, pad]} style={{marginTop: '66px'}}>
-                <div className={styles.ratingCup} style={{padding: `0px 0px 0px ${pad}`, overflow: 'hidden'}}>
-                    <div className={styles.firstContainer} style={{marginLeft: "0px"}}>
-                        <h3 className={styles.title}>Рейтинг</h3>
-                        <div className={styles.subrow}>
-                        <TrophyOutlined style={{color : "#F4B336" ,  
-                            fontSize: `24px`, 
-                            fontWeight: "600"}}
-                />
-                            <span className={styles.cupNum}>{cRating}</span>
-                        </div>
-                    </div>
-                    <TrophyOutlined style={{color : "#F4B336" , 
-                            marginRight: '-50px',
-                            fontSize: `150px`, 
-                            fontWeight: "600", 
-                            opacity : 0.2}}
-                />
-                </div>
-
-                 <SideFeedbacks feedbacks={feedbacks}/> 
-
-                </Row>
-            </Col> 
-        </PageContainer>
-        </>
-    )
-
-}
-
-
-async function getExpert(id) {
-
-   
-    const data = await createStrapiAxios()
- 
-   .get(`/experts/${id}?populate[0]=branches&populate[1]=user.avatar&populate[2]=feedbacks.author.avatar&populate[3]=educations.diplom&populate[4]=specializations`)
-   .then(res => res.data)
-   .catch(e => {
-      console.log("ERROR in GetExpert --------", e);
-      return null;
-    });
-  
-   return (data) 
-  
-  };
-
-
-export async function getServerSideProps(context) {
-  
-    const {id} = context.query;
-
-    const data = await getExpert(id);
-      
-    return { props: { serverExpert: data } }  
+  if (!expert) {
+    return <Result status="404" title="Эксперт не найден" style={{ marginTop: '120px' }} />;
   }
 
+  const { user } = expert;
+  const pad = `${theme?.gutters?.gorizontal?.[theme?.id] ?? 20}px`;
+  const avatar = theme.isDesktop ? 200 : 110;
 
-//***************************************************************************************************************************** */
-
-
-  function Info ({expert}) {
-
-    const cExpert = expert.attributes;
-
-    const branches = cExpert.branches.data?? [];
-    const educations = cExpert.educations.data?? [];
-    const experience = cExpert.experience;
-    const description = cExpert.description;
-    
-    console.log('cExpert-------------------------------------------', cExpert);
-
-
-    const expStr = experience ? `${experience} лет` : 'Не указан';  //  t()-------------------------------------------------------------------------------------------------------------------------------
-
-    const theme = useThemeContext();
-
-    const gutter = theme?.gutters?.gorizontal[theme?.id]?? 20;
-
-    const pad = `${gutter}px`;
-
-
-    const contentStyle = {
-        height: '160px',
-        color: '#fff',
-        lineHeight: '160px',
-        textAlign: 'center',
-        background: '#364d79',
-      };
-
-const branchesLabels = branches.map(item => {
-    return (
-        <span key={item.id} className={styles.lawType} style={{fontSize: "14px"}}>{item.attributes?.name?? '----not found----'}</span>
-    )
-});
-
-let diploms = [];
-
-const educationCards = educations.map(item => {
-
-    const cItem = item.attributes;
-    const uCityName = theme.cities.find(city => city.id === cItem.city)?.city;
-   const diplom = cItem.diplom?.data?.attributes?.url?? '';
-   const cImage = `${process.env.NEXT_PUBLIC_UPLOADS_API}${diplom}`;
-
-    return (
-        <>
-        {/* <Col xs={24} sm={24} md={12} lg={12} xl={12}> */}
-        <div 
-            className={styles.education} 
-            style={{
-                display: "flex", 
-                justifyContent: "flex-start",
-                alignItems: 'center',
-                flexDirection: 'row',
-                }}>
-            <div >
-              
-                <AntImage
-                  src={cImage}
-                  width = {"100px"}
-                  height={"150px"}
-                />
-            </div>
-            <div style={{
-                display: "flex", 
-                justifyContent: "flex-start",
-                alignItems: 'start',
-                flexDirection: 'column',
-                marginLeft: pad,
-            }}>
-                <h4 className={styles.subtitle}><span className={styles.univercity1}>{cItem.university}</span></h4>
-                <div className={styles.subrow1}>
-     
-                    <span className={styles.univercitySpec2} style={{marginLeft: '0px'}}>{cItem.speciality}</span> 
-                    <div className={styles.circleDivider}></div>
-                    <span className={styles.year}>{cItem.year}</span>
-                </div>
-            </div>
+  const title = (
+    <Space align="center" size="large">
+      <UserImage image={user.avatarUrl ?? ''} width={avatar} />
+      <div>
+        <div>
+          {user.name} {user.surname ?? ''}
+          {expert.verified && (
+            <Tooltip title="Документы проверены">
+              <SafetyCertificateOutlined style={{ color: '#32D69B', marginLeft: '12px', fontSize: '0.7em' }} />
+            </Tooltip>
+          )}
         </div>
-   
-</>
-    )
-});
+        {user.city && (
+          <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px', color: 'grey', fontSize: '22px' }}>
+            <EnvironmentOutlined style={{ fontSize: '24px' }} />
+            <span style={{ marginLeft: '10px' }}>{user.city.name}</span>
+          </div>
+        )}
+      </div>
+    </Space>
+  );
 
+  return (
+    <>
+      <PageHeader title={title} />
+      <PageContainer>
+        <Col xs={24} sm={24} md={18} lg={18} xl={18}>
+          <Tabs
+            defaultActiveKey="info"
+            items={[
+              { key: 'info', label: t('labels.information'), children: <Info expert={expert} /> },
+              {
+                key: 'feedbacks',
+                label: `${t('labels.feedbacks')} (${expert.reviewsCount})`,
+                children: <Feedbacks expertId={expert.id} />,
+              },
+            ]}
+          />
+        </Col>
 
+        <Col xs={24} sm={24} md={6} lg={6} xl={6}>
+          <Row gutter={[pad, pad]} style={{ marginTop: theme.isDesktop ? '66px' : 0 }}>
+            <div className={styles.ratingCup} style={{ padding: `0px 0px 0px ${pad}`, overflow: 'hidden' }}>
+              <div className={styles.firstContainer} style={{ marginLeft: '0px' }}>
+                <h3 className={styles.title}>Рейтинг</h3>
+                <div className={styles.subrow}>
+                  <TrophyOutlined style={{ color: '#F4B336', fontSize: '24px' }} />
+                  <span className={styles.cupNum}>{expert.rating}</span>
+                </div>
+              </div>
+              <TrophyOutlined style={{ color: '#F4B336', marginRight: '-50px', fontSize: '150px', opacity: 0.2 }} />
+            </div>
+            <SideFeedbacks
+              starsAvg={expert.starsAvg}
+              reviewsCount={expert.reviewsCount}
+              distribution={reviews?.distribution}
+            />
+          </Row>
+        </Col>
+      </PageContainer>
+    </>
+  );
+}
 
+function Info({ expert }) {
+  const theme = useThemeContext();
+  const pad = `${theme?.gutters?.gorizontal?.[theme?.id] ?? 20}px`;
+  const years = expert.experience;
 
-    return (
-        <div className={styles.blockMain}>
-        
-           {/* <div className={styles.row1}> */}
-               <Row gutter={[pad, pad]} style={{width: "100%"}}>
-                   <Col xs={24} sm={24} md={9} lg={9} xl={9}>
-                        <div style={{display:'flex', flexDirection: "column", flexWrap:'wrap', width:'100%'}}>
-                                <p className={styles.title}>Специализация</p>
-                               {/*  <span className={styles.occupation}>{specialization.name}</span> */}
-                                <div className={styles.subrow} style={{marginLeft: "-20px"}}>
-                                    <span className={styles.comment} style={{marginLeft: "20px", marginTop: "10px", color : "darkgrey"}}>Стаж</span>
-                                    <span className={styles.experience} style={{marginTop: "10px"}}>{expStr}</span>
-                                    <div style={{display:'flex', flexWrap:'nowrap', marginLeft: "20px", justifyContent: "flex-start", marginTop: "10px"}}>
-                                        <UserOutlined style={{color : "darkgrey"}}/>
-                                        {/* <span className={styles.facetype}>{fis ? "Физ. лицо" : "Юр. лицо"}</span>   Need to add a fis field into DB expert model*/} 
-                                        <span className={styles.facetype}>Физ. лицо</span> 
-                                    </div>    
-                                 </div>
-                        </div>
-                    </Col>
-                    <Col xs={24} sm={24} md={15} lg={15} xl={15}>
-                        <div className={styles.category}>
-                            <p className={styles.title}>Категории права</p>
-                            <div className={styles.subrow}>
-                                {branchesLabels}
-       
-                            </div>
-                        </div>
-                    </Col>
-               </Row>
-           {/* </div> */}
-           <div className={styles.row2} style={{width: "100%"}}>
-               <h3 className={styles.title}>Личная информация</h3>
-               <h4 className={styles.comment2}>О себе</h4>
-               <div className={styles.personalInfo}><span className={styles.personalText}>{description}</span></div>
-           </div>
+  return (
+    <div className={styles.blockMain}>
+      <Row gutter={[pad, pad]} style={{ width: '100%' }}>
+        <Col xs={24} sm={24} md={9} lg={9} xl={9}>
+          <p className={styles.title}>Специализация</p>
+          <span className={styles.occupation}>
+            {expert.specializations.map((spec) => spec.name).join(', ') || 'Не указана'}
+          </span>
+          <div className={styles.subrow} style={{ marginLeft: '-20px' }}>
+            <span className={styles.comment} style={{ marginLeft: '20px', marginTop: '10px', color: 'darkgrey' }}>
+              Стаж
+            </span>
+            <span className={styles.experience} style={{ marginTop: '10px' }}>
+              {years === null ? 'Не указан' : `${years} ${plural(years, 'год', 'года', 'лет')}`}
+            </span>
+            <div style={{ display: 'flex', marginLeft: '20px', marginTop: '10px' }}>
+              <UserOutlined style={{ color: 'darkgrey' }} />
+            </div>
+          </div>
+        </Col>
+        <Col xs={24} sm={24} md={15} lg={15} xl={15}>
+          <div className={styles.category}>
+            <p className={styles.title}>Категории права</p>
+            <div className={styles.subrow}>
+              {expert.branches.map((branch) => (
+                <span key={branch.id} className={styles.lawType} style={{ fontSize: '14px' }}>
+                  {branch.name}
+                </span>
+              ))}
+            </div>
+          </div>
+        </Col>
+      </Row>
 
-           <div className={styles.row4}>
-                <h3 className={styles.title}>Образование</h3>
-             
-                <Row style = {{width: "100%"}} gutter={[pad, pad]}>
-                    {educationCards}
-                </Row>
-           </div>
-       {/*     
-           <div className={styles.row5} style={{width: "100%"}}>
-                <div className={styles.withArrows}>
-                    <h3 className={styles.title}>Сертификаты и документы</h3>
-                </div>    
-         
-           
-                <Carousel 
-                    width='90%'
-                    centerMode={true} 
-                    centerSlidePercentage='25'
-                    //centerSlidePercentage={theme?.id === 'xl' || theme?.id === 'xxl' ? '30' : '50' }
-                    infiniteLoop={false} showArrows={true} showThumbs={false}
-                    emulateTouch={true} swipeable={true}
-                    >
-                    {diplomsCards}
-                </Carousel>
-           </div> */}
-     
-    </div> 
-    )
+      {expert.description && (
+        <div className={styles.row2} style={{ width: '100%' }}>
+          <h3 className={styles.title}>Личная информация</h3>
+          <h4 className={styles.comment2}>О себе</h4>
+          <div className={styles.personalInfo}>
+            <span className={styles.personalText} style={{ whiteSpace: 'pre-wrap' }}>
+              {expert.description}
+            </span>
+          </div>
+        </div>
+      )}
+
+      {expert.services.length > 0 && (
+        <div className={styles.row4}>
+          <h3 className={styles.title}>Услуги и цены</h3>
+          {expert.services.map((service) => (
+            <div
+              key={service.id}
+              style={{ display: 'flex', justifyContent: 'space-between', gap: '20px', padding: '8px 0', borderBottom: '1px solid #EAEFF6' }}
+            >
+              <span>{service.title}</span>
+              <span style={{ whiteSpace: 'nowrap', color: '#0066FF' }}>{service.price.toLocaleString('ru-RU')} ₽</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {expert.educations.length > 0 && (
+        <div className={styles.row4}>
+          <h3 className={styles.title}>Образование</h3>
+          <Row style={{ width: '100%' }} gutter={[pad, pad]}>
+            {expert.educations.map((education) => (
+              <Col key={education.id} xs={24} sm={24} md={12} lg={12} xl={12}>
+                <div className={styles.education}>
+                  <h4 className={styles.subtitle}>
+                    <span className={styles.univercity1}>{education.university}</span>
+                    {education.hasDiploma && (
+                      <Tooltip title="Диплом загружен">
+                        <SafetyCertificateOutlined style={{ color: '#32D69B', marginLeft: '8px' }} />
+                      </Tooltip>
+                    )}
+                  </h4>
+                  <div className={styles.subrow1}>
+                    <span className={styles.univercitySpec2}>{education.speciality}</span>
+                    <div className={styles.circleDivider}></div>
+                    <span className={styles.year}>{education.year}</span>
+                  </div>
+                </div>
+              </Col>
+            ))}
+          </Row>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export async function getServerSideProps(context) {
+  try {
+    return { props: { serverExpert: await experts.get(context.query.id, createApi(context)) } };
+  } catch {
+    return { props: { serverExpert: null } };
+  }
 }
