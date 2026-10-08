@@ -1,9 +1,10 @@
-import { PaperClipOutlined } from '@ant-design/icons';
+import { CheckOutlined, PaperClipOutlined } from '@ant-design/icons';
 import { Button, Result, Spin } from 'antd';
 import moment from 'moment';
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { chat } from '../../../lib/api';
 import { useSocketEvent } from '../../context/socketContext';
+import Composer from './composer';
 
 const PAGE = 30;
 
@@ -28,7 +29,15 @@ function Bubble({ message, mine }) {
             </a>
           </div>
         ))}
-        <div style={{ fontSize: '11px', opacity: 0.7, textAlign: 'right' }}>{moment(message.createdAt).format('HH:mm')}</div>
+        <div style={{ fontSize: '11px', opacity: 0.7, textAlign: 'right' }}>
+          {moment(message.createdAt).format('HH:mm')}
+          {mine && (
+            <span role="img" aria-label={message.read ? 'Прочитано' : 'Отправлено'} style={{ marginLeft: '6px' }}>
+              <CheckOutlined />
+              {message.read && <CheckOutlined style={{ marginLeft: '-7px' }} />}
+            </span>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -38,8 +47,9 @@ const dayLabel = (date) =>
   moment(date).calendar(null, { sameDay: '[Сегодня]', lastDay: '[Вчера]', lastWeek: 'D MMMM', sameElse: 'D MMMM YYYY' });
 
 /**
- * Messages of one chat, oldest at the top, with earlier pages loaded on
- * demand. Opening the chat marks the companion's messages as read.
+ * One chat: messages oldest at the top with earlier pages loaded on demand,
+ * and the box for writing. Seeing the companion's messages marks them read;
+ * own messages show one tick when sent and two when read.
  */
 export default function Thread({ conversationId, viewerId, onRead }) {
   const [messages, setMessages] = useState([]);
@@ -79,11 +89,21 @@ export default function Thread({ conversationId, viewerId, onRead }) {
   // Pushed by the server for both sides, so the sender's other tabs follow too.
   useSocketEvent('message:new', (message) => {
     if (message.conversationId !== conversationId || state !== 'ready') return;
-    setMessages((current) => (current.some((item) => item.id === message.id) ? current : [...current, message]));
+    append(message);
     if (message.senderId !== viewerId) {
       markRead();
     }
   });
+
+  useSocketEvent('message:read', (event) => {
+    if (event.conversationId === conversationId && event.readerId !== viewerId) {
+      setMessages((current) => current.map((item) => (item.senderId === viewerId ? { ...item, read: true } : item)));
+    }
+  });
+
+  const append = (message) => {
+    setMessages((current) => (current.some((item) => item.id === message.id) ? current : [...current, message]));
+  };
 
   const lastId = messages[messages.length - 1]?.id;
   useLayoutEffect(() => {
@@ -115,6 +135,7 @@ export default function Thread({ conversationId, viewerId, onRead }) {
 
   let previousDay = null;
   return (
+    <>
     <div ref={box} style={{ flex: 1, overflowY: 'auto', padding: '12px 16px' }} aria-live="polite">
       {state === 'loading' && (
         <div style={{ textAlign: 'center', marginTop: '60px' }}>
@@ -147,5 +168,7 @@ export default function Thread({ conversationId, viewerId, onRead }) {
         );
       })}
     </div>
+    {state === 'ready' && <Composer conversationId={conversationId} onSent={append} />}
+    </>
   );
 }

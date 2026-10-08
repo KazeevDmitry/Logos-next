@@ -1,11 +1,11 @@
-import { CalendarOutlined, EnvironmentOutlined, PaperClipOutlined } from '@ant-design/icons';
+import { CalendarOutlined, EnvironmentOutlined, MessageOutlined, PaperClipOutlined } from '@ant-design/icons';
 import { Button, Col, Divider, Result } from 'antd';
 import moment from 'moment';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useQuery, useQueryClient } from 'react-query';
-import { tasks } from '../../lib/api';
+import { chat, tasks } from '../../lib/api';
 import { createApi } from '../../lib/api/client';
 import PageContainer from '../../src/components/layouts/pageContainer';
 import PageHeader from '../../src/components/layouts/pageHeader';
@@ -45,6 +45,14 @@ export default function TaskPage({ serverTask }) {
     enabled: Boolean(task) && (isAuthor || hasOwnOffer),
     refetchOnWindowFocus: false,
   });
+
+  // Every offer has a chat between the author and the expert who made it.
+  const { data: conversations = [] } = useQuery(['chat', 'conversations'], () => chat.conversations(), {
+    enabled: Boolean(task) && (isAuthor || hasOwnOffer),
+    refetchOnWindowFocus: false,
+  });
+  const chatWith = (userId) =>
+    conversations.find((conversation) => conversation.task.id === id && conversation.companion.id === userId);
 
   const refresh = () => {
     queryClient.invalidateQueries(['task', id]);
@@ -125,26 +133,37 @@ export default function TaskPage({ serverTask }) {
               {isAuthor && responses.length === 0 && (
                 <p style={{ color: '#5E6674', marginTop: '12px' }}>Пока никто не откликнулся.</p>
               )}
-              {responses.map((response) => (
-                <ResponseCard
-                  key={response.id}
-                  response={response}
-                  chosen={task.performer?.expertId === response.expert.expertId}
-                  actions={
-                    isAuthor && task.status === 'OPEN' ? (
-                      <Button
-                        type="primary"
-                        loading={running === 'choose'}
-                        onClick={() => runAction('choose', { responseId: response.id })}
-                      >
-                        Выбрать исполнителем
-                      </Button>
-                    ) : !isAuthor && task.status === 'OPEN' ? (
-                      <Button onClick={withdraw}>Отозвать отклик</Button>
-                    ) : null
-                  }
-                />
-              ))}
+              {responses.map((response) => {
+                const conversation = chatWith(isAuthor ? response.expert.user.id : task.author.id);
+                return (
+                  <ResponseCard
+                    key={response.id}
+                    response={response}
+                    chosen={task.performer?.expertId === response.expert.expertId}
+                    actions={
+                      <>
+                        {isAuthor && task.status === 'OPEN' && (
+                          <Button
+                            type="primary"
+                            loading={running === 'choose'}
+                            onClick={() => runAction('choose', { responseId: response.id })}
+                          >
+                            Выбрать исполнителем
+                          </Button>
+                        )}
+                        {conversation && (
+                          <Link href={`/messages?chat=${conversation.id}`}>
+                            <Button icon={<MessageOutlined />}>
+                              {isAuthor ? 'Написать эксперту' : 'Написать заказчику'}
+                            </Button>
+                          </Link>
+                        )}
+                        {!isAuthor && task.status === 'OPEN' && <Button onClick={withdraw}>Отозвать отклик</Button>}
+                      </>
+                    }
+                  />
+                );
+              })}
             </div>
           )}
         </Col>
