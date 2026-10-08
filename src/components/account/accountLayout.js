@@ -5,10 +5,12 @@ import { useUserContext } from '../../context/userContext';
 import PageContainer from '../layouts/pageContainer';
 import PageHeader from '../layouts/pageHeader';
 
-/** Sections of the personal account. `expert` ones are shown to experts only. */
+/** Sections of the personal account: `expert` ones for experts only, `customer` ones for the rest. */
 const MENU = [
   { key: '/personalaccount', label: 'Обзор' },
   { key: '/personalaccount/profile', label: 'Личные данные' },
+  { key: '/personalaccount/expert', label: 'Профиль эксперта', expert: true },
+  { key: '/personalaccount/expert', label: 'Стать экспертом', customer: true },
   { key: '/mytasks', label: 'Мои задачи' },
   { key: '/myresponses', label: 'Мои отклики', expert: true },
 ];
@@ -21,7 +23,7 @@ export default function AccountLayout({ title, children }) {
   const router = useRouter();
   const { isExpert } = useUserContext();
   const pad = `${theme?.gutters?.gorizontal?.[theme?.id] ?? 20}px`;
-  const items = MENU.filter((item) => !item.expert || isExpert).map(({ key, label }) => ({ key, label }));
+  const items = MENU.filter((item) => (isExpert ? !item.customer : !item.expert)).map(({ key, label }) => ({ key, label }));
 
   return (
     <>

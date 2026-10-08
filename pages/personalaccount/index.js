@@ -1,5 +1,5 @@
 import { CheckCircleFilled, RightOutlined } from '@ant-design/icons';
-import { Progress } from 'antd';
+import { Button, Progress } from 'antd';
 import Link from 'next/link';
 import { withAuth } from '../../lib/withAuth';
 import AccountLayout from '../../src/components/account/accountLayout';
@@ -59,6 +59,18 @@ function AccountOverview({ user }) {
           </ul>
         </div>
       </div>
+
+      {user.role === 'USER' && (
+        <div style={{ marginTop: '30px', padding: '20px', borderRadius: '10px', background: '#F0F2F6' }}>
+          <div style={{ fontSize: '18px', fontWeight: 500 }}>Вы юрист, адвокат или нотариус?</div>
+          <p style={{ color: '#5E6674', margin: '6px 0 14px' }}>
+            Станьте экспертом: откликайтесь на задачи заказчиков и отвечайте на вопросы.
+          </p>
+          <Link href="/personalaccount/expert">
+            <Button type="primary">Стать экспертом</Button>
+          </Link>
+        </div>
+      )}
     </AccountLayout>
   );
 }
