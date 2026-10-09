@@ -36,7 +36,15 @@ function AvatarEditor({ user }) {
   };
 
   return (
-    <div style={{ display: 'flex', gap: '20px', alignItems: 'center', flexWrap: 'wrap', marginBottom: '30px' }}>
+    <div
+      style={{
+        display: 'flex',
+        gap: '20px',
+        alignItems: 'center',
+        flexWrap: 'wrap',
+        marginBottom: '30px',
+      }}
+    >
       <UserImage image={user.avatarUrl ?? ''} width={110} />
       <div>
         <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
@@ -55,7 +63,11 @@ function AvatarEditor({ user }) {
             </Button>
           </Upload>
           {user.avatarUrl && (
-            <Button icon={<DeleteOutlined />} disabled={busy} onClick={() => change(() => users.removeAvatar())}>
+            <Button
+              icon={<DeleteOutlined />}
+              disabled={busy}
+              onClick={() => change(() => users.removeAvatar())}
+            >
               Удалить
             </Button>
           )}
@@ -123,7 +135,11 @@ function ProfilePage({ user }) {
           cityId: user.city?.id,
         }}
       >
-        <Form.Item name="name" label="Имя" rules={[{ required: true, whitespace: true, message: 'Укажите имя' }]}>
+        <Form.Item
+          name="name"
+          label="Имя"
+          rules={[{ required: true, whitespace: true, message: 'Укажите имя' }]}
+        >
           <Input size={theme?.size} maxLength={60} autoComplete="given-name" />
         </Form.Item>
         <Form.Item name="surname" label="Фамилия">
@@ -142,7 +158,13 @@ function ProfilePage({ user }) {
             },
           ]}
         >
-          <Input size={theme?.size} maxLength={24} inputMode="tel" autoComplete="tel" placeholder="+7" />
+          <Input
+            size={theme?.size}
+            maxLength={24}
+            inputMode="tel"
+            autoComplete="tel"
+            placeholder="+7"
+          />
         </Form.Item>
         <Form.Item name="cityId" label="Город">
           <CitySelect />

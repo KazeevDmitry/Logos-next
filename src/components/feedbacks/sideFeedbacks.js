@@ -18,7 +18,10 @@ export default function SideFeedbacks({ starsAvg = 0, reviewsCount = 0, distribu
     <div className={styles.block} style={{ padding: pad }}>
       <div className={styles.blockHeader}>
         <span>{t('labels.feedbacks')}</span>
-        <div className={styles.prockHeader} style={{ color: reviewsCount > 0 ? '#F44336' : '#CED3DB' }}>
+        <div
+          className={styles.prockHeader}
+          style={{ color: reviewsCount > 0 ? '#F44336' : '#CED3DB' }}
+        >
           <StarOutlined /> <span>{starsAvg.toFixed(1)}</span>
         </div>
       </div>
@@ -26,7 +29,12 @@ export default function SideFeedbacks({ starsAvg = 0, reviewsCount = 0, distribu
         const count = distribution[stars] ?? 0;
         const percent = reviewsCount > 0 ? (count * 100) / reviewsCount : 0;
         return (
-          <Row key={stars} gutter={[10, 10]} style={{ marginTop: '15px', width: '100%' }} align="middle">
+          <Row
+            key={stars}
+            gutter={[10, 10]}
+            style={{ marginTop: '15px', width: '100%' }}
+            align="middle"
+          >
             <Col flex="20px">{stars}</Col>
             <Col flex="auto">
               <div style={{ width: '100%', height: '3px', backgroundColor: '#EAEFF6' }}>

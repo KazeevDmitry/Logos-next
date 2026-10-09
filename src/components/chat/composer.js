@@ -31,7 +31,11 @@ export default function Composer({ conversationId, onSent }) {
       setFiles([]);
       onSent(message);
     } catch (e) {
-      setError(errorStatus(e) === 429 ? 'Слишком много сообщений подряд. Подождите минуту.' : errorMessage(e));
+      setError(
+        errorStatus(e) === 429
+          ? 'Слишком много сообщений подряд. Подождите минуту.'
+          : errorMessage(e),
+      );
     } finally {
       setBusy(false);
     }
@@ -54,7 +58,14 @@ export default function Composer({ conversationId, onSent }) {
           placeholder="Напишите сообщение"
           aria-label="Сообщение"
         />
-        <Button type="primary" icon={<SendOutlined />} loading={busy} disabled={empty} onClick={send} aria-label="Отправить" />
+        <Button
+          type="primary"
+          icon={<SendOutlined />}
+          loading={busy}
+          disabled={empty}
+          onClick={send}
+          aria-label="Отправить"
+        />
       </div>
       <div style={{ marginTop: '8px' }}>
         <FileUploader value={files} onChange={setFiles} max={MAX_FILES} label="Прикрепить файл" />

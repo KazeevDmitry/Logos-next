@@ -16,7 +16,13 @@ const UPLOAD_ERRORS = {
  * so the component works as an antd Form control; the form then sends
  * `value.map((file) => file.id)`.
  */
-export default function FileUploader({ value = [], onChange, max = 5, accept, label = 'Прикрепить файл' }) {
+export default function FileUploader({
+  value = [],
+  onChange,
+  max = 5,
+  accept,
+  label = 'Прикрепить файл',
+}) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
 
@@ -38,7 +44,10 @@ export default function FileUploader({ value = [], onChange, max = 5, accept, la
   return (
     <div>
       {value.map((file) => (
-        <div key={file.id} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+        <div
+          key={file.id}
+          style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}
+        >
           <PaperClipOutlined />
           <a href={file.url} target="_blank" rel="noreferrer" style={{ overflowWrap: 'anywhere' }}>
             {file.name}

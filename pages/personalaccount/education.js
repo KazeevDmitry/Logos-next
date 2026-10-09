@@ -74,7 +74,11 @@ function EducationModal({ education, open, onClose, onSaved }) {
         <Form.Item name="city" label="Город">
           <Input maxLength={100} />
         </Form.Item>
-        <Form.Item name="year" label="Год окончания" rules={[{ required: true, message: 'Укажите год окончания' }]}>
+        <Form.Item
+          name="year"
+          label="Год окончания"
+          rules={[{ required: true, message: 'Укажите год окончания' }]}
+        >
           <InputNumber min={1950} max={THIS_YEAR + 8} precision={0} style={{ width: '140px' }} />
         </Form.Item>
         <Form.Item
@@ -82,10 +86,16 @@ function EducationModal({ education, open, onClose, onSaved }) {
           label="Диплом"
           extra="Скан или фото диплома. Его видите только вы и администратор; в профиле появится отметка «диплом загружен»."
         >
-          <FileUploader max={1} accept="image/jpeg,image/png,image/webp,application/pdf" label="Прикрепить диплом" />
+          <FileUploader
+            max={1}
+            accept="image/jpeg,image/png,image/webp,application/pdf"
+            label="Прикрепить диплом"
+          />
         </Form.Item>
         <FormError>{error}</FormError>
-        <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '16px' }}>
+        <div
+          style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '16px' }}
+        >
           <Button onClick={onClose}>Отмена</Button>
           <Button type="primary" htmlType="submit" loading={busy}>
             Сохранить
@@ -99,9 +109,13 @@ function EducationModal({ education, open, onClose, onSaved }) {
 function EducationPage() {
   const queryClient = useQueryClient();
   const { successNotification, infoNotification } = useNotifyContext();
-  const { data: educations = [], isLoading } = useQuery(['my-educations'], () => experts.educations(), {
-    refetchOnWindowFocus: false,
-  });
+  const { data: educations = [], isLoading } = useQuery(
+    ['my-educations'],
+    () => experts.educations(),
+    {
+      refetchOnWindowFocus: false,
+    },
+  );
   // undefined: closed; null: adding; an entry: editing it.
   const [editing, setEditing] = useState(undefined);
 
@@ -137,7 +151,13 @@ function EducationPage() {
       {educations.map((education) => (
         <div
           key={education.id}
-          style={{ display: 'flex', gap: '16px', padding: '16px 0', borderBottom: '1px solid #EEF0F4', alignItems: 'flex-start' }}
+          style={{
+            display: 'flex',
+            gap: '16px',
+            padding: '16px 0',
+            borderBottom: '1px solid #EEF0F4',
+            alignItems: 'flex-start',
+          }}
         >
           <div style={{ flex: 1, minWidth: 0, overflowWrap: 'anywhere' }}>
             <div style={{ fontSize: '18px', fontWeight: 500 }}>{education.university}</div>
@@ -158,12 +178,22 @@ function EducationPage() {
             aria-label={`Изменить: ${education.university}`}
             onClick={() => setEditing(education)}
           />
-          <Popconfirm title="Удалить эту запись?" okText="Да" cancelText="Нет" onConfirm={() => remove(education)}>
+          <Popconfirm
+            title="Удалить эту запись?"
+            okText="Да"
+            cancelText="Нет"
+            onConfirm={() => remove(education)}
+          >
             <Button icon={<DeleteOutlined />} aria-label={`Удалить: ${education.university}`} />
           </Popconfirm>
         </div>
       ))}
-      <Button type="primary" icon={<PlusOutlined />} style={{ marginTop: '20px' }} onClick={() => setEditing(null)}>
+      <Button
+        type="primary"
+        icon={<PlusOutlined />}
+        style={{ marginTop: '20px' }}
+        onClick={() => setEditing(null)}
+      >
         Добавить образование
       </Button>
     </AccountLayout>

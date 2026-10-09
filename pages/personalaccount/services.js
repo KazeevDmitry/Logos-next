@@ -46,7 +46,9 @@ function ServicesPage() {
         <Form
           onFinish={save}
           style={{ maxWidth: '760px' }}
-          initialValues={{ services: expert.services.map(({ title, price }) => ({ title, price })) }}
+          initialValues={{
+            services: expert.services.map(({ title, price }) => ({ title, price })),
+          }}
         >
           <p style={{ color: '#5E6674' }}>
             Что вы делаете и сколько это стоит. Список показывается в вашем профиле в этом порядке.
@@ -68,7 +70,10 @@ function ServicesPage() {
                         aria-label={`Услуга ${index + 1}`}
                       />
                     </Form.Item>
-                    <Form.Item name={[name, 'price']} rules={[{ required: true, message: 'Укажите цену' }]}>
+                    <Form.Item
+                      name={[name, 'price']}
+                      rules={[{ required: true, message: 'Укажите цену' }]}
+                    >
                       <InputNumber
                         size={theme?.size}
                         min={0}
@@ -90,7 +95,10 @@ function ServicesPage() {
                 ))}
                 {fields.length === 0 && <p>Услуг пока нет.</p>}
                 {fields.length < MAX_SERVICES && (
-                  <Button icon={<PlusOutlined />} onClick={() => add({ title: '', price: undefined })}>
+                  <Button
+                    icon={<PlusOutlined />}
+                    onClick={() => add({ title: '', price: undefined })}
+                  >
                     Добавить услугу
                   </Button>
                 )}

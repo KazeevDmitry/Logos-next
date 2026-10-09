@@ -68,10 +68,21 @@ export default function ListPage({
               <Spin size="large" />
             </div>
           )}
-          {isError && <Result status="warning" title="Не удалось загрузить список" subTitle="Обновите страницу." />}
-          {!isLoading && !isError && items.length === 0 && <Empty description={emptyText} style={{ margin: '60px 0' }} />}
+          {isError && (
+            <Result
+              status="warning"
+              title="Не удалось загрузить список"
+              subTitle="Обновите страницу."
+            />
+          )}
+          {!isLoading && !isError && items.length === 0 && (
+            <Empty description={emptyText} style={{ margin: '60px 0' }} />
+          )}
 
-          <Row gutter={[pad, pad]} style={{ marginBottom: '20px', opacity: isFetching && !isLoading ? 0.6 : 1 }}>
+          <Row
+            gutter={[pad, pad]}
+            style={{ marginBottom: '20px', opacity: isFetching && !isLoading ? 0.6 : 1 }}
+          >
             {items.map((item) => (
               <Col key={item.id} span={24}>
                 {renderItem(item)}

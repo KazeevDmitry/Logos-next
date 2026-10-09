@@ -19,7 +19,11 @@ function MockPaymentPage() {
   const id = Number(router.query.id);
   const [busy, setBusy] = useState(null);
   const [error, setError] = useState('');
-  const { data: payment, isLoading, isError } = useQuery(['payment', id], () => finance.payment(id), {
+  const {
+    data: payment,
+    isLoading,
+    isError,
+  } = useQuery(['payment', id], () => finance.payment(id), {
     enabled: Number.isFinite(id),
     retry: false,
     refetchOnWindowFocus: false,
@@ -56,16 +60,29 @@ function MockPaymentPage() {
         message="Это демонстрационная страница оплаты"
         description="Настоящие деньги не списываются. Выберите, чем закончится платёж."
       />
-      <div style={{ fontSize: '32px', color: '#0066FF', margin: '24px 0 4px' }}>{roubles(payment.amount)}</div>
+      <div style={{ fontSize: '32px', color: '#0066FF', margin: '24px 0 4px' }}>
+        {roubles(payment.amount)}
+      </div>
       <p>
         Оплата задачи <Link href={`/task/${payment.taskId}`}>№ {payment.taskId}</Link>
       </p>
       {payment.status === 'PENDING' ? (
         <div style={{ display: 'grid', gap: '10px', marginTop: '20px' }}>
-          <Button type="primary" size="large" loading={busy === 'succeeded'} disabled={busy === 'failed'} onClick={() => complete('succeeded')}>
+          <Button
+            type="primary"
+            size="large"
+            loading={busy === 'succeeded'}
+            disabled={busy === 'failed'}
+            onClick={() => complete('succeeded')}
+          >
             Оплатить
           </Button>
-          <Button size="large" loading={busy === 'failed'} disabled={busy === 'succeeded'} onClick={() => complete('failed')}>
+          <Button
+            size="large"
+            loading={busy === 'failed'}
+            disabled={busy === 'succeeded'}
+            onClick={() => complete('failed')}
+          >
             Отклонить платёж
           </Button>
         </div>

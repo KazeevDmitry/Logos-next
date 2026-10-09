@@ -34,7 +34,12 @@ function PayoutModal({ open, available, onClose, onDone }) {
 
   return (
     <Modal open={open} destroyOnClose title="Вывод средств" onCancel={onClose} footer={null}>
-      <Form layout="vertical" preserve={false} onFinish={send} initialValues={{ amount: available }}>
+      <Form
+        layout="vertical"
+        preserve={false}
+        onFinish={send}
+        initialValues={{ amount: available }}
+      >
         <Form.Item
           name="amount"
           label="Сумма"
@@ -59,7 +64,9 @@ function PayoutModal({ open, available, onClose, onDone }) {
           <Input.TextArea rows={3} maxLength={500} showCount />
         </Form.Item>
         <FormError>{error}</FormError>
-        <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '16px' }}>
+        <div
+          style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '16px' }}
+        >
           <Button onClick={onClose}>Отмена</Button>
           <Button type="primary" htmlType="submit" loading={busy}>
             Отправить заявку
@@ -89,16 +96,29 @@ export default function Payouts({ available }) {
         onClose={() => setOpen(false)}
         onDone={() => {
           setOpen(false);
-          successNotification('Заявка отправлена', 'Сумма зарезервирована. Мы сообщим, когда деньги будут переведены.');
+          successNotification(
+            'Заявка отправлена',
+            'Сумма зарезервирована. Мы сообщим, когда деньги будут переведены.',
+          );
           queryClient.invalidateQueries('finance');
         }}
       />
-      <div style={{ display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap', marginTop: '20px' }}>
+      <div
+        style={{
+          display: 'flex',
+          gap: '16px',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          marginTop: '20px',
+        }}
+      >
         <Button type="primary" disabled={available < MIN_PAYOUT} onClick={() => setOpen(true)}>
           Вывести средства
         </Button>
         {available < MIN_PAYOUT && (
-          <span style={{ color: '#5E6674' }}>Вывод доступен от {roubles(MIN_PAYOUT)} на балансе.</span>
+          <span style={{ color: '#5E6674' }}>
+            Вывод доступен от {roubles(MIN_PAYOUT)} на балансе.
+          </span>
         )}
       </div>
 
@@ -118,14 +138,18 @@ export default function Payouts({ available }) {
                 }}
               >
                 <div style={{ minWidth: 0, overflowWrap: 'anywhere' }}>
-                  <Tag color={STATUS_COLOR[payout.status]}>{t(`finance.payoutStatus.${payout.status}`)}</Tag>
+                  <Tag color={STATUS_COLOR[payout.status]}>
+                    {t(`finance.payoutStatus.${payout.status}`)}
+                  </Tag>
                   <span style={{ color: '#9AA1AD', fontSize: '13px' }}>
                     {moment(payout.createdAt).format('DD.MM.YYYY, HH:mm')}
                   </span>
                   <div style={{ color: '#5E6674' }}>{payout.details}</div>
                   {payout.comment && <div>Комментарий администратора: {payout.comment}</div>}
                 </div>
-                <div style={{ fontSize: '18px', whiteSpace: 'nowrap' }}>{roubles(payout.amount)}</div>
+                <div style={{ fontSize: '18px', whiteSpace: 'nowrap' }}>
+                  {roubles(payout.amount)}
+                </div>
               </li>
             ))}
           </ul>

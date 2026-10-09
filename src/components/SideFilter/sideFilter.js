@@ -8,7 +8,15 @@ import InputSlider from '../input-slider/input-slider';
 import styles from './sideFilter.module.less';
 
 const BUDGET_RANGE = [1000, 500000];
-const FILTER_KEYS = ['city', 'branch', 'subbranch', 'specialization', 'contractual', 'budgetmin', 'budgetmax'];
+const FILTER_KEYS = [
+  'city',
+  'branch',
+  'subbranch',
+  'specialization',
+  'contractual',
+  'budgetmin',
+  'budgetmax',
+];
 
 /**
  * Filters of a list page. The state lives in the URL query (city, branch,
@@ -22,9 +30,11 @@ export default function SideFilter({
   const router = useRouter();
   const theme = useThemeContext();
 
-  const { branch, specialization, city, budgetmin, budgetmax, contractual, subbranch } = router.query;
+  const { branch, specialization, city, budgetmin, budgetmax, contractual, subbranch } =
+    router.query;
   const negotiable = contractual === 'true';
-  const budget = !negotiable && budgetmin && budgetmax ? { inp1: budgetmin, inp2: budgetmax } : null;
+  const budget =
+    !negotiable && budgetmin && budgetmax ? { inp1: budgetmin, inp2: budgetmax } : null;
 
   /** Applies changes to the query: null or undefined removes a key. Any change returns to page 1. */
   const update = (changes) => {
@@ -43,7 +53,10 @@ export default function SideFilter({
   const divided = { marginTop: '30px', borderTop: '1px solid lightgrey', paddingTop: '20px' };
 
   return (
-    <div className={styles.specBlock} style={{ padding: !theme.isDesktop ? '20px' : pad, marginBottom: pad }}>
+    <div
+      className={styles.specBlock}
+      style={{ padding: !theme.isDesktop ? '20px' : pad, marginBottom: pad }}
+    >
       {!theme.isDesktop && (
         <div className={styles.flexCont}>
           <div className={styles.filterHeader}> Фильтр </div>
@@ -53,7 +66,9 @@ export default function SideFilter({
         </div>
       )}
       {theme.isDesktop && (
-        <div style={{ fontSize: '22px', lineHeight: '22px', fontWeight: '550', marginBottom: pad }}>Фильтр</div>
+        <div style={{ fontSize: '22px', lineHeight: '22px', fontWeight: '550', marginBottom: pad }}>
+          Фильтр
+        </div>
       )}
 
       {show.city && (
@@ -66,7 +81,11 @@ export default function SideFilter({
       {show.spec && (
         <>
           <div className={styles.specBlockHeader}>{t('headers.specialization')}</div>
-          <CityInput marker="spec" value={specialization} onChange={(id) => update({ specialization: id })} />
+          <CityInput
+            marker="spec"
+            value={specialization}
+            onChange={(id) => update({ specialization: id })}
+          />
         </>
       )}
 
@@ -77,7 +96,10 @@ export default function SideFilter({
           </div>
           <BranchSelect
             size={theme.size}
-            value={{ branch_id: branch ? Number(branch) : null, subbranch_id: subbranch ? Number(subbranch) : null }}
+            value={{
+              branch_id: branch ? Number(branch) : null,
+              subbranch_id: subbranch ? Number(subbranch) : null,
+            }}
             onChange={(value) => update({ branch: value.branch_id, subbranch: value.subbranch_id })}
           />
         </>
@@ -132,7 +154,9 @@ export function AskQuestionSideBlock({ style }) {
 
   return (
     <div className={styles.specBlock} style={style}>
-      <span style={{ fontSize: '22px', lineHeight: '22px', fontWeight: '600', textAlign: 'center' }}>
+      <span
+        style={{ fontSize: '22px', lineHeight: '22px', fontWeight: '600', textAlign: 'center' }}
+      >
         Задайте бесплатный вопрос специалистам портала
       </span>
       <Button

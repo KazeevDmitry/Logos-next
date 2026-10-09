@@ -27,7 +27,15 @@ export default function PageHeader({
   const gut = theme?.gutters?.gorizontal[theme?.id] ?? 20;
 
   return (
-    <div style={{ width: '100%', marginTop: '100px', marginLeft: 'auto', marginRight: 'auto', maxWidth }}>
+    <div
+      style={{
+        width: '100%',
+        marginTop: '100px',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        maxWidth,
+      }}
+    >
       {typeof title === 'string' && <Seo title={title} {...seo} />}
       <Row gutter={[gut, gut]}>
         <Col xs={24 - xs} sm={24 - sm} md={24 - md} lg={24 - lg} xl={24 - xl}>
@@ -40,7 +48,14 @@ export default function PageHeader({
         <Col xs={xs} sm={sm} md={md} lg={lg} xl={xl}>
           {!closeBtn && children}
           {closeBtn && (
-            <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'flex-end', height: '100%' }}>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'flex-end',
+                justifyContent: 'flex-end',
+                height: '100%',
+              }}
+            >
               <button
                 type="button"
                 aria-label="Закрыть"

@@ -25,7 +25,12 @@ export function siteUrl(req) {
 }
 
 export async function getServerSideProps({ req, res }) {
-  const lines = ['User-agent: *', ...PRIVATE.map((path) => `Disallow: ${path}`), '', `Sitemap: ${siteUrl(req)}/sitemap.xml`];
+  const lines = [
+    'User-agent: *',
+    ...PRIVATE.map((path) => `Disallow: ${path}`),
+    '',
+    `Sitemap: ${siteUrl(req)}/sitemap.xml`,
+  ];
   res.setHeader('Content-Type', 'text/plain; charset=utf-8');
   res.setHeader('Cache-Control', 'public, max-age=3600');
   res.write(`${lines.join('\n')}\n`);

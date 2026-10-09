@@ -52,7 +52,9 @@ export default function QuestionCard({ question, expanded = false }) {
       <div className={styles.titleBlock}>
         {!expanded && (
           <div className={styles.questionBody}>
-            <span style={{ fontSize: theme.isDesktop ? '28px' : '22px', fontWeight: '450' }}>{question.title}</span>
+            <span style={{ fontSize: theme.isDesktop ? '28px' : '22px', fontWeight: '450' }}>
+              {question.title}
+            </span>
           </div>
         )}
         <BranchPills branch={question.branch} subbranch={question.subbranch} />
@@ -75,12 +77,26 @@ export default function QuestionCard({ question, expanded = false }) {
           </div>
         )}
         <Divider />
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            gap: '16px',
+            flexWrap: 'wrap',
+          }}
+        >
           <AuthorLine user={question.author} />
           <div style={{ display: 'flex', alignItems: 'center', gap: '20px', color: '#5E6674' }}>
             <PublishedDate currDate={new Date(question.createdAt)} textColor="#5E6674" />
-            <span style={{ color: question.answersCount > 0 ? '#32D69B' : '#CED3DB', whiteSpace: 'nowrap' }}>
-              <MessageOutlined /> <Plural count={question.answersCount} i18nextPath="answers.plural" />
+            <span
+              style={{
+                color: question.answersCount > 0 ? '#32D69B' : '#CED3DB',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              <MessageOutlined />{' '}
+              <Plural count={question.answersCount} i18nextPath="answers.plural" />
             </span>
           </div>
         </div>

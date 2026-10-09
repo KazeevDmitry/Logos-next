@@ -47,7 +47,10 @@ function ExpertProfilePage() {
         queryClient.setQueryData(['my-expert'], await experts.become(body));
         // The role changed: the menu and the pages open to experts depend on it.
         await refreshUser();
-        successNotification('Вы стали экспертом', 'Добавьте услуги и образование — так заказчикам проще вас выбрать.');
+        successNotification(
+          'Вы стали экспертом',
+          'Добавьте услуги и образование — так заказчикам проще вас выбрать.',
+        );
       }
     } catch (e) {
       setError(errorMessage(e));
@@ -93,7 +96,14 @@ function ExpertProfilePage() {
         <Form.Item
           name="specializationIds"
           label="Специализация"
-          rules={[{ required: true, type: 'array', min: 1, message: 'Выберите хотя бы одну специализацию' }]}
+          rules={[
+            {
+              required: true,
+              type: 'array',
+              min: 1,
+              message: 'Выберите хотя бы одну специализацию',
+            },
+          ]}
         >
           <Select
             mode="multiple"
@@ -106,7 +116,9 @@ function ExpertProfilePage() {
         <Form.Item
           name="branchIds"
           label="Отрасли права"
-          rules={[{ required: true, type: 'array', min: 1, message: 'Выберите хотя бы одну отрасль' }]}
+          rules={[
+            { required: true, type: 'array', min: 1, message: 'Выберите хотя бы одну отрасль' },
+          ]}
         >
           <Select
             mode="multiple"
@@ -117,7 +129,13 @@ function ExpertProfilePage() {
           />
         </Form.Item>
         <Form.Item name="experience" label="Опыт работы, лет">
-          <InputNumber size={theme?.size} min={0} max={70} precision={0} style={{ width: '160px' }} />
+          <InputNumber
+            size={theme?.size}
+            min={0}
+            max={70}
+            precision={0}
+            style={{ width: '160px' }}
+          />
         </Form.Item>
         <Form.Item name="description" label="О себе">
           <Input.TextArea
@@ -128,7 +146,13 @@ function ExpertProfilePage() {
           />
         </Form.Item>
         <FormError>{error}</FormError>
-        <Button type="primary" htmlType="submit" size={theme?.size} loading={busy} style={{ marginTop: '10px' }}>
+        <Button
+          type="primary"
+          htmlType="submit"
+          size={theme?.size}
+          loading={busy}
+          style={{ marginTop: '10px' }}
+        >
           {isExpert ? 'Сохранить' : 'Стать экспертом'}
         </Button>
       </Form>

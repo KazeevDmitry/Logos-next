@@ -25,22 +25,37 @@ function MyTasks() {
   const performing = isExpert && router.query.role === 'performer';
 
   const setRole = (role) => {
-    router.push({ pathname: router.pathname, query: role === 'performer' ? { role } : {} }, undefined, {
-      shallow: true,
-    });
+    router.push(
+      { pathname: router.pathname, query: role === 'performer' ? { role } : {} },
+      undefined,
+      {
+        shallow: true,
+      },
+    );
   };
 
   return (
     <>
       <PageHeader title="Мои задачи" seo={{ noindex: true }}>
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '100%',
+            height: '100%',
+          }}
+        >
           {createButton(theme?.size)}
         </div>
       </PageHeader>
       <PageContainer>
         {isExpert && (
           <Col span={24}>
-            <Radio.Group value={performing ? 'performer' : 'author'} onChange={(e) => setRole(e.target.value)}>
+            <Radio.Group
+              value={performing ? 'performer' : 'author'}
+              onChange={(e) => setRole(e.target.value)}
+            >
               <Radio.Button value="author">Я заказчик</Radio.Button>
               <Radio.Button value="performer">Я исполнитель</Radio.Button>
             </Radio.Group>

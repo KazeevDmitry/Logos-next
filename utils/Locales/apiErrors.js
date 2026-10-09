@@ -5,12 +5,16 @@
  * general "something went wrong" text rather than in English.
  */
 export default {
-  'A review can be left only after the task is completed': 'Отзыв можно оставить только после завершения задачи',
-  'A task can be edited only while it is open': 'Задачу можно редактировать, только пока она принимает отклики',
+  'A review can be left only after the task is completed':
+    'Отзыв можно оставить только после завершения задачи',
+  'A task can be edited only while it is open':
+    'Задачу можно редактировать, только пока она принимает отклики',
   'A user with this e-mail already exists': 'Пользователь с таким e-mail уже зарегистрирован',
   'Account no longer exists': 'Учётная запись больше не существует',
-  'Another operation on these funds is in progress; try again': 'С этими деньгами уже идёт другая операция. Попробуйте ещё раз',
-  'Another operation on your balance is in progress; try again': 'С вашим балансом уже идёт другая операция. Попробуйте ещё раз',
+  'Another operation on these funds is in progress; try again':
+    'С этими деньгами уже идёт другая операция. Попробуйте ещё раз',
+  'Another operation on your balance is in progress; try again':
+    'С вашим балансом уже идёт другая операция. Попробуйте ещё раз',
   'Article not found': 'Статья не найдена',
   'Choose a branch of law for the question': 'Выберите отрасль права для вопроса',
   'Conversation not found': 'Диалог не найден',
@@ -18,7 +22,8 @@ export default {
   'Education entry not found': 'Запись об образовании не найдена',
   'Expert not found': 'Эксперт не найден',
   'Invalid e-mail or password': 'Неверный e-mail или пароль',
-  'Name your price: this task has a negotiable price': 'Укажите свою цену: у этой задачи цена договорная',
+  'Name your price: this task has a negotiable price':
+    'Укажите свою цену: у этой задачи цена договорная',
   'No file was sent in the "file" field': 'Файл не был отправлен',
   'Not enough funds for this operation': 'Недостаточно средств для этой операции',
   'Not signed in': 'Войдите, чтобы продолжить',
@@ -26,7 +31,8 @@ export default {
   'Only experts can respond to tasks': 'Откликаться на задачи могут только эксперты',
   'Only the author can change this task': 'Изменить задачу может только её автор',
   'Only the author can see the responses to this task': 'Отклики видит только автор задачи',
-  'Only the author of the task can review the performer': 'Оставить отзыв может только автор задачи',
+  'Only the author of the task can review the performer':
+    'Оставить отзыв может только автор задачи',
   'Only the author pays for the task': 'Оплатить задачу может только её автор',
   'Payment not found': 'Платёж не найден',
   'Payout not found': 'Заявка на вывод не найдена',
@@ -34,12 +40,15 @@ export default {
   'Session expired': 'Сессия истекла. Войдите снова',
   'Session not found': 'Сессия не найдена. Войдите снова',
   'Session was revoked': 'Сессия завершена. Войдите снова',
-  'Set a budget or mark the price as negotiable': 'Укажите бюджет или отметьте, что цена договорная',
+  'Set a budget or mark the price as negotiable':
+    'Укажите бюджет или отметьте, что цена договорная',
   'Task not found': 'Задача не найдена',
-  'The comment you are replying to is not in this article': 'Комментарий, на который вы отвечаете, не найден в этой статье',
+  'The comment you are replying to is not in this article':
+    'Комментарий, на который вы отвечаете, не найден в этой статье',
   'The link is invalid or has expired': 'Ссылка недействительна или устарела',
   'The response can no longer be withdrawn': 'Отклик уже нельзя отозвать',
-  'The task was changed by someone else; reload and try again': 'Задача изменилась, пока вы на неё смотрели. Проверьте её состояние и попробуйте ещё раз',
+  'The task was changed by someone else; reload and try again':
+    'Задача изменилась, пока вы на неё смотрели. Проверьте её состояние и попробуйте ещё раз',
   'This account is blocked': 'Учётная запись заблокирована',
   'This payout has already been processed': 'Эта заявка на вывод уже обработана',
   'This response does not belong to the task': 'Этот отклик относится к другой задаче',
@@ -55,5 +64,6 @@ export default {
   'You have not responded to this task': 'Вы не откликались на эту задачу',
   'Your documents are already being checked': 'Ваши документы уже на проверке',
   'Your profile is already verified': 'Ваш профиль уже подтверждён',
-  'fileIds must be files you uploaded and have not used yet': 'Прикрепить можно только свои ещё не использованные файлы',
+  'fileIds must be files you uploaded and have not used yet':
+    'Прикрепить можно только свои ещё не использованные файлы',
 };

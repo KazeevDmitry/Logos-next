@@ -66,7 +66,14 @@ export default function TaskForm({ task, submitText, onSubmit }) {
   };
 
   return (
-    <Form form={form} name="task" layout="vertical" initialValues={toFormValues(task)} onFinish={onFinish} scrollToFirstError>
+    <Form
+      form={form}
+      name="task"
+      layout="vertical"
+      initialValues={toFormValues(task)}
+      onFinish={onFinish}
+      scrollToFirstError
+    >
       <Form.Item
         name="title"
         label="Название задачи"
@@ -75,7 +82,12 @@ export default function TaskForm({ task, submitText, onSubmit }) {
           { min: 5, message: 'Не короче 5 символов' },
         ]}
       >
-        <Input size={theme?.size} maxLength={200} showCount placeholder="Например: раздел имущества при разводе" />
+        <Input
+          size={theme?.size}
+          maxLength={200}
+          showCount
+          placeholder="Например: раздел имущества при разводе"
+        />
       </Form.Item>
 
       <Form.Item
@@ -96,8 +108,18 @@ export default function TaskForm({ task, submitText, onSubmit }) {
         </Radio.Group>
       </Form.Item>
       {priceMode !== 'negotiable' && (
-        <Form.Item name="budget" label="Бюджет, ₽" rules={[{ required: true, message: 'Укажите бюджет' }]}>
-          <InputNumber size={theme?.size} min={1} max={100000000} precision={0} style={{ width: '220px' }} />
+        <Form.Item
+          name="budget"
+          label="Бюджет, ₽"
+          rules={[{ required: true, message: 'Укажите бюджет' }]}
+        >
+          <InputNumber
+            size={theme?.size}
+            min={1}
+            max={100000000}
+            precision={0}
+            style={{ width: '220px' }}
+          />
         </Form.Item>
       )}
 
@@ -116,7 +138,13 @@ export default function TaskForm({ task, submitText, onSubmit }) {
         <CityInput marker="spec" placeholder="Любой специалист" />
       </Form.Item>
       <Form.Item name="branchIds" label="Отрасли права">
-        <Select mode="multiple" allowClear size={theme?.size} optionFilterProp="children" maxTagCount="responsive">
+        <Select
+          mode="multiple"
+          allowClear
+          size={theme?.size}
+          optionFilterProp="children"
+          maxTagCount="responsive"
+        >
           {branches.map((branch) => (
             <Select.Option key={branch.id} value={branch.id}>
               {branch.name}
@@ -134,7 +162,13 @@ export default function TaskForm({ task, submitText, onSubmit }) {
       </Form.Item>
 
       <FormError>{error}</FormError>
-      <Button type="primary" htmlType="submit" size={theme?.size} loading={busy} style={{ marginTop: '16px' }}>
+      <Button
+        type="primary"
+        htmlType="submit"
+        size={theme?.size}
+        loading={busy}
+        style={{ marginTop: '16px' }}
+      >
         {submitText}
       </Button>
     </Form>

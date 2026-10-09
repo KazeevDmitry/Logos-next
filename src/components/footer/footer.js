@@ -1,17 +1,16 @@
 import React from 'react';
 import styles from './footer.module.css';
 
-export default function Footer () {
-  
-    return (
-      <footer className={styles.footer}>
-        {/* <div className={styles.footerContainer}> */}
-          <div className={styles.blockCopyright}>
-            <div className={styles.logo}></div>
-            <div className={styles.copyright}>
-              © Logos — агрегатор юридических услуг. Все права защищены
-            </div>
-            {/* <a href="/" className={styles.confidentialLink}>
+export default function Footer() {
+  return (
+    <footer className={styles.footer}>
+      {/* <div className={styles.footerContainer}> */}
+      <div className={styles.blockCopyright}>
+        <div className={styles.logo}></div>
+        <div className={styles.copyright}>
+          © Logos — агрегатор юридических услуг. Все права защищены
+        </div>
+        {/* <a href="/" className={styles.confidentialLink}>
               Политика конфиденциальности
             </a>
             <a href="/" className={styles.ofertaLink}>
@@ -74,9 +73,8 @@ export default function Footer () {
             <a href="/" className={styles.advertizersLink}>
               Рекламодателям
             </a> */}
-          </div>
-        {/* </div> */}
-      </footer>
-    );
-  }
-
+      </div>
+      {/* </div> */}
+    </footer>
+  );
+}

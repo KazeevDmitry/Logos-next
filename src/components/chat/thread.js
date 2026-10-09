@@ -10,7 +10,9 @@ const PAGE = 30;
 
 function Bubble({ message, mine }) {
   return (
-    <div style={{ display: 'flex', justifyContent: mine ? 'flex-end' : 'flex-start', margin: '6px 0' }}>
+    <div
+      style={{ display: 'flex', justifyContent: mine ? 'flex-end' : 'flex-start', margin: '6px 0' }}
+    >
       <div
         style={{
           maxWidth: 'min(520px, 82%)',
@@ -24,7 +26,12 @@ function Bubble({ message, mine }) {
         {message.text && <div style={{ whiteSpace: 'pre-wrap' }}>{message.text}</div>}
         {message.attachments.map((file) => (
           <div key={file.id}>
-            <a href={file.url} target="_blank" rel="noreferrer" style={{ color: 'inherit', textDecoration: 'underline' }}>
+            <a
+              href={file.url}
+              target="_blank"
+              rel="noreferrer"
+              style={{ color: 'inherit', textDecoration: 'underline' }}
+            >
               <PaperClipOutlined /> {file.name}
             </a>
           </div>
@@ -32,7 +39,11 @@ function Bubble({ message, mine }) {
         <div style={{ fontSize: '11px', opacity: 0.7, textAlign: 'right' }}>
           {moment(message.createdAt).format('HH:mm')}
           {mine && (
-            <span role="img" aria-label={message.read ? 'Прочитано' : 'Отправлено'} style={{ marginLeft: '6px' }}>
+            <span
+              role="img"
+              aria-label={message.read ? 'Прочитано' : 'Отправлено'}
+              style={{ marginLeft: '6px' }}
+            >
               <CheckOutlined />
               {message.read && <CheckOutlined style={{ marginLeft: '-7px' }} />}
             </span>
@@ -44,7 +55,12 @@ function Bubble({ message, mine }) {
 }
 
 const dayLabel = (date) =>
-  moment(date).calendar(null, { sameDay: '[Сегодня]', lastDay: '[Вчера]', lastWeek: 'D MMMM', sameElse: 'D MMMM YYYY' });
+  moment(date).calendar(null, {
+    sameDay: '[Сегодня]',
+    lastDay: '[Вчера]',
+    lastWeek: 'D MMMM',
+    sameElse: 'D MMMM YYYY',
+  });
 
 /**
  * One chat: messages oldest at the top with earlier pages loaded on demand,
@@ -97,12 +113,16 @@ export default function Thread({ conversationId, viewerId, onRead }) {
 
   useSocketEvent('message:read', (event) => {
     if (event.conversationId === conversationId && event.readerId !== viewerId) {
-      setMessages((current) => current.map((item) => (item.senderId === viewerId ? { ...item, read: true } : item)));
+      setMessages((current) =>
+        current.map((item) => (item.senderId === viewerId ? { ...item, read: true } : item)),
+      );
     }
   });
 
   const append = (message) => {
-    setMessages((current) => (current.some((item) => item.id === message.id) ? current : [...current, message]));
+    setMessages((current) =>
+      current.some((item) => item.id === message.id) ? current : [...current, message],
+    );
   };
 
   const lastId = messages[messages.length - 1]?.id;
@@ -130,45 +150,64 @@ export default function Thread({ conversationId, viewerId, onRead }) {
   };
 
   if (state === 'error') {
-    return <Result status="warning" title="Не удалось загрузить переписку" subTitle="Обновите страницу." />;
+    return (
+      <Result
+        status="warning"
+        title="Не удалось загрузить переписку"
+        subTitle="Обновите страницу."
+      />
+    );
   }
 
   let previousDay = null;
   return (
     <>
-    <div ref={box} style={{ flex: 1, overflowY: 'auto', padding: '12px 16px' }} aria-live="polite">
-      {state === 'loading' && (
-        <div style={{ textAlign: 'center', marginTop: '60px' }}>
-          <Spin />
-        </div>
-      )}
-      {hasMore && (
-        <div style={{ textAlign: 'center' }}>
-          <Button type="link" loading={loadingOlder} onClick={loadOlder}>
-            Показать более ранние
-          </Button>
-        </div>
-      )}
-      {state === 'ready' && messages.length === 0 && (
-        <p style={{ color: '#5E6674', textAlign: 'center', marginTop: '60px' }}>Сообщений пока нет.</p>
-      )}
-      {messages.map((message) => {
-        const day = moment(message.createdAt).format('YYYY-MM-DD');
-        const newDay = day !== previousDay;
-        previousDay = day;
-        return (
-          <div key={message.id}>
-            {newDay && (
-              <div style={{ textAlign: 'center', color: '#9AA1AD', fontSize: '12px', margin: '12px 0 4px' }}>
-                {dayLabel(message.createdAt)}
-              </div>
-            )}
-            <Bubble message={message} mine={message.senderId === viewerId} />
+      <div
+        ref={box}
+        style={{ flex: 1, overflowY: 'auto', padding: '12px 16px' }}
+        aria-live="polite"
+      >
+        {state === 'loading' && (
+          <div style={{ textAlign: 'center', marginTop: '60px' }}>
+            <Spin />
           </div>
-        );
-      })}
-    </div>
-    {state === 'ready' && <Composer conversationId={conversationId} onSent={append} />}
+        )}
+        {hasMore && (
+          <div style={{ textAlign: 'center' }}>
+            <Button type="link" loading={loadingOlder} onClick={loadOlder}>
+              Показать более ранние
+            </Button>
+          </div>
+        )}
+        {state === 'ready' && messages.length === 0 && (
+          <p style={{ color: '#5E6674', textAlign: 'center', marginTop: '60px' }}>
+            Сообщений пока нет.
+          </p>
+        )}
+        {messages.map((message) => {
+          const day = moment(message.createdAt).format('YYYY-MM-DD');
+          const newDay = day !== previousDay;
+          previousDay = day;
+          return (
+            <div key={message.id}>
+              {newDay && (
+                <div
+                  style={{
+                    textAlign: 'center',
+                    color: '#9AA1AD',
+                    fontSize: '12px',
+                    margin: '12px 0 4px',
+                  }}
+                >
+                  {dayLabel(message.createdAt)}
+                </div>
+              )}
+              <Bubble message={message} mine={message.senderId === viewerId} />
+            </div>
+          );
+        })}
+      </div>
+      {state === 'ready' && <Composer conversationId={conversationId} onSent={append} />}
     </>
   );
 }

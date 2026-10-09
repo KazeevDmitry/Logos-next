@@ -53,9 +53,18 @@ export default function ConversationList({ conversations, activeId, viewerId, on
                 <span style={{ ...ellipsis, display: 'block', color: '#0066FF', fontSize: '13px' }}>
                   {conversation.task.title}
                 </span>
-                <span style={{ display: 'flex', justifyContent: 'space-between', gap: '8px', color: '#5E6674' }}>
+                <span
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    gap: '8px',
+                    color: '#5E6674',
+                  }}
+                >
                   <span style={ellipsis}>
-                    {conversation.lastMessage && !conversation.lastMessage.text && <PaperClipOutlined />}{' '}
+                    {conversation.lastMessage && !conversation.lastMessage.text && (
+                      <PaperClipOutlined />
+                    )}{' '}
                     {preview(conversation, viewerId)}
                   </span>
                   <Badge count={conversation.unreadCount} size="small" />
@@ -69,6 +78,18 @@ export default function ConversationList({ conversations, activeId, viewerId, on
   );
 }
 
-const ellipsis = { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', minWidth: 0 };
+const ellipsis = {
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+  minWidth: 0,
+};
 /** Time for today, a short date otherwise. */
-const CALENDAR = { sameDay: 'HH:mm', lastDay: '[вчера]', lastWeek: 'DD.MM', sameElse: 'DD.MM.YY', nextDay: 'DD.MM', nextWeek: 'DD.MM' };
+const CALENDAR = {
+  sameDay: 'HH:mm',
+  lastDay: '[вчера]',
+  lastWeek: 'DD.MM',
+  sameElse: 'DD.MM.YY',
+  nextDay: 'DD.MM',
+  nextWeek: 'DD.MM',
+};

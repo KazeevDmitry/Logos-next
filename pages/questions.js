@@ -25,7 +25,15 @@ export default function Questions({ serverData }) {
       title="Вопросы и ответы"
       description="Вопросы юристам и ответы практикующих специалистов. Задайте свой вопрос бесплатно."
       headerChildren={
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '100%',
+            height: '100%',
+          }}
+        >
           <Link href="/addquestion">
             <Button size={theme?.size} type="primary">
               Задать вопрос

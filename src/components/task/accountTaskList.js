@@ -11,7 +11,17 @@ const PAGE_SIZE = 5;
 const FILTERS = { status: ['status', 'text'] };
 
 /** A tab per status; labels: locale `task.tabs`. */
-const TABS = ['all', 'OPEN', 'ASSIGNED', 'AWAITING_PAYMENT', 'IN_PROGRESS', 'REVIEW', 'COMPLETED', 'DISPUTED', 'CANCELLED'];
+const TABS = [
+  'all',
+  'OPEN',
+  'ASSIGNED',
+  'AWAITING_PAYMENT',
+  'IN_PROGRESS',
+  'REVIEW',
+  'COMPLETED',
+  'DISPUTED',
+  'CANCELLED',
+];
 
 /**
  * One of the signed-in user's task lists (created, performing, responded to)
@@ -34,28 +44,48 @@ export default function AccountTaskList({ name, fetcher, emptyText, emptyAction,
   const setStatus = (key) => {
     // A new tab starts from its first page.
     const { status: _status, page: _page, ...rest } = router.query;
-    router.push({ pathname: router.pathname, query: key === 'all' ? rest : { ...rest, status: key } }, undefined, {
-      shallow: true,
-    });
+    router.push(
+      { pathname: router.pathname, query: key === 'all' ? rest : { ...rest, status: key } },
+      undefined,
+      {
+        shallow: true,
+      },
+    );
   };
 
   return (
     <Col span={24}>
-      <Tabs activeKey={status} onChange={setStatus} items={TABS.map((key) => ({ key, label: t(`task.tabs.${key}`) }))} />
+      <Tabs
+        activeKey={status}
+        onChange={setStatus}
+        items={TABS.map((key) => ({ key, label: t(`task.tabs.${key}`) }))}
+      />
 
       {isLoading && (
         <div style={{ display: 'flex', justifyContent: 'center', margin: '60px 0' }}>
           <Spin size="large" />
         </div>
       )}
-      {isError && <Result status="warning" title="Не удалось загрузить список" subTitle="Обновите страницу." />}
+      {isError && (
+        <Result
+          status="warning"
+          title="Не удалось загрузить список"
+          subTitle="Обновите страницу."
+        />
+      )}
       {!isLoading && !isError && items.length === 0 && (
-        <Empty description={status === 'all' ? emptyText : 'В этом статусе задач нет'} style={{ margin: '60px 0' }}>
+        <Empty
+          description={status === 'all' ? emptyText : 'В этом статусе задач нет'}
+          style={{ margin: '60px 0' }}
+        >
           {status === 'all' && emptyAction}
         </Empty>
       )}
 
-      <Row gutter={[pad, pad]} style={{ marginBottom: '20px', opacity: isFetching && !isLoading ? 0.6 : 1 }}>
+      <Row
+        gutter={[pad, pad]}
+        style={{ marginBottom: '20px', opacity: isFetching && !isLoading ? 0.6 : 1 }}
+      >
         {items.map((task) => (
           <Col key={task.id} span={24}>
             <Link href={`/task/${task.id}`} style={{ color: 'black' }}>
@@ -64,7 +94,12 @@ export default function AccountTaskList({ name, fetcher, emptyText, emptyAction,
           </Col>
         ))}
       </Row>
-      <MyPagination page={page} total={data?.total ?? 0} pageSize={PAGE_SIZE} setPage={() => undefined} />
+      <MyPagination
+        page={page}
+        total={data?.total ?? 0}
+        pageSize={PAGE_SIZE}
+        setPage={() => undefined}
+      />
     </Col>
   );
 }

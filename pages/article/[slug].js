@@ -25,12 +25,16 @@ export default function ArticlePage({ serverArticle, serverSimilar = [] }) {
     refetchOnWindowFocus: false,
     staleTime: 30_000,
   });
-  const { data: similar = [] } = useQuery(['article', slug, 'similar'], () => news.similar(slug, 2), {
-    initialData: serverSimilar,
-    enabled: Boolean(article),
-    refetchOnWindowFocus: false,
-    staleTime: 60_000,
-  });
+  const { data: similar = [] } = useQuery(
+    ['article', slug, 'similar'],
+    () => news.similar(slug, 2),
+    {
+      initialData: serverSimilar,
+      enabled: Boolean(article),
+      refetchOnWindowFocus: false,
+      staleTime: 60_000,
+    },
+  );
 
   if (!article) {
     return <Result status="404" title="Статья не найдена" style={{ marginTop: '120px' }} />;
@@ -44,7 +48,11 @@ export default function ArticlePage({ serverArticle, serverSimilar = [] }) {
     <>
       <PageHeader
         title={article.title}
-        seo={{ description: article.description ?? article.content, image: article.imageUrl, type: 'article' }}
+        seo={{
+          description: article.description ?? article.content,
+          image: article.imageUrl,
+          type: 'article',
+        }}
       >
         {article.publishedAt && (
           <PublishedDate
@@ -64,11 +72,21 @@ export default function ArticlePage({ serverArticle, serverSimilar = [] }) {
               <img
                 src={article.imageUrl}
                 alt=""
-                style={{ width: '100%', maxHeight: '480px', objectFit: 'cover', borderRadius: '10px 10px 0px 0px' }}
+                style={{
+                  width: '100%',
+                  maxHeight: '480px',
+                  objectFit: 'cover',
+                  borderRadius: '10px 10px 0px 0px',
+                }}
               />
             )}
-            <div className={stylesArt.articleBlock} style={{ paddingRight: pad, paddingLeft: pad, marginTop: pad }}>
-              {article.description && <p style={{ fontSize: '20px', fontWeight: 500 }}>{article.description}</p>}
+            <div
+              className={stylesArt.articleBlock}
+              style={{ paddingRight: pad, paddingLeft: pad, marginTop: pad }}
+            >
+              {article.description && (
+                <p style={{ fontSize: '20px', fontWeight: 500 }}>{article.description}</p>
+              )}
               {/* Markdown is rendered without raw HTML, so article text cannot inject scripts. */}
               <ReactMarkdown remarkPlugins={[gfm]}>{article.content}</ReactMarkdown>
             </div>

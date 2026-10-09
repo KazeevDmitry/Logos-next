@@ -13,13 +13,13 @@ make logs
 make down
 ```
 
-| Command        | What it does                                   |
-| -------------- | ---------------------------------------------- |
-| `make lint`    | ESLint                                         |
-| `make format`  | Prettier, write changes                        |
-| `make build`   | Production build                               |
+| Command        | What it does                                        |
+| -------------- | --------------------------------------------------- |
+| `make lint`    | ESLint                                              |
+| `make format`  | Prettier, write changes                             |
+| `make build`   | Production build                                    |
 | `make install` | Reinstall dependencies after `package.json` changes |
-| `make shell`   | Shell inside the container                     |
+| `make shell`   | Shell inside the container                          |
 
 Each target is a thin wrapper around `docker compose run --rm web …`; to add a package use `docker compose run --rm web yarn add <name>`.
 

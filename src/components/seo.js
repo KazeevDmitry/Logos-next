@@ -37,8 +37,18 @@ export default function Seo({ title, description, image, noindex = false, type =
       <meta key="og:locale" property="og:locale" content="ru_RU" />
       {url && <meta key="og:url" property="og:url" content={url} />}
       {url && !noindex && <link key="canonical" rel="canonical" href={url} />}
-      {image && <meta key="og:image" property="og:image" content={image.startsWith('http') ? image : `${SITE_URL}${image}`} />}
-      <meta key="twitter:card" name="twitter:card" content={image ? 'summary_large_image' : 'summary'} />
+      {image && (
+        <meta
+          key="og:image"
+          property="og:image"
+          content={image.startsWith('http') ? image : `${SITE_URL}${image}`}
+        />
+      )}
+      <meta
+        key="twitter:card"
+        name="twitter:card"
+        content={image ? 'summary_large_image' : 'summary'}
+      />
     </Head>
   );
 }

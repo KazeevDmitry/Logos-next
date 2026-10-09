@@ -51,10 +51,12 @@ export const emailRules = [
 ];
 
 /** Rule for a "repeat password" field. */
-export const sameAs = (field) => ({ getFieldValue }) => ({
-  validator(_, value) {
-    return !value || getFieldValue(field) === value
-      ? Promise.resolve()
-      : Promise.reject(new Error('Пароли не совпадают'));
-  },
-});
+export const sameAs =
+  (field) =>
+  ({ getFieldValue }) => ({
+    validator(_, value) {
+      return !value || getFieldValue(field) === value
+        ? Promise.resolve()
+        : Promise.reject(new Error('Пароли не совпадают'));
+    },
+  });

@@ -22,9 +22,13 @@ export default function TaskFeedback({ task, onDone }) {
       <div>
         <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
           <Rate disabled value={task.feedback.stars} style={{ color: 'red' }} />
-          <span style={{ color: '#5E6674' }}>{moment(task.feedback.createdAt).format('DD.MM.YYYY')}</span>
+          <span style={{ color: '#5E6674' }}>
+            {moment(task.feedback.createdAt).format('DD.MM.YYYY')}
+          </span>
         </div>
-        <div style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere', marginTop: '10px' }}>{task.feedback.text}</div>
+        <div style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere', marginTop: '10px' }}>
+          {task.feedback.text}
+        </div>
       </div>
     );
   }
@@ -63,7 +67,12 @@ export default function TaskFeedback({ task, onDone }) {
         label="Отзыв"
         rules={[{ required: true, whitespace: true, message: 'Напишите пару слов о работе' }]}
       >
-        <Input.TextArea rows={4} maxLength={3000} showCount placeholder="Что получилось хорошо, что можно улучшить" />
+        <Input.TextArea
+          rows={4}
+          maxLength={3000}
+          showCount
+          placeholder="Что получилось хорошо, что можно улучшить"
+        />
       </Form.Item>
       <Button type="primary" htmlType="submit" loading={sending}>
         Оставить отзыв

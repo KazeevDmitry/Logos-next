@@ -9,19 +9,32 @@ import styles from './expertCard.module.less';
 export default function ExpertCard({ expert }) {
   const theme = useThemeContext();
   const { user } = expert;
-  const avatarSize = theme?.id === 'xxl' || theme?.id === 'xl' ? 150 : theme?.id === 'xs' ? 80 : 110;
+  const avatarSize =
+    theme?.id === 'xxl' || theme?.id === 'xl' ? 150 : theme?.id === 'xs' ? 80 : 110;
 
   return (
     <div className={`${styles.card} ${styles.hoverable ?? ''}`}>
-      <Row gutter={[20, 40]} justify="center" align="middle" wrap={false} style={{ width: '100%', height: '100%' }}>
+      <Row
+        gutter={[20, 40]}
+        justify="center"
+        align="middle"
+        wrap={false}
+        style={{ width: '100%', height: '100%' }}
+      >
         <Col flex={`${avatarSize}px`} style={{ paddingLeft: '0px' }}>
           <UserImage image={user.avatarUrl ?? ''} width={avatarSize} />
         </Col>
 
         <Col flex="auto" style={{ height: '100%' }}>
           <div className={styles.inCardBlock}>
-            <div className={`${styles.wrapBlock} ${styles.branchWrap}`} style={{ marginBottom: '15px' }}>
-              <div className={styles.specname} style={{ marginRight: '20px', marginBottom: '10px' }}>
+            <div
+              className={`${styles.wrapBlock} ${styles.branchWrap}`}
+              style={{ marginBottom: '15px' }}
+            >
+              <div
+                className={styles.specname}
+                style={{ marginRight: '20px', marginBottom: '10px' }}
+              >
                 {user.name} {user.surname ?? ''}
                 {expert.verified && (
                   <Tooltip title="Документы проверены">
@@ -45,7 +58,10 @@ export default function ExpertCard({ expert }) {
             )}
 
             {expert.description && theme.isDesktop && (
-              <Typography.Paragraph style={{ marginBottom: '0px' }} ellipsis={{ rows: 2, tooltip: false }}>
+              <Typography.Paragraph
+                style={{ marginBottom: '0px' }}
+                ellipsis={{ rows: 2, tooltip: false }}
+              >
                 {expert.description}
               </Typography.Paragraph>
             )}
@@ -55,14 +71,22 @@ export default function ExpertCard({ expert }) {
                 {user.city && (
                   <>
                     <EnvironmentOutlined style={{ fontSize: '19px', fontWeight: '600' }} />
-                    <div className={styles.occupation} style={{ marginLeft: '10px', fontSize: '15px' }}>
+                    <div
+                      className={styles.occupation}
+                      style={{ marginLeft: '10px', fontSize: '15px' }}
+                    >
                       {user.city.name}
                     </div>
                   </>
                 )}
               </div>
               <div style={{ width: '100%', maxWidth: '200px', marginTop: '10px' }}>
-                <RatingBar stars={expert.starsAvg} cups={expert.rating} reviews={expert.reviewsCount} fontSize={15} />
+                <RatingBar
+                  stars={expert.starsAvg}
+                  cups={expert.rating}
+                  reviews={expert.reviewsCount}
+                  fontSize={15}
+                />
               </div>
             </div>
           </div>

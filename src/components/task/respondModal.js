@@ -50,7 +50,11 @@ export default function RespondModal({ task, open, onClose, onDone }) {
         <Form.Item
           name="price"
           label="Ваша цена, ₽"
-          extra={negotiable ? 'Цена по договоренности: назовите свою.' : `Если не указать, будет бюджет задачи: ${task.budget.toLocaleString('ru-RU')} ₽.`}
+          extra={
+            negotiable
+              ? 'Цена по договоренности: назовите свою.'
+              : `Если не указать, будет бюджет задачи: ${task.budget.toLocaleString('ru-RU')} ₽.`
+          }
           rules={negotiable ? [{ required: true, message: 'Назовите цену' }] : []}
         >
           <InputNumber min={1} max={100000000} precision={0} style={{ width: '200px' }} />

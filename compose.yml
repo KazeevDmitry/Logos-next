@@ -10,7 +10,7 @@ services:
       API_INTERNAL_URL: http://host.docker.internal:4000
       NEXT_PUBLIC_WS_URL: http://localhost:4000
     ports:
-      - "${WEB_PORT:-3000}:3000"
+      - '${WEB_PORT:-3000}:3000'
     volumes:
       # node_modules stays inside the mounted folder (installed by the container,
       # never by the host) so the editor's TypeScript server can read the types.

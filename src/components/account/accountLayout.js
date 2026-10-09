@@ -34,17 +34,22 @@ export default function AccountLayout({ title, children }) {
   const { isExpert } = useUserContext();
   const { t } = useTranslation();
   const pad = `${theme?.gutters?.gorizontal?.[theme?.id] ?? 20}px`;
-  const items = MENU.filter((item) => (isExpert ? !item.customer : !item.expert)).map(({ key, label }) => ({
-    key,
-    label: t(`account.menu.${label}`),
-  }));
+  const items = MENU.filter((item) => (isExpert ? !item.customer : !item.expert)).map(
+    ({ key, label }) => ({
+      key,
+      label: t(`account.menu.${label}`),
+    }),
+  );
 
   return (
     <>
       <PageHeader title={title} seo={{ noindex: true }} />
       <PageContainer>
         <Col xs={24} sm={24} md={8} lg={7} xl={6}>
-          <nav aria-label={t('account.menu.label')} style={{ ...accountBlock, padding: '10px 0', overflow: 'hidden' }}>
+          <nav
+            aria-label={t('account.menu.label')}
+            style={{ ...accountBlock, padding: '10px 0', overflow: 'hidden' }}
+          >
             <Menu
               mode={theme.isDesktop ? 'inline' : 'horizontal'}
               selectedKeys={[router.pathname]}

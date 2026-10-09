@@ -13,19 +13,25 @@
 # Usage
 
 ## With chaining
+
 <Icon['FILE_NAME_WITHOUT_EXTENSION'] />
 
 ### Example
+
 <Icon.Message />
 
 ## With children
+
 <LogosIcon>FILE_NAME_WITHOUT_EXTENSION</LogosIcon>
 
 ### Example
+
 <LogosIcon>Message</LogosIcon>
 
 ## Or with prop
+
 <LogosIcon name="FILE_NAME_WITHOUT_EXTENSION" />
 
 ### Example
+
 <LogosIcon name="Message" />

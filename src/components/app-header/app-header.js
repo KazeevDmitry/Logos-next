@@ -12,7 +12,14 @@ import MessagesLink from './messagesLink';
 import NotificationBell from './notificationBell';
 
 /** A <button> that looks like the element it replaced: no border, no background. */
-const plainButton = { border: 'none', background: 'none', padding: 0, font: 'inherit', color: 'inherit', textAlign: 'left' };
+const plainButton = {
+  border: 'none',
+  background: 'none',
+  padding: 0,
+  font: 'inherit',
+  color: 'inherit',
+  textAlign: 'left',
+};
 
 /**
  * The site header: logo, sections, and for a signed-in user the chat and
@@ -75,14 +82,27 @@ export default function AppHeader({ loading }) {
               <Button
                 htmlType="button"
                 ghost
-                style={{ height: '30px', fontSize: '12px', marginRight: '30px', borderRadius: '4px' }}
+                style={{
+                  height: '30px',
+                  fontSize: '12px',
+                  marginRight: '30px',
+                  borderRadius: '4px',
+                }}
                 onClick={() => router.push('/login')}
               >
                 {t('buttons.mobileheaderBtn')}
               </Button>
             )}
             {signedIn && (
-              <div style={{ marginRight: '30px', display: 'flex', alignItems: 'center', gap: '14px', color: 'white' }}>
+              <div
+                style={{
+                  marginRight: '30px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '14px',
+                  color: 'white',
+                }}
+              >
                 <MessagesLink size={20} />
                 <NotificationBell size={20} />
                 <Link href="/personalaccount" aria-label="Личный кабинет">
@@ -95,7 +115,10 @@ export default function AppHeader({ loading }) {
       )}
 
       {theme?.isDesktop && (
-        <header className={styles.mainHeader} style={{ paddingTop: '5px', paddingBottom: loading ? '0px' : '5px' }}>
+        <header
+          className={styles.mainHeader}
+          style={{ paddingTop: '5px', paddingBottom: loading ? '0px' : '5px' }}
+        >
           <div className={styles.menu}>
             <div className={styles.mainLogo}>
               <Link href="/" className={styles.logosHeader} style={{ color: '#1890ff' }}>
@@ -118,7 +141,14 @@ export default function AppHeader({ loading }) {
 
               <div className={styles.toolBar} style={{ fontSize: '16px' }}>
                 {signedIn && (
-                  <span style={{ marginRight: '18px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <span
+                    style={{
+                      marginRight: '18px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '10px',
+                    }}
+                  >
                     <MessagesLink />
                     <NotificationBell />
                   </span>
@@ -147,7 +177,12 @@ export default function AppHeader({ loading }) {
                 )}
                 {!signedIn && (
                   <Link href="/login">
-                    <Button type="primary" htmlType="button" size={theme.size} style={{ marginLeft: '20px', fontFamily: 'inherit' }}>
+                    <Button
+                      type="primary"
+                      htmlType="button"
+                      size={theme.size}
+                      style={{ marginLeft: '20px', fontFamily: 'inherit' }}
+                    >
                       Войти
                     </Button>
                   </Link>
@@ -157,7 +192,11 @@ export default function AppHeader({ loading }) {
           </div>
 
           {loading && (
-            <div style={{ width: '100%', overflow: 'hidden', margin: '0', height: '5px' }} role="progressbar" aria-label="Загрузка страницы">
+            <div
+              style={{ width: '100%', overflow: 'hidden', margin: '0', height: '5px' }}
+              role="progressbar"
+              aria-label="Загрузка страницы"
+            >
               <div className={styles.horizontalgradient} />
             </div>
           )}
@@ -167,7 +206,9 @@ export default function AppHeader({ loading }) {
       {menuOpen && (
         <DropMenu
           className={theme?.isDesktop ? styles.userMenuBox : styles.mobileUserMenuBox}
-          groups={theme?.isDesktop ? [USER_MENU_ITEMS] : signedIn ? [PAGES, USER_MENU_ITEMS] : [PAGES]}
+          groups={
+            theme?.isDesktop ? [USER_MENU_ITEMS] : signedIn ? [PAGES, USER_MENU_ITEMS] : [PAGES]
+          }
           onClose={closeMenu}
           onSignOut={signedIn ? signOut : null}
           signOutText={t('buttons.logoff')}
@@ -199,7 +240,11 @@ function DropMenu({ className, groups, onClose, onSignOut, signOutText }) {
   useEffect(() => {
     const onMouseDown = (event) => {
       // The button that opened the menu toggles it itself.
-      if (box.current && !box.current.contains(event.target) && !event.target.closest('[aria-expanded]')) {
+      if (
+        box.current &&
+        !box.current.contains(event.target) &&
+        !event.target.closest('[aria-expanded]')
+      ) {
         onClose();
       }
     };

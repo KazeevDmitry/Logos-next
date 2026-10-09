@@ -12,7 +12,9 @@ const REFRESH_MS = 60_000;
 function NoticeList({ onNavigate }) {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { data, isLoading } = useQuery(['notifications', 'latest'], () => notifications.list({ pageSize: SHOWN }));
+  const { data, isLoading } = useQuery(['notifications', 'latest'], () =>
+    notifications.list({ pageSize: SHOWN }),
+  );
   const refresh = () => queryClient.invalidateQueries('notifications');
 
   const open = (notice) => {
@@ -41,12 +43,16 @@ function NoticeList({ onNavigate }) {
   }
   const items = data?.items ?? [];
   if (items.length === 0) {
-    return <Empty description="Уведомлений пока нет" style={{ width: '340px', margin: '10px 0' }} />;
+    return (
+      <Empty description="Уведомлений пока нет" style={{ width: '340px', margin: '10px 0' }} />
+    );
   }
 
   return (
     <div style={{ width: 'min(340px, 80vw)' }}>
-      <ul style={{ listStyle: 'none', margin: 0, padding: 0, maxHeight: '60vh', overflowY: 'auto' }}>
+      <ul
+        style={{ listStyle: 'none', margin: 0, padding: 0, maxHeight: '60vh', overflowY: 'auto' }}
+      >
         {items.map((notice) => (
           <li key={notice.id}>
             <button
@@ -65,7 +71,9 @@ function NoticeList({ onNavigate }) {
             >
               <div style={{ fontWeight: notice.read ? 400 : 600 }}>{notice.title}</div>
               <div style={{ color: '#5E6674', overflowWrap: 'anywhere' }}>{notice.body}</div>
-              <div style={{ color: '#9AA1AD', fontSize: '12px' }}>{moment(notice.createdAt).fromNow()}</div>
+              <div style={{ color: '#9AA1AD', fontSize: '12px' }}>
+                {moment(notice.createdAt).fromNow()}
+              </div>
             </button>
           </li>
         ))}
@@ -100,7 +108,14 @@ export default function NotificationBell({ size = 22 }) {
       <button
         type="button"
         aria-label={unread > 0 ? `Уведомления, непрочитанных: ${unread}` : 'Уведомления'}
-        style={{ border: 'none', background: 'none', cursor: 'pointer', padding: '6px', lineHeight: 1, color: 'inherit' }}
+        style={{
+          border: 'none',
+          background: 'none',
+          cursor: 'pointer',
+          padding: '6px',
+          lineHeight: 1,
+          color: 'inherit',
+        }}
       >
         <Badge count={unread} size="small" overflowCount={99}>
           <BellOutlined style={{ fontSize: `${size}px` }} />

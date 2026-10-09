@@ -8,7 +8,8 @@ import pluralizeEn from 'pluralize';
 function Plural({ count = 0, i18nextPath = '' }) {
   const { t, i18n } = useTranslation();
 
-  const num = typeof count === 'number' ? count : Number(String(count ?? 0).replace(/[^\d.-]/g, '')) || 0;
+  const num =
+    typeof count === 'number' ? count : Number(String(count ?? 0).replace(/[^\d.-]/g, '')) || 0;
   const form = (id) => t(`${i18nextPath}.${id}`);
 
   if ((i18n.language ?? 'ru').startsWith('en')) {

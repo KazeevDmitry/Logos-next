@@ -72,8 +72,8 @@ function EmailNotifications({ user }) {
         <span>Присылать уведомления на e-mail</span>
       </label>
       <p style={{ color: '#5E6674', marginTop: '8px', maxWidth: '560px' }}>
-        Об откликах, выборе исполнителя, оплате и новых сообщениях. На сайте уведомления показываются всегда; письма о
-        входе и пароле приходят в любом случае.
+        Об откликах, выборе исполнителя, оплате и новых сообщениях. На сайте уведомления
+        показываются всегда; письма о входе и пароле приходят в любом случае.
       </p>
     </>
   );
@@ -112,7 +112,12 @@ function ChangePassword() {
         >
           <Input.Password size={theme?.size} maxLength={128} autoComplete="current-password" />
         </Form.Item>
-        <Form.Item name="newPassword" label="Новый пароль" rules={passwordRules} extra="Не короче 8 символов, с буквой и цифрой">
+        <Form.Item
+          name="newPassword"
+          label="Новый пароль"
+          rules={passwordRules}
+          extra="Не короче 8 символов, с буквой и цифрой"
+        >
           <Input.Password size={theme?.size} maxLength={128} autoComplete="new-password" />
         </Form.Item>
         <Form.Item
@@ -124,7 +129,13 @@ function ChangePassword() {
           <Input.Password size={theme?.size} maxLength={128} autoComplete="new-password" />
         </Form.Item>
         <FormError>{error}</FormError>
-        <Button type="primary" htmlType="submit" size={theme?.size} loading={busy} style={{ marginTop: '10px' }}>
+        <Button
+          type="primary"
+          htmlType="submit"
+          size={theme?.size}
+          loading={busy}
+          style={{ marginTop: '10px' }}
+        >
           Изменить пароль
         </Button>
       </Form>

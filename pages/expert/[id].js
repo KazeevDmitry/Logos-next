@@ -1,4 +1,9 @@
-import { EnvironmentOutlined, SafetyCertificateOutlined, TrophyOutlined, UserOutlined } from '@ant-design/icons';
+import {
+  EnvironmentOutlined,
+  SafetyCertificateOutlined,
+  TrophyOutlined,
+  UserOutlined,
+} from '@ant-design/icons';
 import { Col, Result, Row, Space, Tabs, Tooltip } from 'antd';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
@@ -57,12 +62,22 @@ export default function ExpertPage({ serverExpert }) {
           {user.name} {user.surname ?? ''}
           {expert.verified && (
             <Tooltip title="Документы проверены">
-              <SafetyCertificateOutlined style={{ color: '#32D69B', marginLeft: '12px', fontSize: '0.7em' }} />
+              <SafetyCertificateOutlined
+                style={{ color: '#32D69B', marginLeft: '12px', fontSize: '0.7em' }}
+              />
             </Tooltip>
           )}
         </div>
         {user.city && (
-          <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px', color: 'grey', fontSize: '22px' }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              marginTop: '10px',
+              color: 'grey',
+              fontSize: '22px',
+            }}
+          >
             <EnvironmentOutlined style={{ fontSize: '24px' }} />
             <span style={{ marginLeft: '10px' }}>{user.city.name}</span>
           </div>
@@ -98,7 +113,10 @@ export default function ExpertPage({ serverExpert }) {
 
         <Col xs={24} sm={24} md={6} lg={6} xl={6}>
           <Row gutter={[pad, pad]} style={{ marginTop: theme.isDesktop ? '66px' : 0 }}>
-            <div className={styles.ratingCup} style={{ padding: `0px 0px 0px ${pad}`, overflow: 'hidden' }}>
+            <div
+              className={styles.ratingCup}
+              style={{ padding: `0px 0px 0px ${pad}`, overflow: 'hidden' }}
+            >
               <div className={styles.firstContainer} style={{ marginLeft: '0px' }}>
                 <h3 className={styles.title}>Рейтинг</h3>
                 <div className={styles.subrow}>
@@ -106,7 +124,9 @@ export default function ExpertPage({ serverExpert }) {
                   <span className={styles.cupNum}>{expert.rating}</span>
                 </div>
               </div>
-              <TrophyOutlined style={{ color: '#F4B336', marginRight: '-50px', fontSize: '150px', opacity: 0.2 }} />
+              <TrophyOutlined
+                style={{ color: '#F4B336', marginRight: '-50px', fontSize: '150px', opacity: 0.2 }}
+              />
             </div>
             <SideFeedbacks
               starsAvg={expert.starsAvg}
@@ -134,7 +154,10 @@ function Info({ expert }) {
             {expert.specializations.map((spec) => spec.name).join(', ') || 'Не указана'}
           </span>
           <div className={styles.subrow} style={{ marginLeft: '-20px' }}>
-            <span className={styles.comment} style={{ marginLeft: '20px', marginTop: '10px', color: 'darkgrey' }}>
+            <span
+              className={styles.comment}
+              style={{ marginLeft: '20px', marginTop: '10px', color: 'darkgrey' }}
+            >
               Стаж
             </span>
             <span className={styles.experience} style={{ marginTop: '10px' }}>
@@ -177,10 +200,18 @@ function Info({ expert }) {
           {expert.services.map((service) => (
             <div
               key={service.id}
-              style={{ display: 'flex', justifyContent: 'space-between', gap: '20px', padding: '8px 0', borderBottom: '1px solid #EAEFF6' }}
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                gap: '20px',
+                padding: '8px 0',
+                borderBottom: '1px solid #EAEFF6',
+              }}
             >
               <span>{service.title}</span>
-              <span style={{ whiteSpace: 'nowrap', color: '#0066FF' }}>{service.price.toLocaleString('ru-RU')} ₽</span>
+              <span style={{ whiteSpace: 'nowrap', color: '#0066FF' }}>
+                {service.price.toLocaleString('ru-RU')} ₽
+              </span>
             </div>
           ))}
         </div>
@@ -197,7 +228,9 @@ function Info({ expert }) {
                     <span className={styles.univercity1}>{education.university}</span>
                     {education.hasDiploma && (
                       <Tooltip title="Диплом загружен">
-                        <SafetyCertificateOutlined style={{ color: '#32D69B', marginLeft: '8px' }} />
+                        <SafetyCertificateOutlined
+                          style={{ color: '#32D69B', marginLeft: '8px' }}
+                        />
                       </Tooltip>
                     )}
                   </h4>

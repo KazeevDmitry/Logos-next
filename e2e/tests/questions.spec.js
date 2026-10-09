@@ -2,9 +2,15 @@ const { test, expect } = require('@playwright/test');
 const { EXPERT, newPerson, register, signIn, uniqueEmail } = require('./helpers');
 
 test.describe.serial('questions and answers', () => {
-  const asker = { name: 'Глеб', surname: 'Вопросов', email: uniqueEmail('asker'), password: 'Passw0rd-e2e' };
+  const asker = {
+    name: 'Глеб',
+    surname: 'Вопросов',
+    email: uniqueEmail('asker'),
+    password: 'Passw0rd-e2e',
+  };
   const title = `Можно ли вернуть задаток ${Date.now()}?`;
-  const answer = 'Да, если договор не был заключён по вине продавца — в двойном размере (ст. 381 ГК РФ).';
+  const answer =
+    'Да, если договор не был заключён по вине продавца — в двойном размере (ст. 381 ГК РФ).';
   let questionUrl;
 
   test('a signed-out visitor is sent to sign in before asking', async ({ page }) => {
@@ -17,7 +23,9 @@ test.describe.serial('questions and answers', () => {
     await register(page, asker);
     await page.goto('/addquestion');
     await page.getByLabel('Заголовок вопроса').fill(title);
-    await page.getByLabel('Подробности').fill('Внёс задаток за квартиру, продавец передумал продавать.');
+    await page
+      .getByLabel('Подробности')
+      .fill('Внёс задаток за квартиру, продавец передумал продавать.');
     await page.getByLabel('Отрасль права').click();
     await page.locator('.ant-select-tree-node-content-wrapper').first().click();
     await page.getByRole('button', { name: 'Опубликовать вопрос' }).click();

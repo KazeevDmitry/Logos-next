@@ -57,7 +57,12 @@ function AddQuestion() {
                   { min: 5, message: 'Не короче 5 символов' },
                 ]}
               >
-                <Input size={theme?.size} maxLength={200} showCount placeholder="Например: можно ли вернуть товар без чека?" />
+                <Input
+                  size={theme?.size}
+                  maxLength={200}
+                  showCount
+                  placeholder="Например: можно ли вернуть товар без чека?"
+                />
               </Form.Item>
               <Form.Item
                 name="description"
@@ -67,7 +72,11 @@ function AddQuestion() {
                   { min: 10, message: 'Не короче 10 символов' },
                 ]}
               >
-                <Input.TextArea autoSize={{ minRows: 5, maxRows: 16 }} maxLength={10000} showCount />
+                <Input.TextArea
+                  autoSize={{ minRows: 5, maxRows: 16 }}
+                  maxLength={10000}
+                  showCount
+                />
               </Form.Item>
               <Form.Item
                 name="branch"
@@ -83,11 +92,21 @@ function AddQuestion() {
               >
                 <BranchSelect size={theme?.size} />
               </Form.Item>
-              <Form.Item name="attachments" label="Документы (до 5 файлов)" extra="JPG, PNG, WEBP, PDF, DOC, DOCX до 10 МБ">
+              <Form.Item
+                name="attachments"
+                label="Документы (до 5 файлов)"
+                extra="JPG, PNG, WEBP, PDF, DOC, DOCX до 10 МБ"
+              >
                 <FileUploader max={5} />
               </Form.Item>
               <FormError>{error}</FormError>
-              <Button type="primary" htmlType="submit" size={theme?.size} loading={busy} style={{ marginTop: '16px' }}>
+              <Button
+                type="primary"
+                htmlType="submit"
+                size={theme?.size}
+                loading={busy}
+                style={{ marginTop: '16px' }}
+              >
                 Опубликовать вопрос
               </Button>
             </Form>

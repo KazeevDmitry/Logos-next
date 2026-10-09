@@ -31,7 +31,8 @@ export function listParams(query, filters = {}, pageSize = 10) {
     const raw = query[urlKey];
     if (raw === undefined || raw === '') continue;
     if (kind === 'int') params[apiKey] = toInt(raw);
-    else if (kind === 'bool') params[apiKey] = raw === 'true' ? true : raw === 'false' ? false : undefined;
+    else if (kind === 'bool')
+      params[apiKey] = raw === 'true' ? true : raw === 'false' ? false : undefined;
     else params[apiKey] = raw;
   }
   return params;

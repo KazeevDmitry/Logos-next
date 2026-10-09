@@ -5,7 +5,9 @@ import ru from '../utils/Locales/ru.js';
 
 const flat = (object, prefix = '') =>
   Object.entries(object).flatMap(([key, value]) =>
-    value && typeof value === 'object' && !Array.isArray(value) ? flat(value, `${prefix}${key}.`) : [`${prefix}${key}`],
+    value && typeof value === 'object' && !Array.isArray(value)
+      ? flat(value, `${prefix}${key}.`)
+      : [`${prefix}${key}`],
   );
 
 const ruKeys = new Set(flat(ru));

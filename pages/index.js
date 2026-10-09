@@ -72,7 +72,11 @@ export default function Home({ topExperts }) {
       {theme.isDesktop && (
         <div
           className={styles.sectionPromo}
-          style={{ marginLeft: bleed, marginRight: bleed, padding: `0px ${theme?.appContainerPadding}px` }}
+          style={{
+            marginLeft: bleed,
+            marginRight: bleed,
+            padding: `0px ${theme?.appContainerPadding}px`,
+          }}
         >
           <div className={styles.txtWrapper} style={{ height: '100%' }}>
             <h1 className={styles.promoHeader}>{t('main.promo.title')}</h1>
@@ -84,8 +88,14 @@ export default function Home({ topExperts }) {
           {topExperts.slice(0, CIRCLES).map((expert, i) => {
             const slot = CIRCLE_SLOTS[i];
             return (
-              <div key={expert.id} style={{ position: 'absolute', top: slot.top, right: slot.right }}>
-                <Link href={`/expert/${expert.id}`} aria-label={`${expert.user.name} ${expert.user.surname ?? ''}`}>
+              <div
+                key={expert.id}
+                style={{ position: 'absolute', top: slot.top, right: slot.right }}
+              >
+                <Link
+                  href={`/expert/${expert.id}`}
+                  aria-label={`${expert.user.name} ${expert.user.surname ?? ''}`}
+                >
                   <UserImage
                     image={expert.user.avatarUrl ?? ''}
                     width={sizes[slot.size]}
@@ -208,7 +218,11 @@ function MainTabs() {
             { xs: 10, sm: 10, md: 15, lg: 20, xl: 30, xxl: 40 },
           ]}
           className={styles.tabContentBox}
-          style={{ marginLeft: '0px', marginRight: '0px', paddingBottom: lookingForTask ? '35px' : '50px' }}
+          style={{
+            marginLeft: '0px',
+            marginRight: '0px',
+            paddingBottom: lookingForTask ? '35px' : '50px',
+          }}
         >
           <TabCol>
             <Form.Item name="city" label="Город" style={{ marginBottom: '0px', width: '100%' }}>
@@ -216,7 +230,11 @@ function MainTabs() {
             </Form.Item>
           </TabCol>
           <TabCol>
-            <Form.Item name="spec" label="Специализация" style={{ marginBottom: '0px', width: '100%' }}>
+            <Form.Item
+              name="spec"
+              label="Специализация"
+              style={{ marginBottom: '0px', width: '100%' }}
+            >
               <CityInput marker="spec" />
             </Form.Item>
           </TabCol>
@@ -226,13 +244,22 @@ function MainTabs() {
                 <InputSlider maxValues={[1000, 500000]} step={1000} />
               </Form.Item>
             ) : (
-              <Form.Item name="branch" label="Отрасль права" style={{ marginBottom: '25px', width: '100%' }}>
+              <Form.Item
+                name="branch"
+                label="Отрасль права"
+                style={{ marginBottom: '25px', width: '100%' }}
+              >
                 <CityInput marker="catg" />
               </Form.Item>
             )}
           </TabCol>
           <TabCol>
-            <Button size={theme?.size} style={{ width: '100%', marginTop: '33px' }} type="primary" htmlType="submit">
+            <Button
+              size={theme?.size}
+              style={{ width: '100%', marginTop: '33px' }}
+              type="primary"
+              htmlType="submit"
+            >
               {lookingForTask ? 'Найти задачу' : 'Найти исполнителя'}
             </Button>
           </TabCol>
@@ -284,7 +311,11 @@ function InfoBlock({ title, linkTo, linkText, children }) {
 
 export async function getServerSideProps(context) {
   try {
-    return { props: { topExperts: await expertsApi.top(Math.max(CIRCLES, BEST_COUNT), createApi(context)) } };
+    return {
+      props: {
+        topExperts: await expertsApi.top(Math.max(CIRCLES, BEST_COUNT), createApi(context)),
+      },
+    };
   } catch {
     // The page still renders its static parts if the API is unreachable.
     return { props: { topExperts: [] } };

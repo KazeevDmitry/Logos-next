@@ -46,7 +46,12 @@ export default function Login() {
       )}
       <Form name="login" layout="vertical" onFinish={onFinish} validateTrigger="onSubmit">
         <Form.Item name="email" rules={emailRules} style={{ marginBottom: '15px' }}>
-          <Input size={theme?.size} placeholder="E-mail" autoComplete="email" onChange={() => setError('')} />
+          <Input
+            size={theme?.size}
+            placeholder="E-mail"
+            autoComplete="email"
+            onChange={() => setError('')}
+          />
         </Form.Item>
         <Form.Item
           name="password"

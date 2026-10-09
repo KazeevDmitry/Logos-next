@@ -1,5 +1,13 @@
 const { test, expect } = require('@playwright/test');
-const { EXPERT, confirmClick, findLinkInMail, newPerson, register, signIn, uniqueEmail } = require('./helpers');
+const {
+  EXPERT,
+  confirmClick,
+  findLinkInMail,
+  newPerson,
+  register,
+  signIn,
+  uniqueEmail,
+} = require('./helpers');
 
 /**
  * The marketplace loop, end to end, with two people in two browsers:
@@ -7,7 +15,12 @@ const { EXPERT, confirmClick, findLinkInMail, newPerson, register, signIn, uniqu
  * chooses and pays, the expert delivers, the customer accepts and reviews.
  */
 test.describe.serial('a task from publication to review', () => {
-  const customer = { name: 'Вера', surname: 'Тестова', email: uniqueEmail('customer'), password: 'Passw0rd-e2e' };
+  const customer = {
+    name: 'Вера',
+    surname: 'Тестова',
+    email: uniqueEmail('customer'),
+    password: 'Passw0rd-e2e',
+  };
   const title = `Проверка договора аренды ${Date.now()}`;
   let customerPage;
   let expertPage;
@@ -34,7 +47,9 @@ test.describe.serial('a task from publication to review', () => {
   test('the customer publishes a task', async () => {
     await customerPage.goto('/task/new');
     await customerPage.getByLabel('Название задачи').fill(title);
-    await customerPage.getByLabel('Что нужно сделать').fill('Проверить договор аренды офиса и указать на риски для арендатора.');
+    await customerPage
+      .getByLabel('Что нужно сделать')
+      .fill('Проверить договор аренды офиса и указать на риски для арендатора.');
     await customerPage.getByLabel('Бюджет, ₽').fill('15000');
     await customerPage.getByRole('button', { name: 'Опубликовать задачу' }).click();
 
@@ -53,7 +68,9 @@ test.describe.serial('a task from publication to review', () => {
     await signIn(expertPage, EXPERT);
     await expertPage.goto(taskUrl);
     await expertPage.getByRole('button', { name: 'Откликнуться на задачу' }).click();
-    await expertPage.getByLabel('Комментарий к задаче').fill('Проверю за два дня, опыт по аренде 8 лет.');
+    await expertPage
+      .getByLabel('Комментарий к задаче')
+      .fill('Проверю за два дня, опыт по аренде 8 лет.');
     await expertPage.getByLabel('Ваша цена, ₽').fill('14000');
     await expertPage.getByRole('button', { name: 'Отправить отклик' }).click();
 
@@ -63,7 +80,9 @@ test.describe.serial('a task from publication to review', () => {
 
   test('the customer is notified and chooses the expert', async () => {
     await customerPage.goto(taskUrl);
-    await expect(customerPage.getByRole('button', { name: /Уведомления, непрочитанных/ })).toBeVisible();
+    await expect(
+      customerPage.getByRole('button', { name: /Уведомления, непрочитанных/ }),
+    ).toBeVisible();
     await expect(customerPage.getByRole('heading', { name: 'Отклики (1)' })).toBeVisible();
     await customerPage.getByRole('button', { name: 'Выбрать исполнителем' }).click();
 
@@ -89,7 +108,9 @@ test.describe.serial('a task from publication to review', () => {
     await expect(customerPage.getByText('В работе').first()).toBeVisible();
 
     await customerPage.goto('/finance');
-    await expect(customerPage.getByText('Зарезервировано').locator('..')).toContainText(/14\s000 ₽/);
+    await expect(customerPage.getByText('Зарезервировано').locator('..')).toContainText(
+      /14\s000 ₽/,
+    );
   });
 
   test('the expert submits the work', async () => {
@@ -116,7 +137,10 @@ test.describe.serial('a task from publication to review', () => {
     await expect(expertPage.getByText(/\+12\s600 ₽/).first()).toBeVisible();
 
     await expertPage.goto(taskUrl);
-    await expertPage.getByRole('link', { name: new RegExp(EXPERT.name) }).first().click();
+    await expertPage
+      .getByRole('link', { name: new RegExp(EXPERT.name) })
+      .first()
+      .click();
     await expect(expertPage).toHaveURL(/\/expert\/\d+$/);
     await expertPage.getByRole('tab', { name: /Отзывы/ }).click();
     // The review is in the list and in the side column.
@@ -134,7 +158,10 @@ test.describe.serial('a task from publication to review', () => {
 
     await expertPage.goto('/messages');
     await expect(expertPage.getByRole('link', { name: /Сообщения, непрочитанных/ })).toBeVisible();
-    await expertPage.getByRole('button', { name: new RegExp(customer.name) }).first().click();
+    await expertPage
+      .getByRole('button', { name: new RegExp(customer.name) })
+      .first()
+      .click();
     await expect(expertPage.getByText(text).last()).toBeVisible();
   });
 });

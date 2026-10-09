@@ -1,4 +1,9 @@
-import { CalendarOutlined, EnvironmentOutlined, MessageOutlined, PaperClipOutlined } from '@ant-design/icons';
+import {
+  CalendarOutlined,
+  EnvironmentOutlined,
+  MessageOutlined,
+  PaperClipOutlined,
+} from '@ant-design/icons';
 import { Button, Col, Divider, Result } from 'antd';
 import moment from 'moment';
 import Link from 'next/link';
@@ -15,7 +20,11 @@ import ResponseCard from '../../src/components/task/responseCard';
 import TaskActions, { useTaskAction } from '../../src/components/task/taskActions';
 import TaskFeedback from '../../src/components/task/taskFeedback';
 import TaskTimeline from '../../src/components/task/taskTimeline';
-import { taskPrice, TaskStatusPill, ViewerStatusPill } from '../../src/components/taskCard/taskStatus';
+import {
+  taskPrice,
+  TaskStatusPill,
+  ViewerStatusPill,
+} from '../../src/components/taskCard/taskStatus';
 import { useNotifyContext } from '../../src/context/notificationContext';
 import { useThemeContext } from '../../src/context/themeContext';
 import { useUserContext } from '../../src/context/userContext';
@@ -41,18 +50,28 @@ export default function TaskPage({ serverTask }) {
 
   const isAuthor = task?.viewerStatus === 'youAuthor';
   const hasOwnOffer = ['youRespond', 'youChosen', 'youPerformer'].includes(task?.viewerStatus);
-  const { data: responses = [] } = useQuery(['responses', id, currentUser?.id ?? null], () => tasks.responses(id), {
-    enabled: Boolean(task) && (isAuthor || hasOwnOffer),
-    refetchOnWindowFocus: false,
-  });
+  const { data: responses = [] } = useQuery(
+    ['responses', id, currentUser?.id ?? null],
+    () => tasks.responses(id),
+    {
+      enabled: Boolean(task) && (isAuthor || hasOwnOffer),
+      refetchOnWindowFocus: false,
+    },
+  );
 
   // Every offer has a chat between the author and the expert who made it.
-  const { data: conversations = [] } = useQuery(['chat', 'conversations'], () => chat.conversations(), {
-    enabled: Boolean(task) && (isAuthor || hasOwnOffer),
-    refetchOnWindowFocus: false,
-  });
+  const { data: conversations = [] } = useQuery(
+    ['chat', 'conversations'],
+    () => chat.conversations(),
+    {
+      enabled: Boolean(task) && (isAuthor || hasOwnOffer),
+      refetchOnWindowFocus: false,
+    },
+  );
   const chatWith = (userId) =>
-    conversations.find((conversation) => conversation.task.id === id && conversation.companion.id === userId);
+    conversations.find(
+      (conversation) => conversation.task.id === id && conversation.companion.id === userId,
+    );
 
   const refresh = () => {
     queryClient.invalidateQueries(['task', id]);
@@ -79,7 +98,10 @@ export default function TaskPage({ serverTask }) {
         onClose={() => setResponding(false)}
         onDone={() => {
           setResponding(false);
-          successNotification('Отклик отправлен', 'Заказчик увидит его и сможет выбрать вас исполнителем.');
+          successNotification(
+            'Отклик отправлен',
+            'Заказчик увидит его и сможет выбрать вас исполнителем.',
+          );
           refresh();
         }}
       />
@@ -92,11 +114,20 @@ export default function TaskPage({ serverTask }) {
               <ViewerStatusPill viewerStatus={task.viewerStatus} />
             </div>
             {task.specialization && (
-              <div style={{ fontSize: '18px', fontWeight: 500, marginTop: '14px' }}>{task.specialization.name}</div>
+              <div style={{ fontSize: '18px', fontWeight: 500, marginTop: '14px' }}>
+                {task.specialization.name}
+              </div>
             )}
             <BranchPills branches={task.branches} />
             <Divider />
-            <div style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere', fontSize: '16px', lineHeight: '24px' }}>
+            <div
+              style={{
+                whiteSpace: 'pre-wrap',
+                overflowWrap: 'anywhere',
+                fontSize: '16px',
+                lineHeight: '24px',
+              }}
+            >
               {task.text}
             </div>
             {task.documents.length > 0 && (
@@ -158,7 +189,9 @@ export default function TaskPage({ serverTask }) {
                             </Button>
                           </Link>
                         )}
-                        {!isAuthor && task.status === 'OPEN' && <Button onClick={withdraw}>Отозвать отклик</Button>}
+                        {!isAuthor && task.status === 'OPEN' && (
+                          <Button onClick={withdraw}>Отозвать отклик</Button>
+                        )}
                       </>
                     }
                   />
@@ -171,9 +204,13 @@ export default function TaskPage({ serverTask }) {
         <Col xs={24} sm={24} md={24} lg={7} xl={6}>
           <div style={{ ...block, padding: pad }}>
             <div style={{ fontSize: '28px', color: '#0066FF' }}>{taskPrice(task)}</div>
-            {task.agreedPrice !== null && task.budget !== null && task.agreedPrice !== task.budget && (
-              <div style={{ color: '#5E6674' }}>Бюджет задачи: {task.budget.toLocaleString('ru-RU')} ₽</div>
-            )}
+            {task.agreedPrice !== null &&
+              task.budget !== null &&
+              task.agreedPrice !== task.budget && (
+                <div style={{ color: '#5E6674' }}>
+                  Бюджет задачи: {task.budget.toLocaleString('ru-RU')} ₽
+                </div>
+              )}
             <Divider />
             <div style={{ display: 'grid', gap: '10px', color: '#5E6674' }}>
               {task.city && (
@@ -216,7 +253,8 @@ export default function TaskPage({ serverTask }) {
               )}
               {task.status === 'OPEN' && currentUser && !isExpert && !isAuthor && (
                 <span style={{ color: '#5E6674' }}>
-                  Откликаться могут эксперты. <Link href="/personalaccount/expert">Стать экспертом</Link>
+                  Откликаться могут эксперты.{' '}
+                  <Link href="/personalaccount/expert">Стать экспертом</Link>
                 </span>
               )}
               <TaskActions task={task} refresh={refresh} size={theme?.size} />

@@ -24,7 +24,8 @@ function PaymentReturnPage() {
     enabled: Number.isFinite(id),
     retry: false,
     refetchOnWindowFocus: false,
-    refetchInterval: (current) => (current?.status === 'PENDING' && !waitedTooLong ? POLL_MS : false),
+    refetchInterval: (current) =>
+      current?.status === 'PENDING' && !waitedTooLong ? POLL_MS : false,
   });
   const status = payment?.status;
 

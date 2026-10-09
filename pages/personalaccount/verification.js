@@ -32,8 +32,8 @@ function PassportForm({ onSent, again }) {
   return (
     <div style={{ maxWidth: '640px', marginTop: '20px' }}>
       <p>
-        Загрузите скан или фото разворота паспорта с фотографией. Имя и фамилия в паспорте должны совпадать с указанными
-        в профиле.
+        Загрузите скан или фото разворота паспорта с фотографией. Имя и фамилия в паспорте должны
+        совпадать с указанными в профиле.
       </p>
       <p style={{ color: '#5E6674' }}>
         Документ увидит только администратор при проверке. JPG, PNG, WEBP или PDF до 10 МБ.
@@ -46,7 +46,13 @@ function PassportForm({ onSent, again }) {
         label="Выбрать файл"
       />
       <FormError>{error}</FormError>
-      <Button type="primary" style={{ marginTop: '20px' }} disabled={files.length === 0} loading={busy} onClick={send}>
+      <Button
+        type="primary"
+        style={{ marginTop: '20px' }}
+        disabled={files.length === 0}
+        loading={busy}
+        onClick={send}
+      >
         {again ? 'Отправить повторно' : 'Отправить на проверку'}
       </Button>
     </div>
@@ -100,10 +106,16 @@ function VerificationPage() {
               type="error"
               showIcon
               message="Проверка не пройдена"
-              description={request.comment ? `Комментарий администратора: ${request.comment}` : 'Загрузите документ ещё раз.'}
+              description={
+                request.comment
+                  ? `Комментарий администратора: ${request.comment}`
+                  : 'Загрузите документ ещё раз.'
+              }
             />
           )}
-          {(!status || status === 'REJECTED') && <PassportForm again={status === 'REJECTED'} onSent={refresh} />}
+          {(!status || status === 'REJECTED') && (
+            <PassportForm again={status === 'REJECTED'} onSent={refresh} />
+          )}
         </>
       )}
     </AccountLayout>

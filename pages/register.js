@@ -4,7 +4,12 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { auth } from '../lib/api';
 import { errorMessage, errorStatus } from '../lib/api/client';
-import AuthPage, { emailRules, FormError, passwordRules, sameAs } from '../src/components/authPage/authPage';
+import AuthPage, {
+  emailRules,
+  FormError,
+  passwordRules,
+  sameAs,
+} from '../src/components/authPage/authPage';
 import { useNotifyContext } from '../src/context/notificationContext';
 import { useThemeContext } from '../src/context/themeContext';
 import { useUserContext } from '../src/context/userContext';
@@ -23,11 +28,16 @@ export default function Register() {
     setError('');
     try {
       setCurrentUser(await auth.register({ name, surname: surname || undefined, email, password }));
-      successNotification('Вы зарегистрированы', 'Мы отправили письмо со ссылкой для подтверждения e-mail.');
+      successNotification(
+        'Вы зарегистрированы',
+        'Мы отправили письмо со ссылкой для подтверждения e-mail.',
+      );
       router.replace('/');
     } catch (e) {
       setError(
-        errorStatus(e) === 409 ? 'Пользователь с таким e-mail уже зарегистрирован' : errorMessage(e),
+        errorStatus(e) === 409
+          ? 'Пользователь с таким e-mail уже зарегистрирован'
+          : errorMessage(e),
       );
       setBusy(false);
     }
@@ -37,15 +47,35 @@ export default function Register() {
 
   return (
     <AuthPage title="Регистрация">
-      <Form name="register" layout="vertical" onFinish={onFinish} validateTrigger="onSubmit" scrollToFirstError>
-        <Form.Item name="name" rules={[{ required: true, whitespace: true, message: 'Введите ваше имя' }]} {...item}>
+      <Form
+        name="register"
+        layout="vertical"
+        onFinish={onFinish}
+        validateTrigger="onSubmit"
+        scrollToFirstError
+      >
+        <Form.Item
+          name="name"
+          rules={[{ required: true, whitespace: true, message: 'Введите ваше имя' }]}
+          {...item}
+        >
           <Input size={theme?.size} placeholder="Имя" autoComplete="given-name" maxLength={60} />
         </Form.Item>
         <Form.Item name="surname" {...item}>
-          <Input size={theme?.size} placeholder="Фамилия" autoComplete="family-name" maxLength={60} />
+          <Input
+            size={theme?.size}
+            placeholder="Фамилия"
+            autoComplete="family-name"
+            maxLength={60}
+          />
         </Form.Item>
         <Form.Item name="email" rules={emailRules} {...item}>
-          <Input size={theme?.size} placeholder="E-mail" autoComplete="email" onChange={() => setError('')} />
+          <Input
+            size={theme?.size}
+            placeholder="E-mail"
+            autoComplete="email"
+            onChange={() => setError('')}
+          />
         </Form.Item>
         <Form.Item
           name="password"
@@ -63,7 +93,11 @@ export default function Register() {
           validateFirst
           {...item}
         >
-          <Input.Password size={theme?.size} placeholder="Повторите пароль" autoComplete="new-password" />
+          <Input.Password
+            size={theme?.size}
+            placeholder="Повторите пароль"
+            autoComplete="new-password"
+          />
         </Form.Item>
         <Form.Item
           name="agree"
@@ -71,7 +105,9 @@ export default function Register() {
           rules={[
             {
               validator: (_, checked) =>
-                checked ? Promise.resolve() : Promise.reject(new Error('Примите условия соглашения')),
+                checked
+                  ? Promise.resolve()
+                  : Promise.reject(new Error('Примите условия соглашения')),
             },
           ]}
           style={{ marginBottom: 0 }}

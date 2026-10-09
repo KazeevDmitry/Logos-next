@@ -50,13 +50,21 @@ function timeline(task, t) {
   if (task.status === 'DISPUTED') {
     // A dispute can only be opened once the work is paid for.
     return {
-      items: [...stages.slice(0, 3), { ...stage('DISPUTED'), description: t('task.stages.disputeNote') }, stages[5]],
+      items: [
+        ...stages.slice(0, 3),
+        { ...stage('DISPUTED'), description: t('task.stages.disputeNote') },
+        stages[5],
+      ],
       current: 3,
       status: 'error',
     };
   }
   // The last stage is an outcome, not something in progress.
-  return { items: stages, current: STAGES.indexOf(task.status), status: task.status === 'COMPLETED' ? 'finish' : 'process' };
+  return {
+    items: stages,
+    current: STAGES.indexOf(task.status),
+    status: task.status === 'COMPLETED' ? 'finish' : 'process',
+  };
 }
 
 export default function TaskTimeline({ task }) {

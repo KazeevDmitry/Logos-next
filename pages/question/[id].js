@@ -30,7 +30,9 @@ function AnswerForm({ questionId }) {
   return (
     <div style={{ background: 'white', borderRadius: '10px', padding: '20px', marginTop: '20px' }}>
       <div style={{ fontSize: '20px', fontWeight: 500 }}>Знаете ответ на этот вопрос?</div>
-      <p style={{ color: '#5E6674' }}>Нам всегда приятно знать мнение профессионалов из сообщества</p>
+      <p style={{ color: '#5E6674' }}>
+        Нам всегда приятно знать мнение профессионалов из сообщества
+      </p>
       <Input.TextArea
         autoSize={{ minRows: 4, maxRows: 14 }}
         maxLength={10000}
@@ -59,11 +61,22 @@ function AnswerForm({ questionId }) {
 function AnswerCard({ answer }) {
   return (
     <div style={{ background: 'white', borderRadius: '10px', padding: '20px', marginTop: '20px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' }}>
+      <div
+        style={{ display: 'flex', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' }}
+      >
         <AuthorLine user={answer.author} />
-        <span style={{ color: '#5E6674', fontSize: '14px' }}>{moment(answer.createdAt).format('DD MMM YYYY, HH:mm')}</span>
+        <span style={{ color: '#5E6674', fontSize: '14px' }}>
+          {moment(answer.createdAt).format('DD MMM YYYY, HH:mm')}
+        </span>
       </div>
-      <div style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere', marginTop: '12px', fontSize: '16px' }}>
+      <div
+        style={{
+          whiteSpace: 'pre-wrap',
+          overflowWrap: 'anywhere',
+          marginTop: '12px',
+          fontSize: '16px',
+        }}
+      >
         {answer.text}
       </div>
     </div>
@@ -104,7 +117,8 @@ export default function QuestionPage({ serverQuestion, serverAnswers = [] }) {
           {canAnswer && <AnswerForm questionId={question.id} />}
           {!currentUser && (
             <p style={{ marginTop: '20px', color: '#5E6674' }}>
-              Вы юрист? <Link href={`/login?next=/question/${question.id}`}>Войдите</Link>, чтобы ответить.
+              Вы юрист? <Link href={`/login?next=/question/${question.id}`}>Войдите</Link>, чтобы
+              ответить.
             </p>
           )}
 

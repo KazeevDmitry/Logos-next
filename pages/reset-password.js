@@ -54,7 +54,11 @@ export default function ResetPassword() {
           extra="Не короче 8 символов, с буквой и цифрой"
           style={{ marginBottom: '15px' }}
         >
-          <Input.Password size={theme?.size} placeholder="Новый пароль" autoComplete="new-password" />
+          <Input.Password
+            size={theme?.size}
+            placeholder="Новый пароль"
+            autoComplete="new-password"
+          />
         </Form.Item>
         <Form.Item
           name="confirm"
@@ -63,7 +67,11 @@ export default function ResetPassword() {
           validateFirst
           style={{ marginBottom: 0 }}
         >
-          <Input.Password size={theme?.size} placeholder="Повторите пароль" autoComplete="new-password" />
+          <Input.Password
+            size={theme?.size}
+            placeholder="Повторите пароль"
+            autoComplete="new-password"
+          />
         </Form.Item>
         <FormError>{error}</FormError>
         {error && <Link href="/forgot-password">Запросить новую ссылку</Link>}

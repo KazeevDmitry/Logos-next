@@ -28,7 +28,10 @@ function tileSpan(index, breakpoint) {
 
 export default function News({ serverData, categories = [], partnerNews = [] }) {
   const theme = useThemeContext();
-  const { data, isLoading, page, params } = useListQuery('news', news.list, { ...options, serverData });
+  const { data, isLoading, page, params } = useListQuery('news', news.list, {
+    ...options,
+    serverData,
+  });
   const { data: partner = partnerNews } = useQuery(
     ['news', 'partner'],
     () => news.list({ partner: true, pageSize: 5 }).then((res) => res.items),
@@ -40,14 +43,21 @@ export default function News({ serverData, categories = [], partnerNews = [] }) 
   const blockPad = theme.isDesktop ? pad : '20px';
   const items = data?.items ?? [];
   const pagination = (
-    <MyPagination page={page} total={data?.total ?? 0} pageSize={PAGE_SIZE} setPage={() => undefined} />
+    <MyPagination
+      page={page}
+      total={data?.total ?? 0}
+      pageSize={PAGE_SIZE}
+      setPage={() => undefined}
+    />
   );
 
   return (
     <>
       <PageHeader
         title="Новости"
-        seo={{ description: 'Новости права и разборы изменений в законодательстве от редакции LogosEst.' }}
+        seo={{
+          description: 'Новости права и разборы изменений в законодательстве от редакции LogosEst.',
+        }}
       />
       <PageContainer>
         <Col xs={24} sm={24} md={16} lg={17} xl={18}>
@@ -62,10 +72,20 @@ export default function News({ serverData, categories = [], partnerNews = [] }) 
               <Spin size="large" />
             </div>
           )}
-          {!isLoading && items.length === 0 && <Empty description="Новостей не найдено" style={{ margin: '60px 0' }} />}
-          <Row gutter={[gutter, gutter]} style={{ marginBottom: `${gutter / 2}px`, marginTop: `${gutter / 2}px` }}>
+          {!isLoading && items.length === 0 && (
+            <Empty description="Новостей не найдено" style={{ margin: '60px 0' }} />
+          )}
+          <Row
+            gutter={[gutter, gutter]}
+            style={{ marginBottom: `${gutter / 2}px`, marginTop: `${gutter / 2}px` }}
+          >
             {items.map((article, i) => (
-              <NewsCard key={article.id} article={article} cnt={tileSpan(i, theme?.id)} showCatg={!params.category} />
+              <NewsCard
+                key={article.id}
+                article={article}
+                cnt={tileSpan(i, theme?.id)}
+                showCatg={!params.category}
+              />
             ))}
           </Row>
           {pagination}
@@ -74,8 +94,14 @@ export default function News({ serverData, categories = [], partnerNews = [] }) 
         <Col xs={0} sm={0} md={8} lg={7} xl={6}>
           <NewsFilter categories={categories} />
           {partner.length > 0 && (
-            <div className={styles.specBlock} style={{ paddingTop: blockPad, paddingBottom: blockPad, marginBottom: pad }}>
-              <div className={styles.specBlockHeader} style={{ marginLeft: blockPad, marginBottom: blockPad }}>
+            <div
+              className={styles.specBlock}
+              style={{ paddingTop: blockPad, paddingBottom: blockPad, marginBottom: pad }}
+            >
+              <div
+                className={styles.specBlockHeader}
+                style={{ marginLeft: blockPad, marginBottom: blockPad }}
+              >
                 Новости партнеров
               </div>
               {partner.map((article) => (

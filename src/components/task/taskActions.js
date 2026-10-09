@@ -22,10 +22,17 @@ const ACTIONS = {
     ASSIGNED: [{ action: 'unassign', confirm: 'unassign' }, CANCEL],
     AWAITING_PAYMENT: [CANCEL],
     IN_PROGRESS: [DISPUTE],
-    REVIEW: [{ action: 'accept', confirm: 'accept', primary: true }, { action: 'request-changes' }, DISPUTE],
+    REVIEW: [
+      { action: 'accept', confirm: 'accept', primary: true },
+      { action: 'request-changes' },
+      DISPUTE,
+    ],
   },
   youChosen: {
-    ASSIGNED: [{ action: 'confirm', primary: true }, { action: 'decline', confirm: 'decline' }],
+    ASSIGNED: [
+      { action: 'confirm', primary: true },
+      { action: 'decline', confirm: 'decline' },
+    ],
   },
   youPerformer: {
     IN_PROGRESS: [{ action: 'submit', confirm: 'submit', primary: true }, DISPUTE],
@@ -97,7 +104,8 @@ export default function TaskActions({ task, refresh, size, children }) {
   const { run, running } = useTaskAction(task.id, refresh);
   const actions = ACTIONS[task.viewerStatus]?.[task.status] ?? [];
   const group = HINT_GROUP[task.viewerStatus];
-  const hint = group && HINTS[group].includes(task.status) ? t(`task.hints.${group}.${task.status}`) : null;
+  const hint =
+    group && HINTS[group].includes(task.status) ? t(`task.hints.${group}.${task.status}`) : null;
   const canPay = task.viewerStatus === 'youAuthor' && task.status === 'AWAITING_PAYMENT';
 
   if (actions.length === 0 && !hint && !children && !canPay) {

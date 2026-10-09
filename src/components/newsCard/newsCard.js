@@ -22,7 +22,12 @@ export default function NewsCard({ article, cnt = 8, showCatg = true }) {
         <div
           lang="ru"
           className={styles.card}
-          style={{ backgroundImage: background, hyphens: 'auto', backgroundSize: 'cover', backgroundPosition: 'center' }}
+          style={{
+            backgroundImage: background,
+            hyphens: 'auto',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
         >
           {showCatg && article.category && (
             <div className={styles.catglabel}>{article.category.name.toUpperCase()}</div>
@@ -31,7 +36,11 @@ export default function NewsCard({ article, cnt = 8, showCatg = true }) {
             {article.title}
           </h5>
           {article.publishedAt && (
-            <PublishedDate style={{ marginLeft: '20px' }} currDate={new Date(article.publishedAt)} textColor="white" />
+            <PublishedDate
+              style={{ marginLeft: '20px' }}
+              currDate={new Date(article.publishedAt)}
+              textColor="white"
+            />
           )}
         </div>
       </Link>
@@ -50,7 +59,11 @@ export function PartnerNewsCard({ article }) {
         {article.imageUrl && (
           <div className={styles.flexCont}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img style={{ width: '70px', height: '45px', objectFit: 'cover' }} src={article.imageUrl} alt="" />
+            <img
+              style={{ width: '70px', height: '45px', objectFit: 'cover' }}
+              src={article.imageUrl}
+              alt=""
+            />
           </div>
         )}
         <div

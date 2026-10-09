@@ -36,7 +36,9 @@ async function register(page, { name, surname, email, password }) {
 async function findLinkInMail(request, address, pattern) {
   await expect
     .poll(async () => {
-      const list = await (await request.get(`${MAIL_URL}/api/v1/search`, { params: { query: `to:${address}` } })).json();
+      const list = await (
+        await request.get(`${MAIL_URL}/api/v1/search`, { params: { query: `to:${address}` } })
+      ).json();
       for (const item of list.messages ?? []) {
         const message = await (await request.get(`${MAIL_URL}/api/v1/message/${item.ID}`)).json();
         const match = (message.Text ?? '').match(pattern);
@@ -45,7 +47,9 @@ async function findLinkInMail(request, address, pattern) {
       return null;
     })
     .not.toBeNull();
-  const list = await (await request.get(`${MAIL_URL}/api/v1/search`, { params: { query: `to:${address}` } })).json();
+  const list = await (
+    await request.get(`${MAIL_URL}/api/v1/search`, { params: { query: `to:${address}` } })
+  ).json();
   for (const item of list.messages) {
     const message = await (await request.get(`${MAIL_URL}/api/v1/message/${item.ID}`)).json();
     const match = (message.Text ?? '').match(pattern);
@@ -57,9 +61,22 @@ async function findLinkInMail(request, address, pattern) {
 /** Clicks a button that asks "are you sure?" and answers yes. */
 async function confirmClick(page, name) {
   await page.getByRole('button', { name, exact: true }).click();
-  await page.locator('.ant-popover:not(.ant-popover-hidden)').getByRole('button', { name: 'Да' }).click();
+  await page
+    .locator('.ant-popover:not(.ant-popover-hidden)')
+    .getByRole('button', { name: 'Да' })
+    .click();
 }
 
-const uniqueEmail = (prefix) => `${prefix}-${Date.now()}-${Math.floor(Math.random() * 1e4)}@e2e.logosest.local`;
+const uniqueEmail = (prefix) =>
+  `${prefix}-${Date.now()}-${Math.floor(Math.random() * 1e4)}@e2e.logosest.local`;
 
-module.exports = { EXPERT, DEMO_PASSWORD, newPerson, signIn, register, findLinkInMail, confirmClick, uniqueEmail };
+module.exports = {
+  EXPERT,
+  DEMO_PASSWORD,
+  newPerson,
+  signIn,
+  register,
+  findLinkInMail,
+  confirmClick,
+  uniqueEmail,
+};

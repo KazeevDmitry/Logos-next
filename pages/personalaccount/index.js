@@ -11,10 +11,20 @@ const ROLE = { USER: 'Заказчик', EXPERT: 'Эксперт', ADMIN: 'Ад�
 /** One step of the checklist; a link when the step has a page to do it on. */
 function Check({ check }) {
   const row = (
-    <span style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '6px 0', color: check.done ? '#5E6674' : 'black' }}>
+    <span
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '10px',
+        padding: '6px 0',
+        color: check.done ? '#5E6674' : 'black',
+      }}
+    >
       <CheckCircleFilled style={{ color: check.done ? '#32D69B' : '#CED3DB', fontSize: '18px' }} />
       <span style={{ textDecoration: check.done ? 'line-through' : 'none' }}>{check.text}</span>
-      {!check.done && check.href && <RightOutlined style={{ fontSize: '11px', color: '#0066FF' }} />}
+      {!check.done && check.href && (
+        <RightOutlined style={{ fontSize: '11px', color: '#0066FF' }} />
+      )}
     </span>
   );
   return <li>{check.href && !check.done ? <Link href={check.href}>{row}</Link> : row}</li>;
@@ -39,7 +49,15 @@ function AccountOverview({ user }) {
         </div>
       </div>
 
-      <div style={{ display: 'flex', gap: '30px', alignItems: 'flex-start', flexWrap: 'wrap', marginTop: '30px' }}>
+      <div
+        style={{
+          display: 'flex',
+          gap: '30px',
+          alignItems: 'flex-start',
+          flexWrap: 'wrap',
+          marginTop: '30px',
+        }}
+      >
         <Progress type="circle" percent={percent} width={110} strokeColor="#0066FF" />
         <div>
           <h2 style={{ fontSize: '20px', fontWeight: 500 }}>
@@ -61,7 +79,14 @@ function AccountOverview({ user }) {
       </div>
 
       {user.role === 'USER' && (
-        <div style={{ marginTop: '30px', padding: '20px', borderRadius: '10px', background: '#F0F2F6' }}>
+        <div
+          style={{
+            marginTop: '30px',
+            padding: '20px',
+            borderRadius: '10px',
+            background: '#F0F2F6',
+          }}
+        >
           <div style={{ fontSize: '18px', fontWeight: 500 }}>Вы юрист, адвокат или нотариус?</div>
           <p style={{ color: '#5E6674', margin: '6px 0 14px' }}>
             Станьте экспертом: откликайтесь на задачи заказчиков и отвечайте на вопросы.

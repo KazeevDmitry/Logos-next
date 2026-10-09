@@ -21,13 +21,22 @@ export default function NewsFilter({ categories = [] }) {
   }
   const pad = `${theme?.gutters?.gorizontal?.[theme?.id] ?? 20}px`;
   const allNews = (style) => (
-    <Button size={theme?.size} style={style} type="primary" htmlType="button" onClick={() => select(null)}>
+    <Button
+      size={theme?.size}
+      style={style}
+      type="primary"
+      htmlType="button"
+      onClick={() => select(null)}
+    >
       Все новости
     </Button>
   );
 
   return (
-    <div className={styles.specBlock} style={{ padding: theme.isDesktop ? pad : '20px', marginBottom: pad }}>
+    <div
+      className={styles.specBlock}
+      style={{ padding: theme.isDesktop ? pad : '20px', marginBottom: pad }}
+    >
       {theme.isDesktop ? (
         <div className={styles.specBlockHeader}>Категории</div>
       ) : (
@@ -41,7 +50,9 @@ export default function NewsFilter({ categories = [] }) {
           key={item.id}
           role="button"
           tabIndex={0}
-          className={item.slug === category ? `${styles.arbitr} ${styles.activeKatg}` : styles.arbitr}
+          className={
+            item.slug === category ? `${styles.arbitr} ${styles.activeKatg}` : styles.arbitr
+          }
           onClick={() => select(item.slug)}
           onKeyDown={(e) => e.key === 'Enter' && select(item.slug)}
         >

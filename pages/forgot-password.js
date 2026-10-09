@@ -29,8 +29,8 @@ export default function ForgotPassword() {
     return (
       <AuthPage title="Проверьте почту">
         <p>
-          Если адрес <b>{sentTo}</b> зарегистрирован, мы отправили на него ссылку для смены пароля. Она
-          действует один час.
+          Если адрес <b>{sentTo}</b> зарегистрирован, мы отправили на него ссылку для смены пароля.
+          Она действует один час.
         </p>
         <Link href="/login">Вернуться ко входу</Link>
       </AuthPage>
@@ -39,7 +39,9 @@ export default function ForgotPassword() {
 
   return (
     <AuthPage title="Восстановление пароля">
-      <p style={{ fontSize: '16px' }}>На ваш e-mail будет отправлена ссылка для восстановления пароля.</p>
+      <p style={{ fontSize: '16px' }}>
+        На ваш e-mail будет отправлена ссылка для восстановления пароля.
+      </p>
       <Form name="forgot" layout="vertical" onFinish={onFinish} validateTrigger="onSubmit">
         <Form.Item name="email" rules={emailRules} style={{ marginBottom: 0 }}>
           <Input size={theme?.size} placeholder="E-mail" autoComplete="email" />

@@ -19,7 +19,10 @@ function NewTask() {
   const onSubmit = async (body) => {
     const created = await tasks.create(body);
     queryClient.invalidateQueries('tasks');
-    successNotification('Задача опубликована', 'Эксперты увидят её в каталоге и смогут откликнуться.');
+    successNotification(
+      'Задача опубликована',
+      'Эксперты увидят её в каталоге и смогут откликнуться.',
+    );
     router.push(`/task/${created.id}`);
   };
 

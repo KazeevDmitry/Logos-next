@@ -25,13 +25,20 @@ function MessagesPage({ user }) {
   const theme = useThemeContext();
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { data: conversations, isLoading } = useQuery(['chat', 'conversations'], () => chat.conversations(), {
-    refetchOnWindowFocus: false,
-  });
+  const { data: conversations, isLoading } = useQuery(
+    ['chat', 'conversations'],
+    () => chat.conversations(),
+    {
+      refetchOnWindowFocus: false,
+    },
+  );
   const activeId = Number(router.query.chat) || null;
   const active = conversations?.find((conversation) => conversation.id === activeId) ?? null;
 
-  const select = (id) => router.push({ pathname: '/messages', query: id ? { chat: id } : {} }, undefined, { shallow: true });
+  const select = (id) =>
+    router.push({ pathname: '/messages', query: id ? { chat: id } : {} }, undefined, {
+      shallow: true,
+    });
   const refreshChats = useCallback(() => queryClient.invalidateQueries('chat'), [queryClient]);
 
   const showList = theme.isDesktop || !active;
@@ -56,8 +63,19 @@ function MessagesPage({ user }) {
         )}
         {conversations?.length > 0 && showList && (
           <Col xs={24} sm={24} md={24} lg={8} xl={7}>
-            <div style={{ ...panel, maxHeight: theme.isDesktop ? HEIGHT : undefined, overflowY: 'auto' }}>
-              <ConversationList conversations={conversations} activeId={activeId} viewerId={user.id} onSelect={select} />
+            <div
+              style={{
+                ...panel,
+                maxHeight: theme.isDesktop ? HEIGHT : undefined,
+                overflowY: 'auto',
+              }}
+            >
+              <ConversationList
+                conversations={conversations}
+                activeId={activeId}
+                viewerId={user.id}
+                onSelect={select}
+              />
             </div>
           </Col>
         )}
@@ -66,13 +84,26 @@ function MessagesPage({ user }) {
             <div style={{ ...panel, height: HEIGHT, display: 'flex', flexDirection: 'column' }}>
               {active ? (
                 <>
-                  <div style={{ display: 'flex', gap: '12px', alignItems: 'center', padding: '12px 16px', borderBottom: '1px solid #EEF0F4' }}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      gap: '12px',
+                      alignItems: 'center',
+                      padding: '12px 16px',
+                      borderBottom: '1px solid #EEF0F4',
+                    }}
+                  >
                     {!theme.isDesktop && (
                       <button
                         type="button"
                         aria-label="К списку диалогов"
                         onClick={() => select(null)}
-                        style={{ border: 'none', background: 'none', cursor: 'pointer', padding: '6px' }}
+                        style={{
+                          border: 'none',
+                          background: 'none',
+                          cursor: 'pointer',
+                          padding: '6px',
+                        }}
                       >
                         <ArrowLeftOutlined />
                       </button>
@@ -80,12 +111,23 @@ function MessagesPage({ user }) {
                     <UserImage image={active.companion.avatarUrl ?? ''} width={40} />
                     <div style={{ minWidth: 0 }}>
                       <b>{companionName(active.companion)}</b>
-                      <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      <div
+                        style={{
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
                         <Link href={`/task/${active.task.id}`}>{active.task.title}</Link>
                       </div>
                     </div>
                   </div>
-                  <Thread key={active.id} conversationId={active.id} viewerId={user.id} onRead={refreshChats} />
+                  <Thread
+                    key={active.id}
+                    conversationId={active.id}
+                    viewerId={user.id}
+                    onRead={refreshChats}
+                  />
                 </>
               ) : (
                 <div style={{ margin: 'auto', color: '#5E6674' }}>

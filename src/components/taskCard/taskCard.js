@@ -19,15 +19,24 @@ export default function TaskCard({ task, showStatus = false, footer }) {
     <div className={styles.card} style={{ padding: pad }}>
       <div className={styles.titleBlock}>
         <div className={styles.questionBody}>
-          <span style={{ fontSize: theme.isDesktop ? '28px' : '22px', fontWeight: '450' }}>{task.title}</span>
+          <span style={{ fontSize: theme.isDesktop ? '28px' : '22px', fontWeight: '450' }}>
+            {task.title}
+          </span>
           <span
-            style={{ fontSize: negotiable ? '18px' : '24px', marginLeft: '20px', color: '#0066FF', whiteSpace: 'nowrap' }}
+            style={{
+              fontSize: negotiable ? '18px' : '24px',
+              marginLeft: '20px',
+              color: '#0066FF',
+              whiteSpace: 'nowrap',
+            }}
           >
             {taskPrice(task)}
           </span>
         </div>
         <div className={styles.specBlock} style={{ marginLeft: '-20px' }}>
-          {task.specialization && <div className={styles.specLabel}>{task.specialization.name}</div>}
+          {task.specialization && (
+            <div className={styles.specLabel}>{task.specialization.name}</div>
+          )}
           {task.branches.map((branch) => (
             <div key={branch.id} className={styles.branchLabel}>
               {branch.name}
@@ -38,11 +47,22 @@ export default function TaskCard({ task, showStatus = false, footer }) {
 
       <div className={styles.descriptionBlock}>
         <Divider />
-        <Typography.Paragraph style={{ fontSize: '16px', lineHeight: '24px', marginBottom: 0 }} ellipsis={{ rows: 2 }}>
+        <Typography.Paragraph
+          style={{ fontSize: '16px', lineHeight: '24px', marginBottom: 0 }}
+          ellipsis={{ rows: 2 }}
+        >
           {task.text}
         </Typography.Paragraph>
         <Divider />
-        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '12px 20px', color: '#5E6674' }}>
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            gap: '12px 20px',
+            color: '#5E6674',
+          }}
+        >
           {task.city && (
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
               <EnvironmentOutlined style={{ fontSize: '22px' }} />

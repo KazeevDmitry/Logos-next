@@ -7,7 +7,12 @@ import PageContainer from '../src/components/layouts/pageContainer';
 import PageHeader from '../src/components/layouts/pageHeader';
 import AccountTaskList from '../src/components/task/accountTaskList';
 
-const note = { borderTop: '1px solid #EEF0F4', marginTop: '16px', paddingTop: '14px', color: '#5E6674' };
+const note = {
+  borderTop: '1px solid #EEF0F4',
+  marginTop: '16px',
+  paddingTop: '14px',
+  color: '#5E6674',
+};
 
 /** Tasks the expert offered to do, each with the offer they made. */
 function MyResponses() {
@@ -31,7 +36,9 @@ function MyResponses() {
               {' · '}
               {moment(task.myResponse.createdAt).format('DD.MM.YYYY')}
               <div style={{ overflowWrap: 'anywhere', marginTop: '4px' }}>
-                {task.myResponse.text.length > 200 ? `${task.myResponse.text.slice(0, 200)}…` : task.myResponse.text}
+                {task.myResponse.text.length > 200
+                  ? `${task.myResponse.text.slice(0, 200)}…`
+                  : task.myResponse.text}
               </div>
             </div>
           )}

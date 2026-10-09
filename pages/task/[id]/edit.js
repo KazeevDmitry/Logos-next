@@ -32,7 +32,13 @@ function EditTask({ user }) {
     return <Result status="404" title="Задача не найдена" style={{ marginTop: '120px' }} />;
   }
   if (task.author.id !== user.id) {
-    return <Result status="403" title="Редактировать задачу может только её автор" style={{ marginTop: '120px' }} />;
+    return (
+      <Result
+        status="403"
+        title="Редактировать задачу может только её автор"
+        style={{ marginTop: '120px' }}
+      />
+    );
   }
   if (task.status !== 'OPEN') {
     return (

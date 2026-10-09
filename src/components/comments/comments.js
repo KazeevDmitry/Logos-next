@@ -73,7 +73,9 @@ function Comment({ comment, tree, articleId, level, canReply }) {
   const replies = tree.get(comment.id) ?? [];
 
   return (
-    <div style={{ marginTop: '20px', marginLeft: level > 0 && level <= MAX_INDENT_LEVEL ? '24px' : 0 }}>
+    <div
+      style={{ marginTop: '20px', marginLeft: level > 0 && level <= MAX_INDENT_LEVEL ? '24px' : 0 }}
+    >
       <div style={{ display: 'flex', gap: '12px' }}>
         <UserImage image={author.avatarUrl ?? ''} width={40} />
         <div style={{ flex: 1, minWidth: 0 }}>
@@ -85,14 +87,21 @@ function Comment({ comment, tree, articleId, level, canReply }) {
               {moment(comment.createdAt).format('DD MMM YYYY, HH:mm')}
             </span>
           </div>
-          <div style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere', marginTop: '4px' }}>{comment.text}</div>
+          <div style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere', marginTop: '4px' }}>
+            {comment.text}
+          </div>
           {canReply && !replying && (
             <Button type="link" style={{ padding: 0 }} onClick={() => setReplying(true)}>
               Ответить
             </Button>
           )}
           {replying && (
-            <CommentForm articleId={articleId} parentId={comment.id} autoFocus onDone={() => setReplying(false)} />
+            <CommentForm
+              articleId={articleId}
+              parentId={comment.id}
+              autoFocus
+              onDone={() => setReplying(false)}
+            />
           )}
         </div>
       </div>
@@ -113,9 +122,13 @@ function Comment({ comment, tree, articleId, level, canReply }) {
 /** The comment thread of an article with a form for signed-in readers. */
 export default function Comments({ articleId }) {
   const { currentUser } = useUserContext();
-  const { data: comments = [], isLoading } = useQuery(['comments', articleId], () => news.comments(articleId), {
-    refetchOnWindowFocus: false,
-  });
+  const { data: comments = [], isLoading } = useQuery(
+    ['comments', articleId],
+    () => news.comments(articleId),
+    {
+      refetchOnWindowFocus: false,
+    },
+  );
   const tree = useMemo(() => byParent(comments), [comments]);
   const roots = tree.get(0) ?? [];
 
@@ -129,7 +142,9 @@ export default function Comments({ articleId }) {
         </p>
       )}
       {!isLoading && roots.length === 0 && (
-        <p style={{ textAlign: 'center', marginTop: '20px' }}>Для этой статьи пока нет комментариев</p>
+        <p style={{ textAlign: 'center', marginTop: '20px' }}>
+          Для этой статьи пока нет комментариев
+        </p>
       )}
       {roots.map((comment) => (
         <Comment

@@ -21,7 +21,8 @@ async function all(fetcher, http, params = {}) {
   return items;
 }
 
-const escapeXml = (text) => text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const escapeXml = (text) =>
+  text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 export async function getServerSideProps(context) {
   const http = createApi();
@@ -36,8 +37,14 @@ export async function getServerSideProps(context) {
   const urls = [
     ...['/', '/tasks', '/experts', '/news', '/questions'].map((path) => ({ path })),
     ...expertList.map((expert) => ({ path: `/expert/${expert.id}` })),
-    ...articleList.map((article) => ({ path: `/article/${encodeURIComponent(article.slug)}`, date: article.publishedAt })),
-    ...questionList.map((question) => ({ path: `/question/${question.id}`, date: question.createdAt })),
+    ...articleList.map((article) => ({
+      path: `/article/${encodeURIComponent(article.slug)}`,
+      date: article.publishedAt,
+    })),
+    ...questionList.map((question) => ({
+      path: `/question/${question.id}`,
+      date: question.createdAt,
+    })),
     ...taskList.map((task) => ({ path: `/task/${task.id}`, date: task.createdAt })),
   ];
   const body = urls
@@ -49,7 +56,9 @@ export async function getServerSideProps(context) {
 
   context.res.setHeader('Content-Type', 'application/xml; charset=utf-8');
   context.res.setHeader('Cache-Control', 'public, max-age=3600');
-  context.res.write(`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${body}</urlset>`);
+  context.res.write(
+    `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${body}</urlset>`,
+  );
   context.res.end();
   return { props: {} };
 }

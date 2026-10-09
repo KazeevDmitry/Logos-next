@@ -10,12 +10,54 @@ const gutters = {
 
 /** Layout settings per viewport width, smallest first. */
 const BREAKPOINTS = [
-  { id: 'xs', query: '(max-width:575px)', size: 'middle', elementHeight: 32, isDesktop: false, appContainerPadding: 0 },
-  { id: 'sm', query: '(min-width: 576px) and (max-width: 767px)', size: 'middle', elementHeight: 32, isDesktop: false, appContainerPadding: 0 },
-  { id: 'md', query: '(min-width: 768px) and (max-width: 991px)', size: 'middle', elementHeight: 32, isDesktop: true, appContainerPadding: 20 },
-  { id: 'lg', query: '(min-width: 992px) and (max-width: 1200px)', size: 'middle', elementHeight: 32, isDesktop: true, appContainerPadding: 30 },
-  { id: 'xl', query: '(min-width: 1201px) and (max-width: 1600px)', size: 'large', elementHeight: 40, isDesktop: true, appContainerPadding: 50 },
-  { id: 'xxl', query: '(min-width: 1601px)', size: 'large', elementHeight: 40, isDesktop: true, appContainerPadding: 50 },
+  {
+    id: 'xs',
+    query: '(max-width:575px)',
+    size: 'middle',
+    elementHeight: 32,
+    isDesktop: false,
+    appContainerPadding: 0,
+  },
+  {
+    id: 'sm',
+    query: '(min-width: 576px) and (max-width: 767px)',
+    size: 'middle',
+    elementHeight: 32,
+    isDesktop: false,
+    appContainerPadding: 0,
+  },
+  {
+    id: 'md',
+    query: '(min-width: 768px) and (max-width: 991px)',
+    size: 'middle',
+    elementHeight: 32,
+    isDesktop: true,
+    appContainerPadding: 20,
+  },
+  {
+    id: 'lg',
+    query: '(min-width: 992px) and (max-width: 1200px)',
+    size: 'middle',
+    elementHeight: 32,
+    isDesktop: true,
+    appContainerPadding: 30,
+  },
+  {
+    id: 'xl',
+    query: '(min-width: 1201px) and (max-width: 1600px)',
+    size: 'large',
+    elementHeight: 40,
+    isDesktop: true,
+    appContainerPadding: 50,
+  },
+  {
+    id: 'xxl',
+    query: '(min-width: 1601px)',
+    size: 'large',
+    elementHeight: 40,
+    isDesktop: true,
+    appContainerPadding: 50,
+  },
 ];
 
 /** Used before the browser reports its width (server rendering, first paint). */

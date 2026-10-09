@@ -45,7 +45,14 @@ function Pill({ item, text }) {
   return (
     <div
       className={styles.branchLabel}
-      style={{ ...item.style, textTransform: 'none', marginLeft: 0, marginTop: 0, gap: '8px', whiteSpace: 'nowrap' }}
+      style={{
+        ...item.style,
+        textTransform: 'none',
+        marginLeft: 0,
+        marginTop: 0,
+        gap: '8px',
+        whiteSpace: 'nowrap',
+      }}
     >
       {item.icon}
       <span>{text}</span>
