@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+# Same commands as on a developer machine: everything runs through docker compose.
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build the web image
+        run: docker compose build web
+
+      - name: Install dependencies
+        run: docker compose run --rm web yarn install --frozen-lockfile
+
+      - name: Lint
+        run: docker compose run --rm web yarn lint
+
+      - name: Format check
+        run: docker compose run --rm web yarn format:check
+
+      - name: Locale files have the same keys
+        run: docker compose run --rm web yarn check:locales
+
+      - name: Production build
+        run: docker compose run --rm -e NEXT_DIST_DIR=.next-check web yarn build
+
+      - name: Tear down
+        if: always()
+        run: docker compose down -v
+
+  # Browser tests of the whole product. They need the API next to this
+  # repository; set the repository variable API_REPOSITORY (owner/name) and,
+  # if it is private, the secret API_REPOSITORY_TOKEN. Skipped until then.
+  e2e:
+    if: ${{ vars.API_REPOSITORY != '' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: Logos-next
+
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ vars.API_REPOSITORY }}
+          token: ${{ secrets.API_REPOSITORY_TOKEN || github.token }}
+          path: Logos-api
+
+      - name: Browser tests
+        working-directory: Logos-api
+        env:
+          CI: "true"
+        run: make e2e-ui
+
+      - name: Keep the report of a failed run
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            Logos-next/e2e/playwright-report
+            Logos-next/e2e/test-results
+          retention-days: 7
