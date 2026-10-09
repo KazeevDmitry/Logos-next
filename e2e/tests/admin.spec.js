@@ -182,6 +182,17 @@ test.describe.serial('the admin panel', () => {
     await expect(page.getByRole('heading', { level: 1, name: title })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'На что смотреть' })).toBeVisible();
 
+    // A cover, chosen on the edit form, is saved at once and shown in the list of articles.
+    await admin.goto(`${ADMIN_URL}/admin/resources/Article/records/${article.id}/edit`);
+    const cover = admin.getByTestId('article-cover');
+    await expect(cover).toContainText('Обложки нет');
+    await cover.locator('input[type=file]').setInputFiles({ ...PASSPORT, name: 'cover.png' });
+    await expect(cover.getByRole('button', { name: 'Убрать обложку' })).toBeVisible();
+    await page.goto('/articles');
+    const card = page.getByRole('link', { name: title }).locator('div').first();
+    await expect(card).toHaveCSS('background-image', /\/uploads\/[0-9a-f-]+\.png/);
+    await admin.goto(record('Article', article.id));
+
     await confirmAction(admin, 'unpublish');
     await expect(admin.getByText('Статья снята с публикации')).toBeVisible();
     expect((await page.goto(`/articles/${article.slug}`)).status()).toBe(404);
