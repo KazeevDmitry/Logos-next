@@ -161,12 +161,15 @@ function LittleCard({ expert, top, left }) {
   );
 }
 
-/** The search box that overlaps the hero: "looking for a task" / "looking for an expert". */
+/**
+ * The search box that overlaps the hero: "looking for an expert" (first,
+ * and open by default: most visitors are customers) / "looking for a task".
+ */
 function MainTabs() {
   const theme = useThemeContext();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState(1);
-  const lookingForTask = activeTab === 1;
+  const lookingForTask = activeTab === 2;
 
   /** Opens the task or expert list with the chosen filters in the URL, where SideFilter reads them. */
   const onFinish = ({ city, spec, budget, branch }) => {
@@ -189,14 +192,14 @@ function MainTabs() {
         {
           tab: 1,
           cls: styles.tabCls1,
-          wide: i18n.t('pages.index.ischuZadachu'),
-          narrow: i18n.t('pages.index.zadachi'),
+          wide: i18n.t('pages.index.ischuEksperta'),
+          narrow: i18n.t('pages.index.eksperty'),
         },
         {
           tab: 2,
           cls: styles.tabCls2,
-          wide: i18n.t('pages.index.ischuIspolnitelya'),
-          narrow: i18n.t('pages.index.eksperty'),
+          wide: i18n.t('pages.index.ischuZadachu'),
+          narrow: i18n.t('pages.index.zadachi'),
         },
       ].map(({ tab, cls, wide, narrow }) => (
         <div
