@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { auth } from '../lib/api';
 import { errorMessage, errorStatus } from '../lib/api/client';
+import OAuthButtons from '../src/components/authPage/oauthButtons';
 import AuthPage, { emailRules, FormError } from '../src/components/authPage/authPage';
 import { useThemeContext } from '../src/context/themeContext';
 import { useUserContext } from '../src/context/userContext';
@@ -14,6 +15,16 @@ import i18n from '../utils/i18n-init';
 export function safeNext(next) {
   return typeof next === 'string' && next.startsWith('/') && !next.startsWith('//') ? next : '/';
 }
+
+/** Why a sign-in through Yandex, VK, Mail.ru or OK did not happen (`?error=oauth_…`). */
+const OAUTH_ERRORS = {
+  oauth_unavailable: i18n.t('ui.oauth.errors.unavailable'),
+  oauth_state: i18n.t('ui.oauth.errors.state'),
+  oauth_denied: i18n.t('ui.oauth.errors.denied'),
+  oauth_provider: i18n.t('ui.oauth.errors.provider'),
+  oauth_no_email: i18n.t('ui.oauth.errors.noEmail'),
+  oauth_blocked: i18n.t('pages.login.akkauntZablokirovanNapishiteVPodderzhku'),
+};
 
 const LOGIN_ERRORS = {
   401: i18n.t('pages.login.nevernyyEMailIliParol'),
@@ -69,7 +80,7 @@ export default function Login() {
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Link href="/forgot-password">{i18n.t('pages.login.zabyliParol')}</Link>
         </div>
-        <FormError>{error}</FormError>
+        <FormError>{error || OAUTH_ERRORS[router.query.error]}</FormError>
         <Form.Item>
           <Button
             type="primary"
@@ -81,6 +92,7 @@ export default function Login() {
             {i18n.t('pages.login.voyti')}
           </Button>
         </Form.Item>
+        <OAuthButtons next={safeNext(router.query.next)} />
         <div className={styles.register}>
           <Link href="/register" replace className={styles.registerLink}>
             {i18n.t('pages.login.registratsiya')}

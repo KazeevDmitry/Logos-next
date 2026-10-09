@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { auth } from '../lib/api';
 import { errorMessage, errorStatus } from '../lib/api/client';
+import OAuthButtons from '../src/components/authPage/oauthButtons';
 import AuthPage, {
   emailRules,
   FormError,
@@ -149,6 +150,7 @@ export default function Register() {
             {i18n.t('pages.register.zaregistrirovatsya')}
           </Button>
         </Form.Item>
+        <OAuthButtons />
         <div className={styles.register}>
           {i18n.t('pages.register.uzheEstAkkaunt')}{' '}
           <Link href="/login" replace className={styles.registerLink}>

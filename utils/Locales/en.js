@@ -951,6 +951,18 @@ export default {
       zayavkiNaVyvod: 'Payout requests',
       kommentariyAdministratora: "Administrator's comment:",
     },
+    oauth: {
+      iliVoyditeCherez: 'Or sign in with',
+      services: { yandex: 'Yandex', vk: 'VK ID', mailru: 'Mail.ru', ok: 'Odnoklassniki' },
+      errors: {
+        unavailable: 'Sign-in with this service is not available now.',
+        state: 'The sign-in could not be completed: the attempt has expired. Try again.',
+        denied: 'You cancelled the sign-in at the service.',
+        provider: 'The service did not confirm the sign-in. Try again or use your password.',
+        noEmail:
+          'The service did not share an e-mail address. Allow access to it, or register with an e-mail.',
+      },
+    },
     footer: {
       logosAgregatorYuridicheskihUslugVse:
         '© Logos — legal services marketplace. All rights reserved',
