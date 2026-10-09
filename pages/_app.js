@@ -8,6 +8,7 @@ import { ConfigProvider } from 'antd';
 import ru from 'antd/locale/ru_RU';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import JsonLd from '../src/components/jsonLd';
 import MainLayout from '../src/components/layouts/mainLayout';
 import Seo, { SeoOverride } from '../src/components/seo';
 import { NoteProvider } from '../src/context/notificationContext';
@@ -15,6 +16,16 @@ import { SocketProvider } from '../src/context/socketContext';
 import { ThemeProvider } from '../src/context/themeContext';
 import { UserProvider } from '../src/context/userContext';
 import theme from '../src/theme';
+
+/** The block of structured data an administrator added to the page, or null. */
+function customJsonLd(text) {
+  try {
+    return text ? JSON.parse(text) : null;
+  } catch {
+    // The admin panel refuses broken JSON; never let one break a page.
+    return null;
+  }
+}
 
 export default function MyApp({ Component, pageProps }) {
   const router = useRouter();
@@ -46,6 +57,7 @@ export default function MyApp({ Component, pageProps }) {
                 {/* What an administrator set for this page; pages pass it as the `seo` prop. */}
                 <SeoOverride.Provider value={pageProps.seo ?? null}>
                   <Seo />
+                  <JsonLd id="custom" data={customJsonLd(pageProps.seo?.jsonLd)} />
                   <MainLayout loading={loading}>
                     <Component {...pageProps} />
                   </MainLayout>

@@ -6,12 +6,14 @@ import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { questions } from '../../lib/api';
 import { createApi, errorMessage } from '../../lib/api/client';
+import JsonLd from '../../src/components/jsonLd';
 import PageContainer from '../../src/components/layouts/pageContainer';
 import PageHeader from '../../src/components/layouts/pageHeader';
 import QuestionCard, { AuthorLine } from '../../src/components/questionCard/questionCard';
 import { AskQuestionSideBlock } from '../../src/components/SideFilter/sideFilter';
 import { useThemeContext } from '../../src/context/themeContext';
 import { useUserContext } from '../../src/context/userContext';
+import { graph, questionBreadcrumbs, questionPage } from '../../src/seo/schema';
 
 import i18n from '../../utils/i18n-init';
 /** New answers show up without a reload. */
@@ -122,6 +124,10 @@ export default function QuestionPage({ serverQuestion, serverAnswers = [] }) {
 
   return (
     <>
+      <JsonLd
+        id="page"
+        data={graph(questionPage(question, answers), questionBreadcrumbs(question))}
+      />
       <PageHeader title={question.title} seo={{ description: question.description }} />
       <PageContainer>
         <Col xs={24} sm={24} md={16} lg={17} xl={18}>

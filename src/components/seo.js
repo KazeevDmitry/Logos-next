@@ -4,7 +4,7 @@ import { createContext, useContext } from 'react';
 
 import i18n from '../../utils/i18n-init';
 export const SITE_NAME = 'LogosEst';
-const DEFAULT_DESCRIPTION = i18n.t('ui.seo.logosestServisPoiskaYuristovAdvokatov');
+export const DEFAULT_DESCRIPTION = i18n.t('ui.seo.logosestServisPoiskaYuristovAdvokatov');
 /** Public address of the site, e.g. https://logosest.ru; needed for absolute links only. */
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? '').replace(/\/$/, '');
 

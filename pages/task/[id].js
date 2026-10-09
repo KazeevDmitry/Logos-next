@@ -13,6 +13,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { chat, tasks } from '../../lib/api';
 import { createApi } from '../../lib/api/client';
 import FileLink from '../../src/components/fileLink/fileLink';
+import JsonLd from '../../src/components/jsonLd';
 import PageContainer from '../../src/components/layouts/pageContainer';
 import PageHeader from '../../src/components/layouts/pageHeader';
 import { AuthorLine, BranchPills } from '../../src/components/questionCard/questionCard';
@@ -29,6 +30,7 @@ import {
 import { useNotifyContext } from '../../src/context/notificationContext';
 import { useThemeContext } from '../../src/context/themeContext';
 import { useUserContext } from '../../src/context/userContext';
+import { graph, taskBreadcrumbs } from '../../src/seo/schema';
 
 import i18n from '../../utils/i18n-init';
 const block = { background: 'white', borderRadius: '10px' };
@@ -111,6 +113,7 @@ export default function TaskPage({ serverTask }) {
           refresh();
         }}
       />
+      <JsonLd id="page" data={graph(taskBreadcrumbs(task))} />
       <PageHeader title={task.title} seo={{ description: task.text }} />
       <PageContainer>
         <Col xs={24} sm={24} md={24} lg={17} xl={18}>

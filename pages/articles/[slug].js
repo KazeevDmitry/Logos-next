@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { Col, Result, Row } from 'antd';
 import { useRouter } from 'next/router';
+import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 import { useQuery } from '@tanstack/react-query';
@@ -8,11 +9,14 @@ import gfm from 'remark-gfm';
 import { news } from '../../lib/api';
 import { createApi } from '../../lib/api/client';
 import { articleSeo } from '../../lib/pageSeo';
+import JsonLd from '../../src/components/jsonLd';
 import PageContainer from '../../src/components/layouts/pageContainer';
 import PageHeader from '../../src/components/layouts/pageHeader';
 import NewsCard from '../../src/components/newsCard/newsCard';
 import PublishedDate from '../../src/components/publishedDate/publishedDate';
+import { SeoOverride } from '../../src/components/seo';
 import { useThemeContext } from '../../src/context/themeContext';
+import { article as articleSchema, articleBreadcrumbs, graph } from '../../src/seo/schema';
 import stylesArt from './article.module.scss';
 
 import i18n from '../../utils/i18n-init';
@@ -20,6 +24,7 @@ export default function ArticlePage({ serverArticle, serverSimilar = [] }) {
   const { t } = useTranslation();
   const theme = useThemeContext();
   const { slug } = useRouter().query;
+  const seo = useContext(SeoOverride);
 
   const { data: article } = useQuery({
     queryKey: ['article', slug],
@@ -54,6 +59,7 @@ export default function ArticlePage({ serverArticle, serverSimilar = [] }) {
 
   return (
     <>
+      <JsonLd id="page" data={graph(articleSchema(article, seo), articleBreadcrumbs(article))} />
       <PageHeader
         title={article.title}
         seo={{

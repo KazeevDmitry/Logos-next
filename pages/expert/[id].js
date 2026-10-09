@@ -13,12 +13,14 @@ import { chat, experts } from '../../lib/api';
 import { createApi } from '../../lib/api/client';
 import Feedbacks from '../../src/components/feedbacks/feedbacks';
 import SideFeedbacks from '../../src/components/feedbacks/sideFeedbacks';
+import JsonLd from '../../src/components/jsonLd';
 import PageContainer from '../../src/components/layouts/pageContainer';
 import PageHeader from '../../src/components/layouts/pageHeader';
 import Seo from '../../src/components/seo';
 import UserImage from '../../src/components/userImage/userImage';
 import { useThemeContext } from '../../src/context/themeContext';
 import { useUserContext } from '../../src/context/userContext';
+import { expertBreadcrumbs, expertProfile, graph } from '../../src/seo/schema';
 import styles from './expertInfo.module.scss';
 
 import i18n from '../../utils/i18n-init';
@@ -119,6 +121,7 @@ export default function ExpertPage({ serverExpert }) {
         image={user.avatarUrl}
         type="profile"
       />
+      <JsonLd id="page" data={graph(expertProfile(expert), expertBreadcrumbs(expert))} />
       <PageHeader title={title} />
       <PageContainer>
         <Col xs={24} sm={24} md={18} lg={18} xl={18}>

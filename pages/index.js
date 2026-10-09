@@ -7,6 +7,7 @@ import { experts as expertsApi } from '../lib/api';
 import { createApi } from '../lib/api/client';
 import { pageSeo } from '../lib/pageSeo';
 import CityInput from '../src/components/cityInput/cityInput';
+import JsonLd from '../src/components/jsonLd';
 import InputSlider from '../src/components/input-slider/input-slider';
 import PageContainer from '../src/components/layouts/pageContainer';
 import PageHeader from '../src/components/layouts/pageHeader';
@@ -14,6 +15,7 @@ import RatingBar from '../src/components/ratingbar/ratingbar';
 import UserCard from '../src/components/userCard/userCard';
 import UserImage from '../src/components/userImage/userImage';
 import { useThemeContext } from '../src/context/themeContext';
+import { graph, organization, website } from '../src/seo/schema';
 import styles from '../styles/mainPage.module.scss';
 
 import i18n from '../utils/i18n-init';
@@ -64,6 +66,7 @@ export default function Home({ topExperts }) {
 
   return (
     <>
+      <JsonLd id="page" data={graph(organization(), website())} />
       {!theme.isDesktop && (
         <>
           <PageHeader title={t('main.promo.title')}>
