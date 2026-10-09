@@ -38,7 +38,7 @@ export default function AppHeader({ loading }) {
   const PAGES = [
     { name: t('header.menu.0'), to: '/tasks' },
     { name: t('header.menu.1'), to: '/experts' },
-    { name: t('header.menu.2'), to: '/news' },
+    { name: t('header.menu.2'), to: '/articles' },
     { name: t('header.menu.3'), to: '/questions' },
   ];
   // "My responses" is for experts only.

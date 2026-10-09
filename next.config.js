@@ -52,6 +52,15 @@ module.exports = {
   // Next's own "X-Powered-By" tells visitors nothing they need.
   poweredByHeader: false,
 
+  // The news list and the article page used to live at /news and
+  // /article/<slug>; old links and search results keep working.
+  async redirects() {
+    return [
+      { source: '/news', destination: '/articles', permanent: true },
+      { source: '/article/:slug', destination: '/articles/:slug', permanent: true },
+    ];
+  },
+
   async headers() {
     return [{ source: '/:path*', headers: SECURITY_HEADERS }];
   },

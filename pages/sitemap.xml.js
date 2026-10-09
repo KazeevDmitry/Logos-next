@@ -35,10 +35,10 @@ export async function getServerSideProps(context) {
   ]);
 
   const urls = [
-    ...['/', '/tasks', '/experts', '/news', '/questions'].map((path) => ({ path })),
+    ...['/', '/tasks', '/experts', '/articles', '/questions'].map((path) => ({ path })),
     ...expertList.map((expert) => ({ path: `/expert/${expert.id}` })),
     ...articleList.map((article) => ({
-      path: `/article/${encodeURIComponent(article.slug)}`,
+      path: `/articles/${encodeURIComponent(article.slug)}`,
       date: article.publishedAt,
     })),
     ...questionList.map((question) => ({

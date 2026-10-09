@@ -172,19 +172,19 @@ test.describe.serial('the admin panel', () => {
     expect(article.slug).toMatch(/^kak-proverit-dogovor-arendy-\d+$/);
 
     // A draft: not on the site.
-    expect((await page.goto(`/article/${article.slug}`)).status()).toBe(404);
+    expect((await page.goto(`/articles/${article.slug}`)).status()).toBe(404);
 
     await admin.goto(record('Article', article.id));
     await confirmAction(admin, 'publish');
     await expect(admin.getByText('Статья опубликована')).toBeVisible();
 
-    await page.goto(`/article/${article.slug}`);
+    await page.goto(`/articles/${article.slug}`);
     await expect(page.getByRole('heading', { level: 1, name: title })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'На что смотреть' })).toBeVisible();
 
     await confirmAction(admin, 'unpublish');
     await expect(admin.getByText('Статья снята с публикации')).toBeVisible();
-    expect((await page.goto(`/article/${article.slug}`)).status()).toBe(404);
+    expect((await page.goto(`/articles/${article.slug}`)).status()).toBe(404);
   });
 
   test('blocks an account: it is signed out at once and cannot sign in', async () => {

@@ -19,7 +19,7 @@ export default function NewsCard({ article, cnt = 8, showCatg = true }) {
 
   return (
     <Col span={cnt}>
-      <Link href={`/article/${article.slug}`} style={{ color: 'white', cursor: 'pointer' }}>
+      <Link href={`/articles/${article.slug}`} style={{ color: 'white', cursor: 'pointer' }}>
         <div
           lang="ru"
           className={styles.card}
@@ -55,7 +55,7 @@ export function PartnerNewsCard({ article }) {
   const pad = theme.isDesktop ? `${theme?.gutters?.gorizontal?.[theme?.id] ?? 20}px` : '20px';
 
   return (
-    <Link href={`/article/${article.slug}`} style={{ color: 'black', cursor: 'pointer' }}>
+    <Link href={`/articles/${article.slug}`} style={{ color: 'black', cursor: 'pointer' }}>
       <div className={styles.partnerCard} style={{ paddingLeft: pad, paddingRight: pad }}>
         {article.imageUrl && (
           <div className={styles.flexCont}>
