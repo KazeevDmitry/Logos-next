@@ -18,6 +18,8 @@ export default function ListPage({
   description,
   headerChildren,
   searchPlaceholder,
+  // Search while typing, from this many characters (see SearchField); off when not given.
+  liveSearchFrom,
   filter,
   query,
   pageSize,
@@ -60,6 +62,7 @@ export default function ListPage({
           <SearchField
             style={{ width: '100%', marginTop: '0px', borderRadius: '10px', marginBottom: pad }}
             placeholder={searchPlaceholder}
+            liveFrom={liveSearchFrom}
           />
           {!theme.isDesktop && filter && <SideFilter show={{ ...filter, showreset: false }} />}
           {pagination}

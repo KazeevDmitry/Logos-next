@@ -22,6 +22,7 @@ export default function Experts({ serverData }) {
       title={i18n.t('pages.experts.eksperty')}
       description={i18n.t('pages.experts.yuristyAdvokatyINotariusyS')}
       searchPlaceholder={i18n.t('pages.experts.vveditePolnostyuIliChastichnoImya')}
+      liveSearchFrom={2}
       filter={{ city: true, spec: true, branch: true, budget: false }}
       query={query}
       pageSize={PAGE_SIZE}
