@@ -1,46 +1,31 @@
-import React, {useEffect, useState} from 'react';
+import { Layout } from 'antd';
+import { useThemeContext } from '../../context/themeContext';
 import AppHeader from '../app-header/app-header';
+import ErrorBoundary from '../errorBoundary';
 import Footer from '../footer/footer';
-
-import styles from "./mainLayout.module.less";
-import {useThemeContext} from '../../context/themeContext';
-
-import { Layout, } from 'antd';
+import styles from './mainLayout.module.less';
 
 const { Content } = Layout;
 
+/** Header, the page, footer. A crash inside the page leaves the header and footer usable. */
 export default function MainLayout({ children, loading }) {
-
-
-  const [sectionMinHeigth, setSectionMinHeigth] = useState(``); 
-
   const theme = useThemeContext();
 
-  const resizeHandler = () => {
-
-    setSectionMinHeigth(`${document.documentElement.clientHeight-130}px`);
-  }
-
-  useEffect(() => {
-    window.addEventListener("resize", resizeHandler);
-    resizeHandler();
-    return () => {
-      window.removeEventListener("resize", resizeHandler);
-    };
-  }, []);
-
-
   return (
-    <>
     <Layout>
-      <AppHeader loading={loading}/>
-      <Content className={styles.appContainer} style={{paddingLeft: theme?.appContainerPadding, paddingRight: theme?.appContainerPadding, minHeight: sectionMinHeigth}}>
-        {children}  
+      <AppHeader loading={loading} />
+      <Content
+        className={styles.appContainer}
+        style={{
+          paddingLeft: theme?.appContainerPadding,
+          paddingRight: theme?.appContainerPadding,
+          // Keeps the footer at the bottom of a short page.
+          minHeight: 'calc(100vh - 130px)',
+        }}
+      >
+        <ErrorBoundary>{children}</ErrorBoundary>
       </Content>
-      
       <Footer />
     </Layout>
-      
-    </>
-  )
+  );
 }
