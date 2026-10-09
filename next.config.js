@@ -18,7 +18,41 @@ const ANTD_PACKAGES = [
   ...fs.readdirSync('node_modules').filter((name) => name.startsWith('rc-')),
 ];
 
+// What a page of the site may load and where it may send data: this origin
+// only. Styles may be inline (Ant Design writes its CSS into the page);
+// scripts may not, except under `next dev`, whose hot reload needs it.
+const DEV = process.env.NODE_ENV !== 'production';
+// The chat socket goes to the API's own origin when it differs from the site's.
+const WS = process.env.NEXT_PUBLIC_WS_URL;
+const SOCKET_SOURCES = WS ? [WS, WS.replace(/^http/, 'ws')] : [];
+const CONTENT_SECURITY_POLICY = [
+  "default-src 'self'",
+  `script-src 'self'${DEV ? " 'unsafe-inline' 'unsafe-eval'" : ''}`,
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob:",
+  "font-src 'self' data:",
+  ["connect-src 'self'", ...SOCKET_SOURCES, ...(DEV ? ['ws:'] : [])].join(' '),
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "frame-ancestors 'none'",
+].join('; ');
+const SECURITY_HEADERS = [
+  { key: 'Content-Security-Policy', value: CONTENT_SECURITY_POLICY },
+  { key: 'X-Frame-Options', value: 'DENY' },
+  { key: 'X-Content-Type-Options', value: 'nosniff' },
+  { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+  { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(), payment=()' },
+];
+
 module.exports = {
+  // Next's own "X-Powered-By" tells visitors nothing they need.
+  poweredByHeader: false,
+
+  async headers() {
+    return [{ source: '/:path*', headers: SECURITY_HEADERS }];
+  },
+
   transpilePackages: ANTD_PACKAGES,
   reactStrictMode: true,
 
