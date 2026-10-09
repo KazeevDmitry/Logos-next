@@ -10,7 +10,7 @@ const subbranchKey = (id) => `s${id}`;
  * `value` and `onChange` use { branch_id, subbranch_id }; choosing a
  * sub-branch also reports the branch it belongs to.
  */
-export default function BranchSelect({ value, onChange, errorStatus, size }) {
+export default function BranchSelect({ id, value, onChange, errorStatus, size }) {
   const branches = useBranches();
 
   const treeData = branches.map((branch) => ({
@@ -41,6 +41,8 @@ export default function BranchSelect({ value, onChange, errorStatus, size }) {
 
   return (
     <TreeSelect
+      // From Form.Item: ties the field to its label.
+      id={id}
       showSearch
       allowClear
       treeDefaultExpandAll

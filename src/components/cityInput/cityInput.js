@@ -10,7 +10,7 @@ const SEARCH_DELAY_MS = 250;
  * City picker with server-side search over ~2500 Russian cities.
  * `value` is a city id; with nothing typed it offers the largest cities.
  */
-export function CitySelect({ value, onChange, width = '100%', placeholder = 'Начните вводить город' }) {
+export function CitySelect({ id, value, onChange, width = '100%', placeholder = 'Начните вводить город' }) {
   const theme = useThemeContext();
   const selected = useCity(value);
   const [options, setOptions] = useState([]);
@@ -48,6 +48,7 @@ export function CitySelect({ value, onChange, width = '100%', placeholder = 'Н�
 
   return (
     <Select
+      id={id}
       showSearch
       allowClear
       filterOption={false}
@@ -71,10 +72,11 @@ export function CitySelect({ value, onChange, width = '100%', placeholder = 'Н�
 }
 
 /** Plain select over a short reference list of { id, name }. */
-function ReferenceSelect({ items, value, onChange, width, placeholder }) {
+function ReferenceSelect({ id, items, value, onChange, width, placeholder }) {
   const theme = useThemeContext();
   return (
     <Select
+      id={id}
       showSearch
       allowClear
       optionFilterProp="children"
