@@ -19,15 +19,18 @@ const ANTD_PACKAGES = [
 ];
 
 // What a page of the site may load and where it may send data: this origin
-// only. Styles may be inline (Ant Design writes its CSS into the page);
-// scripts may not, except under `next dev`, whose hot reload needs it.
+// only. Inline styles and scripts stay allowed: Ant Design writes its CSS
+// into the page, and Next starts every page with a small inline script
+// (a nonce is not possible while some pages are prerendered). So the policy
+// does not stop an injected inline script by itself; it stops loading code
+// from another site and sending data to one. `next dev` also needs eval.
 const DEV = process.env.NODE_ENV !== 'production';
 // The chat socket goes to the API's own origin when it differs from the site's.
 const WS = process.env.NEXT_PUBLIC_WS_URL;
 const SOCKET_SOURCES = WS ? [WS, WS.replace(/^http/, 'ws')] : [];
 const CONTENT_SECURITY_POLICY = [
   "default-src 'self'",
-  `script-src 'self'${DEV ? " 'unsafe-inline' 'unsafe-eval'" : ''}`,
+  `script-src 'self' 'unsafe-inline'${DEV ? " 'unsafe-eval'" : ''}`,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob:",
   "font-src 'self' data:",
