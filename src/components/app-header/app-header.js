@@ -1,112 +1,38 @@
-import React, { useState, useContext, useEffect, useRef } from "react";
+import { LogoutOutlined } from '@ant-design/icons';
+import { Button } from 'antd';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-
-import AskModal from "../askModal/askModal";
-import Icons from "../../../utils/icons";
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useThemeContext } from '../../context/themeContext';
+import { useUserContext } from '../../context/userContext';
+import UserImage from '../userImage/userImage';
+import styles from './app-header.module.less';
+import MessagesLink from './messagesLink';
+import NotificationBell from './notificationBell';
 
+/** A <button> that looks like the element it replaced: no border, no background. */
+const plainButton = { border: 'none', background: 'none', padding: 0, font: 'inherit', color: 'inherit', textAlign: 'left' };
 
-import styles from "./app-header.module.less";
-
-import { Select, Button, Divider } from 'antd';
-
-import {useThemeContext} from '../../context/themeContext';
-import {useUserContext} from '../../context/userContext';
-
-import UserImage from "../userImage/userImage";
-import NotificationBell from "./notificationBell";
-import MessagesLink from "./messagesLink";
-
-import { LogoutOutlined } from "@ant-design/icons";
-
-const { Option } = Select;
-
-export default function AppHeader({loading}) 
-{
-
-  const [ userMenuOpen, setUserMenuOpen ] = useState(false);
-
-  const [ askShow, setAskShow ] = useState(false);
-  const [ curAvatar, setcurAvatar ] = useState();
-
-
-  const {currentUser, logout} = useUserContext();
-
-  // Truthy when someone is signed in (the session itself is in httpOnly cookies).
-  const userJWT = currentUser ? true : null;
-
-const isExpert = currentUser?.role === 'EXPERT';
-
-
- 
-  const { t, i18n } = useTranslation();
-
+/**
+ * The site header: logo, sections, and for a signed-in user the chat and
+ * notification icons with the account menu. On phones the sections and the
+ * account menu share one drawer behind the burger button.
+ */
+export default function AppHeader({ loading }) {
+  const { t } = useTranslation();
   const router = useRouter();
-
-  //const navigate = useNavigate();
-
-  const theme=useThemeContext();
-
-
-  const callUserMenu = () => {
-    setUserMenuOpen(!userMenuOpen);
-  };
-
-  const onUserLeave = () => {
-    // setAskShow(true);
-
-    logout();
-    setUserMenuOpen(!userMenuOpen);
-  };
-
-  const askHide = (value) => {
-
-    if (value) {
-      setUserMenuOpen(false);
-
-   
-  }
-  setAskShow(false);
-  };
-
-  const onOutClick = () => {
-    setUserMenuOpen(false);
-  };
-
-
-  const LANGS = [
-    {
-      title: 'English',
-      name: 'en'
-    },
-    {
-      title: 'Русский',
-      name: 'ru'
-    },
-  ]
+  const theme = useThemeContext();
+  const { currentUser, logout, isExpert } = useUserContext();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const signedIn = Boolean(currentUser);
 
   const PAGES = [
-    {
-    /*   name: isExpert ? 'Задачи' : 'Задать вопрос',
-      to: isExpert ? '/tasks' : '/addquestion', */
-      name: t('header.menu.0'),
-      to: '/tasks', 
-    },
-    {
-      name: t('header.menu.1'),
-      to: '/experts', 
-    },
-    {
-      name: t('header.menu.2'), // Новости
-      to: '/news'
-    },
-    {
-      name: t('header.menu.3'), // Вопросы юристам
-      to: '/questions'
-    }
+    { name: t('header.menu.0'), to: '/tasks' },
+    { name: t('header.menu.1'), to: '/experts' },
+    { name: t('header.menu.2'), to: '/news' },
+    { name: t('header.menu.3'), to: '/questions' },
   ];
-
   // "My responses" is for experts only.
   const USER_MENU_ITEMS = [
     { name: t('menu.user.profile'), to: '/personalaccount' },
@@ -116,299 +42,196 @@ const isExpert = currentUser?.role === 'EXPERT';
     { name: t('menu.user.finance'), to: '/finance' },
   ];
 
-  const logoffStr = t('buttons.logoff');
+  const toggleMenu = () => setMenuOpen((open) => !open);
+  const closeMenu = () => setMenuOpen(false);
+  const signOut = () => {
+    closeMenu();
+    logout();
+  };
+  const avatar = currentUser?.avatarUrl ?? '';
 
-  const username = currentUser?.name?? '';
-
-  let userImage='';
-
-userImage = currentUser?.avatarUrl ?? '';
-
-
-const padHeader = !loading ? '5px' : '0px';
-
-   return (
+  return (
     <>
-        {!theme?.isDesktop && 
-          <header className={styles.mobileHeader}>
-            <div className={styles.mobileTopBox}>
-               <div className={styles.burgerMenu} onClick={callUserMenu}>
-                    <div className={styles.menuDash}></div>
-                    <div className={styles.menuDash}></div>
-                    <div className={styles.menuDash}></div>
-               </div>
+      {!theme?.isDesktop && (
+        <header className={styles.mobileHeader}>
+          <div className={styles.mobileTopBox}>
+            <button
+              type="button"
+              className={styles.burgerMenu}
+              style={plainButton}
+              aria-label="Меню"
+              aria-expanded={menuOpen}
+              onClick={toggleMenu}
+            >
+              <span className={styles.menuDash} style={{ display: 'block' }} />
+              <span className={styles.menuDash} style={{ display: 'block' }} />
+              <span className={styles.menuDash} style={{ display: 'block' }} />
+            </button>
 
-               <Link href='/' className={styles.logosHeader}>
-                 LogosEst
-                  </Link>
-               {!userJWT && (
-                  <Button  htmlType="button"
-                   ghost
-                          style={{
-                                  height: "30px",
-                                  fontSize: "12px",
-                                  marginRight: "30px",
-                                  borderRadius: "4px"
-                                }}
-                          onClick={()=> router.push('/login')}
-                          >
-                          {t('buttons.mobileheaderBtn')}
-                  </Button>
-                )}
-               {userJWT &&
-                <div style={{marginRight: "30px", display: "flex", alignItems: "center", gap: "14px", color: "white"}}>
-                  <MessagesLink size={20} />
-                  <NotificationBell size={20} />
-                  <UserImage
-                      image= {userImage}
-                      online="true"
-                      width= {35}
-             
-                    />
-                  </div>  }
-            </div>
-            
-          </header>}
-          {/* //---------------------------------------------------------------------------------------------------------------------- */}
-
-        {theme?.isDesktop &&
-        <>
-       
-          <header className={styles.mainHeader} style={{paddingTop: '5px', paddingBottom: padHeader}}>
-              <div className={styles.menu}>
-                <div className={styles.mainLogo}>
-                  <Link href="/" 
-                     className={styles.logosHeader} style={{color: "#1890ff"}} > LogosEst 
-                  </Link>
-                </div>
-
-                <div className={styles.navToolsBox}>
-
-                  <ul className={styles.menuBox}>
-                    {
-                      PAGES.map(({ to, name }, i) => (
-                        <li key={i}>
-                          <NavLink
-                            href={to}
-                            style={{marginLeft: "50px"}}
-                          >
-                            { name }
-                          </NavLink>
-                        </li>
-                      ))
-                    }
-                    </ul>
-
-                  <div className={styles.toolBar} style={{fontSize: '16px'}}>
-
-                    <div className={styles.userBox}  style={{fontSize: '16px'}}>
-                      {userJWT && <span style={{marginRight: "18px", display: "flex", alignItems: "center", gap: "10px"}}><MessagesLink /><NotificationBell /></span>}
-                      {userJWT && <div className={styles.imageClazz} onClick={callUserMenu}>
-                                        <UserImage
-                                            image= {userImage}
-                                            online={false}
-                                            width= {45}
-                                          />
-                                    
-                                  </div>}
-
-                      {theme?.id !== "md" && userJWT && 
-                      
-                          <span className={styles.userLink} onClick={callUserMenu}>
-                              {currentUser?.name?? currentUser.email}
-                              <br></br>
-                              {currentUser?.surname?? ''}
-                          </span>
-                          }
-                    
-                      {!userJWT && 
-                    
-                      <Link href={'/login'}>
-                        <Button type="primary" htmlType="button"
-                                size = {theme.size}  
-                              
-                                style={{
-                                        // width: '62%',
-                                        marginLeft: '20px',
-                                        fontFamily: 'inherit'
-                                      }}
-                               
-                                >
-                                 Войти   
-                                {/* {t('buttons.headerBtn')} */}
-                        </Button>
-                         </Link>
-                   
-                     }
-
-                    </div>
-                  </div>
-                </div>  
-              </div>
-
-              {loading && <div 
-             
-                style={{
-                  width: '100%',
-                  overflow: 'hidden',
-                  margin: '0',
-                  height: '5px',
-                }} 
+            <Link href="/" className={styles.logosHeader}>
+              LogosEst
+            </Link>
+            {!signedIn && (
+              <Button
+                htmlType="button"
+                ghost
+                style={{ height: '30px', fontSize: '12px', marginRight: '30px', borderRadius: '4px' }}
+                onClick={() => router.push('/login')}
               >
-                <div className={styles.horizontalgradient}>
+                {t('buttons.mobileheaderBtn')}
+              </Button>
+            )}
+            {signedIn && (
+              <div style={{ marginRight: '30px', display: 'flex', alignItems: 'center', gap: '14px', color: 'white' }}>
+                <MessagesLink size={20} />
+                <NotificationBell size={20} />
+                <Link href="/personalaccount" aria-label="Личный кабинет">
+                  <UserImage image={avatar} width={35} />
+                </Link>
+              </div>
+            )}
+          </div>
+        </header>
+      )}
 
-                </div>
-             </div>}
-       
-            </header>
-       {/*      {loading &&  */}
-        
-            </>  
-}
+      {theme?.isDesktop && (
+        <header className={styles.mainHeader} style={{ paddingTop: '5px', paddingBottom: loading ? '0px' : '5px' }}>
+          <div className={styles.menu}>
+            <div className={styles.mainLogo}>
+              <Link href="/" className={styles.logosHeader} style={{ color: '#1890ff' }}>
+                LogosEst
+              </Link>
+            </div>
 
-      {userMenuOpen&&theme?.isDesktop && <UserMenu
-        onOutClick={onOutClick}
-        onUserLeave={onUserLeave}
-        logoff = {logoffStr}
-        items = {USER_MENU_ITEMS}
-        onClick={callUserMenu}
-      />}
-       {userMenuOpen&&!theme?.isDesktop && <MobileUserMenu
-        onOutClick={onOutClick}
-        onUserLeave={onUserLeave}
-        logoff = {logoffStr}
-        items = {USER_MENU_ITEMS}
-        mainItems = {PAGES}
-        onClick={callUserMenu}
-      />}
-      <AskModal visible={askShow} setShow={askHide} />
+            <div className={styles.navToolsBox}>
+              <nav aria-label="Разделы сайта">
+                <ul className={styles.menuBox}>
+                  {PAGES.map(({ to, name }) => (
+                    <li key={to}>
+                      <NavLink href={to} style={{ marginLeft: '50px' }}>
+                        {name}
+                      </NavLink>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+
+              <div className={styles.toolBar} style={{ fontSize: '16px' }}>
+                {signedIn && (
+                  <span style={{ marginRight: '18px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <MessagesLink />
+                    <NotificationBell />
+                  </span>
+                )}
+                {signedIn && (
+                  <button
+                    type="button"
+                    className={styles.userBox}
+                    style={{ ...plainButton, fontSize: '16px', cursor: 'pointer' }}
+                    aria-haspopup="true"
+                    aria-expanded={menuOpen}
+                    aria-label={`Меню пользователя: ${currentUser.name}`}
+                    onClick={toggleMenu}
+                  >
+                    <span className={styles.imageClazz} style={{ display: 'block' }}>
+                      <UserImage image={avatar} width={45} />
+                    </span>
+                    {theme?.id !== 'md' && (
+                      <span className={styles.userLink}>
+                        {currentUser.name}
+                        <br />
+                        {currentUser.surname ?? ''}
+                      </span>
+                    )}
+                  </button>
+                )}
+                {!signedIn && (
+                  <Link href="/login">
+                    <Button type="primary" htmlType="button" size={theme.size} style={{ marginLeft: '20px', fontFamily: 'inherit' }}>
+                      Войти
+                    </Button>
+                  </Link>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {loading && (
+            <div style={{ width: '100%', overflow: 'hidden', margin: '0', height: '5px' }} role="progressbar" aria-label="Загрузка страницы">
+              <div className={styles.horizontalgradient} />
+            </div>
+          )}
+        </header>
+      )}
+
+      {menuOpen && (
+        <DropMenu
+          className={theme?.isDesktop ? styles.userMenuBox : styles.mobileUserMenuBox}
+          groups={theme?.isDesktop ? [USER_MENU_ITEMS] : signedIn ? [PAGES, USER_MENU_ITEMS] : [PAGES]}
+          onClose={closeMenu}
+          onSignOut={signedIn ? signOut : null}
+          signOutText={t('buttons.logoff')}
+        />
+      )}
     </>
   );
-
-};
-
-
+}
 
 function NavLink({ children, href, style }) {
   const router = useRouter();
-  let match = href === router.pathname;
-
+  const match = href === router.pathname;
   return (
-    <Link href = {href}
-        
-       style={style} className={styles.menuLink + ' '+ (match ? styles.activeMenu : '')}>
-          {children}
-      
-        
-      </Link>
-       
+    <Link
+      href={href}
+      style={style}
+      aria-current={match ? 'page' : undefined}
+      className={`${styles.menuLink} ${match ? styles.activeMenu : ''}`}
+    >
+      {children}
+    </Link>
   );
 }
 
-//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-
-
-
-
- 
-  
-  
-
-
-  
-
-
-
-
-function MobileUserMenu (props) {
-  let mainRef = useRef();
-
-  const {setCurrentUser} = useUserContext();
+/** The account menu (desktop) or the drawer (phone). Closes on a click outside and on Escape. */
+function DropMenu({ className, groups, onClose, onSignOut, signOutText }) {
+  const box = useRef(null);
 
   useEffect(() => {
-
-    const onOutSideClick = (e) => {
-      if (mainRef.current && !mainRef.current.contains(e.target)) {
-        props.onOutClick();
+    const onMouseDown = (event) => {
+      // The button that opened the menu toggles it itself.
+      if (box.current && !box.current.contains(event.target) && !event.target.closest('[aria-expanded]')) {
+        onClose();
       }
     };
-
-    document.addEventListener("mousedown", onOutSideClick);
-        return () => {
-          document.removeEventListener("mousedown", onOutSideClick);
-        };
-     },
-  []);
-  
-
-  return (
-      <div className={styles.mobileUserMenuBox} ref={mainRef}>
-   
-        <UserMenuItems items = {props.mainItems} onClick= {props.onClick}/>    
-
-        <UserMenuItems items = {props.items} onClick= {props.onClick}/>
-
-        <div className={styles.userMenuLine}></div>
-        <div className={styles.userOutBox} onClick={(props.onUserLeave)}>
-          <span className={styles.outLabel}> {props.logoff} </span>
-          {/* <div className={styles.outIcon}>
-            <Icons.logoffDoor color={'#0062FF'} />
-          </div> */}
-        
-        </div>
-      </div>
-  )
-}
-
-class UserMenu extends React.Component {
-  constructor(props) {
-    super(props);
-    this.menuRef = React.createRef();
-    this.onOutSideClick = (e) => {
-      if (this.menuRef.current && !this.menuRef.current.contains(e.target)) {
-        this.props.onOutClick();
-      }
+    const onKeyDown = (event) => event.key === 'Escape' && onClose();
+    document.addEventListener('mousedown', onMouseDown);
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', onMouseDown);
+      document.removeEventListener('keydown', onKeyDown);
     };
-  }
-
-  componentDidMount() {
-    document.addEventListener("mousedown", this.onOutSideClick);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener("mousedown", this.onOutSideClick);
-  }
-
-  render() {
-  
-    return (
- 
-      <div className={styles.userMenuBox} ref={this.menuRef}>
-        <UserMenuItems items = {this.props.items} onClick={this.props.onClick}/>
-        <div className={styles.userMenuLine}></div>
-        <div className={styles.userOutBox} onClick={this.props.onUserLeave}>
-          <span className={styles.outLabel}> {this.props.logoff} </span>
-          <LogoutOutlined className={styles.logOutIcon} />
-        </div>
-      </div>
-    );
-  }
-}
-
-function UserMenuItems({items, onClick}){
-  const { t } = useTranslation();
+  }, [onClose]);
 
   return (
-    <div className={styles.userLinkBox}>
-      {
-         items.map(({ to, name }, i) => (
-                  <Link key={i} href={to}
-                    className={styles.menuLink} onClick={onClick}> { name } 
-                  </Link>
-              ))
-            }
-    </div>
-  )
+    <nav className={className} ref={box} aria-label="Меню">
+      {groups.map((items) => (
+        <div key={items[0].to} className={styles.userLinkBox}>
+          {items.map(({ to, name }) => (
+            <Link key={to} href={to} className={styles.menuLink} onClick={onClose}>
+              {name}
+            </Link>
+          ))}
+        </div>
+      ))}
+      {onSignOut && (
+        <>
+          <div className={styles.userMenuLine} />
+          <button type="button" className={styles.userOutBox} onClick={onSignOut}>
+            <span className={styles.outLabel}>{signOutText}</span>
+            <LogoutOutlined className={styles.logOutIcon} />
+          </button>
+        </>
+      )}
+    </nav>
+  );
 }

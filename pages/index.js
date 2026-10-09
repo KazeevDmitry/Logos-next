@@ -173,13 +173,28 @@ function MainTabs() {
   const tabClass = (tab, base) => (activeTab === tab ? `${base} ${styles.activeTab}` : base);
 
   return (
-    <div className={styles.tabBox}>
-      <div className={tabClass(1, styles.tabCls1)} onClick={() => setActiveTab(1)}>
-        <span className={tabClass(1, styles.tabText)}>{theme?.isDesktop ? 'Ищу задачу' : 'Задачи'}</span>
-      </div>
-      <div className={tabClass(2, styles.tabCls2)} onClick={() => setActiveTab(2)}>
-        <span className={tabClass(2, styles.tabText)}>{theme?.isDesktop ? 'Ищу исполнителя' : 'Эксперты'}</span>
-      </div>
+    <div className={styles.tabBox} role="tablist" aria-label="Что вы ищете">
+      {[
+        { tab: 1, cls: styles.tabCls1, wide: 'Ищу задачу', narrow: 'Задачи' },
+        { tab: 2, cls: styles.tabCls2, wide: 'Ищу исполнителя', narrow: 'Эксперты' },
+      ].map(({ tab, cls, wide, narrow }) => (
+        <div
+          key={tab}
+          role="tab"
+          tabIndex={0}
+          aria-selected={activeTab === tab}
+          className={tabClass(tab, cls)}
+          onClick={() => setActiveTab(tab)}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              setActiveTab(tab);
+            }
+          }}
+        >
+          <span className={tabClass(tab, styles.tabText)}>{theme?.isDesktop ? wide : narrow}</span>
+        </div>
+      ))}
       <Form
         name="tabcontent"
         layout="vertical"

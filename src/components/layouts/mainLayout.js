@@ -13,8 +13,12 @@ export default function MainLayout({ children, loading }) {
 
   return (
     <Layout>
+      <a href="#content" className="skip-link">
+        Перейти к содержимому
+      </a>
       <AppHeader loading={loading} />
       <Content
+        id="content"
         className={styles.appContainer}
         style={{
           paddingLeft: theme?.appContainerPadding,

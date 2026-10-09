@@ -83,7 +83,7 @@ export default function UserImage ({image, online, width, onClick, onMouseEnter,
                                       src={userImage} 
                                       onMouseEnter={onImageMouseEnter}
                                       onMouseLeave={onImageMouseLeave}
-                                      alt="img">
+                                      alt="">
                                   </img> 
                                   }
   
