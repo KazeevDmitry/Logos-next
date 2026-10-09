@@ -22,25 +22,25 @@ make down
 
 If port 3000 is taken: `WEB_PORT=3100 make up` (the same variable works for the API's `make up`).
 
-| Command        | What it does                                                    |
-| -------------- | --------------------------------------------------------------- |
-| `make lint`    | ESLint                                                          |
-| `make format`  | Prettier, write changes                                         |
-| `make locales` | Check that `ru.js` and `en.js` have the same keys               |
+| Command        | What it does                                                     |
+| -------------- | ---------------------------------------------------------------- |
+| `make lint`    | ESLint                                                           |
+| `make format`  | Prettier, write changes                                          |
+| `make locales` | Check that `ru.js` and `en.js` have the same keys                |
 | `make build`   | Production build into `.next-check`, safe next to the dev server |
-| `make e2e`     | Browser tests of the whole product in a throwaway stack         |
-| `make install` | Reinstall dependencies after `package.json` changes             |
-| `make shell`   | Shell inside the container                                      |
+| `make e2e`     | Browser tests of the whole product in a throwaway stack          |
+| `make install` | Reinstall dependencies after `package.json` changes              |
+| `make shell`   | Shell inside the container                                       |
 
 Each target is a thin wrapper around `docker compose run --rm web …`; to add a package use `docker compose run --rm web yarn add <name>`.
 
 ## Configuration
 
-| Variable | When it is read | Meaning |
-| -------- | --------------- | ------- |
-| `API_INTERNAL_URL` | build and run | The API as this server reaches it. `/api/v1` and `/uploads` are proxied there, so the browser only ever talks to the site's own origin and the session cookies are first-party. |
-| `NEXT_PUBLIC_WS_URL` | build | The API's public origin for the chat socket. Empty when a reverse proxy serves `/socket.io` on the site's origin (production). |
-| `NEXT_PUBLIC_SITE_URL` | build | Public address of the site, for canonical links and sharing tags. |
+| Variable               | When it is read | Meaning                                                                                                                                                                         |
+| ---------------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `API_INTERNAL_URL`     | build and run   | The API as this server reaches it. `/api/v1` and `/uploads` are proxied there, so the browser only ever talks to the site's own origin and the session cookies are first-party. |
+| `NEXT_PUBLIC_WS_URL`   | build           | The API's public origin for the chat socket. Empty when a reverse proxy serves `/socket.io` on the site's origin (production).                                                  |
+| `NEXT_PUBLIC_SITE_URL` | build           | Public address of the site, for canonical links and sharing tags.                                                                                                               |
 
 In development they come from the compose files. For the production image they are build arguments (see `Dockerfile` and `../Logos-api/compose.prod.yml`). Do not create a file named `.env` here: Docker Compose reads it for its own settings.
 
