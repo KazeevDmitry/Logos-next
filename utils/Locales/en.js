@@ -405,6 +405,11 @@ export default {
   // Page and component copy, grouped by the file that uses it:
   // pages.<route>, ui.<component>.
   pages: {
+    agreement: {
+      title: 'User agreement',
+      description: 'Terms of use of LogosEst: registration, tasks, payment, disputes.',
+      updated: 'Version of {{date}}',
+    },
     404: {
       stranitsaNeNaydena: 'Page not found',
       vozmozhnoSsylkaUstarelaIliV:
@@ -753,7 +758,8 @@ export default {
       parol: 'Password',
       povtoriteParol: 'Repeat the password',
       primiteUsloviyaSoglasheniya: 'Accept the terms of the agreement',
-      prinimayuUsloviyaPolzovatelskogoSoglasheni: 'I accept the terms of the user agreement',
+      prinimayuUsloviya: 'I accept the terms of the',
+      polzovatelskogoSoglasheniya: 'user agreement',
       zaregistrirovatsya: 'Sign up',
       uzheEstAkkaunt: 'Already have an account?',
       voyti: 'Sign in',
@@ -948,6 +954,7 @@ export default {
     footer: {
       logosAgregatorYuridicheskihUslugVse:
         '© Logos — legal services marketplace. All rights reserved',
+      polzovatelskoeSoglashenie: 'User agreement',
     },
     mainLayout: {
       pereytiKSoderzhimomu: 'Skip to content',

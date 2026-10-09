@@ -129,7 +129,13 @@ export default function Register() {
           ]}
           style={{ marginBottom: 0 }}
         >
-          <Checkbox>{i18n.t('pages.register.prinimayuUsloviyaPolzovatelskogoSoglasheni')}</Checkbox>
+          <Checkbox>
+            {i18n.t('pages.register.prinimayuUsloviya')}{' '}
+            {/* Opens beside the form, so what has been typed is not lost. */}
+            <Link href="/agreement" target="_blank" rel="noopener">
+              {i18n.t('pages.register.polzovatelskogoSoglasheniya')}
+            </Link>
+          </Checkbox>
         </Form.Item>
         <FormError>{error}</FormError>
         <Form.Item>
