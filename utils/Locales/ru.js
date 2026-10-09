@@ -5,15 +5,14 @@ export default {
   main: {
     promo: {
       title: 'Квалифицированная юридическая помощь',
-      subtitle:
-        'Более {{count}} исполнителей, работающих в различных сферах юриспруденции и права.',
+      subtitle: 'Более {{count}} экспертов, работающих в различных сферах юриспруденции и права.',
     },
     top: {
       title: 'Лучшие эксперты месяца',
     },
   },
   header: {
-    menu: ['Задачи', 'Исполнители', 'Новости', 'Вопросы юристам', 'Помощь'],
+    menu: ['Задачи', 'Эксперты', 'Новости', 'Вопросы юристам', 'Помощь'],
   },
   reviews: {
     plural: ['Нет отзывов', '%d отзыв', '%d отзыва', '%d отзывов'],
@@ -235,7 +234,7 @@ export default {
     deleteDocument: 'Удалить документ',
     writeUs: 'Напишите нам',
     findTask: 'Найти задачу',
-    findExpert: 'Найти исполнителя',
+    findExpert: 'Найти эксперта',
     askQuestion: 'Задать вопрос',
     resetFilter: 'Сбросить фильтр',
     save: 'Сохранить',
@@ -502,7 +501,7 @@ export default {
       byudzhet: 'Бюджет',
       otraslPrava: 'Отрасль права',
       naytiZadachu: 'Найти задачу',
-      naytiIspolnitelya: 'Найти исполнителя',
+      naytiIspolnitelya: 'Найти эксперта',
     },
     login: {
       nevernyyEMailIliParol: 'Неверный e-mail или пароль',
@@ -636,9 +635,9 @@ export default {
       profilZapolnen: 'Профиль заполнен',
       zapolniteProfil: 'Заполните профиль',
       zakazchikiChascheVybirayutIspolniteleyS:
-        'Заказчики чаще выбирают исполнителей с подробным и подтверждённым профилем.',
+        'Заказчики чаще выбирают экспертов с подробным и подтверждённым профилем.',
       sZapolnennymProfilemIspolnitelyamProsche:
-        'С заполненным профилем исполнителям проще с вами работать.',
+        'С заполненным профилем экспертам проще с вами работать.',
       vyYuristAdvokatIliNotarius: 'Вы юрист, адвокат или нотариус?',
       stanteEkspertomOtklikaytesNaZadachi:
         'Станьте экспертом: откликайтесь на задачи заказчиков и отвечайте на вопросы.',
@@ -975,7 +974,7 @@ export default {
     },
     seo: {
       logosestServisPoiskaYuristovAdvokatov:
-        'LogosEst — сервис поиска юристов, адвокатов и нотариусов: разместите задачу, сравните предложения и выберите исполнителя.',
+        'LogosEst — сервис поиска юристов, адвокатов и нотариусов: разместите задачу, сравните предложения и выберите эксперта.',
       yuridicheskieUslugiOnlayn: '{{SITE_NAME}} — юридические услуги онлайн',
     },
     accountTaskList: {
