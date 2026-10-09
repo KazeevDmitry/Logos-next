@@ -437,7 +437,7 @@ export default {
       otraslPrava: 'Branch of law',
       vyberiteOtraslPrava: 'Choose a branch of law',
       dokumentyDo5Faylov: 'Documents (up to 5 files)',
-      jpgPngWebpPdfDoc: 'JPG, PNG, WEBP, PDF, DOC, DOCX up to 10 MB',
+      jpgPngWebpPdfDoc: 'JPG, PNG, WEBP, PDF, DOC, DOCX',
       opublikovatVopros: 'Publish the question',
     },
     articleSlug: {
@@ -708,7 +708,7 @@ export default {
       zagruziteSkanIliFotoRazvorota:
         'Upload a scan or photo of the passport page with your photograph. The name in the passport must match the one in your profile.',
       dokumentUviditTolkoAdministratorPri:
-        'Only the administrator sees the document during the check. JPG, PNG, WEBP or PDF up to 10 MB.',
+        'Only the administrator sees the document during the check. JPG, PNG, WEBP or PDF.',
       vybratFayl: 'Choose a file',
       otpravitPovtorno: 'Send again',
       otpravitNaProverku: 'Send for checking',
@@ -931,7 +931,7 @@ export default {
       otzyvovPokaNet: 'No reviews yet',
     },
     fileUploader: {
-      faylSlishkomBolshoyMaksimum10: 'The file is too large (10 MB at most)',
+      faylSlishkomBolshoy: 'The file is too large',
       podhodyatJpgPngWebpPdf: 'JPG, PNG, WEBP, PDF, DOC and DOCX are accepted',
       prikrepitFayl: 'Attach a file',
       ubrat: 'Remove {{name}}',
@@ -1035,7 +1035,7 @@ export default {
       otrasliPrava: 'Branches of law',
       dokumentyDo10Faylov: 'Documents (up to 10 files)',
       dokumentyUvidyatTolkoEkspertyI:
-        'Only experts and administrators see the documents. JPG, PNG, WEBP, PDF, DOC, DOCX up to 10 MB.',
+        'Only experts and administrators see the documents. JPG, PNG, WEBP, PDF, DOC, DOCX.',
     },
   },
 };

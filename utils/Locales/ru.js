@@ -436,7 +436,7 @@ export default {
       otraslPrava: 'Отрасль права',
       vyberiteOtraslPrava: 'Выберите отрасль права',
       dokumentyDo5Faylov: 'Документы (до 5 файлов)',
-      jpgPngWebpPdfDoc: 'JPG, PNG, WEBP, PDF, DOC, DOCX до 10 МБ',
+      jpgPngWebpPdfDoc: 'JPG, PNG, WEBP, PDF, DOC, DOCX',
       opublikovatVopros: 'Опубликовать вопрос',
     },
     articleSlug: {
@@ -710,7 +710,7 @@ export default {
       zagruziteSkanIliFotoRazvorota:
         'Загрузите скан или фото разворота паспорта с фотографией. Имя и фамилия в паспорте должны совпадать с указанными в профиле.',
       dokumentUviditTolkoAdministratorPri:
-        'Документ увидит только администратор при проверке. JPG, PNG, WEBP или PDF до 10 МБ.',
+        'Документ увидит только администратор при проверке. JPG, PNG, WEBP или PDF.',
       vybratFayl: 'Выбрать файл',
       otpravitPovtorno: 'Отправить повторно',
       otpravitNaProverku: 'Отправить на проверку',
@@ -934,7 +934,7 @@ export default {
       otzyvovPokaNet: 'Отзывов пока нет',
     },
     fileUploader: {
-      faylSlishkomBolshoyMaksimum10: 'Файл слишком большой (максимум 10 МБ)',
+      faylSlishkomBolshoy: 'Файл слишком большой',
       podhodyatJpgPngWebpPdf: 'Подходят JPG, PNG, WEBP, PDF, DOC и DOCX',
       prikrepitFayl: 'Прикрепить файл',
       ubrat: 'Убрать {{name}}',
@@ -1038,7 +1038,7 @@ export default {
       otrasliPrava: 'Отрасли права',
       dokumentyDo10Faylov: 'Документы (до 10 файлов)',
       dokumentyUvidyatTolkoEkspertyI:
-        'Документы увидят только эксперты и администраторы. JPG, PNG, WEBP, PDF, DOC, DOCX до 10 МБ.',
+        'Документы увидят только эксперты и администраторы. JPG, PNG, WEBP, PDF, DOC, DOCX.',
     },
   },
 };

@@ -6,7 +6,7 @@ import { errorMessage, errorStatus } from '../../../lib/api/client';
 
 import i18n from '../../../utils/i18n-init';
 const UPLOAD_ERRORS = {
-  413: i18n.t('ui.fileUploader.faylSlishkomBolshoyMaksimum10'),
+  413: i18n.t('ui.fileUploader.faylSlishkomBolshoy'),
   415: i18n.t('ui.fileUploader.podhodyatJpgPngWebpPdf'),
 };
 
