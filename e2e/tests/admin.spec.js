@@ -254,8 +254,14 @@ test.describe.serial('the admin panel', () => {
     );
     const body = await response.json();
     expect(body.notice.message).toBe('Это последний администратор: его роль изменить нельзя');
-    expect(body.record.params).toMatchObject({ role: 'ADMIN', status: 'ACTIVE' });
+    // The form gets back what was typed, with the mistake marked; nothing is saved.
+    expect(Object.keys(body.record.errors)).toEqual(['role']);
+    const kept = await (
+      await admin.request.get(`${ADMIN_URL}/admin/api/resources/User/records/${adminId}/show`)
+    ).json();
+    expect(kept.record.params).toMatchObject({ role: 'ADMIN', status: 'ACTIVE' });
     // The password hash never leaves the server.
     expect(body.record.params).not.toHaveProperty('passwordHash');
+    expect(kept.record.params).not.toHaveProperty('passwordHash');
   });
 });
