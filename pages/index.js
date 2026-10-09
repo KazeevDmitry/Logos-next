@@ -36,7 +36,10 @@ const specOf = (expert) => expert.specializations[0]?.name ?? '';
 export default function Home({ topExperts }) {
   const theme = useThemeContext();
   const { t } = useTranslation();
+  // The card of the expert under the pointer. It stays mounted after the
+  // pointer leaves, only hidden, so it can fade out as well as in.
   const [hovered, setHovered] = useState(null);
+  const [cardShown, setCardShown] = useState(false);
 
   const compact = theme.size === 'middle';
   const sizes = {
@@ -52,6 +55,7 @@ export default function Home({ topExperts }) {
       ? Math.round(box.top - 160 + window.pageYOffset + box.height * 0.2)
       : Math.round(box.bottom - 60 + window.pageYOffset - box.height * 0.2);
     setHovered({ expert, left, top });
+    setCardShown(true);
   };
 
   const bleed = `-${theme?.appContainerPadding}px`;
@@ -101,7 +105,7 @@ export default function Home({ topExperts }) {
                     image={expert.user.avatarUrl ?? ''}
                     width={sizes[slot.size]}
                     onMouseEnter={onMouseEnter(expert, slot.tooltipAbove)}
-                    onMouseLeave={() => setHovered(null)}
+                    onMouseLeave={() => setCardShown(false)}
                     style={{ cursor: 'pointer' }}
                   />
                 </Link>
@@ -109,7 +113,14 @@ export default function Home({ topExperts }) {
             );
           })}
 
-          {hovered && <LittleCard expert={hovered.expert} top={hovered.top} left={hovered.left} />}
+          {hovered && (
+            <LittleCard
+              expert={hovered.expert}
+              top={hovered.top}
+              left={hovered.left}
+              shown={cardShown}
+            />
+          )}
           <MainTabs />
         </div>
       )}
@@ -142,9 +153,13 @@ export default function Home({ topExperts }) {
 }
 
 /** The small card that follows the pointer over a hero avatar. */
-function LittleCard({ expert, top, left }) {
+function LittleCard({ expert, top, left, shown }) {
   return (
-    <div className={styles.littleCard} style={{ left: `${left}px`, top: `${top}px` }}>
+    <div
+      className={shown ? `${styles.littleCard} ${styles.littleCardShown}` : styles.littleCard}
+      style={{ left: `${left}px`, top: `${top}px` }}
+      aria-hidden={!shown}
+    >
       <div className={styles.gridElement} style={{ fontSize: '18px', fontWeight: '600' }}>
         {expert.user.name} {expert.user.surname ?? ''}
       </div>

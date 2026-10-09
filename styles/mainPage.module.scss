@@ -56,6 +56,41 @@
   border-radius: 10px;
   // box-shadow: 0 0 2px #666;
   z-index: 2;
+  // Hidden until an expert's photo is under the pointer; fades both ways.
+  // `visibility` waits for the fade-out to end, then takes the card out of
+  // the way of the pointer and of screen readers.
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.2s ease,
+    visibility 0s linear 0.2s;
+}
+
+.littleCardShown {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.2s ease;
+  // The card is created already shown the first time: an animation, unlike
+  // a transition, also plays then.
+  animation: littleCardIn 0.2s ease;
+}
+
+@keyframes littleCardIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .littleCard,
+  .littleCardShown {
+    transition: none;
+    animation: none;
+  }
 }
 
 .tabBox {
