@@ -107,30 +107,14 @@ const isExpert = currentUser?.role === 'EXPERT';
     }
   ];
 
+  // "My responses" is for experts only.
   const USER_MENU_ITEMS = [
-    {
-      name: t('menu.user.profile'),
-      to: "/personalaccount",
-    },
-    {
-      name: t('menu.user.projects'),
-      to: '/mytasks', 
-    },
-    {
-      name: t('menu.user.requests'), 
-      to: '#/404'
-    },
-    {
-      name: t('menu.user.messages'), 
-      to: '#/404'
-    },
-    {
-      name: t('menu.user.finance'), 
-      to: '#/404'
-    }
+    { name: t('menu.user.profile'), to: '/personalaccount' },
+    { name: t('menu.user.projects'), to: '/mytasks' },
+    ...(isExpert ? [{ name: t('menu.user.requests'), to: '/myresponses' }] : []),
+    { name: t('menu.user.messages'), to: '/messages' },
+    { name: t('menu.user.finance'), to: '/finance' },
   ];
-  
- 
 
   const logoffStr = t('buttons.logoff');
 
