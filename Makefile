@@ -1,6 +1,6 @@
 RUN = docker compose run --rm web
 
-.PHONY: up down logs install lint format build shell
+.PHONY: up down logs install lint format build shell e2e locales
 
 up: ## start the dev server on http://localhost:3000
 	docker compose up -d --build
@@ -25,3 +25,9 @@ build: ## production build into .next-check, safe to run next to the dev server
 
 shell:
 	$(RUN) bash
+
+locales: ## ru.js and en.js must have the same keys
+	$(RUN) yarn check:locales
+
+e2e: ## browser tests of the whole product (throwaway stack from ../Logos-api)
+	$(MAKE) -C ../Logos-api e2e-ui

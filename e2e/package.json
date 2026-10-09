@@ -1,0 +1,11 @@
+{
+  "name": "logos-e2e",
+  "private": true,
+  "description": "Browser tests of the whole product. Run with `make e2e` (Docker); see ../README.md.",
+  "scripts": {
+    "test": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.49.1"
+  }
+}
