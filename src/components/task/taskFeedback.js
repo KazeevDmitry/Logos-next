@@ -26,6 +26,13 @@ export default function TaskFeedback({ task, onDone }) {
           <span style={{ color: '#5E6674' }}>
             {dayjs(task.feedback.createdAt).format('DD.MM.YYYY')}
           </span>
+          {/* Only the author is sent a review that is not published yet. */}
+          {task.feedback.status === 'PENDING' && (
+            <span style={{ color: '#C98A0B' }}>{i18n.t('ui.taskFeedback.naProverke')}</span>
+          )}
+          {task.feedback.status === 'REJECTED' && (
+            <span style={{ color: '#F44336' }}>{i18n.t('ui.taskFeedback.otklonen')}</span>
+          )}
         </div>
         <div style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere', marginTop: '10px' }}>
           {task.feedback.text}

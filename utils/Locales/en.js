@@ -1009,7 +1009,11 @@ export default {
     taskFeedback: {
       zakazchikPokaNeOstavilOtzyv: 'The customer has not left a review yet.',
       spasiboZaOtzyv: 'Thank you for the review',
-      onPoyavitsyaVProfileIspolnitelya: "It will appear in the performer's profile.",
+      onPoyavitsyaVProfileIspolnitelya:
+        "It will appear on the expert's profile after an administrator has checked it.",
+      naProverke:
+        "Being checked: it will appear on the expert's profile once an administrator publishes it",
+      otklonen: 'Not published: declined by an administrator',
       nePoluchilosSohranitOtzyv: 'Could not save the review',
       otseniteRabotuIspolnitelyaOtzyvUvidyat:
         "Rate the performer's work. Other customers will see the review; it cannot be changed later.",

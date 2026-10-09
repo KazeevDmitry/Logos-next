@@ -1011,10 +1011,13 @@ export default {
     taskFeedback: {
       zakazchikPokaNeOstavilOtzyv: 'Заказчик пока не оставил отзыв.',
       spasiboZaOtzyv: 'Спасибо за отзыв',
-      onPoyavitsyaVProfileIspolnitelya: 'Он появится в профиле исполнителя.',
+      onPoyavitsyaVProfileIspolnitelya:
+        'Он появится в профиле эксперта после проверки администратором.',
+      naProverke: 'На проверке: появится в профиле эксперта после публикации администратором',
+      otklonen: 'Не опубликован: отклонён администратором',
       nePoluchilosSohranitOtzyv: 'Не получилось сохранить отзыв',
       otseniteRabotuIspolnitelyaOtzyvUvidyat:
-        'Оцените работу исполнителя. Отзыв увидят другие заказчики; изменить его потом нельзя.',
+        'Оцените работу исполнителя. После проверки администратором отзыв увидят другие заказчики; изменить его потом нельзя.',
       otsenka: 'Оценка',
       postavteOtsenkuOt1Do: 'Поставьте оценку от 1 до 5',
       otzyv: 'Отзыв',

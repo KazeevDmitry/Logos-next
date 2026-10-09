@@ -1,10 +1,16 @@
 const { test, expect } = require('@playwright/test');
-const { EXPERT, newPerson, register, signIn, uniqueEmail } = require('./helpers');
+const {
+  ADMIN,
+  ADMIN_URL,
+  EXPERT,
+  confirmAction,
+  newPerson,
+  register,
+  signIn,
+  signInToPanel,
+  uniqueEmail,
+} = require('./helpers');
 
-/** The admin panel is served by the API, not by the site. */
-const ADMIN_URL = process.env.ADMIN_URL ?? 'http://localhost:4000';
-/** Seeded by the API (`SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD`). */
-const ADMIN = { email: 'admin@logosest.local', password: 'Admin12345' };
 /** The smallest file the API accepts as a PNG image. */
 const PASSPORT = {
   name: 'passport.png',
@@ -14,19 +20,6 @@ const PASSPORT = {
     Buffer.from('scan of a passport'),
   ]),
 };
-
-async function signInToPanel(page, { email, password }) {
-  await page.goto(`${ADMIN_URL}/admin/login`);
-  await page.locator('input[name=email]').fill(email);
-  await page.locator('input[name=password]').fill(password);
-  await page.getByRole('button', { name: 'Войти' }).click();
-}
-
-/** Clicks a button of a record and answers the "are you sure?" dialog with yes. */
-async function confirmAction(page, action) {
-  await page.getByTestId(`action-${action}`).click();
-  await page.getByRole('button', { name: 'Подтвердить' }).click();
-}
 
 /**
  * Registers a person on the site, makes them an expert and sends a passport

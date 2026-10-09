@@ -67,10 +67,32 @@ async function confirmClick(page, name) {
     .click();
 }
 
+/** The admin panel is served by the API, not by the site. */
+const ADMIN_URL = process.env.ADMIN_URL ?? 'http://localhost:4000';
+/** Seeded by the API (`SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD`). */
+const ADMIN = { email: 'admin@logosest.local', password: 'Admin12345' };
+
+async function signInToPanel(page, { email, password }) {
+  await page.goto(`${ADMIN_URL}/admin/login`);
+  await page.locator('input[name=email]').fill(email);
+  await page.locator('input[name=password]').fill(password);
+  await page.getByRole('button', { name: 'Войти' }).click();
+}
+
+/** Clicks a button of a record in the panel and answers "are you sure?" with yes. */
+async function confirmAction(page, action) {
+  await page.getByTestId(`action-${action}`).click();
+  await page.getByRole('button', { name: 'Подтвердить' }).click();
+}
+
 const uniqueEmail = (prefix) =>
   `${prefix}-${Date.now()}-${Math.floor(Math.random() * 1e4)}@e2e.logosest.local`;
 
 module.exports = {
+  ADMIN,
+  ADMIN_URL,
+  signInToPanel,
+  confirmAction,
   EXPERT,
   DEMO_PASSWORD,
   newPerson,

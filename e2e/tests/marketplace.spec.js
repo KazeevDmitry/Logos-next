@@ -1,11 +1,14 @@
 const { test, expect } = require('@playwright/test');
 const {
+  ADMIN,
   EXPERT,
+  confirmAction,
   confirmClick,
   findLinkInMail,
   newPerson,
   register,
   signIn,
+  signInToPanel,
   uniqueEmail,
 } = require('./helpers');
 
@@ -128,6 +131,29 @@ test.describe.serial('a task from publication to review', () => {
     await customerPage.getByLabel('Отзыв', { exact: true }).fill('Всё чётко и в срок, рекомендую.');
     await customerPage.getByRole('button', { name: 'Оставить отзыв' }).click();
     await expect(customerPage.getByText('Всё чётко и в срок, рекомендую.')).toBeVisible();
+    // Not public yet: an administrator reads every review first.
+    await expect(customerPage.getByText('На проверке')).toBeVisible();
+    await expertPage.goto(taskUrl);
+    await expect(expertPage.getByText('Заказчик пока не оставил отзыв.')).toBeVisible();
+  });
+
+  test('an administrator publishes the review', async ({ browser }) => {
+    const admin = await newPerson(browser);
+    await signInToPanel(admin, ADMIN);
+    const waiting = admin.getByTestId('card-Отзывы на проверке');
+    await expect(waiting.getByRole('heading')).toHaveText('1');
+    await waiting.getByRole('link', { name: 'Открыть список' }).click();
+
+    const row = admin.locator('tbody tr', { hasText: 'Всё чётко и в срок, рекомендую.' });
+    await expect(row).toContainText('На проверке');
+    // A click on the row opens the review.
+    await row.getByText('Всё чётко и в срок, рекомендую.').click();
+    await confirmAction(admin, 'approve');
+    await expect(admin.getByText('Отзыв опубликован')).toBeVisible();
+    await admin.context().close();
+
+    await customerPage.reload();
+    await expect(customerPage.getByText('На проверке')).toHaveCount(0);
   });
 
   test('the expert is paid, less the commission, and the review is on the profile', async () => {
