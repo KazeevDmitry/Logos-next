@@ -7,7 +7,6 @@ import { useQuery } from '@tanstack/react-query';
 import gfm from 'remark-gfm';
 import { news } from '../../lib/api';
 import { createApi } from '../../lib/api/client';
-import Comments from '../../src/components/comments/comments';
 import PageContainer from '../../src/components/layouts/pageContainer';
 import PageHeader from '../../src/components/layouts/pageHeader';
 import NewsCard from '../../src/components/newsCard/newsCard';
@@ -105,19 +104,9 @@ export default function ArticlePage({ serverArticle, serverSimilar = [] }) {
             </div>
           </article>
 
-          <div className={stylesArt.commentsBlock} style={{ padding: pad }}>
-            <div className={stylesArt.commentsHeader} style={{ marginBottom: pad }}>
-              <span style={{ lineHeight: '32px' }}>
-                {t('headers.comments')}
-                {article.commentsCount > 0 ? ` (${article.commentsCount})` : ''}
-              </span>
-            </div>
-            <Comments articleId={article.id} />
-          </div>
-
           {!theme?.isDesktop && similarTiles.length > 0 && (
-            <div className={stylesArt.commentsBlock} style={{ padding: pad }}>
-              <div className={stylesArt.commentsHeader}>{t('headers.similarnews')}</div>
+            <div className={stylesArt.similarBlock} style={{ padding: pad }}>
+              <div className={stylesArt.similarHeader}>{t('headers.similarnews')}</div>
               <Row gutter={[gutter, gutter]} style={{ marginTop: '20px' }}>
                 {similarTiles}
               </Row>

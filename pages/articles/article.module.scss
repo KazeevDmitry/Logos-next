@@ -128,7 +128,7 @@
   margin-top: 40px;
 }
 
-.commentsBlock {
+.similarBlock {
   width: 100%;
   background-color: white;
   border-radius: 10px;
@@ -137,7 +137,7 @@
   min-height: 200px;
 }
 
-.commentsHeader {
+.similarHeader {
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -148,10 +148,6 @@
   font-weight: 450;
   align-items: center;
   line-height: 32px;
-}
-
-.addCommentBtn {
-  max-width: 350px;
 }
 
 @media (max-width: 992px) and (min-width: 576px) {
@@ -209,14 +205,8 @@
       }
     }
   }
-  .commentsBlock {
+  .similarBlock {
     padding: 15px 20px;
-  }
-  .addCommentBtn {
-    width: 100%;
-    margin-top: 20px;
-    margin-left: auto;
-    margin-right: auto;
   }
 }
 
