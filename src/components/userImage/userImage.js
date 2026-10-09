@@ -1,4 +1,4 @@
-import React from 'react';
+import Image from 'next/image';
 import styles from './userImage.module.less';
 import { UserOutlined } from '@ant-design/icons';
 
@@ -74,15 +74,16 @@ export default function UserImage({
   return (
     <div style={wrapDiv} onClick={onClick ?? null}>
       {image && image !== '' && (
-        <img
-          style={imageStyle}
+        // Resized to the size it is shown at; the name is always next to it, so no alt text.
+        <Image
+          style={{ ...imageStyle, objectFit: 'cover' }}
           src={userImage}
+          width={width}
+          height={width}
           onMouseEnter={onImageMouseEnter}
           onMouseLeave={onImageMouseLeave}
           alt=""
-          loading="lazy"
-          decoding="async"
-        ></img>
+        />
       )}
 
       {(!image || image === '') && (

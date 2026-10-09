@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { Col, Result, Row } from 'antd';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
@@ -68,12 +69,17 @@ export default function ArticlePage({ serverArticle, serverSimilar = [] }) {
         <Col xs={24} sm={24} md={24} lg={18} xl={18}>
           <article className={stylesArt.articleStyle} style={{ paddingBottom: pad }}>
             {article.imageUrl && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
+              // The cover is the largest thing on the page: sized by the layout, loaded first.
+              <Image
                 src={article.imageUrl}
                 alt=""
+                width={1200}
+                height={480}
+                priority
+                sizes="(max-width: 992px) 100vw, 75vw"
                 style={{
                   width: '100%',
+                  height: 'auto',
                   maxHeight: '480px',
                   objectFit: 'cover',
                   borderRadius: '10px 10px 0px 0px',

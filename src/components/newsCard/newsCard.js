@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { Col } from 'antd';
 import Link from 'next/link';
 import { useThemeContext } from '../../context/themeContext';
@@ -58,10 +59,11 @@ export function PartnerNewsCard({ article }) {
       <div className={styles.partnerCard} style={{ paddingLeft: pad, paddingRight: pad }}>
         {article.imageUrl && (
           <div className={styles.flexCont}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              style={{ width: '70px', height: '45px', objectFit: 'cover' }}
+            <Image
+              style={{ objectFit: 'cover' }}
               src={article.imageUrl}
+              width={70}
+              height={45}
               alt=""
             />
           </div>
