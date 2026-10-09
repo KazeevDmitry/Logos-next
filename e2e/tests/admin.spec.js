@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { EXPERT, newPerson, register, uniqueEmail } = require('./helpers');
+const { EXPERT, newPerson, register, signIn, uniqueEmail } = require('./helpers');
 
 /** The admin panel is served by the API, not by the site. */
 const ADMIN_URL = process.env.ADMIN_URL ?? 'http://localhost:4000';
@@ -214,6 +214,37 @@ test.describe.serial('the admin panel', () => {
 
     await confirmAction(admin, 'unblock');
     await expect(admin.getByText('Пользователь разблокирован')).toBeVisible();
+  });
+
+  test('adds an expert, who signs in on the site with the temporary password', async ({ page }) => {
+    const email = uniqueEmail('added');
+    await admin.goto(`${ADMIN_URL}/admin/resources/Expert`);
+    await admin.getByTestId('action-addExpert').click();
+    const form = admin.getByTestId('new-expert-form');
+    await form.locator('#expert-email').fill(email);
+    await form.locator('#expert-name').fill('Нина');
+    await form.locator('#expert-surname').fill('Добавленная');
+
+    // A specialization and a branch of law are required.
+    await form.getByRole('button', { name: 'Добавить эксперта' }).click();
+    await expect(admin.getByText('Выберите хотя бы одну специализацию')).toBeVisible();
+    await form.getByText('Адвокат', { exact: true }).click();
+    await form.getByText('Семейное право', { exact: true }).click();
+    await form.getByRole('button', { name: 'Добавить эксперта' }).click();
+
+    const result = admin.getByTestId('new-expert-result');
+    await expect(result).toContainText(email);
+    const password = await admin.getByTestId('temporary-password').innerText();
+
+    await signIn(page, { email, password });
+    await page.goto('/personalaccount/expert');
+    await expect(page.getByText('Семейное право')).toBeVisible();
+    // The public profile exists at once.
+    const profile = await result
+      .getByRole('link', { name: 'Открыть профиль' })
+      .getAttribute('href');
+    await page.goto(`/expert/${profile.match(/records\/(\d+)/)[1]}`);
+    await expect(page.getByText('Нина Добавленная').first()).toBeVisible();
   });
 
   test('cannot take the administrator role away from the last administrator', async () => {
