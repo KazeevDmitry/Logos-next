@@ -40,7 +40,7 @@ Each target is a thin wrapper around `docker compose run --rm web …`; to add a
 | ---------------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `API_INTERNAL_URL`     | build and run   | The API as this server reaches it. `/api/v1` and `/uploads` are proxied there, so the browser only ever talks to the site's own origin and the session cookies are first-party. |
 | `NEXT_PUBLIC_WS_URL`   | build           | The API's public origin for the chat socket. Empty when a reverse proxy serves `/socket.io` on the site's origin (production).                                                  |
-| `NEXT_PUBLIC_SITE_URL` | build           | Public address of the site, for canonical links and sharing tags.                                                                                                               |
+| `NEXT_PUBLIC_SITE_URL` | build           | Public address of the site, for canonical links, sharing tags and structured data.                                                                                              |
 
 In development they come from the compose files. For the production image they are build arguments (see `Dockerfile` and `../Logos-api/compose.prod.yml`). Do not create a file named `.env` here: Docker Compose reads it for its own settings.
 
@@ -50,11 +50,22 @@ In development they come from the compose files. For the production image they a
 - `lib/api/` — the only place that talks to the backend: `client.js` (axios, session refresh, error texts) and `index.js` (one function per endpoint).
 - `src/components/` — UI components; `src/context/` — user, theme, notifications, socket; `src/hooks/` — reference data and list pages whose filters live in the URL.
 - `utils/Locales/` — `ru.js` and `en.js` (same keys, checked by `make locales`) and `apiErrors.js`, the Russian text for the API's error messages. The site is published in Russian. All interface text lives in the locale files: shared vocabulary under `task`, `account`, `finance`, and each page's or component's own copy under `pages.<route>` and `ui.<component>`.
+- `src/components/seo.js`, `src/seo/schema.js`, `lib/pageSeo.js` — what search engines are told, see [Search engines](#search-engines).
 - `styles/` — global styles and the site's design values (`variables.scss`); `src/theme.js` gives the same values to Ant Design as theme tokens.
-- `e2e/` — Playwright tests of the marketplace loop, Q&A and the admin panel (which the API serves). They run against the stack in `../Logos-api/compose.e2e.yml`, which uses this app's production image.
+- `e2e/` — Playwright tests of the marketplace loop, Q&A, the admin panel (which the API serves) and what search engines find after an administrator sets it there. They run against the stack in `../Logos-api/compose.e2e.yml`, which uses this app's production image.
 - `next.config.js` — besides the proxy rules, the security headers of every page: a content security policy (this origin only; inline scripts and styles stay allowed because Next and Ant Design need them), no framing, a referrer and a permissions policy.
 
 Files that only some people may open (task documents, chat attachments, diploma scans) are linked with `src/components/fileLink`: the API checks the 15-minute session cookie on the file's address, so the link renews the session before opening it. A plain `<a href>` is right only for public files (avatars, article images, question attachments).
+
+## Search engines
+
+Every page gets its title, description, canonical link and sharing tags from `<Seo>` (`src/components/seo.js`), usually through `<PageHeader title seo>`. Personal pages pass `noindex`; `robots.txt` closes them as well, and `sitemap.xml` lists the public ones.
+
+An administrator can replace the title, the description, the sharing picture and "index or not" of the six fixed pages (`/`, `/tasks`, `/experts`, `/articles`, `/questions`, `/agreement`) and of every article in the admin panel. Such a page asks for its settings in `getServerSideProps` (`pageSeo(path, http)` or `articleSeo(article)` from `lib/pageSeo.js`; list pages pass `seoPath` to `listServerProps`) and returns them as the `seo` prop. `_app` puts that prop into a context and `<Seo>` lets it win, so the page's markup does not know about it. An empty setting means the page's own value; a page hidden from search engines also leaves the sitemap.
+
+Public pages also describe themselves in schema.org terms (JSON-LD in the head): the home page as an organization and a site with a search, an article, an expert's profile, a question with its answers, and the path to each of them and to a task. `src/seo/schema.js` builds these as plain objects from the data the page already has; `<JsonLd id="page" data={graph(…)} />` prints them. To describe a new kind of page, add a function there and render it on the page. The block an administrator pastes in the admin panel is printed by `_app` next to it (`id="custom"`).
+
+Addresses in the canonical link, the sharing tags and the structured data are absolute only when `NEXT_PUBLIC_SITE_URL` is set, so set it for anything a search engine will see.
 
 Deployment is described in the API repository: `../Logos-api/docs/deploy-yandex-cloud.md`.
 
