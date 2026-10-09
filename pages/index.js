@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { experts as expertsApi } from '../lib/api';
 import { createApi } from '../lib/api/client';
+import { pageSeo } from '../lib/pageSeo';
 import CityInput from '../src/components/cityInput/cityInput';
 import InputSlider from '../src/components/input-slider/input-slider';
 import PageContainer from '../src/components/layouts/pageContainer';
@@ -349,14 +350,11 @@ function InfoBlock({ title, linkTo, linkText, children }) {
 }
 
 export async function getServerSideProps(context) {
-  try {
-    return {
-      props: {
-        topExperts: await expertsApi.top(Math.max(CIRCLES, BEST_COUNT), createApi(context)),
-      },
-    };
-  } catch {
+  const http = createApi(context);
+  const [topExperts, seo] = await Promise.all([
     // The page still renders its static parts if the API is unreachable.
-    return { props: { topExperts: [] } };
-  }
+    expertsApi.top(Math.max(CIRCLES, BEST_COUNT), http).catch(() => []),
+    pageSeo('/', http),
+  ]);
+  return { props: { topExperts, seo } };
 }

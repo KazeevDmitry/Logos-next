@@ -58,4 +58,7 @@ export default function Questions({ serverData }) {
   );
 }
 
-export const getServerSideProps = listServerProps(questions.list, options);
+export const getServerSideProps = listServerProps(questions.list, {
+  ...options,
+  seoPath: '/questions',
+});

@@ -37,4 +37,7 @@ export default function Experts({ serverData }) {
   );
 }
 
-export const getServerSideProps = listServerProps(experts.list, options);
+export const getServerSideProps = listServerProps(experts.list, {
+  ...options,
+  seoPath: '/experts',
+});

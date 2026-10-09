@@ -9,7 +9,7 @@ import ru from 'antd/locale/ru_RU';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import MainLayout from '../src/components/layouts/mainLayout';
-import Seo from '../src/components/seo';
+import Seo, { SeoOverride } from '../src/components/seo';
 import { NoteProvider } from '../src/context/notificationContext';
 import { SocketProvider } from '../src/context/socketContext';
 import { ThemeProvider } from '../src/context/themeContext';
@@ -43,10 +43,13 @@ export default function MyApp({ Component, pageProps }) {
           <UserProvider>
             <SocketProvider>
               <NoteProvider>
-                <Seo />
-                <MainLayout loading={loading}>
-                  <Component {...pageProps} />
-                </MainLayout>
+                {/* What an administrator set for this page; pages pass it as the `seo` prop. */}
+                <SeoOverride.Provider value={pageProps.seo ?? null}>
+                  <Seo />
+                  <MainLayout loading={loading}>
+                    <Component {...pageProps} />
+                  </MainLayout>
+                </SeoOverride.Provider>
               </NoteProvider>
             </SocketProvider>
           </UserProvider>

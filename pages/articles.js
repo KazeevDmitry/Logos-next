@@ -123,6 +123,7 @@ export default function News({ serverData, categories = [], partnerNews = [] }) 
 
 export const getServerSideProps = listServerProps(news.list, {
   ...options,
+  seoPath: '/articles',
   extra: async (http) => {
     const [categories, partner] = await Promise.all([
       news.categories(http),

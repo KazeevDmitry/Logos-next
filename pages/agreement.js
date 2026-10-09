@@ -1,3 +1,5 @@
+import { createApi } from '../lib/api/client';
+import { pageSeo } from '../lib/pageSeo';
 import PageContainer from '../src/components/layouts/pageContainer';
 import PageHeader from '../src/components/layouts/pageHeader';
 import { AGREEMENT, AGREEMENT_UPDATED } from '../src/content/agreement';
@@ -43,4 +45,9 @@ export default function Agreement() {
       </PageContainer>
     </>
   );
+}
+
+// The text is fixed; the server is asked only for what an administrator set for search engines.
+export async function getServerSideProps(context) {
+  return { props: { seo: await pageSeo('/agreement', createApi(context)) } };
 }

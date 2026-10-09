@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
+import { pageSeo } from '../../lib/pageSeo';
 
 const toInt = (value) => {
   const number = Number.parseInt(value, 10);
@@ -68,12 +69,18 @@ export function useListQuery(name, fetcher, { filters, pageSize = 10, serverData
 /**
  * getServerSideProps for a list page: fetches the first render's data as the
  * visitor. On an API failure the page renders empty and retries in the browser.
+ * `seoPath` is the page's own address; with it the page also gets what an
+ * administrator set for search engines (see lib/pageSeo.js).
  */
-export function listServerProps(fetcher, { filters, pageSize = 10, extra } = {}) {
+export function listServerProps(fetcher, { filters, pageSize = 10, extra, seoPath } = {}) {
   return async (context) => {
     const { createApi } = await import('../../lib/api/client');
     const http = createApi(context);
-    const more = extra ? await extra(http).catch(() => ({})) : {};
+    const [extraProps, seo] = await Promise.all([
+      extra ? extra(http).catch(() => ({})) : {},
+      seoPath ? pageSeo(seoPath, http) : null,
+    ]);
+    const more = { ...extraProps, seo };
     try {
       const serverData = await fetcher(listParams(context.query, filters, pageSize), http);
       return { props: { serverData, ...more } };

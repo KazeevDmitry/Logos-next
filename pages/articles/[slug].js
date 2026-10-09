@@ -7,6 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import gfm from 'remark-gfm';
 import { news } from '../../lib/api';
 import { createApi } from '../../lib/api/client';
+import { articleSeo } from '../../lib/pageSeo';
 import PageContainer from '../../src/components/layouts/pageContainer';
 import PageHeader from '../../src/components/layouts/pageHeader';
 import NewsCard from '../../src/components/newsCard/newsCard';
@@ -132,7 +133,7 @@ export async function getServerSideProps(context) {
   try {
     const serverArticle = await news.get(context.query.slug, http);
     const serverSimilar = await news.similar(context.query.slug, 2, http).catch(() => []);
-    return { props: { serverArticle, serverSimilar } };
+    return { props: { serverArticle, serverSimilar, seo: articleSeo(serverArticle) } };
   } catch {
     context.res.statusCode = 404;
     return { props: { serverArticle: null, serverSimilar: [] } };

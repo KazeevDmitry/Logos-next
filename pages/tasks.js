@@ -59,4 +59,4 @@ export default function Tasks({ serverData }) {
   );
 }
 
-export const getServerSideProps = listServerProps(tasks.list, options);
+export const getServerSideProps = listServerProps(tasks.list, { ...options, seoPath: '/tasks' });
