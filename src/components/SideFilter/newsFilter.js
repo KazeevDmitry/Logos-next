@@ -1,7 +1,7 @@
 import { Button } from 'antd';
 import { useRouter } from 'next/router';
 import { useThemeContext } from '../../context/themeContext';
-import styles from './sideFilter.module.less';
+import styles from './sideFilter.module.scss';
 
 import i18n from '../../../utils/i18n-init';
 /** News rubrics. The chosen one is kept in the URL as ?category=<slug>. */

@@ -3,7 +3,7 @@ import { useThemeContext } from '../../context/themeContext';
 import AppHeader from '../app-header/app-header';
 import ErrorBoundary from '../errorBoundary';
 import Footer from '../footer/footer';
-import styles from './mainLayout.module.less';
+import styles from './mainLayout.module.scss';
 
 import i18n from '../../../utils/i18n-init';
 const { Content } = Layout;

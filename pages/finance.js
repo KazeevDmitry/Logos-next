@@ -1,5 +1,5 @@
 import { Empty, Pagination, Spin } from 'antd';
-import moment from 'moment';
+import dayjs from '../utils/dayjs';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -106,7 +106,7 @@ function FinancePage() {
               <div>{TYPES[item.type] ? t(`finance.types.${TYPES[item.type]}`) : item.type}</div>
               {item.task && <Link href={`/task/${item.task.id}`}>{item.task.title}</Link>}
               <div style={{ color: '#9AA1AD', fontSize: '13px' }}>
-                {moment(item.createdAt).format('DD.MM.YYYY, HH:mm')}
+                {dayjs(item.createdAt).format('DD.MM.YYYY, HH:mm')}
               </div>
             </div>
             <div

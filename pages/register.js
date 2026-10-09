@@ -13,7 +13,7 @@ import AuthPage, {
 import { useNotifyContext } from '../src/context/notificationContext';
 import { useThemeContext } from '../src/context/themeContext';
 import { useUserContext } from '../src/context/userContext';
-import styles from '../styles/auth.module.less';
+import styles from '../styles/auth.module.scss';
 
 import i18n from '../utils/i18n-init';
 export default function Register() {

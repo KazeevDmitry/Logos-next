@@ -1,5 +1,5 @@
 import { Col } from 'antd';
-import styles from '../../../styles/auth.module.less';
+import styles from '../../../styles/auth.module.scss';
 import { useThemeContext } from '../../context/themeContext';
 import PageContainer from '../layouts/pageContainer';
 import PageHeader from '../layouts/pageHeader';

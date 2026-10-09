@@ -16,11 +16,7 @@ export default function ConfirmEmail() {
   const { token } = router.query;
 
   useEffect(() => {
-    if (!router.isReady) {
-      return;
-    }
-    if (!token) {
-      setState('failed');
+    if (!router.isReady || !token) {
       return;
     }
     auth
@@ -34,7 +30,10 @@ export default function ConfirmEmail() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.isReady, token]);
 
-  if (state === 'checking') {
+  // A link without a token cannot be confirmed; no request is made for it.
+  const failed = state === 'failed' || (router.isReady && !token);
+
+  if (state === 'checking' && !failed) {
     return (
       <AuthPage title={i18n.t('pages.confirmEmail.podtverzhdenieEMail')}>
         <div style={{ textAlign: 'center' }}>

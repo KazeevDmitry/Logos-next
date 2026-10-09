@@ -3,7 +3,7 @@ import { Col } from 'antd';
 import Link from 'next/link';
 import { useThemeContext } from '../../context/themeContext';
 import PublishedDate from '../publishedDate/publishedDate';
-import styles from './newsCard.module.less';
+import styles from './newsCard.module.scss';
 
 /** Background for an article without a cover image. */
 const NO_COVER = 'linear-gradient(135deg, #1667d9 0%, #1cd3d9 100%)';

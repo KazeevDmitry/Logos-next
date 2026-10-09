@@ -726,6 +726,7 @@ export default {
       zagruziteDokumentEscheRaz: 'Upload the document again.',
     },
     questionId: {
+      vashOtvet: 'Your answer',
       znaeteOtvetNaEtotVopros: 'Do you know the answer to this question?',
       namVsegdaPriyatnoZnatMnenie:
         'We always value the opinion of professionals from the community',
@@ -972,6 +973,9 @@ export default {
       nichegoNeNaydeno: 'Nothing found',
       neUdalosZagruzitSpisok: 'Could not load the list',
       obnoviteStranitsu: 'Reload the page.',
+    },
+    searchField: {
+      nayti: 'Search',
     },
     seo: {
       logosestServisPoiskaYuristovAdvokatov:

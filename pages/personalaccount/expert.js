@@ -89,7 +89,7 @@ function ExpertProfilePage() {
           type="info"
           showIcon
           style={{ marginBottom: '24px', maxWidth: '720px' }}
-          message={i18n.t('pages.personalaccountExpert.ekspertyOtklikayutsyaNaZadachiI')}
+          title={i18n.t('pages.personalaccountExpert.ekspertyOtklikayutsyaNaZadachiI')}
           description={i18n.t('pages.personalaccountExpert.rasskazhiteOSvoeyPraktikeVy')}
         />
       )}

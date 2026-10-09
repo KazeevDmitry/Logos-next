@@ -9,7 +9,7 @@ import SearchField from '../src/components/searchField/searchField';
 import NewsFilter from '../src/components/SideFilter/newsFilter';
 import { useThemeContext } from '../src/context/themeContext';
 import { listServerProps, useListQuery } from '../src/hooks/useListQuery';
-import styles from '../styles/news.module.less';
+import styles from '../styles/news.module.scss';
 
 import i18n from '../utils/i18n-init';
 const PAGE_SIZE = 10;

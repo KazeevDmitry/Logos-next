@@ -1,6 +1,6 @@
 import { CheckOutlined, PaperClipOutlined } from '@ant-design/icons';
 import { Button, Result, Spin } from 'antd';
-import moment from 'moment';
+import dayjs from '../../../utils/dayjs';
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { chat } from '../../../lib/api';
 import { useSocketEvent } from '../../context/socketContext';
@@ -38,7 +38,7 @@ function Bubble({ message, mine }) {
           </div>
         ))}
         <div style={{ fontSize: '11px', opacity: 0.7, textAlign: 'right' }}>
-          {moment(message.createdAt).format('HH:mm')}
+          {dayjs(message.createdAt).format('HH:mm')}
           {mine && (
             <span
               role="img"
@@ -57,8 +57,9 @@ function Bubble({ message, mine }) {
   );
 }
 
+const dayOf = (message) => dayjs(message.createdAt).format('YYYY-MM-DD');
 const dayLabel = (date) =>
-  moment(date).calendar(null, {
+  dayjs(date).calendar(null, {
     sameDay: i18n.t('ui.thread.segodnya'),
     lastDay: i18n.t('ui.thread.vchera'),
     lastWeek: 'D MMMM',
@@ -87,9 +88,8 @@ export default function Thread({ conversationId, viewerId, onRead }) {
   }, [conversationId, onRead]);
 
   useEffect(() => {
+    // The page remounts this component per chat (key), so state starts empty.
     let cancelled = false;
-    setState('loading');
-    setMessages([]);
     chat
       .history(conversationId, { limit: PAGE })
       .then((page) => {
@@ -104,6 +104,12 @@ export default function Thread({ conversationId, viewerId, onRead }) {
       cancelled = true;
     };
   }, [conversationId, markRead]);
+
+  const append = (message) => {
+    setMessages((current) =>
+      current.some((item) => item.id === message.id) ? current : [...current, message],
+    );
+  };
 
   // Pushed by the server for both sides, so the sender's other tabs follow too.
   useSocketEvent('message:new', (message) => {
@@ -121,12 +127,6 @@ export default function Thread({ conversationId, viewerId, onRead }) {
       );
     }
   });
-
-  const append = (message) => {
-    setMessages((current) =>
-      current.some((item) => item.id === message.id) ? current : [...current, message],
-    );
-  };
 
   const lastId = messages[messages.length - 1]?.id;
   useLayoutEffect(() => {
@@ -162,7 +162,6 @@ export default function Thread({ conversationId, viewerId, onRead }) {
     );
   }
 
-  let previousDay = null;
   return (
     <>
       <div
@@ -187,10 +186,9 @@ export default function Thread({ conversationId, viewerId, onRead }) {
             {i18n.t('ui.thread.soobscheniyPokaNet')}
           </p>
         )}
-        {messages.map((message) => {
-          const day = moment(message.createdAt).format('YYYY-MM-DD');
-          const newDay = day !== previousDay;
-          previousDay = day;
+        {messages.map((message, index) => {
+          const day = dayOf(message);
+          const newDay = index === 0 || day !== dayOf(messages[index - 1]);
           return (
             <div key={message.id}>
               {newDay && (

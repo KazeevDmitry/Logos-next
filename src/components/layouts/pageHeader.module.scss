@@ -1,3 +1,5 @@
+@use '../../../styles/variables' as *;
+
 .flexContainer {
   position: relative;
   display: flex;
@@ -58,7 +60,7 @@
   cursor: pointer;
   color: black;
   &:hover {
-    color: @primary-color;
+    color: $primary-color;
   }
 }
 

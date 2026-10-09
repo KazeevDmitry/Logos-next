@@ -1,5 +1,5 @@
 import { Button, Input } from 'antd';
-import moment from 'moment';
+import dayjs from '../../../utils/dayjs';
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -88,7 +88,7 @@ function Comment({ comment, tree, articleId, level, canReply }) {
               {author.name} {author.surname ?? ''}
             </b>
             <span style={{ color: '#5E6674', fontSize: '13px' }}>
-              {moment(comment.createdAt).format('DD MMM YYYY, HH:mm')}
+              {dayjs(comment.createdAt).format('DD MMM YYYY, HH:mm')}
             </span>
           </div>
           <div style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere', marginTop: '4px' }}>

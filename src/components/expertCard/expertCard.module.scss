@@ -1,3 +1,5 @@
+@use '../../../styles/variables' as *;
+
 .inCardBlock {
   display: flex;
   flex-direction: column;
@@ -28,7 +30,7 @@
 }
 
 .branchWrap {
-  border-bottom: 2px solid @light-primary-color;
+  border-bottom: 2px solid $light-primary-color;
   padding-bottom: 15px;
 }
 
@@ -99,7 +101,7 @@
 
 .descBlock {
   display: flex;
-  // border: 1px solid @light-primary-color;
+  // border: 1px solid $light-primary-color;
   border-radius: 10px;
   padding: 10px;
 }

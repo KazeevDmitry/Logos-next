@@ -3,7 +3,7 @@ import { Divider, Typography } from 'antd';
 import Plural from '../../../utils/plural';
 import { useThemeContext } from '../../context/themeContext';
 import PublishedDate from '../publishedDate/publishedDate';
-import styles from './taskCard.module.less';
+import styles from './taskCard.module.scss';
 import { taskPrice, TaskStatusPill, ViewerStatusPill } from './taskStatus';
 
 /**

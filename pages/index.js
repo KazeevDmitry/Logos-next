@@ -13,7 +13,7 @@ import RatingBar from '../src/components/ratingbar/ratingbar';
 import UserCard from '../src/components/userCard/userCard';
 import UserImage from '../src/components/userImage/userImage';
 import { useThemeContext } from '../src/context/themeContext';
-import styles from '../styles/mainPage.module.less';
+import styles from '../styles/mainPage.module.scss';
 
 import i18n from '../utils/i18n-init';
 /** Shown in the promo text until the platform has a real figure worth quoting. */
@@ -230,8 +230,8 @@ function MainTabs() {
           ]}
           className={styles.tabContentBox}
           style={{
-            marginLeft: '0px',
-            marginRight: '0px',
+            // The panel is a box of its own, not a row inside a padded container.
+            marginInline: 0,
             paddingBottom: lookingForTask ? '35px' : '50px',
           }}
         >

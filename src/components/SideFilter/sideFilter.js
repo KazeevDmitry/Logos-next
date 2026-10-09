@@ -5,7 +5,7 @@ import { useThemeContext } from '../../context/themeContext';
 import BranchSelect from '../branchSelect/branchSelect';
 import CityInput from '../cityInput/cityInput';
 import InputSlider from '../input-slider/input-slider';
-import styles from './sideFilter.module.less';
+import styles from './sideFilter.module.scss';
 
 import i18n from '../../../utils/i18n-init';
 const BUDGET_RANGE = [1000, 500000];

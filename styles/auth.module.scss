@@ -1,3 +1,5 @@
+@use './variables' as *;
+
 // @font-face {
 //     font-family: 'Futura PT Book';
 //     src: url('../../fonts/FuturaPT-Book.eot');
@@ -33,7 +35,7 @@
   cursor: pointer;
   color: black;
   &:hover {
-    color: @primary-color;
+    color: $primary-color;
   }
 }
 
@@ -68,7 +70,7 @@
   font-size: 18px;
   font-weight: 400;
   line-height: 21px;
-  color: @primary-color;
+  color: $primary-color;
   text-decoration: none;
 }
 
@@ -145,12 +147,12 @@
   line-height: 21px;
   text-align: center;
   font-family: Futura PT Book;
-  color: @primary-color;
+  color: $primary-color;
 }
 
 .infoimage {
   font-size: 35px;
-  color: @primary-color;
+  color: $primary-color;
 }
 .infodiv {
   width: 100%;
@@ -159,12 +161,12 @@
   justify-content: space-between;
   align-items: center;
   border-radius: 10px;
-  border-color: @primary-color;
-  border: solid 1px @primary-color;
+  border-color: $primary-color;
+  border: solid 1px $primary-color;
   padding: 10px;
 }
 
 .tooltip {
-  background: @light-primary-color;
+  background: $light-primary-color;
   //background-color: rgb(236, 232, 154);
 }

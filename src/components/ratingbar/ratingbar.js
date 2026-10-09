@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './ratingbar.module.less';
+import styles from './ratingbar.module.scss';
 import Plural from '../../../utils/plural';
 import { TrophyOutlined, StarOutlined } from '@ant-design/icons';
 

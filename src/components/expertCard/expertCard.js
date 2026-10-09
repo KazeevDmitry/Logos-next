@@ -3,7 +3,7 @@ import { Col, Row, Tooltip, Typography } from 'antd';
 import { useThemeContext } from '../../context/themeContext';
 import RatingBar from '../ratingbar/ratingbar';
 import UserImage from '../userImage/userImage';
-import styles from './expertCard.module.less';
+import styles from './expertCard.module.scss';
 
 import i18n from '../../../utils/i18n-init';
 /** One expert in the catalogue. `expert` is the API's ExpertDto. */

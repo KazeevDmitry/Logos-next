@@ -1,3 +1,5 @@
+@use '../../../styles/variables' as *;
+
 // @font-face {
 //   font-family: 'Futura PT Book';
 //   src: url('../../fonts/FuturaPT-Book.eot');
@@ -102,7 +104,7 @@
 }
 
 .menuLink:hover {
-  color: @primary-color;
+  color: $primary-color;
 }
 
 .imageClazz {
@@ -123,15 +125,15 @@
   background-color: rgba(255, 255, 255, 1);
   &:hover {
     .imageClazz {
-      box-shadow: 0 0 4px @primary-color;
+      box-shadow: 0 0 4px $primary-color;
     }
     .userLink {
-      color: @primary-color;
+      color: $primary-color;
     }
   }
   &:active {
     .imageClazz {
-      box-shadow: 0 0 0px @primary-color;
+      box-shadow: 0 0 0px $primary-color;
     }
     .userLink {
       color: inherit;
@@ -200,7 +202,7 @@
   padding-left: 40px;
   padding-right: 40px;
   //margin-right: 10px;
-  color: @primary-color;
+  color: $primary-color;
 }
 
 .userOutBox:hover {
@@ -232,8 +234,8 @@
 .activeMenu {
   //  border-bottom: 2px solid #0066FF ;
   //  color: #0066FF;
-  border-bottom: 2px solid @primary-color;
-  color: @primary-color;
+  border-bottom: 2px solid $primary-color;
+  color: $primary-color;
 }
 
 .logosHeader {
@@ -246,7 +248,7 @@
 }
 
 .logOutIcon {
-  color: @primary-color;
+  color: $primary-color;
   font-size: 20px;
 }
 
@@ -341,7 +343,7 @@
 }
 
 .horizontalgradient {
-  background-image: linear-gradient(to right, white, @light-primary-color, white);
+  background-image: linear-gradient(to right, white, $light-primary-color, white);
   height: 100%;
   width: 200px;
   //border-radius: 15px;

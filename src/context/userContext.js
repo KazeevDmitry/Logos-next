@@ -38,9 +38,17 @@ export function UserProvider({ children }) {
     }
   }, []);
 
+  // Who is signed in is asked once, when the app starts in the browser.
   useEffect(() => {
-    refreshUser();
-  }, [refreshUser]);
+    let current = true;
+    users
+      .me()
+      .then((user) => current && setCurrentUser(user))
+      .catch(() => current && setCurrentUser(null));
+    return () => {
+      current = false;
+    };
+  }, []);
 
   const value = useMemo(
     () => ({

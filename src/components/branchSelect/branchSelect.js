@@ -49,7 +49,7 @@ export default function BranchSelect({ id, value, onChange, errorStatus, size })
       treeDefaultExpandAll
       treeNodeFilterProp="title"
       style={{ width: '100%' }}
-      dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+      styles={{ popup: { root: { maxHeight: 400, overflow: 'auto' } } }}
       placeholder={i18n.t('ui.branchSelect.nachniteVvodDlyaPoiska')}
       treeData={treeData}
       value={selected}

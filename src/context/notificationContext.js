@@ -11,14 +11,14 @@ export const NoteProvider = (props) => {
 
   function infoNotification(message, description) {
     api.info({
-      message: message,
+      title: message,
       description: description,
       placement: 'topRight',
     });
   }
   function successNotification(message, description) {
     api.success({
-      message: message,
+      title: message,
       description: description,
       placement: 'topRight',
     });

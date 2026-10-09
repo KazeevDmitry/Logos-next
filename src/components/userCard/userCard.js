@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 
-import styles from './userCard.module.less';
+import styles from './userCard.module.scss';
 import checkedSvg from './icons/checked.svg';
 import UserImage from '../userImage/userImage';
 import { Row, Col } from 'antd';

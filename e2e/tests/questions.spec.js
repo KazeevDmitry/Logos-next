@@ -39,7 +39,7 @@ test.describe.serial('questions and answers', () => {
     const expertPage = await newPerson(browser);
     await signIn(expertPage, EXPERT);
     await expertPage.goto(questionUrl);
-    await expertPage.locator('textarea').fill(answer);
+    await expertPage.getByLabel('Ваш ответ').fill(answer);
     await expertPage.getByRole('button', { name: 'Ответить на вопрос' }).click();
     await expect(expertPage.getByText(answer)).toBeVisible();
     await expertPage.context().close();

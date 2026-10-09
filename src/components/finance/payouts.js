@@ -1,5 +1,5 @@
 import { Button, Form, Input, InputNumber, Modal, Tag } from 'antd';
-import moment from 'moment';
+import dayjs from '../../../utils/dayjs';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -36,7 +36,7 @@ function PayoutModal({ open, available, onClose, onDone }) {
   return (
     <Modal
       open={open}
-      destroyOnClose
+      destroyOnHidden
       title={i18n.t('ui.payouts.vyvodSredstv')}
       onCancel={onClose}
       footer={null}
@@ -64,7 +64,7 @@ function PayoutModal({ open, available, onClose, onDone }) {
             { type: 'number', max: available, message: i18n.t('ui.payouts.bolsheChemDostupno') },
           ]}
         >
-          <InputNumber min={0} precision={0} addonAfter="₽" style={{ width: '200px' }} />
+          <InputNumber min={0} precision={0} suffix="₽" style={{ width: '200px' }} />
         </Form.Item>
         <Form.Item
           name="details"
@@ -162,7 +162,7 @@ export default function Payouts({ available }) {
                     {t(`finance.payoutStatus.${payout.status}`)}
                   </Tag>
                   <span style={{ color: '#9AA1AD', fontSize: '13px' }}>
-                    {moment(payout.createdAt).format('DD.MM.YYYY, HH:mm')}
+                    {dayjs(payout.createdAt).format('DD.MM.YYYY, HH:mm')}
                   </span>
                   <div style={{ color: '#5E6674' }}>{payout.details}</div>
                   {payout.comment && (

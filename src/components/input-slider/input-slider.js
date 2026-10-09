@@ -8,7 +8,7 @@ import { useThemeContext } from '../../context/themeContext';
 
 import { Input } from 'antd';
 // import 'antd/dist/antd.css';
-import styles from './input-slider.module.less';
+import styles from './input-slider.module.scss';
 
 export default function InputSlider({
   value = { inp1: 0, inp2: 0 },
@@ -68,7 +68,7 @@ export default function InputSlider({
       <div className={styles.sliderBlock}>
         <Slider
           range
-          tooltipVisible={false}
+          tooltip={{ open: false }}
           value={value ? Object.values(value) : maxValues}
           min={maxValues[0]}
           max={maxValues[1]}

@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 
-import styles from './pageContainer.module.less';
+import styles from './pageContainer.module.scss';
 import { Row } from 'antd';
 import { useThemeContext } from '../../context/themeContext';
 

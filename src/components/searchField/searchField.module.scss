@@ -1,3 +1,5 @@
+@use '../../../styles/variables' as *;
+
 .wrapper {
   background-color: #fff;
   border-radius: 10px;
@@ -9,5 +11,5 @@
 }
 
 .blueIcon {
-  color: @primary-color;
+  color: $primary-color;
 }

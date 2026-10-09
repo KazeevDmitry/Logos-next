@@ -3,7 +3,7 @@ import { Divider, Typography } from 'antd';
 import Plural from '../../../utils/plural';
 import { useThemeContext } from '../../context/themeContext';
 import PublishedDate from '../publishedDate/publishedDate';
-import styles from '../taskCard/taskCard.module.less';
+import styles from '../taskCard/taskCard.module.scss';
 import UserImage from '../userImage/userImage';
 
 /** Who wrote something and where they are from. `user` is the API's public user object. */

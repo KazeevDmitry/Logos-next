@@ -7,7 +7,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import i18n from '../../../utils/i18n-init';
 import { roubles } from '../../../utils/money';
-import styles from './taskCard.module.less';
+import styles from './taskCard.module.scss';
 
 const tone = (rgb) => ({ color: `rgb(${rgb})`, backgroundColor: `rgba(${rgb}, 0.15)` });
 const VIOLET = '63, 68, 201';

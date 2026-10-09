@@ -1,10 +1,10 @@
 # LogosEst — frontend
 
-The site of the LogosEst legal-services marketplace. Next.js 14 (pages router), React 18, Ant Design 4, react-query. The backend is the NestJS API in `../Logos-api`; its README describes the product, the deployment and the seeded demo accounts.
+The site of the LogosEst legal-services marketplace. Next.js 16 (pages router, Turbopack), React 19, Ant Design 6, TanStack Query 5, Sass modules, on Node 24. The backend is the NestJS API in `../Logos-api`; its README describes the product, the deployment and the seeded demo accounts.
 
 ## Everything runs in Docker
 
-The host needs only `git`, `docker` and `make`. Do not run `yarn` or `node` on the host. `node_modules` appears in the project folder so your editor can resolve imports, but it is installed by the container for Node 20 on Linux.
+The host needs only `git`, `docker` and `make`. Do not run `yarn` or `node` on the host. `node_modules` appears in the project folder so your editor can resolve imports, but it is installed by the container for Node 24 on Linux.
 
 The usual way to work is the whole stack, started from the API project:
 
@@ -50,7 +50,7 @@ In development they come from the compose files. For the production image they a
 - `lib/api/` — the only place that talks to the backend: `client.js` (axios, session refresh, error texts) and `index.js` (one function per endpoint).
 - `src/components/` — UI components; `src/context/` — user, theme, notifications, socket; `src/hooks/` — reference data and list pages whose filters live in the URL.
 - `utils/Locales/` — `ru.js` and `en.js` (same keys, checked by `make locales`) and `apiErrors.js`, the Russian text for the API's error messages. The site is published in Russian. All interface text lives in the locale files: shared vocabulary under `task`, `account`, `finance`, and each page's or component's own copy under `pages.<route>` and `ui.<component>`.
-- `styles/` — global styles and Ant Design theme variables (`antdVariables.less`; variables only, see the note inside).
+- `styles/` — global styles and the site's design values (`variables.scss`); `src/theme.js` gives the same values to Ant Design as theme tokens.
 - `e2e/` — Playwright tests. They run against the stack in `../Logos-api/compose.e2e.yml`, which uses this app's production image.
 
 ## Checks

@@ -1,3 +1,5 @@
+@use './variables' as *;
+
 .layoutSection {
   //font-family: Futura PT Book;
   // font-style: normal;
@@ -49,7 +51,7 @@
   cursor: pointer;
   color: black;
   &:hover {
-    color: @primary-color;
+    color: $primary-color;
   }
 }
 
@@ -57,7 +59,7 @@
   cursor: pointer;
   color: black;
   &:hover {
-    color: @primary-color;
+    color: $primary-color;
   }
 }
 

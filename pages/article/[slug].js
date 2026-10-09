@@ -13,7 +13,7 @@ import PageHeader from '../../src/components/layouts/pageHeader';
 import NewsCard from '../../src/components/newsCard/newsCard';
 import PublishedDate from '../../src/components/publishedDate/publishedDate';
 import { useThemeContext } from '../../src/context/themeContext';
-import stylesArt from './article.module.less';
+import stylesArt from './article.module.scss';
 
 import i18n from '../../utils/i18n-init';
 export default function ArticlePage({ serverArticle, serverSimilar = [] }) {

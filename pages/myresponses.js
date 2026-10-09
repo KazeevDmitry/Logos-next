@@ -1,5 +1,5 @@
 import { Button } from 'antd';
-import moment from 'moment';
+import dayjs from '../utils/dayjs';
 import Link from 'next/link';
 import { tasks } from '../lib/api';
 import { withRole } from '../lib/withAuth';
@@ -35,7 +35,7 @@ function MyResponses() {
               {i18n.t('pages.myresponses.vashePredlozhenie')}{' '}
               <b style={{ color: '#0066FF' }}>{task.myResponse.price.toLocaleString('ru-RU')} ₽</b>
               {' · '}
-              {moment(task.myResponse.createdAt).format('DD.MM.YYYY')}
+              {dayjs(task.myResponse.createdAt).format('DD.MM.YYYY')}
               <div style={{ overflowWrap: 'anywhere', marginTop: '4px' }}>
                 {task.myResponse.text.length > 200
                   ? `${task.myResponse.text.slice(0, 200)}…`

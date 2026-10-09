@@ -1,6 +1,6 @@
 import { BellOutlined } from '@ant-design/icons';
 import { Badge, Button, Empty, Popover, Spin } from 'antd';
-import moment from 'moment';
+import dayjs from '../../../utils/dayjs';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -77,7 +77,7 @@ function NoticeList({ onNavigate }) {
               <div style={{ fontWeight: notice.read ? 400 : 600 }}>{notice.title}</div>
               <div style={{ color: '#5E6674', overflowWrap: 'anywhere' }}>{notice.body}</div>
               <div style={{ color: '#9AA1AD', fontSize: '12px' }}>
-                {moment(notice.createdAt).fromNow()}
+                {dayjs(notice.createdAt).fromNow()}
               </div>
             </button>
           </li>
@@ -108,7 +108,7 @@ export default function NotificationBell({ size = 22 }) {
       placement="bottomRight"
       open={open}
       onOpenChange={setOpen}
-      destroyTooltipOnHide
+      destroyOnHidden
       title={i18n.t('ui.notificationBell.uvedomleniya')}
       content={<NoticeList onNavigate={() => setOpen(false)} />}
     >

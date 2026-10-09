@@ -1,6 +1,6 @@
 import { PaperClipOutlined } from '@ant-design/icons';
 import { Badge } from 'antd';
-import moment from 'moment';
+import dayjs from '../../../utils/dayjs';
 import UserImage from '../userImage/userImage';
 
 import i18n from '../../../utils/i18n-init';
@@ -50,7 +50,7 @@ export default function ConversationList({ conversations, activeId, viewerId, on
                   <b style={ellipsis}>{companionName(conversation.companion)}</b>
                   {conversation.lastMessage && (
                     <span style={{ color: '#9AA1AD', fontSize: '12px', whiteSpace: 'nowrap' }}>
-                      {moment(conversation.lastMessage.createdAt).calendar(null, CALENDAR)}
+                      {dayjs(conversation.lastMessage.createdAt).calendar(null, CALENDAR)}
                     </span>
                   )}
                 </span>

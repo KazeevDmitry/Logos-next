@@ -1,10 +1,10 @@
 import React from 'react';
 
-import styles from './publishedDate.module.less';
+import styles from './publishedDate.module.scss';
 import useMediaQuery from '../../../utils/useMediaQuery';
 import { EyeOutlined, CalendarOutlined } from '@ant-design/icons';
 
-import moment from 'moment';
+import dayjs from '../../../utils/dayjs';
 
 export default function PublishedDate({
   currDate = new Date(),
@@ -24,7 +24,7 @@ export default function PublishedDate({
 
   const imgWidth = above1023 ? '20px' : '16px';
 
-  const dateTimeStr = moment(currDate).format(format); //'DD MMM YYYY    hh:mm'
+  const dateTimeStr = dayjs(currDate).format(format); //'DD MMM YYYY    hh:mm'
   const conv = conversations ?? '?';
   const cViews = views ?? '?';
 

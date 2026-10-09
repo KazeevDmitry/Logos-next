@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useRef } from 'react';
+import { useState } from 'react';
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
 
 const toInt = (value) => {
@@ -50,8 +50,8 @@ export function useListQuery(name, fetcher, { filters, pageSize = 10, serverData
   const params = listParams(router.query, filters, pageSize);
   // `name` may be a key prefix (['tasks', 'mine']) so related lists are invalidated together.
   const key = [...[name].flat(), params];
-  const firstKey = useRef(JSON.stringify(key));
-  const isFirst = firstKey.current === JSON.stringify(key);
+  const [firstKey] = useState(() => JSON.stringify(key));
+  const isFirst = firstKey === JSON.stringify(key);
 
   const result = useQuery({
     queryKey: key,

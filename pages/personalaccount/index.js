@@ -63,7 +63,7 @@ function AccountOverview({ user }) {
           marginTop: '30px',
         }}
       >
-        <Progress type="circle" percent={percent} width={110} strokeColor="#0066FF" />
+        <Progress type="circle" percent={percent} size={110} strokeColor="#0066FF" />
         <div>
           <h2 style={{ fontSize: '20px', fontWeight: 500 }}>
             {percent === 100

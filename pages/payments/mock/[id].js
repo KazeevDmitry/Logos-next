@@ -66,7 +66,7 @@ function MockPaymentPage() {
       <Alert
         type="warning"
         showIcon
-        message={i18n.t('pages.paymentsMockId.etoDemonstratsionnayaStranitsaOplaty')}
+        title={i18n.t('pages.paymentsMockId.etoDemonstratsionnayaStranitsaOplaty')}
         description={i18n.t('pages.paymentsMockId.nastoyaschieDengiNeSpisyvayutsyaVyberite')}
       />
       <div style={{ fontSize: '32px', color: '#0066FF', margin: '24px 0 4px' }}>

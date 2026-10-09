@@ -1,5 +1,5 @@
 import { Alert, Button, Spin } from 'antd';
-import moment from 'moment';
+import dayjs from '../../utils/dayjs';
 import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { experts } from '../../lib/api';
@@ -10,7 +10,7 @@ import { FormError } from '../../src/components/authPage/authPage';
 import FileUploader from '../../src/components/fileUploader/fileUploader';
 
 import i18n from '../../utils/i18n-init';
-const date = (value) => moment(value).format('DD.MM.YYYY');
+const date = (value) => dayjs(value).format('DD.MM.YYYY');
 
 /** Upload of the passport scan and the request to check it. */
 function PassportForm({ onSent, again }) {
@@ -83,7 +83,7 @@ function VerificationPage() {
             <Alert
               type="info"
               showIcon
-              message={i18n.t('pages.personalaccountVerification.lichnostNePodtverzhdena')}
+              title={i18n.t('pages.personalaccountVerification.lichnostNePodtverzhdena')}
               description={i18n.t(
                 'pages.personalaccountVerification.podtverzhdennyeEkspertyPoluchayutOtmetkuV',
               )}
@@ -93,7 +93,7 @@ function VerificationPage() {
             <Alert
               type="info"
               showIcon
-              message={i18n.t('pages.personalaccountVerification.dokumentNaProverke')}
+              title={i18n.t('pages.personalaccountVerification.dokumentNaProverke')}
               description={i18n.t(
                 'pages.personalaccountVerification.zayavkaOtpravlenaObychnoProverkaZanimaet',
                 { v0: date(request.createdAt) },
@@ -104,7 +104,7 @@ function VerificationPage() {
             <Alert
               type="success"
               showIcon
-              message={i18n.t('pages.personalaccountVerification.lichnostPodtverzhdena')}
+              title={i18n.t('pages.personalaccountVerification.lichnostPodtverzhdena')}
               description={i18n.t(
                 'pages.personalaccountVerification.proverkaProydenaVVashemProfile',
                 { v0: date(request.reviewedAt ?? request.createdAt) },
@@ -115,7 +115,7 @@ function VerificationPage() {
             <Alert
               type="error"
               showIcon
-              message={i18n.t('pages.personalaccountVerification.proverkaNeProydena')}
+              title={i18n.t('pages.personalaccountVerification.proverkaNeProydena')}
               description={
                 request.comment
                   ? i18n.t('pages.personalaccountVerification.kommentariyAdministratora', {

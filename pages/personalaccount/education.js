@@ -41,7 +41,7 @@ function EducationModal({ education, open, onClose, onSaved }) {
   return (
     <Modal
       open={open}
-      destroyOnClose
+      destroyOnHidden
       title={
         education
           ? i18n.t('pages.personalaccountEducation.izmenitObrazovanie')

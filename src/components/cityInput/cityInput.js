@@ -21,13 +21,13 @@ export function CitySelect({
   const theme = useThemeContext();
   const selected = useCity(value);
   const [options, setOptions] = useState([]);
-  const [loading, setLoading] = useState(false);
+  // The first list (the largest cities) is requested as soon as the picker appears.
+  const [loading, setLoading] = useState(true);
   const timer = useRef();
   const latest = useRef(0);
 
   const load = (search) => {
     const request = ++latest.current;
-    setLoading(true);
     reference
       .cities(search)
       .then((cities) => {
@@ -47,6 +47,7 @@ export function CitySelect({
 
   const onSearch = (text) => {
     clearTimeout(timer.current);
+    setLoading(true);
     timer.current = setTimeout(() => load(text), SEARCH_DELAY_MS);
   };
 

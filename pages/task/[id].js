@@ -5,7 +5,7 @@ import {
   PaperClipOutlined,
 } from '@ant-design/icons';
 import { Button, Col, Divider, Result } from 'antd';
-import moment from 'moment';
+import dayjs from '../../utils/dayjs';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -237,12 +237,12 @@ export default function TaskPage({ serverTask }) {
               )}
               <span>
                 <CalendarOutlined /> {i18n.t('pages.taskId.opublikovana')}{' '}
-                {moment(task.createdAt).format('DD.MM.YYYY')}
+                {dayjs(task.createdAt).format('DD.MM.YYYY')}
               </span>
               {task.deadline && (
                 <span>
                   <CalendarOutlined /> {i18n.t('pages.taskId.srokDo')}{' '}
-                  {moment(task.deadline).format('DD.MM.YYYY')}
+                  {dayjs(task.deadline).format('DD.MM.YYYY')}
                 </span>
               )}
               <span>

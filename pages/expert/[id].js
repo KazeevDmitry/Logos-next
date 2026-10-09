@@ -19,7 +19,7 @@ import Seo from '../../src/components/seo';
 import UserImage from '../../src/components/userImage/userImage';
 import { useThemeContext } from '../../src/context/themeContext';
 import { useUserContext } from '../../src/context/userContext';
-import styles from './expertInfo.module.less';
+import styles from './expertInfo.module.scss';
 
 import i18n from '../../utils/i18n-init';
 const plural = (n, one, few, many) => {

@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useThemeContext } from '../../context/themeContext';
 import { useUserContext } from '../../context/userContext';
 import UserImage from '../userImage/userImage';
-import styles from './app-header.module.less';
+import styles from './app-header.module.scss';
 import MessagesLink from './messagesLink';
 import NotificationBell from './notificationBell';
 

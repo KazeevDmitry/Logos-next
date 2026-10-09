@@ -16,7 +16,7 @@ i18n.use(initReactI18next).init({
   lng: 'ru',
   // Ready as soon as this module is imported: texts are also read outside
   // components (validation rules, tables of labels) while modules load.
-  initImmediate: false,
+  initAsync: false,
   // React escapes what it renders; escaping here as well would show "&amp;".
   interpolation: { escapeValue: false },
   fallbackLng: 'ru',

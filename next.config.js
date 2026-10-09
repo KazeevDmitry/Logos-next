@@ -1,18 +1,26 @@
-const withAntdLess = require('next-plugin-antd-less');
-
 /** Where the NestJS API listens, as seen from this server (not from the browser). */
 const API = process.env.API_INTERNAL_URL ?? 'http://localhost:4000';
 
 const LOCALES = ['ru'];
 
 /** @type {import('next').NextConfig} */
-module.exports = withAntdLess({
-  lessVarsFilePath: './styles/antdVariables.less',
-  lessVarsFilePathAppendToEndOfContent: false,
-  cssLoaderOptions: {},
+// Ant Design and the packages it is built from ship ES modules that Node
+// cannot load directly during server rendering; let the bundler handle them.
+const fs = require('fs');
+const scoped = (scope) =>
+  fs.existsSync(`node_modules/${scope}`)
+    ? fs.readdirSync(`node_modules/${scope}`).map((name) => `${scope}/${name}`)
+    : [];
+const ANTD_PACKAGES = [
+  'antd',
+  ...scoped('@ant-design'),
+  ...scoped('@rc-component'),
+  ...fs.readdirSync('node_modules').filter((name) => name.startsWith('rc-')),
+];
 
+module.exports = {
+  transpilePackages: ANTD_PACKAGES,
   reactStrictMode: true,
-  swcMinify: true,
 
   // `make build` checks the production build while `make up` is running;
   // a separate output folder keeps it from overwriting the dev server's files.
@@ -35,10 +43,4 @@ module.exports = withAntdLess({
       { source: `/${locale}/uploads/:path*`, destination: `${API}/uploads/:path*`, locale: false },
     ]);
   },
-
-  webpack(config, { webpack }) {
-    // moment ships ~130 locales; the site needs Russian (English is built in).
-    config.plugins.push(new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /ru/));
-    return config;
-  },
-});
+};

@@ -36,13 +36,13 @@ function timeline(task, t) {
   const stage = (status) => ({
     key: status,
     title: t(`task.stages.${status}`),
-    description: notes[status] ? t(`task.stages.${notes[status][0]}`, notes[status][1]) : undefined,
+    content: notes[status] ? t(`task.stages.${notes[status][0]}`, notes[status][1]) : undefined,
   });
   const stages = STAGES.map(stage);
 
   if (task.status === 'CANCELLED') {
     return {
-      items: [stages[0], { ...stage('CANCELLED'), description: t('task.stages.cancelNote') }],
+      items: [stages[0], { ...stage('CANCELLED'), content: t('task.stages.cancelNote') }],
       current: 1,
       status: 'error',
     };
@@ -52,7 +52,7 @@ function timeline(task, t) {
     return {
       items: [
         ...stages.slice(0, 3),
-        { ...stage('DISPUTED'), description: t('task.stages.disputeNote') },
+        { ...stage('DISPUTED'), content: t('task.stages.disputeNote') },
         stages[5],
       ],
       current: 3,
@@ -71,10 +71,6 @@ export default function TaskTimeline({ task }) {
   const { t } = useTranslation();
   const { items, current, status } = timeline(task, t);
   return (
-    <Steps direction="vertical" size="small" current={current} status={status}>
-      {items.map((item) => (
-        <Steps.Step key={item.key} title={item.title} description={item.description} />
-      ))}
-    </Steps>
+    <Steps orientation="vertical" size="small" current={current} status={status} items={items} />
   );
 }

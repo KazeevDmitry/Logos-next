@@ -2,7 +2,7 @@ import { Col, Divider, Rate, Typography } from 'antd';
 import Link from 'next/link';
 import PublishedDate from '../publishedDate/publishedDate';
 import UserImage from '../userImage/userImage';
-import styles from './feedbacks.module.less';
+import styles from './feedbacks.module.scss';
 
 const more = <span style={{ color: '#0066FF', fontWeight: '600' }}>{'>>>>'}</span>;
 

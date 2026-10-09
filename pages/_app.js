@@ -1,81 +1,57 @@
+import 'antd/dist/reset.css';
 import '../styles/globals.css';
-import React, { useEffect, useState } from 'react';
-
-import '../styles/antdVariables.less';
-import { ThemeProvider } from '../src/context/themeContext';
-import { UserProvider } from '../src/context/userContext';
-import { NoteProvider } from '../src/context/notificationContext';
-import { SocketProvider } from '../src/context/socketContext';
 import '../utils/i18n-init';
-import { useTranslation } from 'react-i18next';
-import { useRouter } from 'next/router';
-import { ConfigProvider, notification } from 'antd';
-import ru from 'antd/lib/locale/ru_RU';
-import en from 'antd/lib/locale/en_US';
+import '../utils/dayjs';
 
-import moment from 'moment';
-import 'moment/locale/ru';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ConfigProvider } from 'antd';
+import ru from 'antd/locale/ru_RU';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import MainLayout from '../src/components/layouts/mainLayout';
 import Seo from '../src/components/seo';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-
-moment.locale('ru');
+import { NoteProvider } from '../src/context/notificationContext';
+import { SocketProvider } from '../src/context/socketContext';
+import { ThemeProvider } from '../src/context/themeContext';
+import { UserProvider } from '../src/context/userContext';
+import theme from '../src/theme';
 
 export default function MyApp({ Component, pageProps }) {
+  const router = useRouter();
+  // The thin progress line under the header while the next page loads.
   const [loading, setLoading] = useState(false);
-
-  const { t, i18n } = useTranslation();
-  const changeLanguage = (language) => {
-    i18n.changeLanguage(language);
-
-    moment.locale(i18n.language);
-  };
-
-  const antdLocales = (lang = 'ru') => {
-    const covab = { ru, en };
-    return covab[lang];
-  };
-
-  // const [queryClient] = useState(() => new QueryClient());
-
-  // one client for the app's lifetime; a new one per render would drop the cache
+  // One client for the app's lifetime; a new one per render would drop the cache.
   const [queryClient] = useState(() => new QueryClient());
 
-  const router = useRouter();
-
   useEffect(() => {
-    // Обработка начала загрузки
-    router.events.on('routeChangeStart', () => {
-      setLoading(true);
-    });
-
-    // Обработка окончания загрузки
-    router.events.on('routeChangeComplete', () => {
-      setLoading(false);
-    });
-    router.events.on('routeChangeError', () => {
-      setLoading(false);
-    });
-  }, []);
+    const start = () => setLoading(true);
+    const stop = () => setLoading(false);
+    router.events.on('routeChangeStart', start);
+    router.events.on('routeChangeComplete', stop);
+    router.events.on('routeChangeError', stop);
+    return () => {
+      router.events.off('routeChangeStart', start);
+      router.events.off('routeChangeComplete', stop);
+      router.events.off('routeChangeError', stop);
+    };
+  }, [router.events]);
 
   return (
-    <>
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <ConfigProvider locale={ru} theme={theme}>
         <ThemeProvider>
           <UserProvider>
             <SocketProvider>
               <NoteProvider>
-                <ConfigProvider locale={antdLocales(i18n.language)}>
-                  <Seo />
-                  <MainLayout loading={loading}>
-                    <Component {...pageProps} />
-                  </MainLayout>
-                </ConfigProvider>
+                <Seo />
+                <MainLayout loading={loading}>
+                  <Component {...pageProps} />
+                </MainLayout>
               </NoteProvider>
             </SocketProvider>
           </UserProvider>
         </ThemeProvider>
-      </QueryClientProvider>
-    </>
+      </ConfigProvider>
+    </QueryClientProvider>
   );
 }

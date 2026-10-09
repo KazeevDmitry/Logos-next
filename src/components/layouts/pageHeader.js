@@ -3,7 +3,7 @@ import { Col, Row } from 'antd';
 import { useRouter } from 'next/router';
 import { useThemeContext } from '../../context/themeContext';
 import Seo from '../seo';
-import styles from './pageHeader.module.less';
+import styles from './pageHeader.module.scss';
 
 import i18n from '../../../utils/i18n-init';
 /**

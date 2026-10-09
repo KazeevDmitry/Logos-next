@@ -1,0 +1,8 @@
+// The site's own design values, shared by the .module.scss files through
+// `@use '…/styles/variables' as *`. Ant Design gets the same values as theme
+// tokens in src/theme.js; keep the two in step.
+$primary-color: #1890ff;
+// The primary colour 20 points lighter.
+$light-primary-color: #7ec1ff;
+$cardsHeader-color: rgb(203, 223, 240);
+$containerMaxWidth: 1160px;

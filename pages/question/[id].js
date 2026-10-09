@@ -1,5 +1,5 @@
 import { Button, Col, Empty, Input, Result } from 'antd';
-import moment from 'moment';
+import dayjs from '../../utils/dayjs';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -39,6 +39,7 @@ function AnswerForm({ questionId }) {
         autoSize={{ minRows: 4, maxRows: 14 }}
         maxLength={10000}
         showCount
+        aria-label={i18n.t('pages.questionId.vashOtvet')}
         value={text}
         onChange={(e) => setText(e.target.value)}
       />
@@ -68,7 +69,7 @@ function AnswerCard({ answer }) {
       >
         <AuthorLine user={answer.author} />
         <span style={{ color: '#5E6674', fontSize: '14px' }}>
-          {moment(answer.createdAt).format('DD MMM YYYY, HH:mm')}
+          {dayjs(answer.createdAt).format('DD MMM YYYY, HH:mm')}
         </span>
       </div>
       <div

@@ -1,6 +1,6 @@
 import { SafetyCertificateOutlined } from '@ant-design/icons';
 import { Tooltip } from 'antd';
-import moment from 'moment';
+import dayjs from '../../../utils/dayjs';
 import Link from 'next/link';
 import RatingBar from '../ratingbar/ratingbar';
 import UserImage from '../userImage/userImage';
@@ -51,7 +51,7 @@ export default function ResponseCard({ response, chosen = false, actions }) {
             {response.price.toLocaleString('ru-RU')} ₽
           </div>
           <div style={{ color: '#5E6674', fontSize: '13px' }}>
-            {moment(response.createdAt).format('DD MMM YYYY, HH:mm')}
+            {dayjs(response.createdAt).format('DD MMM YYYY, HH:mm')}
           </div>
         </div>
       </div>

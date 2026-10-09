@@ -3,7 +3,7 @@ import { Col, Row } from 'antd';
 import { useTranslation } from 'react-i18next';
 import Plural from '../../../utils/plural';
 import { useThemeContext } from '../../context/themeContext';
-import styles from './sideFeedbacks.module.less';
+import styles from './sideFeedbacks.module.scss';
 
 /**
  * Review summary: the average, a bar per star value and the review count.

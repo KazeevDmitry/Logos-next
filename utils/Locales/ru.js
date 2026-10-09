@@ -728,6 +728,7 @@ export default {
       zagruziteDokumentEscheRaz: 'Загрузите документ ещё раз.',
     },
     questionId: {
+      vashOtvet: 'Ваш ответ',
       znaeteOtvetNaEtotVopros: 'Знаете ответ на этот вопрос?',
       namVsegdaPriyatnoZnatMnenie: 'Нам всегда приятно знать мнение профессионалов из сообщества',
       otvetitNaVopros: 'Ответить на вопрос',
@@ -975,6 +976,9 @@ export default {
       nichegoNeNaydeno: 'Ничего не найдено',
       neUdalosZagruzitSpisok: 'Не удалось загрузить список',
       obnoviteStranitsu: 'Обновите страницу.',
+    },
+    searchField: {
+      nayti: 'Найти',
     },
     seo: {
       logosestServisPoiskaYuristovAdvokatov:

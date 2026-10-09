@@ -45,6 +45,8 @@ export function SocketProvider({ children }) {
     const refreshChats = () => queryClient.invalidateQueries({ queryKey: ['chat'] });
     connection.on('message:new', refreshChats);
     connection.on('message:read', refreshChats);
+    // The effect owns the connection; state hands it to the components that listen.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSocket(connection);
 
     return () => {
@@ -60,7 +62,9 @@ export function SocketProvider({ children }) {
 export function useSocketEvent(event, handler) {
   const socket = useContext(SocketContext);
   const latest = useRef(handler);
-  latest.current = handler;
+  useEffect(() => {
+    latest.current = handler;
+  });
 
   useEffect(() => {
     if (!socket) {

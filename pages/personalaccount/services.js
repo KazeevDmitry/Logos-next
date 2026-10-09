@@ -95,7 +95,7 @@ function ServicesPage() {
                         min={0}
                         max={100000000}
                         precision={0}
-                        addonAfter="₽"
+                        suffix="₽"
                         placeholder={i18n.t('pages.personalaccountServices.tsena')}
                         aria-label={i18n.t('pages.personalaccountServices.tsenaUslugi', {
                           v0: index + 1,

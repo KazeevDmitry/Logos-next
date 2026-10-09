@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import styles from './userImage.module.less';
+import styles from './userImage.module.scss';
 import { UserOutlined } from '@ant-design/icons';
 
 export default function UserImage({

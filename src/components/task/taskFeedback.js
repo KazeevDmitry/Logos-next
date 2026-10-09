@@ -1,5 +1,5 @@
 import { Button, Form, Input, Rate } from 'antd';
-import moment from 'moment';
+import dayjs from '../../../utils/dayjs';
 import { useState } from 'react';
 import { tasks } from '../../../lib/api';
 import { errorMessage } from '../../../lib/api/client';
@@ -24,7 +24,7 @@ export default function TaskFeedback({ task, onDone }) {
         <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
           <Rate disabled value={task.feedback.stars} style={{ color: 'red' }} />
           <span style={{ color: '#5E6674' }}>
-            {moment(task.feedback.createdAt).format('DD.MM.YYYY')}
+            {dayjs(task.feedback.createdAt).format('DD.MM.YYYY')}
           </span>
         </div>
         <div style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere', marginTop: '10px' }}>

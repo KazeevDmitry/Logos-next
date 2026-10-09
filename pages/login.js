@@ -7,7 +7,7 @@ import { errorMessage, errorStatus } from '../lib/api/client';
 import AuthPage, { emailRules, FormError } from '../src/components/authPage/authPage';
 import { useThemeContext } from '../src/context/themeContext';
 import { useUserContext } from '../src/context/userContext';
-import styles from '../styles/auth.module.less';
+import styles from '../styles/auth.module.scss';
 
 import i18n from '../utils/i18n-init';
 /** Only same-site paths are followed after login, never an outside address. */

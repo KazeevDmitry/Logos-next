@@ -1,3 +1,5 @@
+@use './variables' as *;
+
 .sectionPromo {
   position: relative;
   // display: flex;
@@ -59,7 +61,7 @@
 .tabBox {
   display: flex;
   position: relative;
-  max-width: @containerMaxWidth;
+  max-width: $containerMaxWidth;
   background-color: #f5f6f7;
   border-radius: 15px;
   margin-left: auto;

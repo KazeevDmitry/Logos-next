@@ -1,5 +1,5 @@
 import { Button, DatePicker, Form, Input, InputNumber, Radio, Select } from 'antd';
-import moment from 'moment';
+import dayjs from '../../../utils/dayjs';
 import { useState } from 'react';
 import { errorMessage } from '../../../lib/api/client';
 import { useThemeContext } from '../../context/themeContext';
@@ -19,7 +19,7 @@ function toFormValues(task) {
     text: task.text,
     priceMode: task.contractual ? 'negotiable' : 'fixed',
     budget: task.budget ?? undefined,
-    deadline: task.deadline ? moment(task.deadline) : undefined,
+    deadline: task.deadline ? dayjs(task.deadline) : undefined,
     cityId: task.city?.id,
     specializationId: task.specialization?.id,
     branchIds: task.branches.map((branch) => branch.id),
@@ -128,7 +128,7 @@ export default function TaskForm({ task, submitText, onSubmit }) {
         <DatePicker
           size={theme?.size}
           format="DD.MM.YYYY"
-          disabledDate={(date) => date && date.isBefore(moment().startOf('day'))}
+          disabledDate={(date) => date && date.isBefore(dayjs().startOf('day'))}
         />
       </Form.Item>
 
