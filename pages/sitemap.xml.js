@@ -1,7 +1,8 @@
-import { experts, news, questions, tasks } from '../lib/api';
+import { experts, news, questions, seo, tasks } from '../lib/api';
 import { createApi } from '../lib/api/client';
 import { siteUrl } from './robots.txt';
 
+const FIXED_PAGES = ['/', '/tasks', '/experts', '/articles', '/questions', '/agreement'];
 const PAGE_SIZE = 100;
 /** Newest entries per section; enough for a young site and bounded for the API. */
 const MAX_PAGES = 20;
@@ -27,22 +28,25 @@ const escapeXml = (text) =>
 export async function getServerSideProps(context) {
   const http = createApi();
   const base = siteUrl(context.req);
-  const [expertList, articleList, questionList, taskList] = await Promise.all([
+  const [expertList, articleList, questionList, taskList, seoPages] = await Promise.all([
     all(experts.list, http),
     all(news.list, http),
     all(questions.list, http),
     all(tasks.list, http),
+    seo.pages(http).catch(() => []),
   ]);
+  // What an administrator hid from search engines is not offered to them either.
+  const hidden = new Set(seoPages.filter((page) => page.noindex).map((page) => page.path));
 
   const urls = [
-    ...['/', '/tasks', '/experts', '/articles', '/questions', '/agreement'].map((path) => ({
-      path,
-    })),
+    ...FIXED_PAGES.filter((path) => !hidden.has(path)).map((path) => ({ path })),
     ...expertList.map((expert) => ({ path: `/expert/${expert.id}` })),
-    ...articleList.map((article) => ({
-      path: `/articles/${encodeURIComponent(article.slug)}`,
-      date: article.publishedAt,
-    })),
+    ...articleList
+      .filter((article) => !article.noindex)
+      .map((article) => ({
+        path: `/articles/${encodeURIComponent(article.slug)}`,
+        date: article.publishedAt,
+      })),
     ...questionList.map((question) => ({
       path: `/question/${question.id}`,
       date: question.createdAt,
