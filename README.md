@@ -51,7 +51,12 @@ In development they come from the compose files. For the production image they a
 - `src/components/` — UI components; `src/context/` — user, theme, notifications, socket; `src/hooks/` — reference data and list pages whose filters live in the URL.
 - `utils/Locales/` — `ru.js` and `en.js` (same keys, checked by `make locales`) and `apiErrors.js`, the Russian text for the API's error messages. The site is published in Russian. All interface text lives in the locale files: shared vocabulary under `task`, `account`, `finance`, and each page's or component's own copy under `pages.<route>` and `ui.<component>`.
 - `styles/` — global styles and the site's design values (`variables.scss`); `src/theme.js` gives the same values to Ant Design as theme tokens.
-- `e2e/` — Playwright tests. They run against the stack in `../Logos-api/compose.e2e.yml`, which uses this app's production image.
+- `e2e/` — Playwright tests of the marketplace loop, Q&A and the admin panel (which the API serves). They run against the stack in `../Logos-api/compose.e2e.yml`, which uses this app's production image.
+- `next.config.js` — besides the proxy rules, the security headers of every page: a content security policy (this origin only; inline scripts and styles stay allowed because Next and Ant Design need them), no framing, a referrer and a permissions policy.
+
+Files that only some people may open (task documents, chat attachments, diploma scans) are linked with `src/components/fileLink`: the API checks the 15-minute session cookie on the file's address, so the link renews the session before opening it. A plain `<a href>` is right only for public files (avatars, article images, question attachments).
+
+Deployment is described in the API repository: `../Logos-api/docs/deploy-yandex-cloud.md`.
 
 ## Checks
 
