@@ -1,6 +1,7 @@
 import { Button, Form, Input, InputNumber, Modal, Tag } from 'antd';
 import moment from 'moment';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from 'react-query';
 import { finance } from '../../../lib/api';
 import { errorMessage } from '../../../lib/api/client';
@@ -11,11 +12,8 @@ import { FormError } from '../authPage/authPage';
 /** The API refuses smaller requests. */
 const MIN_PAYOUT = 100;
 
-const STATUS = {
-  REQUESTED: { text: 'В обработке', color: 'gold' },
-  PAID: { text: 'Выплачено', color: 'green' },
-  REJECTED: { text: 'Отклонено', color: 'red' },
-};
+/** Tag colour per payout status; texts: locale `finance.payoutStatus`. */
+const STATUS_COLOR = { REQUESTED: 'gold', PAID: 'green', REJECTED: 'red' };
 
 function PayoutModal({ open, available, onClose, onDone }) {
   const [error, setError] = useState('');
@@ -78,6 +76,7 @@ function PayoutModal({ open, available, onClose, onDone }) {
  */
 export default function Payouts({ available }) {
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
   const { successNotification } = useNotifyContext();
   const [open, setOpen] = useState(false);
   const { data: payouts = [] } = useQuery(['finance', 'payouts'], () => finance.payouts());
@@ -119,7 +118,7 @@ export default function Payouts({ available }) {
                 }}
               >
                 <div style={{ minWidth: 0, overflowWrap: 'anywhere' }}>
-                  <Tag color={STATUS[payout.status]?.color}>{STATUS[payout.status]?.text ?? payout.status}</Tag>
+                  <Tag color={STATUS_COLOR[payout.status]}>{t(`finance.payoutStatus.${payout.status}`)}</Tag>
                   <span style={{ color: '#9AA1AD', fontSize: '13px' }}>
                     {moment(payout.createdAt).format('DD.MM.YYYY, HH:mm')}
                   </span>

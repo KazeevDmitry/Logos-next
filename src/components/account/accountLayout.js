@@ -1,24 +1,28 @@
 import { Col, Menu } from 'antd';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'react-i18next';
 import { useThemeContext } from '../../context/themeContext';
 import { useUserContext } from '../../context/userContext';
 import PageContainer from '../layouts/pageContainer';
 import PageHeader from '../layouts/pageHeader';
 
-/** Sections of the personal account: `expert` ones for experts only, `customer` ones for the rest. */
+/**
+ * Sections of the personal account: `expert` ones for experts only,
+ * `customer` ones for the rest. Labels: locale `account.menu`.
+ */
 const MENU = [
-  { key: '/personalaccount', label: 'Обзор' },
-  { key: '/personalaccount/profile', label: 'Личные данные' },
-  { key: '/personalaccount/expert', label: 'Профиль эксперта', expert: true },
-  { key: '/personalaccount/services', label: 'Услуги и цены', expert: true },
-  { key: '/personalaccount/education', label: 'Образование', expert: true },
-  { key: '/personalaccount/verification', label: 'Подтверждение личности', expert: true },
-  { key: '/personalaccount/expert', label: 'Стать экспертом', customer: true },
-  { key: '/mytasks', label: 'Мои задачи' },
-  { key: '/myresponses', label: 'Мои отклики', expert: true },
-  { key: '/messages', label: 'Сообщения' },
-  { key: '/finance', label: 'Финансы' },
-  { key: '/personalaccount/settings', label: 'Настройки' },
+  { key: '/personalaccount', label: 'overview' },
+  { key: '/personalaccount/profile', label: 'profile' },
+  { key: '/personalaccount/expert', label: 'expert', expert: true },
+  { key: '/personalaccount/services', label: 'services', expert: true },
+  { key: '/personalaccount/education', label: 'education', expert: true },
+  { key: '/personalaccount/verification', label: 'verification', expert: true },
+  { key: '/personalaccount/expert', label: 'becomeExpert', customer: true },
+  { key: '/mytasks', label: 'tasks' },
+  { key: '/myresponses', label: 'responses', expert: true },
+  { key: '/messages', label: 'messages' },
+  { key: '/finance', label: 'finance' },
+  { key: '/personalaccount/settings', label: 'settings' },
 ];
 
 export const accountBlock = { background: 'white', borderRadius: '10px' };
@@ -28,15 +32,19 @@ export default function AccountLayout({ title, children }) {
   const theme = useThemeContext();
   const router = useRouter();
   const { isExpert } = useUserContext();
+  const { t } = useTranslation();
   const pad = `${theme?.gutters?.gorizontal?.[theme?.id] ?? 20}px`;
-  const items = MENU.filter((item) => (isExpert ? !item.customer : !item.expert)).map(({ key, label }) => ({ key, label }));
+  const items = MENU.filter((item) => (isExpert ? !item.customer : !item.expert)).map(({ key, label }) => ({
+    key,
+    label: t(`account.menu.${label}`),
+  }));
 
   return (
     <>
       <PageHeader title={title} seo={{ noindex: true }} />
       <PageContainer>
         <Col xs={24} sm={24} md={8} lg={7} xl={6}>
-          <nav aria-label="Разделы личного кабинета" style={{ ...accountBlock, padding: '10px 0', overflow: 'hidden' }}>
+          <nav aria-label={t('account.menu.label')} style={{ ...accountBlock, padding: '10px 0', overflow: 'hidden' }}>
             <Menu
               mode={theme.isDesktop ? 'inline' : 'horizontal'}
               selectedKeys={[router.pathname]}

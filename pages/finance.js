@@ -2,6 +2,7 @@ import { Empty, Pagination, Spin } from 'antd';
 import moment from 'moment';
 import Link from 'next/link';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useQuery } from 'react-query';
 import { finance } from '../lib/api';
 import { withAuth } from '../lib/withAuth';
@@ -11,15 +12,15 @@ import { roubles } from '../utils/money';
 
 const PAGE_SIZE = 10;
 
-/** The API's ledger transaction types in the user's words. */
+/** The API's ledger transaction types → keys of locale `finance.types`. */
 const TYPES = {
-  'task.funded': 'Оплата задачи (деньги зарезервированы)',
-  'task.released': 'Оплата за выполненную задачу',
-  'task.refunded': 'Возврат за задачу',
-  'payment.refunded': 'Возврат платежа',
-  'payout.requested': 'Заявка на вывод средств',
-  'payout.paid': 'Вывод средств',
-  'payout.rejected': 'Заявка на вывод отклонена, деньги возвращены',
+  'task.funded': 'taskFunded',
+  'task.released': 'taskReleased',
+  'task.refunded': 'taskRefunded',
+  'payment.refunded': 'paymentRefunded',
+  'payout.requested': 'payoutRequested',
+  'payout.paid': 'payoutPaid',
+  'payout.rejected': 'payoutRejected',
 };
 
 function Amount({ label, value, hint, accent }) {
@@ -34,6 +35,7 @@ function Amount({ label, value, hint, accent }) {
 
 /** What the user has, what is on hold, and every movement of their money. */
 function FinancePage() {
+  const { t } = useTranslation();
   const [page, setPage] = useState(1);
   const { data: balance } = useQuery(['finance', 'balance'], () => finance.balance());
   const { data: history, isLoading } = useQuery(
@@ -44,21 +46,21 @@ function FinancePage() {
   const items = history?.items ?? [];
 
   return (
-    <AccountLayout title="Финансы">
+    <AccountLayout title={t('account.menu.finance')}>
       {balance ? (
         <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-          <Amount accent label="Доступно" value={balance.available} hint="Можно вывести" />
-          <Amount label="Выводится" value={balance.pendingPayouts} hint="Заявки на вывод в обработке" />
-          <Amount label="Зарезервировано" value={balance.inEscrow} hint="По вашим задачам до приёмки работы" />
+          <Amount accent label={t('finance.available')} value={balance.available} hint={t('finance.availableHint')} />
+          <Amount label={t('finance.pending')} value={balance.pendingPayouts} hint={t('finance.pendingHint')} />
+          <Amount label={t('finance.escrow')} value={balance.inEscrow} hint={t('finance.escrowHint')} />
         </div>
       ) : (
         <Spin />
       )}
       {balance && <Payouts available={balance.available} />}
 
-      <h2 style={{ fontSize: '20px', fontWeight: 500, marginTop: '36px' }}>История операций</h2>
+      <h2 style={{ fontSize: '20px', fontWeight: 500, marginTop: '36px' }}>{t('finance.history')}</h2>
       {isLoading && <Spin />}
-      {!isLoading && items.length === 0 && <Empty description="Операций пока не было" style={{ margin: '30px 0' }} />}
+      {!isLoading && items.length === 0 && <Empty description={t('finance.noHistory')} style={{ margin: '30px 0' }} />}
       <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
         {items.map((item) => (
           <li
@@ -66,7 +68,7 @@ function FinancePage() {
             style={{ display: 'flex', gap: '16px', justifyContent: 'space-between', padding: '12px 0', borderBottom: '1px solid #EEF0F4' }}
           >
             <div style={{ minWidth: 0, overflowWrap: 'anywhere' }}>
-              <div>{TYPES[item.type] ?? item.type}</div>
+              <div>{TYPES[item.type] ? t(`finance.types.${TYPES[item.type]}`) : item.type}</div>
               {item.task && <Link href={`/task/${item.task.id}`}>{item.task.title}</Link>}
               <div style={{ color: '#9AA1AD', fontSize: '13px' }}>{moment(item.createdAt).format('DD.MM.YYYY, HH:mm')}</div>
             </div>

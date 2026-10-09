@@ -1,6 +1,7 @@
 import { Col, Empty, Result, Row, Spin, Tabs } from 'antd';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'react-i18next';
 import { useThemeContext } from '../../context/themeContext';
 import { useListQuery } from '../../hooks/useListQuery';
 import MyPagination from '../pagination';
@@ -9,17 +10,8 @@ import TaskCard from '../taskCard/taskCard';
 const PAGE_SIZE = 5;
 const FILTERS = { status: ['status', 'text'] };
 
-const TABS = [
-  { key: 'all', label: 'Все' },
-  { key: 'OPEN', label: 'Принимают отклики' },
-  { key: 'ASSIGNED', label: 'Ждут подтверждения' },
-  { key: 'AWAITING_PAYMENT', label: 'Ждут оплаты' },
-  { key: 'IN_PROGRESS', label: 'В работе' },
-  { key: 'REVIEW', label: 'На проверке' },
-  { key: 'COMPLETED', label: 'Выполнены' },
-  { key: 'DISPUTED', label: 'Спор' },
-  { key: 'CANCELLED', label: 'Отменены' },
-];
+/** A tab per status; labels: locale `task.tabs`. */
+const TABS = ['all', 'OPEN', 'ASSIGNED', 'AWAITING_PAYMENT', 'IN_PROGRESS', 'REVIEW', 'COMPLETED', 'DISPUTED', 'CANCELLED'];
 
 /**
  * One of the signed-in user's task lists (created, performing, responded to)
@@ -30,13 +22,14 @@ const TABS = [
 export default function AccountTaskList({ name, fetcher, emptyText, emptyAction, renderNote }) {
   const theme = useThemeContext();
   const router = useRouter();
+  const { t } = useTranslation();
   const pad = `${theme?.gutters?.gorizontal?.[theme?.id] ?? 20}px`;
   const { data, isLoading, isError, isFetching, page } = useListQuery(name, fetcher, {
     filters: FILTERS,
     pageSize: PAGE_SIZE,
   });
   const items = data?.items ?? [];
-  const status = TABS.some((tab) => tab.key === router.query.status) ? router.query.status : 'all';
+  const status = TABS.includes(router.query.status) ? router.query.status : 'all';
 
   const setStatus = (key) => {
     // A new tab starts from its first page.
@@ -48,7 +41,7 @@ export default function AccountTaskList({ name, fetcher, emptyText, emptyAction,
 
   return (
     <Col span={24}>
-      <Tabs activeKey={status} onChange={setStatus} items={TABS} />
+      <Tabs activeKey={status} onChange={setStatus} items={TABS.map((key) => ({ key, label: t(`task.tabs.${key}`) }))} />
 
       {isLoading && (
         <div style={{ display: 'flex', justifyContent: 'center', margin: '60px 0' }}>
