@@ -9,6 +9,7 @@ import { useNotifyContext } from '../../src/context/notificationContext';
 import { useThemeContext } from '../../src/context/themeContext';
 import { useUserContext } from '../../src/context/userContext';
 
+import i18n from '../../utils/i18n-init';
 const heading = { fontSize: '20px', fontWeight: 500 };
 
 /** Whether the address is confirmed, with a way to get the letter again. */
@@ -20,9 +21,15 @@ function EmailStatus({ user }) {
     setBusy(true);
     try {
       await auth.resendConfirmation();
-      successNotification('Письмо отправлено', `Откройте ссылку из письма на ${user.email}.`);
+      successNotification(
+        i18n.t('pages.personalaccountSettings.pismoOtpravleno'),
+        i18n.t('pages.personalaccountSettings.otkroyteSsylkuIzPismaNa', { email: user.email }),
+      );
     } catch (e) {
-      infoNotification('Не получилось отправить письмо', errorMessage(e));
+      infoNotification(
+        i18n.t('pages.personalaccountSettings.nePoluchilosOtpravitPismo'),
+        errorMessage(e),
+      );
     } finally {
       setBusy(false);
     }
@@ -34,14 +41,18 @@ function EmailStatus({ user }) {
       <p style={{ overflowWrap: 'anywhere' }}>
         {user.email} —{' '}
         {user.emailVerified ? (
-          <span style={{ color: '#1FAA78' }}>подтверждён</span>
+          <span style={{ color: '#1FAA78' }}>
+            {i18n.t('pages.personalaccountSettings.podtverzhden')}
+          </span>
         ) : (
-          <span style={{ color: '#C98A0B' }}>не подтверждён</span>
+          <span style={{ color: '#C98A0B' }}>
+            {i18n.t('pages.personalaccountSettings.nePodtverzhden')}
+          </span>
         )}
       </p>
       {!user.emailVerified && (
         <Button loading={busy} onClick={resend}>
-          Отправить письмо ещё раз
+          {i18n.t('pages.personalaccountSettings.otpravitPismoEscheRaz')}
         </Button>
       )}
     </>
@@ -58,7 +69,10 @@ function EmailNotifications({ user }) {
     try {
       setCurrentUser(await users.update({ emailNotifications }));
     } catch (e) {
-      infoNotification('Не получилось сохранить', errorMessage(e));
+      infoNotification(
+        i18n.t('pages.personalaccountSettings.nePoluchilosSohranit'),
+        errorMessage(e),
+      );
     } finally {
       setBusy(false);
     }
@@ -66,14 +80,13 @@ function EmailNotifications({ user }) {
 
   return (
     <>
-      <h2 style={heading}>Уведомления</h2>
+      <h2 style={heading}>{i18n.t('pages.personalaccountSettings.uvedomleniya')}</h2>
       <label style={{ display: 'flex', gap: '12px', alignItems: 'center', cursor: 'pointer' }}>
         <Switch checked={user.emailNotifications} loading={busy} onChange={toggle} />
-        <span>Присылать уведомления на e-mail</span>
+        <span>{i18n.t('pages.personalaccountSettings.prisylatUvedomleniyaNaEMail')}</span>
       </label>
       <p style={{ color: '#5E6674', marginTop: '8px', maxWidth: '560px' }}>
-        Об откликах, выборе исполнителя, оплате и новых сообщениях. На сайте уведомления
-        показываются всегда; письма о входе и пароле приходят в любом случае.
+        {i18n.t('pages.personalaccountSettings.obOtklikahVyboreIspolnitelyaOplate')}
       </p>
     </>
   );
@@ -92,10 +105,17 @@ function ChangePassword() {
     try {
       await users.changePassword({ currentPassword, newPassword });
       form.resetFields();
-      successNotification('Пароль изменён', 'На других устройствах нужно будет войти заново.');
+      successNotification(
+        i18n.t('pages.personalaccountSettings.parolIzmenen'),
+        i18n.t('pages.personalaccountSettings.naDrugihUstroystvahNuzhnoBudet'),
+      );
     } catch (e) {
       // 400 here means the current password did not match.
-      setError(errorStatus(e) === 400 ? 'Текущий пароль указан неверно' : errorMessage(e));
+      setError(
+        errorStatus(e) === 400
+          ? i18n.t('pages.personalaccountSettings.tekuschiyParolUkazanNeverno')
+          : errorMessage(e),
+      );
     } finally {
       setBusy(false);
     }
@@ -103,28 +123,36 @@ function ChangePassword() {
 
   return (
     <>
-      <h2 style={heading}>Пароль</h2>
+      <h2 style={heading}>{i18n.t('pages.personalaccountSettings.parol')}</h2>
       <Form form={form} layout="vertical" style={{ maxWidth: '420px' }} onFinish={save}>
         <Form.Item
           name="currentPassword"
-          label="Текущий пароль"
-          rules={[{ required: true, message: 'Введите текущий пароль' }]}
+          label={i18n.t('pages.personalaccountSettings.tekuschiyParol')}
+          rules={[
+            {
+              required: true,
+              message: i18n.t('pages.personalaccountSettings.vvediteTekuschiyParol'),
+            },
+          ]}
         >
           <Input.Password size={theme?.size} maxLength={128} autoComplete="current-password" />
         </Form.Item>
         <Form.Item
           name="newPassword"
-          label="Новый пароль"
+          label={i18n.t('pages.personalaccountSettings.novyyParol')}
           rules={passwordRules}
-          extra="Не короче 8 символов, с буквой и цифрой"
+          extra={i18n.t('pages.personalaccountSettings.neKoroche8SimvolovS')}
         >
           <Input.Password size={theme?.size} maxLength={128} autoComplete="new-password" />
         </Form.Item>
         <Form.Item
           name="repeat"
-          label="Новый пароль ещё раз"
+          label={i18n.t('pages.personalaccountSettings.novyyParolEscheRaz')}
           dependencies={['newPassword']}
-          rules={[{ required: true, message: 'Повторите пароль' }, sameAs('newPassword')]}
+          rules={[
+            { required: true, message: i18n.t('pages.personalaccountSettings.povtoriteParol') },
+            sameAs('newPassword'),
+          ]}
         >
           <Input.Password size={theme?.size} maxLength={128} autoComplete="new-password" />
         </Form.Item>
@@ -136,7 +164,7 @@ function ChangePassword() {
           loading={busy}
           style={{ marginTop: '10px' }}
         >
-          Изменить пароль
+          {i18n.t('pages.personalaccountSettings.izmenitParol')}
         </Button>
       </Form>
     </>
@@ -145,7 +173,7 @@ function ChangePassword() {
 
 function SettingsPage({ user }) {
   return (
-    <AccountLayout title="Настройки">
+    <AccountLayout title={i18n.t('pages.personalaccountSettings.nastroyki')}>
       <EmailStatus user={user} />
       <Divider />
       <EmailNotifications user={user} />

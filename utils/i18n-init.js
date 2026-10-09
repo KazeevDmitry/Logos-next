@@ -14,6 +14,11 @@ i18n.use(initReactI18next).init({
     ru: { translations: { ...ru } },
   },
   lng: 'ru',
+  // Ready as soon as this module is imported: texts are also read outside
+  // components (validation rules, tables of labels) while modules load.
+  initImmediate: false,
+  // React escapes what it renders; escaping here as well would show "&amp;".
+  interpolation: { escapeValue: false },
   fallbackLng: 'ru',
   ns: ['translations'],
   defaultNS: 'translations',

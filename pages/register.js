@@ -15,6 +15,7 @@ import { useThemeContext } from '../src/context/themeContext';
 import { useUserContext } from '../src/context/userContext';
 import styles from '../styles/auth.module.less';
 
+import i18n from '../utils/i18n-init';
 export default function Register() {
   const theme = useThemeContext();
   const router = useRouter();
@@ -29,15 +30,13 @@ export default function Register() {
     try {
       setCurrentUser(await auth.register({ name, surname: surname || undefined, email, password }));
       successNotification(
-        'Вы зарегистрированы',
-        'Мы отправили письмо со ссылкой для подтверждения e-mail.',
+        i18n.t('pages.register.vyZaregistrirovany'),
+        i18n.t('pages.register.myOtpraviliPismoSoSsylkoy'),
       );
       router.replace('/');
     } catch (e) {
       setError(
-        errorStatus(e) === 409
-          ? 'Пользователь с таким e-mail уже зарегистрирован'
-          : errorMessage(e),
+        errorStatus(e) === 409 ? i18n.t('pages.register.polzovatelSTakimEMail') : errorMessage(e),
       );
       setBusy(false);
     }
@@ -46,7 +45,7 @@ export default function Register() {
   const item = { style: { marginBottom: '15px' } };
 
   return (
-    <AuthPage title="Регистрация">
+    <AuthPage title={i18n.t('pages.register.registratsiya')}>
       <Form
         name="register"
         layout="vertical"
@@ -56,15 +55,26 @@ export default function Register() {
       >
         <Form.Item
           name="name"
-          rules={[{ required: true, whitespace: true, message: 'Введите ваше имя' }]}
+          rules={[
+            {
+              required: true,
+              whitespace: true,
+              message: i18n.t('pages.register.vvediteVasheImya'),
+            },
+          ]}
           {...item}
         >
-          <Input size={theme?.size} placeholder="Имя" autoComplete="given-name" maxLength={60} />
+          <Input
+            size={theme?.size}
+            placeholder={i18n.t('pages.register.imya')}
+            autoComplete="given-name"
+            maxLength={60}
+          />
         </Form.Item>
         <Form.Item name="surname" {...item}>
           <Input
             size={theme?.size}
-            placeholder="Фамилия"
+            placeholder={i18n.t('pages.register.familiya')}
             autoComplete="family-name"
             maxLength={60}
           />
@@ -81,21 +91,28 @@ export default function Register() {
           name="password"
           rules={passwordRules}
           validateFirst
-          extra="Не короче 8 символов, с буквой и цифрой"
+          extra={i18n.t('pages.register.neKoroche8SimvolovS')}
           {...item}
         >
-          <Input.Password size={theme?.size} placeholder="Пароль" autoComplete="new-password" />
+          <Input.Password
+            size={theme?.size}
+            placeholder={i18n.t('pages.register.parol')}
+            autoComplete="new-password"
+          />
         </Form.Item>
         <Form.Item
           name="confirm"
           dependencies={['password']}
-          rules={[{ required: true, message: 'Повторите пароль' }, sameAs('password')]}
+          rules={[
+            { required: true, message: i18n.t('pages.register.povtoriteParol') },
+            sameAs('password'),
+          ]}
           validateFirst
           {...item}
         >
           <Input.Password
             size={theme?.size}
-            placeholder="Повторите пароль"
+            placeholder={i18n.t('pages.register.povtoriteParol')}
             autoComplete="new-password"
           />
         </Form.Item>
@@ -107,12 +124,12 @@ export default function Register() {
               validator: (_, checked) =>
                 checked
                   ? Promise.resolve()
-                  : Promise.reject(new Error('Примите условия соглашения')),
+                  : Promise.reject(new Error(i18n.t('pages.register.primiteUsloviyaSoglasheniya'))),
             },
           ]}
           style={{ marginBottom: 0 }}
         >
-          <Checkbox>Принимаю условия пользовательского соглашения</Checkbox>
+          <Checkbox>{i18n.t('pages.register.prinimayuUsloviyaPolzovatelskogoSoglasheni')}</Checkbox>
         </Form.Item>
         <FormError>{error}</FormError>
         <Form.Item>
@@ -123,13 +140,13 @@ export default function Register() {
             loading={busy}
             style={{ width: '100%', marginTop: '24px' }}
           >
-            Зарегистрироваться
+            {i18n.t('pages.register.zaregistrirovatsya')}
           </Button>
         </Form.Item>
         <div className={styles.register}>
-          Уже есть аккаунт?{' '}
+          {i18n.t('pages.register.uzheEstAkkaunt')}{' '}
           <Link href="/login" replace className={styles.registerLink}>
-            Войти
+            {i18n.t('pages.register.voyti')}
           </Link>
         </div>
       </Form>

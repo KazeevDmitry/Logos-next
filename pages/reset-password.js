@@ -8,6 +8,7 @@ import AuthPage, { FormError, passwordRules, sameAs } from '../src/components/au
 import { useThemeContext } from '../src/context/themeContext';
 import { useUserContext } from '../src/context/userContext';
 
+import i18n from '../utils/i18n-init';
 /** Opened from the e-mailed link: /reset-password?token=… */
 export default function ResetPassword() {
   const theme = useThemeContext();
@@ -28,7 +29,7 @@ export default function ResetPassword() {
     } catch (e) {
       setError(
         errorStatus(e) === 400
-          ? 'Ссылка недействительна или устарела. Запросите новую.'
+          ? i18n.t('pages.resetPassword.ssylkaNedeystvitelnaIliUstarelaZaprosite')
           : errorMessage(e),
       );
       setBusy(false);
@@ -37,44 +38,49 @@ export default function ResetPassword() {
 
   if (router.isReady && !token) {
     return (
-      <AuthPage title="Ссылка недействительна">
-        <p>В ссылке нет кода восстановления.</p>
-        <Link href="/forgot-password">Запросить новую ссылку</Link>
+      <AuthPage title={i18n.t('pages.resetPassword.ssylkaNedeystvitelna')}>
+        <p>{i18n.t('pages.resetPassword.vSsylkeNetKodaVosstanovleniya')}</p>
+        <Link href="/forgot-password">{i18n.t('pages.resetPassword.zaprositNovuyuSsylku')}</Link>
       </AuthPage>
     );
   }
 
   return (
-    <AuthPage title="Новый пароль">
+    <AuthPage title={i18n.t('pages.resetPassword.novyyParol')}>
       <Form name="reset" layout="vertical" onFinish={onFinish} validateTrigger="onSubmit">
         <Form.Item
           name="password"
           rules={passwordRules}
           validateFirst
-          extra="Не короче 8 символов, с буквой и цифрой"
+          extra={i18n.t('pages.resetPassword.neKoroche8SimvolovS')}
           style={{ marginBottom: '15px' }}
         >
           <Input.Password
             size={theme?.size}
-            placeholder="Новый пароль"
+            placeholder={i18n.t('pages.resetPassword.novyyParol')}
             autoComplete="new-password"
           />
         </Form.Item>
         <Form.Item
           name="confirm"
           dependencies={['password']}
-          rules={[{ required: true, message: 'Повторите пароль' }, sameAs('password')]}
+          rules={[
+            { required: true, message: i18n.t('pages.resetPassword.povtoriteParol') },
+            sameAs('password'),
+          ]}
           validateFirst
           style={{ marginBottom: 0 }}
         >
           <Input.Password
             size={theme?.size}
-            placeholder="Повторите пароль"
+            placeholder={i18n.t('pages.resetPassword.povtoriteParol')}
             autoComplete="new-password"
           />
         </Form.Item>
         <FormError>{error}</FormError>
-        {error && <Link href="/forgot-password">Запросить новую ссылку</Link>}
+        {error && (
+          <Link href="/forgot-password">{i18n.t('pages.resetPassword.zaprositNovuyuSsylku')}</Link>
+        )}
         <Form.Item>
           <Button
             type="primary"
@@ -83,7 +89,7 @@ export default function ResetPassword() {
             loading={busy}
             style={{ width: '100%', marginTop: '24px' }}
           >
-            Сохранить пароль
+            {i18n.t('pages.resetPassword.sohranitParol')}
           </Button>
         </Form.Item>
       </Form>

@@ -4,6 +4,7 @@ import ExpertCard from '../src/components/expertCard/expertCard';
 import ListPage from '../src/components/listPage/listPage';
 import { listServerProps, useListQuery } from '../src/hooks/useListQuery';
 
+import i18n from '../utils/i18n-init';
 const PAGE_SIZE = 8;
 /** URL query key → API parameter. */
 const FILTERS = {
@@ -18,14 +19,14 @@ export default function Experts({ serverData }) {
 
   return (
     <ListPage
-      title="Эксперты"
-      description="Юристы, адвокаты и нотариусы с рейтингом и отзывами заказчиков. Выберите специалиста по отрасли права и городу."
-      searchPlaceholder="Введите полностью или частично имя или фамилию"
+      title={i18n.t('pages.experts.eksperty')}
+      description={i18n.t('pages.experts.yuristyAdvokatyINotariusyS')}
+      searchPlaceholder={i18n.t('pages.experts.vveditePolnostyuIliChastichnoImya')}
       filter={{ city: true, spec: true, branch: true, budget: false }}
       query={query}
       pageSize={PAGE_SIZE}
       pluralPath="experts.plural"
-      emptyText="Эксперты не найдены. Попробуйте изменить фильтр."
+      emptyText={i18n.t('pages.experts.ekspertyNeNaydenyPoprobuyteIzmenit')}
       renderItem={(expert) => (
         <Link href={`/expert/${expert.id}`} style={{ color: 'black', cursor: 'pointer' }}>
           <ExpertCard expert={expert} />

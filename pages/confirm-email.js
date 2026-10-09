@@ -6,6 +6,7 @@ import { auth } from '../lib/api';
 import AuthPage from '../src/components/authPage/authPage';
 import { useUserContext } from '../src/context/userContext';
 
+import i18n from '../utils/i18n-init';
 /** Opened from the e-mailed link: /confirm-email?token=… */
 export default function ConfirmEmail() {
   const router = useRouter();
@@ -35,7 +36,7 @@ export default function ConfirmEmail() {
 
   if (state === 'checking') {
     return (
-      <AuthPage title="Подтверждение e-mail">
+      <AuthPage title={i18n.t('pages.confirmEmail.podtverzhdenieEMail')}>
         <div style={{ textAlign: 'center' }}>
           <Spin size="large" />
         </div>
@@ -44,16 +45,16 @@ export default function ConfirmEmail() {
   }
   if (state === 'done') {
     return (
-      <AuthPage title="E-mail подтверждён">
-        <p>Спасибо! Адрес электронной почты подтверждён.</p>
-        <Link href="/">На главную</Link>
+      <AuthPage title={i18n.t('pages.confirmEmail.eMailPodtverzhden')}>
+        <p>{i18n.t('pages.confirmEmail.spasiboAdresElektronnoyPochtyPodtverzhden')}</p>
+        <Link href="/">{i18n.t('pages.confirmEmail.naGlavnuyu')}</Link>
       </AuthPage>
     );
   }
   return (
-    <AuthPage title="Ссылка недействительна">
-      <p>Ссылка уже использована или устарела. Новую можно запросить в личном кабинете.</p>
-      <Link href="/">На главную</Link>
+    <AuthPage title={i18n.t('pages.confirmEmail.ssylkaNedeystvitelna')}>
+      <p>{i18n.t('pages.confirmEmail.ssylkaUzheIspolzovanaIliUstarela')}</p>
+      <Link href="/">{i18n.t('pages.confirmEmail.naGlavnuyu')}</Link>
     </AuthPage>
   );
 }

@@ -29,6 +29,7 @@ import { useNotifyContext } from '../../src/context/notificationContext';
 import { useThemeContext } from '../../src/context/themeContext';
 import { useUserContext } from '../../src/context/userContext';
 
+import i18n from '../../utils/i18n-init';
 const block = { background: 'white', borderRadius: '10px' };
 
 export default function TaskPage({ serverTask }) {
@@ -81,7 +82,13 @@ export default function TaskPage({ serverTask }) {
   const { run: runAction, running } = useTaskAction(id, refresh);
 
   if (!task) {
-    return <Result status="404" title="Задача не найдена" style={{ marginTop: '120px' }} />;
+    return (
+      <Result
+        status="404"
+        title={i18n.t('pages.taskId.zadachaNeNaydena')}
+        style={{ marginTop: '120px' }}
+      />
+    );
   }
 
   const canRespond = task.status === 'OPEN' && isExpert && task.viewerStatus === null;
@@ -99,8 +106,8 @@ export default function TaskPage({ serverTask }) {
         onDone={() => {
           setResponding(false);
           successNotification(
-            'Отклик отправлен',
-            'Заказчик увидит его и сможет выбрать вас исполнителем.',
+            i18n.t('pages.taskId.otklikOtpravlen'),
+            i18n.t('pages.taskId.zakazchikUviditEgoISmozhet'),
           );
           refresh();
         }}
@@ -133,7 +140,9 @@ export default function TaskPage({ serverTask }) {
             {task.documents.length > 0 && (
               <>
                 <Divider />
-                <div style={{ fontWeight: 500, marginBottom: '8px' }}>Документы</div>
+                <div style={{ fontWeight: 500, marginBottom: '8px' }}>
+                  {i18n.t('pages.taskId.dokumenty')}
+                </div>
                 {task.documents.map((file) => (
                   <div key={file.id}>
                     <PaperClipOutlined />{' '}
@@ -145,13 +154,17 @@ export default function TaskPage({ serverTask }) {
               </>
             )}
             <Divider />
-            <div style={{ color: '#5E6674', marginBottom: '8px' }}>Заказчик</div>
+            <div style={{ color: '#5E6674', marginBottom: '8px' }}>
+              {i18n.t('pages.taskId.zakazchik')}
+            </div>
             <AuthorLine user={task.author} size={50} />
           </div>
 
           {task.status === 'COMPLETED' && (
             <div style={{ ...block, padding: pad, marginTop: pad }}>
-              <h2 style={{ fontSize: '24px', fontWeight: 500 }}>Отзыв заказчика</h2>
+              <h2 style={{ fontSize: '24px', fontWeight: 500 }}>
+                {i18n.t('pages.taskId.otzyvZakazchika')}
+              </h2>
               <TaskFeedback task={task} onDone={refresh} />
             </div>
           )}
@@ -159,10 +172,14 @@ export default function TaskPage({ serverTask }) {
           {(isAuthor || hasOwnOffer) && (
             <div style={{ marginTop: pad }}>
               <h2 style={{ fontSize: '24px', fontWeight: 500, marginBottom: 0 }}>
-                {isAuthor ? `Отклики (${responses.length})` : 'Ваш отклик'}
+                {isAuthor
+                  ? i18n.t('pages.taskId.otkliki', { length: responses.length })
+                  : i18n.t('pages.taskId.vashOtklik')}
               </h2>
               {isAuthor && responses.length === 0 && (
-                <p style={{ color: '#5E6674', marginTop: '12px' }}>Пока никто не откликнулся.</p>
+                <p style={{ color: '#5E6674', marginTop: '12px' }}>
+                  {i18n.t('pages.taskId.pokaNiktoNeOtkliknulsya')}
+                </p>
               )}
               {responses.map((response) => {
                 const conversation = chatWith(isAuthor ? response.expert.user.id : task.author.id);
@@ -179,18 +196,20 @@ export default function TaskPage({ serverTask }) {
                             loading={running === 'choose'}
                             onClick={() => runAction('choose', { responseId: response.id })}
                           >
-                            Выбрать исполнителем
+                            {i18n.t('pages.taskId.vybratIspolnitelem')}
                           </Button>
                         )}
                         {conversation && (
                           <Link href={`/messages?chat=${conversation.id}`}>
                             <Button icon={<MessageOutlined />}>
-                              {isAuthor ? 'Написать эксперту' : 'Написать заказчику'}
+                              {isAuthor
+                                ? i18n.t('pages.taskId.napisatEkspertu')
+                                : i18n.t('pages.taskId.napisatZakazchiku')}
                             </Button>
                           </Link>
                         )}
                         {!isAuthor && task.status === 'OPEN' && (
-                          <Button onClick={withdraw}>Отозвать отклик</Button>
+                          <Button onClick={withdraw}>{i18n.t('pages.taskId.otozvatOtklik')}</Button>
                         )}
                       </>
                     }
@@ -208,7 +227,7 @@ export default function TaskPage({ serverTask }) {
               task.budget !== null &&
               task.agreedPrice !== task.budget && (
                 <div style={{ color: '#5E6674' }}>
-                  Бюджет задачи: {task.budget.toLocaleString('ru-RU')} ₽
+                  {i18n.t('pages.taskId.byudzhetZadachi')} {task.budget.toLocaleString('ru-RU')} ₽
                 </div>
               )}
             <Divider />
@@ -219,19 +238,25 @@ export default function TaskPage({ serverTask }) {
                 </span>
               )}
               <span>
-                <CalendarOutlined /> Опубликована {moment(task.createdAt).format('DD.MM.YYYY')}
+                <CalendarOutlined /> {i18n.t('pages.taskId.opublikovana')}{' '}
+                {moment(task.createdAt).format('DD.MM.YYYY')}
               </span>
               {task.deadline && (
                 <span>
-                  <CalendarOutlined /> Срок: до {moment(task.deadline).format('DD.MM.YYYY')}
+                  <CalendarOutlined /> {i18n.t('pages.taskId.srokDo')}{' '}
+                  {moment(task.deadline).format('DD.MM.YYYY')}
                 </span>
               )}
-              <span>Откликов: {task.responsesCount}</span>
+              <span>
+                {i18n.t('pages.taskId.otklikov')} {task.responsesCount}
+              </span>
             </div>
             {task.performer && (
               <>
                 <Divider />
-                <div style={{ color: '#5E6674', marginBottom: '8px' }}>Исполнитель</div>
+                <div style={{ color: '#5E6674', marginBottom: '8px' }}>
+                  {i18n.t('pages.taskId.ispolnitel')}
+                </div>
                 <Link href={`/expert/${task.performer.expertId}`} style={{ color: 'inherit' }}>
                   <AuthorLine user={task.performer.user} />
                 </Link>
@@ -241,34 +266,36 @@ export default function TaskPage({ serverTask }) {
             <div style={{ display: 'grid', gap: '10px', marginTop: '20px' }}>
               {canRespond && (
                 <Button type="primary" size={theme?.size} onClick={() => setResponding(true)}>
-                  Откликнуться на задачу
+                  {i18n.t('pages.taskId.otkliknutsyaNaZadachu')}
                 </Button>
               )}
               {task.status === 'OPEN' && !currentUser && (
                 <Link href={`/login?next=/task/${task.id}`}>
                   <Button type="primary" size={theme?.size} style={{ width: '100%' }}>
-                    Войти, чтобы откликнуться
+                    {i18n.t('pages.taskId.voytiChtobyOtkliknutsya')}
                   </Button>
                 </Link>
               )}
               {task.status === 'OPEN' && currentUser && !isExpert && !isAuthor && (
                 <span style={{ color: '#5E6674' }}>
-                  Откликаться могут эксперты.{' '}
-                  <Link href="/personalaccount/expert">Стать экспертом</Link>
+                  {i18n.t('pages.taskId.otklikatsyaMogutEksperty')}{' '}
+                  <Link href="/personalaccount/expert">{i18n.t('pages.taskId.statEkspertom')}</Link>
                 </span>
               )}
               <TaskActions task={task} refresh={refresh} size={theme?.size} />
               {isAuthor && task.status === 'OPEN' && (
                 <Link href={`/task/${task.id}/edit`}>
                   <Button size={theme?.size} style={{ width: '100%' }}>
-                    Редактировать задачу
+                    {i18n.t('pages.taskId.redaktirovatZadachu')}
                   </Button>
                 </Link>
               )}
             </div>
           </div>
           <div style={{ ...block, padding: pad, marginTop: pad }}>
-            <div style={{ fontWeight: 500, marginBottom: '16px' }}>Ход задачи</div>
+            <div style={{ fontWeight: 500, marginBottom: '16px' }}>
+              {i18n.t('pages.taskId.hodZadachi')}
+            </div>
             <TaskTimeline task={task} />
           </div>
         </Col>

@@ -6,6 +6,7 @@ import { chat } from '../../../lib/api';
 import { useSocketEvent } from '../../context/socketContext';
 import Composer from './composer';
 
+import i18n from '../../../utils/i18n-init';
 const PAGE = 30;
 
 function Bubble({ message, mine }) {
@@ -41,7 +42,9 @@ function Bubble({ message, mine }) {
           {mine && (
             <span
               role="img"
-              aria-label={message.read ? 'Прочитано' : 'Отправлено'}
+              aria-label={
+                message.read ? i18n.t('ui.thread.prochitano') : i18n.t('ui.thread.otpravleno')
+              }
               style={{ marginLeft: '6px' }}
             >
               <CheckOutlined />
@@ -56,8 +59,8 @@ function Bubble({ message, mine }) {
 
 const dayLabel = (date) =>
   moment(date).calendar(null, {
-    sameDay: '[Сегодня]',
-    lastDay: '[Вчера]',
+    sameDay: i18n.t('ui.thread.segodnya'),
+    lastDay: i18n.t('ui.thread.vchera'),
     lastWeek: 'D MMMM',
     sameElse: 'D MMMM YYYY',
   });
@@ -153,8 +156,8 @@ export default function Thread({ conversationId, viewerId, onRead }) {
     return (
       <Result
         status="warning"
-        title="Не удалось загрузить переписку"
-        subTitle="Обновите страницу."
+        title={i18n.t('ui.thread.neUdalosZagruzitPerepisku')}
+        subTitle={i18n.t('ui.thread.obnoviteStranitsu')}
       />
     );
   }
@@ -175,13 +178,13 @@ export default function Thread({ conversationId, viewerId, onRead }) {
         {hasMore && (
           <div style={{ textAlign: 'center' }}>
             <Button type="link" loading={loadingOlder} onClick={loadOlder}>
-              Показать более ранние
+              {i18n.t('ui.thread.pokazatBoleeRannie')}
             </Button>
           </div>
         )}
         {state === 'ready' && messages.length === 0 && (
           <p style={{ color: '#5E6674', textAlign: 'center', marginTop: '60px' }}>
-            Сообщений пока нет.
+            {i18n.t('ui.thread.soobscheniyPokaNet')}
           </p>
         )}
         {messages.map((message) => {

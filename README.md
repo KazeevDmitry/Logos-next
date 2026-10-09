@@ -49,7 +49,7 @@ In development they come from the compose files. For the production image they a
 - `pages/` — routes. Catalogue and content pages render on the server; account pages check the session in the browser (`lib/withAuth.js`).
 - `lib/api/` — the only place that talks to the backend: `client.js` (axios, session refresh, error texts) and `index.js` (one function per endpoint).
 - `src/components/` — UI components; `src/context/` — user, theme, notifications, socket; `src/hooks/` — reference data and list pages whose filters live in the URL.
-- `utils/Locales/` — `ru.js` and `en.js` (same keys, checked by `make locales`) and `apiErrors.js`, the Russian text for the API's error messages. The site is published in Russian; statuses, actions, menus and finance terms come from the locale files, while page-specific copy is still written inline.
+- `utils/Locales/` — `ru.js` and `en.js` (same keys, checked by `make locales`) and `apiErrors.js`, the Russian text for the API's error messages. The site is published in Russian. All interface text lives in the locale files: shared vocabulary under `task`, `account`, `finance`, and each page's or component's own copy under `pages.<route>` and `ui.<component>`.
 - `styles/` — global styles and Ant Design theme variables (`antdVariables.less`; variables only, see the note inside).
 - `e2e/` — Playwright tests. They run against the stack in `../Logos-api/compose.e2e.yml`, which uses this app's production image.
 

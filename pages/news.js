@@ -11,6 +11,7 @@ import { useThemeContext } from '../src/context/themeContext';
 import { listServerProps, useListQuery } from '../src/hooks/useListQuery';
 import styles from '../styles/news.module.less';
 
+import i18n from '../utils/i18n-init';
 const PAGE_SIZE = 10;
 const options = { filters: { category: ['category', 'string'] }, pageSize: PAGE_SIZE };
 
@@ -54,16 +55,16 @@ export default function News({ serverData, categories = [], partnerNews = [] }) 
   return (
     <>
       <PageHeader
-        title="Новости"
+        title={i18n.t('pages.news.novosti')}
         seo={{
-          description: 'Новости права и разборы изменений в законодательстве от редакции LogosEst.',
+          description: i18n.t('pages.news.novostiPravaIRazboryIzmeneniy'),
         }}
       />
       <PageContainer>
         <Col xs={24} sm={24} md={16} lg={17} xl={18}>
           <SearchField
             style={{ width: '100%', marginTop: '0px', borderRadius: '10px', marginBottom: pad }}
-            placeholder="Введите строку для поиска"
+            placeholder={i18n.t('pages.news.vvediteStrokuDlyaPoiska')}
           />
           {!theme.isDesktop && <NewsFilter categories={categories} />}
           {pagination}
@@ -73,7 +74,10 @@ export default function News({ serverData, categories = [], partnerNews = [] }) 
             </div>
           )}
           {!isLoading && items.length === 0 && (
-            <Empty description="Новостей не найдено" style={{ margin: '60px 0' }} />
+            <Empty
+              description={i18n.t('pages.news.novosteyNeNaydeno')}
+              style={{ margin: '60px 0' }}
+            />
           )}
           <Row
             gutter={[gutter, gutter]}
@@ -102,7 +106,7 @@ export default function News({ serverData, categories = [], partnerNews = [] }) 
                 className={styles.specBlockHeader}
                 style={{ marginLeft: blockPad, marginBottom: blockPad }}
               >
-                Новости партнеров
+                {i18n.t('pages.news.novostiPartnerov')}
               </div>
               {partner.map((article) => (
                 <PartnerNewsCard key={article.id} article={article} />

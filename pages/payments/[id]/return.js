@@ -7,6 +7,7 @@ import { finance } from '../../../lib/api';
 import { withAuth } from '../../../lib/withAuth';
 import { roubles } from '../../../utils/money';
 
+import i18n from '../../../utils/i18n-init';
 const POLL_MS = 2000;
 /** The provider confirms within seconds; after this long we stop spinning and say so. */
 const GIVE_UP_MS = 60_000;
@@ -46,21 +47,27 @@ function PaymentReturnPage() {
   const toTask = payment && (
     <Link href={`/task/${payment.taskId}`} key="task">
       <Button type="primary" size="large">
-        Вернуться к задаче
+        {i18n.t('pages.paymentsIdReturn.vernutsyaKZadache')}
       </Button>
     </Link>
   );
 
   if (isError) {
-    return <Result status="404" title="Платёж не найден" style={{ marginTop: '120px' }} />;
+    return (
+      <Result
+        status="404"
+        title={i18n.t('pages.paymentsIdReturn.platezhNeNayden')}
+        style={{ marginTop: '120px' }}
+      />
+    );
   }
   if (!payment || (status === 'PENDING' && !waitedTooLong)) {
     return (
       <Result
         style={{ marginTop: '120px' }}
         icon={<Spin size="large" />}
-        title="Проверяем оплату"
-        subTitle="Обычно это занимает несколько секунд. Не закрывайте страницу."
+        title={i18n.t('pages.paymentsIdReturn.proveryaemOplatu')}
+        subTitle={i18n.t('pages.paymentsIdReturn.obychnoEtoZanimaetNeskolkoSekund')}
       />
     );
   }
@@ -69,8 +76,8 @@ function PaymentReturnPage() {
       <Result
         style={{ marginTop: '120px' }}
         status="success"
-        title={`Оплата ${roubles(payment.amount)} прошла`}
-        subTitle="Деньги зарезервированы. Исполнитель получит их, когда вы примете работу."
+        title={i18n.t('pages.paymentsIdReturn.oplataProshla', { v0: roubles(payment.amount) })}
+        subTitle={i18n.t('pages.paymentsIdReturn.dengiZarezervirovanyIspolnitelPoluchitIh')}
         extra={toTask}
       />
     );
@@ -80,8 +87,8 @@ function PaymentReturnPage() {
       <Result
         style={{ marginTop: '120px' }}
         status="error"
-        title="Платёж не прошёл"
-        subTitle="Деньги не списаны. Вернитесь к задаче и попробуйте ещё раз."
+        title={i18n.t('pages.paymentsIdReturn.platezhNeProshel')}
+        subTitle={i18n.t('pages.paymentsIdReturn.dengiNeSpisanyVernitesK')}
         extra={toTask}
       />
     );
@@ -90,8 +97,8 @@ function PaymentReturnPage() {
     <Result
       style={{ marginTop: '120px' }}
       status="info"
-      title="Платёж ещё обрабатывается"
-      subTitle="Мы пришлём уведомление, когда банк подтвердит оплату. Статус задачи обновится сам."
+      title={i18n.t('pages.paymentsIdReturn.platezhEscheObrabatyvaetsya')}
+      subTitle={i18n.t('pages.paymentsIdReturn.myPrishlemUvedomlenieKogdaBank')}
       extra={toTask}
     />
   );

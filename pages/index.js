@@ -15,6 +15,7 @@ import UserImage from '../src/components/userImage/userImage';
 import { useThemeContext } from '../src/context/themeContext';
 import styles from '../styles/mainPage.module.less';
 
+import i18n from '../utils/i18n-init';
 /** Shown in the promo text until the platform has a real figure worth quoting. */
 const USERS_COUNT = 1000;
 const CIRCLES = 6;
@@ -183,10 +184,20 @@ function MainTabs() {
   const tabClass = (tab, base) => (activeTab === tab ? `${base} ${styles.activeTab}` : base);
 
   return (
-    <div className={styles.tabBox} role="tablist" aria-label="Что вы ищете">
+    <div className={styles.tabBox} role="tablist" aria-label={i18n.t('pages.index.chtoVyIschete')}>
       {[
-        { tab: 1, cls: styles.tabCls1, wide: 'Ищу задачу', narrow: 'Задачи' },
-        { tab: 2, cls: styles.tabCls2, wide: 'Ищу исполнителя', narrow: 'Эксперты' },
+        {
+          tab: 1,
+          cls: styles.tabCls1,
+          wide: i18n.t('pages.index.ischuZadachu'),
+          narrow: i18n.t('pages.index.zadachi'),
+        },
+        {
+          tab: 2,
+          cls: styles.tabCls2,
+          wide: i18n.t('pages.index.ischuIspolnitelya'),
+          narrow: i18n.t('pages.index.eksperty'),
+        },
       ].map(({ tab, cls, wide, narrow }) => (
         <div
           key={tab}
@@ -225,14 +236,18 @@ function MainTabs() {
           }}
         >
           <TabCol>
-            <Form.Item name="city" label="Город" style={{ marginBottom: '0px', width: '100%' }}>
+            <Form.Item
+              name="city"
+              label={i18n.t('pages.index.gorod')}
+              style={{ marginBottom: '0px', width: '100%' }}
+            >
               <CityInput />
             </Form.Item>
           </TabCol>
           <TabCol>
             <Form.Item
               name="spec"
-              label="Специализация"
+              label={i18n.t('pages.index.spetsializatsiya')}
               style={{ marginBottom: '0px', width: '100%' }}
             >
               <CityInput marker="spec" />
@@ -240,13 +255,17 @@ function MainTabs() {
           </TabCol>
           <TabCol>
             {lookingForTask ? (
-              <Form.Item name="budget" label="Бюджет" style={{ marginBottom: '0px' }}>
+              <Form.Item
+                name="budget"
+                label={i18n.t('pages.index.byudzhet')}
+                style={{ marginBottom: '0px' }}
+              >
                 <InputSlider maxValues={[1000, 500000]} step={1000} />
               </Form.Item>
             ) : (
               <Form.Item
                 name="branch"
-                label="Отрасль права"
+                label={i18n.t('pages.index.otraslPrava')}
                 style={{ marginBottom: '25px', width: '100%' }}
               >
                 <CityInput marker="catg" />
@@ -260,7 +279,9 @@ function MainTabs() {
               type="primary"
               htmlType="submit"
             >
-              {lookingForTask ? 'Найти задачу' : 'Найти исполнителя'}
+              {lookingForTask
+                ? i18n.t('pages.index.naytiZadachu')
+                : i18n.t('pages.index.naytiIspolnitelya')}
             </Button>
           </TabCol>
         </Row>

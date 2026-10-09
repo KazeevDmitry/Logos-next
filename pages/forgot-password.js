@@ -6,6 +6,7 @@ import { errorMessage } from '../lib/api/client';
 import AuthPage, { emailRules, FormError } from '../src/components/authPage/authPage';
 import { useThemeContext } from '../src/context/themeContext';
 
+import i18n from '../utils/i18n-init';
 export default function ForgotPassword() {
   const theme = useThemeContext();
   const [sentTo, setSentTo] = useState('');
@@ -27,21 +28,19 @@ export default function ForgotPassword() {
 
   if (sentTo) {
     return (
-      <AuthPage title="Проверьте почту">
+      <AuthPage title={i18n.t('pages.forgotPassword.provertePochtu')}>
         <p>
-          Если адрес <b>{sentTo}</b> зарегистрирован, мы отправили на него ссылку для смены пароля.
-          Она действует один час.
+          {i18n.t('pages.forgotPassword.esliAdres')} <b>{sentTo}</b>{' '}
+          {i18n.t('pages.forgotPassword.zaregistrirovanMyOtpraviliNaNego')}
         </p>
-        <Link href="/login">Вернуться ко входу</Link>
+        <Link href="/login">{i18n.t('pages.forgotPassword.vernutsyaKoVhodu')}</Link>
       </AuthPage>
     );
   }
 
   return (
-    <AuthPage title="Восстановление пароля">
-      <p style={{ fontSize: '16px' }}>
-        На ваш e-mail будет отправлена ссылка для восстановления пароля.
-      </p>
+    <AuthPage title={i18n.t('pages.forgotPassword.vosstanovlenieParolya')}>
+      <p style={{ fontSize: '16px' }}>{i18n.t('pages.forgotPassword.naVashEMailBudet')}</p>
       <Form name="forgot" layout="vertical" onFinish={onFinish} validateTrigger="onSubmit">
         <Form.Item name="email" rules={emailRules} style={{ marginBottom: 0 }}>
           <Input size={theme?.size} placeholder="E-mail" autoComplete="email" />
@@ -55,7 +54,7 @@ export default function ForgotPassword() {
             loading={busy}
             style={{ width: '100%', marginTop: '24px' }}
           >
-            Отправить ссылку
+            {i18n.t('pages.forgotPassword.otpravitSsylku')}
           </Button>
         </Form.Item>
       </Form>

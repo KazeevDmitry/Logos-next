@@ -5,6 +5,7 @@ import { experts } from '../../../lib/api';
 import { useThemeContext } from '../../context/themeContext';
 import FeedbackCard from './feedbackCard';
 
+import i18n from '../../../utils/i18n-init';
 const PAGE_SIZE = 6;
 
 /** Paginated reviews of one expert, loaded from the API page by page. */
@@ -26,7 +27,9 @@ export default function Feedbacks({ expertId }) {
     );
   }
   if (!data || data.total === 0) {
-    return <Empty description="Отзывов пока нет" style={{ margin: '40px 0' }} />;
+    return (
+      <Empty description={i18n.t('ui.feedbacks.otzyvovPokaNet')} style={{ margin: '40px 0' }} />
+    );
   }
 
   return (

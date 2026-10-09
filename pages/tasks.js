@@ -6,6 +6,7 @@ import TaskCard from '../src/components/taskCard/taskCard';
 import { useThemeContext } from '../src/context/themeContext';
 import { listServerProps, useListQuery } from '../src/hooks/useListQuery';
 
+import i18n from '../utils/i18n-init';
 const PAGE_SIZE = 5;
 /** URL query key → API parameter. */
 const FILTERS = {
@@ -24,8 +25,8 @@ export default function Tasks({ serverData }) {
 
   return (
     <ListPage
-      title="Задачи"
-      description="Юридические задачи от заказчиков: договоры, споры, консультации. Откликайтесь и получайте заказы."
+      title={i18n.t('pages.tasks.zadachi')}
+      description={i18n.t('pages.tasks.yuridicheskieZadachiOtZakazchikovDogovory')}
       headerChildren={
         <div
           style={{
@@ -38,17 +39,17 @@ export default function Tasks({ serverData }) {
         >
           <Link href="/task/new">
             <Button size={theme?.size} type="primary">
-              Создать задачу +
+              {i18n.t('pages.tasks.sozdatZadachu')}
             </Button>
           </Link>
         </div>
       }
-      searchPlaceholder="Введите строку для поиска"
+      searchPlaceholder={i18n.t('pages.tasks.vvediteStrokuDlyaPoiska')}
       filter={{ city: true, spec: true, branch: true, budget: true }}
       query={query}
       pageSize={PAGE_SIZE}
       pluralPath="tasks.plural"
-      emptyText="Задач не найдено. Попробуйте изменить фильтр."
+      emptyText={i18n.t('pages.tasks.zadachNeNaydenoPoprobuyteIzmenit')}
       renderItem={(task) => (
         <Link href={`/task/${task.id}`} style={{ color: 'black', cursor: 'pointer' }}>
           <TaskCard task={task} />

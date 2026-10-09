@@ -8,6 +8,7 @@ import { FormError } from '../authPage/authPage';
 import CityInput from '../cityInput/cityInput';
 import FileUploader from '../fileUploader/fileUploader';
 
+import i18n from '../../../utils/i18n-init';
 /** Form values for a task from the API, or the defaults of a new one. */
 function toFormValues(task) {
   if (!task) {
@@ -76,42 +77,42 @@ export default function TaskForm({ task, submitText, onSubmit }) {
     >
       <Form.Item
         name="title"
-        label="Название задачи"
+        label={i18n.t('ui.taskForm.nazvanieZadachi')}
         rules={[
-          { required: true, whitespace: true, message: 'Назовите задачу' },
-          { min: 5, message: 'Не короче 5 символов' },
+          { required: true, whitespace: true, message: i18n.t('ui.taskForm.nazoviteZadachu') },
+          { min: 5, message: i18n.t('ui.taskForm.neKoroche5Simvolov') },
         ]}
       >
         <Input
           size={theme?.size}
           maxLength={200}
           showCount
-          placeholder="Например: раздел имущества при разводе"
+          placeholder={i18n.t('ui.taskForm.naprimerRazdelImuschestvaPriRazvode')}
         />
       </Form.Item>
 
       <Form.Item
         name="text"
-        label="Что нужно сделать"
+        label={i18n.t('ui.taskForm.chtoNuzhnoSdelat')}
         rules={[
-          { required: true, whitespace: true, message: 'Опишите задачу' },
-          { min: 10, message: 'Не короче 10 символов' },
+          { required: true, whitespace: true, message: i18n.t('ui.taskForm.opishiteZadachu') },
+          { min: 10, message: i18n.t('ui.taskForm.neKoroche10Simvolov') },
         ]}
       >
         <Input.TextArea autoSize={{ minRows: 5, maxRows: 16 }} maxLength={10000} showCount />
       </Form.Item>
 
-      <Form.Item name="priceMode" label="Стоимость">
+      <Form.Item name="priceMode" label={i18n.t('ui.taskForm.stoimost')}>
         <Radio.Group>
-          <Radio value="fixed">Фиксированный бюджет</Radio>
-          <Radio value="negotiable">По договоренности</Radio>
+          <Radio value="fixed">{i18n.t('ui.taskForm.fiksirovannyyByudzhet')}</Radio>
+          <Radio value="negotiable">{i18n.t('ui.taskForm.poDogovorennosti')}</Radio>
         </Radio.Group>
       </Form.Item>
       {priceMode !== 'negotiable' && (
         <Form.Item
           name="budget"
-          label="Бюджет, ₽"
-          rules={[{ required: true, message: 'Укажите бюджет' }]}
+          label={i18n.t('ui.taskForm.byudzhet')}
+          rules={[{ required: true, message: i18n.t('ui.taskForm.ukazhiteByudzhet') }]}
         >
           <InputNumber
             size={theme?.size}
@@ -123,7 +124,7 @@ export default function TaskForm({ task, submitText, onSubmit }) {
         </Form.Item>
       )}
 
-      <Form.Item name="deadline" label="Срок выполнения">
+      <Form.Item name="deadline" label={i18n.t('ui.taskForm.srokVypolneniya')}>
         <DatePicker
           size={theme?.size}
           format="DD.MM.YYYY"
@@ -131,13 +132,13 @@ export default function TaskForm({ task, submitText, onSubmit }) {
         />
       </Form.Item>
 
-      <Form.Item name="cityId" label="Город">
+      <Form.Item name="cityId" label={i18n.t('ui.taskForm.gorod')}>
         <CityInput />
       </Form.Item>
-      <Form.Item name="specializationId" label="Кто нужен">
-        <CityInput marker="spec" placeholder="Любой специалист" />
+      <Form.Item name="specializationId" label={i18n.t('ui.taskForm.ktoNuzhen')}>
+        <CityInput marker="spec" placeholder={i18n.t('ui.taskForm.lyuboySpetsialist')} />
       </Form.Item>
-      <Form.Item name="branchIds" label="Отрасли права">
+      <Form.Item name="branchIds" label={i18n.t('ui.taskForm.otrasliPrava')}>
         <Select
           mode="multiple"
           allowClear
@@ -155,8 +156,8 @@ export default function TaskForm({ task, submitText, onSubmit }) {
 
       <Form.Item
         name="documents"
-        label="Документы (до 10 файлов)"
-        extra="Документы увидят только эксперты и администраторы. JPG, PNG, WEBP, PDF, DOC, DOCX до 10 МБ."
+        label={i18n.t('ui.taskForm.dokumentyDo10Faylov')}
+        extra={i18n.t('ui.taskForm.dokumentyUvidyatTolkoEkspertyI')}
       >
         <FileUploader max={10} />
       </Form.Item>

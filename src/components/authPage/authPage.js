@@ -4,6 +4,7 @@ import { useThemeContext } from '../../context/themeContext';
 import PageContainer from '../layouts/pageContainer';
 import PageHeader from '../layouts/pageHeader';
 
+import i18n from '../../../utils/i18n-init';
 /** The narrow white card every sign-in related page is drawn on. */
 export default function AuthPage({ title, children }) {
   const theme = useThemeContext();
@@ -39,15 +40,15 @@ export function FormError({ children }) {
 
 /** The same password policy the API enforces: 8+ characters, a letter and a digit. */
 export const passwordRules = [
-  { required: true, message: 'Введите пароль' },
-  { min: 8, message: 'Не короче 8 символов' },
-  { pattern: /[A-Za-zА-Яа-яЁё]/, message: 'Нужна хотя бы одна буква' },
-  { pattern: /\d/, message: 'Нужна хотя бы одна цифра' },
+  { required: true, message: i18n.t('ui.authPage.vvediteParol') },
+  { min: 8, message: i18n.t('ui.authPage.neKoroche8Simvolov') },
+  { pattern: /[A-Za-zА-Яа-яЁё]/, message: i18n.t('ui.authPage.nuzhnaHotyaByOdnaBukva') },
+  { pattern: /\d/, message: i18n.t('ui.authPage.nuzhnaHotyaByOdnaTsifra') },
 ];
 
 export const emailRules = [
-  { required: true, message: 'Укажите e-mail' },
-  { type: 'email', message: 'Неверно введена почта' },
+  { required: true, message: i18n.t('ui.authPage.ukazhiteEMail') },
+  { type: 'email', message: i18n.t('ui.authPage.nevernoVvedenaPochta') },
 ];
 
 /** Rule for a "repeat password" field. */
@@ -57,6 +58,6 @@ export const sameAs =
     validator(_, value) {
       return !value || getFieldValue(field) === value
         ? Promise.resolve()
-        : Promise.reject(new Error('Пароли не совпадают'));
+        : Promise.reject(new Error(i18n.t('ui.authPage.paroliNeSovpadayut')));
     },
   });

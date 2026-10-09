@@ -4,6 +4,7 @@ import { tasks } from '../../../lib/api';
 import { errorMessage } from '../../../lib/api/client';
 import { FormError } from '../authPage/authPage';
 
+import i18n from '../../../utils/i18n-init';
 /** The dialog in which an expert offers to do a task. */
 export default function RespondModal({ task, open, onClose, onDone }) {
   const [form] = Form.useForm();
@@ -32,9 +33,9 @@ export default function RespondModal({ task, open, onClose, onDone }) {
   return (
     <Modal
       open={open}
-      title="Откликнуться на задачу"
-      okText="Отправить отклик"
-      cancelText="Отмена"
+      title={i18n.t('ui.respondModal.otkliknutsyaNaZadachu')}
+      okText={i18n.t('ui.respondModal.otpravitOtklik')}
+      cancelText={i18n.t('ui.respondModal.otmena')}
       confirmLoading={busy}
       onOk={submit}
       onCancel={onClose}
@@ -42,20 +43,30 @@ export default function RespondModal({ task, open, onClose, onDone }) {
       <Form form={form} layout="vertical" name="respond">
         <Form.Item
           name="text"
-          label="Комментарий к задаче"
-          rules={[{ required: true, whitespace: true, message: 'Расскажите, почему вы подходите' }]}
+          label={i18n.t('ui.respondModal.kommentariyKZadache')}
+          rules={[
+            {
+              required: true,
+              whitespace: true,
+              message: i18n.t('ui.respondModal.rasskazhitePochemuVyPodhodite'),
+            },
+          ]}
         >
           <Input.TextArea rows={5} maxLength={3000} showCount />
         </Form.Item>
         <Form.Item
           name="price"
-          label="Ваша цена, ₽"
+          label={i18n.t('ui.respondModal.vashaTsena')}
           extra={
             negotiable
-              ? 'Цена по договоренности: назовите свою.'
-              : `Если не указать, будет бюджет задачи: ${task.budget.toLocaleString('ru-RU')} ₽.`
+              ? i18n.t('ui.respondModal.tsenaPoDogovorennostiNazoviteSvoyu')
+              : i18n.t('ui.respondModal.esliNeUkazatBudetByudzhet', {
+                  v0: task.budget.toLocaleString('ru-RU'),
+                })
           }
-          rules={negotiable ? [{ required: true, message: 'Назовите цену' }] : []}
+          rules={
+            negotiable ? [{ required: true, message: i18n.t('ui.respondModal.nazoviteTsenu') }] : []
+          }
         >
           <InputNumber min={1} max={100000000} precision={0} style={{ width: '200px' }} />
         </Form.Item>

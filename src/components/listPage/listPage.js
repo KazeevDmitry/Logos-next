@@ -7,6 +7,7 @@ import MyPagination from '../pagination';
 import SearchField from '../searchField/searchField';
 import SideFilter from '../SideFilter/sideFilter';
 
+import i18n from '../../../utils/i18n-init';
 /**
  * The frame shared by every catalogue page: title, search field, the list
  * with pagination above and below, and the filter column on the right
@@ -22,7 +23,7 @@ export default function ListPage({
   pageSize,
   pluralPath,
   renderItem,
-  emptyText = 'Ничего не найдено',
+  emptyText = i18n.t('ui.listPage.nichegoNeNaydeno'),
   sideExtra,
 }) {
   const theme = useThemeContext();
@@ -71,8 +72,8 @@ export default function ListPage({
           {isError && (
             <Result
               status="warning"
-              title="Не удалось загрузить список"
-              subTitle="Обновите страницу."
+              title={i18n.t('ui.listPage.neUdalosZagruzitSpisok')}
+              subTitle={i18n.t('ui.listPage.obnoviteStranitsu')}
             />
           )}
           {!isLoading && !isError && items.length === 0 && (

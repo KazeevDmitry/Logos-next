@@ -11,6 +11,7 @@ import { FormError } from '../../src/components/authPage/authPage';
 import { useNotifyContext } from '../../src/context/notificationContext';
 import { useThemeContext } from '../../src/context/themeContext';
 
+import i18n from '../../utils/i18n-init';
 const MAX_SERVICES = 50;
 
 /** The expert's price list. The whole list is saved at once, in the order shown. */
@@ -30,7 +31,7 @@ function ServicesPage() {
         services.map((service) => ({ title: service.title.trim(), price: service.price })),
       );
       queryClient.setQueryData(['my-expert'], updated);
-      successNotification('Услуги сохранены', '');
+      successNotification(i18n.t('pages.personalaccountServices.uslugiSohraneny'), '');
     } catch (e) {
       setError(errorMessage(e));
     } finally {
@@ -39,7 +40,7 @@ function ServicesPage() {
   };
 
   return (
-    <AccountLayout title="Услуги и цены">
+    <AccountLayout title={i18n.t('pages.personalaccountServices.uslugiITseny')}>
       {isLoading || !expert ? (
         <Spin />
       ) : (
@@ -51,7 +52,7 @@ function ServicesPage() {
           }}
         >
           <p style={{ color: '#5E6674' }}>
-            Что вы делаете и сколько это стоит. Список показывается в вашем профиле в этом порядке.
+            {i18n.t('pages.personalaccountServices.chtoVyDelaeteISkolko')}
           </p>
           <Form.List name="services">
             {(fields, { add, remove }) => (
@@ -61,18 +62,33 @@ function ServicesPage() {
                     <Form.Item
                       name={[name, 'title']}
                       style={{ flex: 1, minWidth: 0 }}
-                      rules={[{ required: true, whitespace: true, message: 'Назовите услугу' }]}
+                      rules={[
+                        {
+                          required: true,
+                          whitespace: true,
+                          message: i18n.t('pages.personalaccountServices.nazoviteUslugu'),
+                        },
+                      ]}
                     >
                       <Input
                         size={theme?.size}
                         maxLength={200}
-                        placeholder="Например: составление искового заявления"
-                        aria-label={`Услуга ${index + 1}`}
+                        placeholder={i18n.t(
+                          'pages.personalaccountServices.naprimerSostavlenieIskovogoZayavleniya',
+                        )}
+                        aria-label={i18n.t('pages.personalaccountServices.usluga', {
+                          v0: index + 1,
+                        })}
                       />
                     </Form.Item>
                     <Form.Item
                       name={[name, 'price']}
-                      rules={[{ required: true, message: 'Укажите цену' }]}
+                      rules={[
+                        {
+                          required: true,
+                          message: i18n.t('pages.personalaccountServices.ukazhiteTsenu'),
+                        },
+                      ]}
                     >
                       <InputNumber
                         size={theme?.size}
@@ -80,26 +96,32 @@ function ServicesPage() {
                         max={100000000}
                         precision={0}
                         addonAfter="₽"
-                        placeholder="Цена"
-                        aria-label={`Цена услуги ${index + 1}`}
+                        placeholder={i18n.t('pages.personalaccountServices.tsena')}
+                        aria-label={i18n.t('pages.personalaccountServices.tsenaUslugi', {
+                          v0: index + 1,
+                        })}
                         style={{ width: theme.isDesktop ? '180px' : '130px' }}
                       />
                     </Form.Item>
                     <Button
                       size={theme?.size}
                       icon={<DeleteOutlined />}
-                      aria-label={`Удалить услугу ${index + 1}`}
+                      aria-label={i18n.t('pages.personalaccountServices.udalitUslugu', {
+                        v0: index + 1,
+                      })}
                       onClick={() => remove(name)}
                     />
                   </div>
                 ))}
-                {fields.length === 0 && <p>Услуг пока нет.</p>}
+                {fields.length === 0 && (
+                  <p>{i18n.t('pages.personalaccountServices.uslugPokaNet')}</p>
+                )}
                 {fields.length < MAX_SERVICES && (
                   <Button
                     icon={<PlusOutlined />}
                     onClick={() => add({ title: '', price: undefined })}
                   >
-                    Добавить услугу
+                    {i18n.t('pages.personalaccountServices.dobavitUslugu')}
                   </Button>
                 )}
               </>
@@ -108,7 +130,7 @@ function ServicesPage() {
           <FormError>{error}</FormError>
           <div style={{ marginTop: '24px' }}>
             <Button type="primary" htmlType="submit" size={theme?.size} loading={busy}>
-              Сохранить
+              {i18n.t('pages.personalaccountServices.sohranit')}
             </Button>
           </div>
         </Form>

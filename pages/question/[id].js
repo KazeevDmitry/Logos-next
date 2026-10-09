@@ -13,6 +13,7 @@ import { AskQuestionSideBlock } from '../../src/components/SideFilter/sideFilter
 import { useThemeContext } from '../../src/context/themeContext';
 import { useUserContext } from '../../src/context/userContext';
 
+import i18n from '../../utils/i18n-init';
 /** New answers show up without a reload. */
 const ANSWERS_REFRESH_MS = 30_000;
 
@@ -29,10 +30,10 @@ function AnswerForm({ questionId }) {
 
   return (
     <div style={{ background: 'white', borderRadius: '10px', padding: '20px', marginTop: '20px' }}>
-      <div style={{ fontSize: '20px', fontWeight: 500 }}>Знаете ответ на этот вопрос?</div>
-      <p style={{ color: '#5E6674' }}>
-        Нам всегда приятно знать мнение профессионалов из сообщества
-      </p>
+      <div style={{ fontSize: '20px', fontWeight: 500 }}>
+        {i18n.t('pages.questionId.znaeteOtvetNaEtotVopros')}
+      </div>
+      <p style={{ color: '#5E6674' }}>{i18n.t('pages.questionId.namVsegdaPriyatnoZnatMnenie')}</p>
       <Input.TextArea
         autoSize={{ minRows: 4, maxRows: 14 }}
         maxLength={10000}
@@ -52,7 +53,7 @@ function AnswerForm({ questionId }) {
         disabled={!text.trim()}
         onClick={() => mutation.mutate(text)}
       >
-        Ответить на вопрос
+        {i18n.t('pages.questionId.otvetitNaVopros')}
       </Button>
     </div>
   );
@@ -103,7 +104,13 @@ export default function QuestionPage({ serverQuestion, serverAnswers = [] }) {
   });
 
   if (!question) {
-    return <Result status="404" title="Вопрос не найден" style={{ marginTop: '120px' }} />;
+    return (
+      <Result
+        status="404"
+        title={i18n.t('pages.questionId.voprosNeNayden')}
+        style={{ marginTop: '120px' }}
+      />
+    );
   }
   const canAnswer = isExpert || isAdmin;
 
@@ -117,13 +124,19 @@ export default function QuestionPage({ serverQuestion, serverAnswers = [] }) {
           {canAnswer && <AnswerForm questionId={question.id} />}
           {!currentUser && (
             <p style={{ marginTop: '20px', color: '#5E6674' }}>
-              Вы юрист? <Link href={`/login?next=/question/${question.id}`}>Войдите</Link>, чтобы
-              ответить.
+              {i18n.t('pages.questionId.vyYurist')}{' '}
+              <Link href={`/login?next=/question/${question.id}`}>
+                {i18n.t('pages.questionId.voydite')}
+              </Link>
+              {i18n.t('pages.questionId.chtobyOtvetit')}
             </p>
           )}
 
           {answers.length === 0 ? (
-            <Empty description="Ответов пока нет" style={{ margin: '40px 0' }} />
+            <Empty
+              description={i18n.t('pages.questionId.otvetovPokaNet')}
+              style={{ margin: '40px 0' }}
+            />
           ) : (
             answers.map((answer) => <AnswerCard key={answer.id} answer={answer} />)
           )}

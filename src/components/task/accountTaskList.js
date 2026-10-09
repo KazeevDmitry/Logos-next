@@ -7,6 +7,7 @@ import { useListQuery } from '../../hooks/useListQuery';
 import MyPagination from '../pagination';
 import TaskCard from '../taskCard/taskCard';
 
+import i18n from '../../../utils/i18n-init';
 const PAGE_SIZE = 5;
 const FILTERS = { status: ['status', 'text'] };
 
@@ -69,13 +70,15 @@ export default function AccountTaskList({ name, fetcher, emptyText, emptyAction,
       {isError && (
         <Result
           status="warning"
-          title="Не удалось загрузить список"
-          subTitle="Обновите страницу."
+          title={i18n.t('ui.accountTaskList.neUdalosZagruzitSpisok')}
+          subTitle={i18n.t('ui.accountTaskList.obnoviteStranitsu')}
         />
       )}
       {!isLoading && !isError && items.length === 0 && (
         <Empty
-          description={status === 'all' ? emptyText : 'В этом статусе задач нет'}
+          description={
+            status === 'all' ? emptyText : i18n.t('ui.accountTaskList.vEtomStatuseZadachNet')
+          }
           style={{ margin: '60px 0' }}
         >
           {status === 'all' && emptyAction}

@@ -9,15 +9,16 @@ import { useThemeContext } from '../src/context/themeContext';
 import { useUserContext } from '../src/context/userContext';
 import styles from '../styles/auth.module.less';
 
+import i18n from '../utils/i18n-init';
 /** Only same-site paths are followed after login, never an outside address. */
 export function safeNext(next) {
   return typeof next === 'string' && next.startsWith('/') && !next.startsWith('//') ? next : '/';
 }
 
 const LOGIN_ERRORS = {
-  401: 'Неверный e-mail или пароль',
-  403: 'Аккаунт заблокирован. Напишите в поддержку.',
-  429: 'Слишком много попыток. Подождите минуту.',
+  401: i18n.t('pages.login.nevernyyEMailIliParol'),
+  403: i18n.t('pages.login.akkauntZablokirovanNapishiteVPodderzhku'),
+  429: i18n.t('pages.login.slishkomMnogoPopytokPodozhditeMinutu'),
 };
 
 export default function Login() {
@@ -40,9 +41,9 @@ export default function Login() {
   };
 
   return (
-    <AuthPage title="Вход">
+    <AuthPage title={i18n.t('pages.login.vhod')}>
       {router.query.reset && (
-        <p style={{ fontSize: '16px' }}>Пароль изменён. Войдите с новым паролем.</p>
+        <p style={{ fontSize: '16px' }}>{i18n.t('pages.login.parolIzmenenVoyditeSNovym')}</p>
       )}
       <Form name="login" layout="vertical" onFinish={onFinish} validateTrigger="onSubmit">
         <Form.Item name="email" rules={emailRules} style={{ marginBottom: '15px' }}>
@@ -55,18 +56,18 @@ export default function Login() {
         </Form.Item>
         <Form.Item
           name="password"
-          rules={[{ required: true, message: 'Введите пароль' }]}
+          rules={[{ required: true, message: i18n.t('pages.login.vvediteParol') }]}
           style={{ marginBottom: '10px' }}
         >
           <Input.Password
             size={theme?.size}
-            placeholder="Пароль"
+            placeholder={i18n.t('pages.login.parol')}
             autoComplete="current-password"
             onChange={() => setError('')}
           />
         </Form.Item>
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <Link href="/forgot-password">Забыли пароль?</Link>
+          <Link href="/forgot-password">{i18n.t('pages.login.zabyliParol')}</Link>
         </div>
         <FormError>{error}</FormError>
         <Form.Item>
@@ -77,12 +78,12 @@ export default function Login() {
             loading={busy}
             style={{ width: '100%', marginTop: '24px' }}
           >
-            Войти
+            {i18n.t('pages.login.voyti')}
           </Button>
         </Form.Item>
         <div className={styles.register}>
           <Link href="/register" replace className={styles.registerLink}>
-            {'РЕГИСТРАЦИЯ >>'}
+            {i18n.t('pages.login.registratsiya')}
           </Link>
         </div>
       </Form>

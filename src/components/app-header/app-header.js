@@ -11,6 +11,7 @@ import styles from './app-header.module.less';
 import MessagesLink from './messagesLink';
 import NotificationBell from './notificationBell';
 
+import i18n from '../../../utils/i18n-init';
 /** A <button> that looks like the element it replaced: no border, no background. */
 const plainButton = {
   border: 'none',
@@ -66,7 +67,7 @@ export default function AppHeader({ loading }) {
               type="button"
               className={styles.burgerMenu}
               style={plainButton}
-              aria-label="Меню"
+              aria-label={i18n.t('ui.appHeader.menyu')}
               aria-expanded={menuOpen}
               onClick={toggleMenu}
             >
@@ -105,7 +106,7 @@ export default function AppHeader({ loading }) {
               >
                 <MessagesLink size={20} />
                 <NotificationBell size={20} />
-                <Link href="/personalaccount" aria-label="Личный кабинет">
+                <Link href="/personalaccount" aria-label={i18n.t('ui.appHeader.lichnyyKabinet')}>
                   <UserImage image={avatar} width={35} />
                 </Link>
               </div>
@@ -127,7 +128,7 @@ export default function AppHeader({ loading }) {
             </div>
 
             <div className={styles.navToolsBox}>
-              <nav aria-label="Разделы сайта">
+              <nav aria-label={i18n.t('ui.appHeader.razdelySayta')}>
                 <ul className={styles.menuBox}>
                   {PAGES.map(({ to, name }) => (
                     <li key={to}>
@@ -160,7 +161,9 @@ export default function AppHeader({ loading }) {
                     style={{ ...plainButton, fontSize: '16px', cursor: 'pointer' }}
                     aria-haspopup="true"
                     aria-expanded={menuOpen}
-                    aria-label={`Меню пользователя: ${currentUser.name}`}
+                    aria-label={i18n.t('ui.appHeader.menyuPolzovatelya', {
+                      name: currentUser.name,
+                    })}
                     onClick={toggleMenu}
                   >
                     <span className={styles.imageClazz} style={{ display: 'block' }}>
@@ -183,7 +186,7 @@ export default function AppHeader({ loading }) {
                       size={theme.size}
                       style={{ marginLeft: '20px', fontFamily: 'inherit' }}
                     >
-                      Войти
+                      {i18n.t('ui.appHeader.voyti')}
                     </Button>
                   </Link>
                 )}
@@ -195,7 +198,7 @@ export default function AppHeader({ loading }) {
             <div
               style={{ width: '100%', overflow: 'hidden', margin: '0', height: '5px' }}
               role="progressbar"
-              aria-label="Загрузка страницы"
+              aria-label={i18n.t('ui.appHeader.zagruzkaStranitsy')}
             >
               <div className={styles.horizontalgradient} />
             </div>
@@ -258,7 +261,7 @@ function DropMenu({ className, groups, onClose, onSignOut, signOutText }) {
   }, [onClose]);
 
   return (
-    <nav className={className} ref={box} aria-label="Меню">
+    <nav className={className} ref={box} aria-label={i18n.t('ui.appHeader.menyu')}>
       {groups.map((items) => (
         <div key={items[0].to} className={styles.userLinkBox}>
           {items.map(({ to, name }) => (

@@ -4,6 +4,7 @@ import { reference } from '../../../lib/api';
 import { useThemeContext } from '../../context/themeContext';
 import { useBranches, useCity, useSpecializations } from '../../hooks/useReference';
 
+import i18n from '../../../utils/i18n-init';
 const SEARCH_DELAY_MS = 250;
 
 /**
@@ -15,7 +16,7 @@ export function CitySelect({
   value,
   onChange,
   width = '100%',
-  placeholder = 'Начните вводить город',
+  placeholder = i18n.t('ui.cityInput.nachniteVvoditGorod'),
 }) {
   const theme = useThemeContext();
   const selected = useCity(value);
@@ -66,7 +67,9 @@ export function CitySelect({
       loading={loading}
       onSearch={onSearch}
       onChange={(id) => onChange?.(id ?? null)}
-      notFoundContent={loading ? 'Ищем…' : 'Город не найден'}
+      notFoundContent={
+        loading ? i18n.t('ui.cityInput.ischem') : i18n.t('ui.cityInput.gorodNeNayden')
+      }
     >
       {shown.map((city) => (
         <Select.Option key={city.id} value={city.id} title={`${city.name}, ${city.region}`}>

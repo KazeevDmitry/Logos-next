@@ -15,6 +15,7 @@ import PublishedDate from '../../src/components/publishedDate/publishedDate';
 import { useThemeContext } from '../../src/context/themeContext';
 import stylesArt from './article.module.less';
 
+import i18n from '../../utils/i18n-init';
 export default function ArticlePage({ serverArticle, serverSimilar = [] }) {
   const { t } = useTranslation();
   const theme = useThemeContext();
@@ -38,7 +39,13 @@ export default function ArticlePage({ serverArticle, serverSimilar = [] }) {
   );
 
   if (!article) {
-    return <Result status="404" title="Статья не найдена" style={{ marginTop: '120px' }} />;
+    return (
+      <Result
+        status="404"
+        title={i18n.t('pages.articleSlug.statyaNeNaydena')}
+        style={{ marginTop: '120px' }}
+      />
+    );
   }
 
   const gutter = theme?.gutters?.gorizontal?.[theme?.id] ?? 20;

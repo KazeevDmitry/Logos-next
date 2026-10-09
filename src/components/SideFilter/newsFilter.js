@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { useThemeContext } from '../../context/themeContext';
 import styles from './sideFilter.module.less';
 
+import i18n from '../../../utils/i18n-init';
 /** News rubrics. The chosen one is kept in the URL as ?category=<slug>. */
 export default function NewsFilter({ categories = [] }) {
   const router = useRouter();
@@ -28,7 +29,7 @@ export default function NewsFilter({ categories = [] }) {
       htmlType="button"
       onClick={() => select(null)}
     >
-      Все новости
+      {i18n.t('ui.newsFilter.vseNovosti')}
     </Button>
   );
 
@@ -38,10 +39,10 @@ export default function NewsFilter({ categories = [] }) {
       style={{ padding: theme.isDesktop ? pad : '20px', marginBottom: pad }}
     >
       {theme.isDesktop ? (
-        <div className={styles.specBlockHeader}>Категории</div>
+        <div className={styles.specBlockHeader}>{i18n.t('ui.newsFilter.kategorii')}</div>
       ) : (
         <div className={styles.flexCont}>
-          <div className={styles.filterHeader}>Категории</div>
+          <div className={styles.filterHeader}>{i18n.t('ui.newsFilter.kategorii')}</div>
           {allNews()}
         </div>
       )}

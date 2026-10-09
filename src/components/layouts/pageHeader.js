@@ -5,6 +5,7 @@ import { useThemeContext } from '../../context/themeContext';
 import Seo from '../seo';
 import styles from './pageHeader.module.less';
 
+import i18n from '../../../utils/i18n-init';
 /**
  * The page's h1 with an optional block to its right (`children`) or a
  * close button. The same title goes to the browser tab; `seo` adds the
@@ -58,7 +59,7 @@ export default function PageHeader({
             >
               <button
                 type="button"
-                aria-label="Закрыть"
+                aria-label={i18n.t('ui.pageHeader.zakryt')}
                 className={styles.closeBtn}
                 style={{
                   borderRadius: '50%',

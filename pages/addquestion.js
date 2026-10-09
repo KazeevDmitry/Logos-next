@@ -13,6 +13,7 @@ import PageHeader from '../src/components/layouts/pageHeader';
 import { useNotifyContext } from '../src/context/notificationContext';
 import { useThemeContext } from '../src/context/themeContext';
 
+import i18n from '../utils/i18n-init';
 function AddQuestion() {
   const theme = useThemeContext();
   const router = useRouter();
@@ -34,7 +35,10 @@ function AddQuestion() {
         fileIds: attachments.map((file) => file.id),
       });
       queryClient.invalidateQueries('questions');
-      successNotification('Вопрос сохранен', 'Ожидайте ответа специалистов');
+      successNotification(
+        i18n.t('pages.addquestion.voprosSohranen'),
+        i18n.t('pages.addquestion.ozhidayteOtvetaSpetsialistov'),
+      );
       router.push(`/question/${created.id}`);
     } catch (e) {
       setError(errorMessage(e));
@@ -44,32 +48,45 @@ function AddQuestion() {
 
   return (
     <>
-      <PageHeader title="Задать вопрос" maxWidth="900px" closeBtn seo={{ noindex: true }} />
+      <PageHeader
+        title={i18n.t('pages.addquestion.zadatVopros')}
+        maxWidth="900px"
+        closeBtn
+        seo={{ noindex: true }}
+      />
       <PageContainer maxWidth="900px">
         <Col span={24}>
           <div style={{ background: 'white', borderRadius: '10px', padding: pad }}>
             <Form name="addquestion" layout="vertical" onFinish={onFinish} scrollToFirstError>
               <Form.Item
                 name="title"
-                label="Заголовок вопроса"
+                label={i18n.t('pages.addquestion.zagolovokVoprosa')}
                 rules={[
-                  { required: true, whitespace: true, message: 'Сформулируйте вопрос' },
-                  { min: 5, message: 'Не короче 5 символов' },
+                  {
+                    required: true,
+                    whitespace: true,
+                    message: i18n.t('pages.addquestion.sformuliruyteVopros'),
+                  },
+                  { min: 5, message: i18n.t('pages.addquestion.neKoroche5Simvolov') },
                 ]}
               >
                 <Input
                   size={theme?.size}
                   maxLength={200}
                   showCount
-                  placeholder="Например: можно ли вернуть товар без чека?"
+                  placeholder={i18n.t('pages.addquestion.naprimerMozhnoLiVernutTovar')}
                 />
               </Form.Item>
               <Form.Item
                 name="description"
-                label="Подробности"
+                label={i18n.t('pages.addquestion.podrobnosti')}
                 rules={[
-                  { required: true, whitespace: true, message: 'Опишите ситуацию' },
-                  { min: 10, message: 'Не короче 10 символов' },
+                  {
+                    required: true,
+                    whitespace: true,
+                    message: i18n.t('pages.addquestion.opishiteSituatsiyu'),
+                  },
+                  { min: 10, message: i18n.t('pages.addquestion.neKoroche10Simvolov') },
                 ]}
               >
                 <Input.TextArea
@@ -80,13 +97,15 @@ function AddQuestion() {
               </Form.Item>
               <Form.Item
                 name="branch"
-                label="Отрасль права"
+                label={i18n.t('pages.addquestion.otraslPrava')}
                 rules={[
                   {
                     validator: (_, value) =>
                       value?.branch_id || value?.subbranch_id
                         ? Promise.resolve()
-                        : Promise.reject(new Error('Выберите отрасль права')),
+                        : Promise.reject(
+                            new Error(i18n.t('pages.addquestion.vyberiteOtraslPrava')),
+                          ),
                   },
                 ]}
               >
@@ -94,8 +113,8 @@ function AddQuestion() {
               </Form.Item>
               <Form.Item
                 name="attachments"
-                label="Документы (до 5 файлов)"
-                extra="JPG, PNG, WEBP, PDF, DOC, DOCX до 10 МБ"
+                label={i18n.t('pages.addquestion.dokumentyDo5Faylov')}
+                extra={i18n.t('pages.addquestion.jpgPngWebpPdfDoc')}
               >
                 <FileUploader max={5} />
               </Form.Item>
@@ -107,7 +126,7 @@ function AddQuestion() {
                 loading={busy}
                 style={{ marginTop: '16px' }}
               >
-                Опубликовать вопрос
+                {i18n.t('pages.addquestion.opublikovatVopros')}
               </Button>
             </Form>
           </div>

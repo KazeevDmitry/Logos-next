@@ -2,6 +2,7 @@ import { useQuery } from 'react-query';
 import { experts } from '../../../lib/api';
 import { useUserContext } from '../../context/userContext';
 
+import i18n from '../../../utils/i18n-init';
 /** The signed-in expert's own profile, or undefined for a customer. */
 export function useMyExpert() {
   const { isExpert } = useUserContext();
@@ -25,52 +26,60 @@ export function useCompleteness() {
 
   const checks = [
     {
-      text: 'Подтвердить e-mail',
+      text: i18n.t('ui.completeness.podtverditEMail'),
       done: currentUser.emailVerified,
       href: '/personalaccount/settings',
     },
     {
-      text: 'Указать фамилию',
+      text: i18n.t('ui.completeness.ukazatFamiliyu'),
       done: Boolean(currentUser.surname),
       href: '/personalaccount/profile',
     },
     {
-      text: 'Добавить фотографию',
+      text: i18n.t('ui.completeness.dobavitFotografiyu'),
       done: Boolean(currentUser.avatarUrl),
       href: '/personalaccount/profile',
     },
-    { text: 'Указать город', done: Boolean(currentUser.city), href: '/personalaccount/profile' },
-    { text: 'Указать телефон', done: Boolean(currentUser.phone), href: '/personalaccount/profile' },
+    {
+      text: i18n.t('ui.completeness.ukazatGorod'),
+      done: Boolean(currentUser.city),
+      href: '/personalaccount/profile',
+    },
+    {
+      text: i18n.t('ui.completeness.ukazatTelefon'),
+      done: Boolean(currentUser.phone),
+      href: '/personalaccount/profile',
+    },
   ];
   if (isExpert) {
     checks.push(
       {
-        text: 'Рассказать о себе',
+        text: i18n.t('ui.completeness.rasskazatOSebe'),
         done: Boolean(expert?.description),
         href: '/personalaccount/expert',
       },
       {
-        text: 'Указать опыт работы',
+        text: i18n.t('ui.completeness.ukazatOpytRaboty'),
         done: expert?.experience !== null && expert?.experience !== undefined,
         href: '/personalaccount/expert',
       },
       {
-        text: 'Выбрать специализацию и отрасли права',
+        text: i18n.t('ui.completeness.vybratSpetsializatsiyuIOtrasliPrava'),
         done: Boolean(expert?.specializations.length && expert?.branches.length),
         href: '/personalaccount/expert',
       },
       {
-        text: 'Добавить услуги и цены',
+        text: i18n.t('ui.completeness.dobavitUslugiITseny'),
         done: Boolean(expert?.services.length),
         href: '/personalaccount/services',
       },
       {
-        text: 'Добавить образование',
+        text: i18n.t('ui.completeness.dobavitObrazovanie'),
         done: Boolean(expert?.educations.length),
         href: '/personalaccount/education',
       },
       {
-        text: 'Подтвердить личность',
+        text: i18n.t('ui.completeness.podtverditLichnost'),
         done: Boolean(expert?.verified),
         href: '/personalaccount/verification',
       },

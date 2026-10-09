@@ -5,6 +5,7 @@ import { tasks } from '../../../lib/api';
 import { errorMessage } from '../../../lib/api/client';
 import { useNotifyContext } from '../../context/notificationContext';
 
+import i18n from '../../../utils/i18n-init';
 /**
  * The author's review of a completed task: a form until it is left (once,
  * by the author), the review itself afterwards for everyone.
@@ -34,17 +35,24 @@ export default function TaskFeedback({ task, onDone }) {
   }
 
   if (task.viewerStatus !== 'youAuthor') {
-    return <span style={{ color: '#5E6674' }}>Заказчик пока не оставил отзыв.</span>;
+    return (
+      <span style={{ color: '#5E6674' }}>
+        {i18n.t('ui.taskFeedback.zakazchikPokaNeOstavilOtzyv')}
+      </span>
+    );
   }
 
   const submit = async ({ stars, text }) => {
     setSending(true);
     try {
       await tasks.feedback(task.id, { stars, text: text.trim() });
-      successNotification('Спасибо за отзыв', 'Он появится в профиле исполнителя.');
+      successNotification(
+        i18n.t('ui.taskFeedback.spasiboZaOtzyv'),
+        i18n.t('ui.taskFeedback.onPoyavitsyaVProfileIspolnitelya'),
+      );
       onDone();
     } catch (e) {
-      infoNotification('Не получилось сохранить отзыв', errorMessage(e));
+      infoNotification(i18n.t('ui.taskFeedback.nePoluchilosSohranitOtzyv'), errorMessage(e));
     } finally {
       setSending(false);
     }
@@ -53,29 +61,42 @@ export default function TaskFeedback({ task, onDone }) {
   return (
     <Form layout="vertical" onFinish={submit} requiredMark={false}>
       <p style={{ color: '#5E6674' }}>
-        Оцените работу исполнителя. Отзыв увидят другие заказчики; изменить его потом нельзя.
+        {i18n.t('ui.taskFeedback.otseniteRabotuIspolnitelyaOtzyvUvidyat')}
       </p>
       <Form.Item
         name="stars"
-        label="Оценка"
-        rules={[{ required: true, type: 'number', min: 1, message: 'Поставьте оценку от 1 до 5' }]}
+        label={i18n.t('ui.taskFeedback.otsenka')}
+        rules={[
+          {
+            required: true,
+            type: 'number',
+            min: 1,
+            message: i18n.t('ui.taskFeedback.postavteOtsenkuOt1Do'),
+          },
+        ]}
       >
         <Rate style={{ color: 'red' }} />
       </Form.Item>
       <Form.Item
         name="text"
-        label="Отзыв"
-        rules={[{ required: true, whitespace: true, message: 'Напишите пару слов о работе' }]}
+        label={i18n.t('ui.taskFeedback.otzyv')}
+        rules={[
+          {
+            required: true,
+            whitespace: true,
+            message: i18n.t('ui.taskFeedback.napishiteParuSlovORabote'),
+          },
+        ]}
       >
         <Input.TextArea
           rows={4}
           maxLength={3000}
           showCount
-          placeholder="Что получилось хорошо, что можно улучшить"
+          placeholder={i18n.t('ui.taskFeedback.chtoPoluchilosHoroshoChtoMozhno')}
         />
       </Form.Item>
       <Button type="primary" htmlType="submit" loading={sending}>
-        Оставить отзыв
+        {i18n.t('ui.taskFeedback.ostavitOtzyv')}
       </Button>
     </Form>
   );

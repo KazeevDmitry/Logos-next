@@ -3,22 +3,26 @@ import { Badge } from 'antd';
 import moment from 'moment';
 import UserImage from '../userImage/userImage';
 
+import i18n from '../../../utils/i18n-init';
 export const companionName = (user) => `${user.name} ${user.surname ?? ''}`.trim();
 
 /** What the last message looked like, in one line. */
 function preview(conversation, viewerId) {
   const last = conversation.lastMessage;
   if (!last) {
-    return 'Сообщений пока нет';
+    return i18n.t('ui.conversationList.soobscheniyPokaNet');
   }
-  const text = last.text || 'Вложение';
-  return last.senderId === viewerId ? `Вы: ${text}` : text;
+  const text = last.text || i18n.t('ui.conversationList.vlozhenie');
+  return last.senderId === viewerId ? i18n.t('ui.conversationList.vy', { text }) : text;
 }
 
 /** The user's chats; `activeId` is the one open on the right. */
 export default function ConversationList({ conversations, activeId, viewerId, onSelect }) {
   return (
-    <ul aria-label="Диалоги" style={{ listStyle: 'none', margin: 0, padding: 0 }}>
+    <ul
+      aria-label={i18n.t('ui.conversationList.dialogi')}
+      style={{ listStyle: 'none', margin: 0, padding: 0 }}
+    >
       {conversations.map((conversation) => {
         const active = conversation.id === activeId;
         return (
@@ -87,7 +91,7 @@ const ellipsis = {
 /** Time for today, a short date otherwise. */
 const CALENDAR = {
   sameDay: 'HH:mm',
-  lastDay: '[вчера]',
+  lastDay: i18n.t('ui.conversationList.vchera'),
   lastWeek: 'DD.MM',
   sameElse: 'DD.MM.YY',
   nextDay: 'DD.MM',

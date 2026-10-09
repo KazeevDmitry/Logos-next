@@ -5,6 +5,7 @@ import { chat } from '../../../lib/api';
 import { errorMessage, errorStatus } from '../../../lib/api/client';
 import FileUploader from '../fileUploader/fileUploader';
 
+import i18n from '../../../utils/i18n-init';
 const MAX_FILES = 5;
 
 /**
@@ -33,7 +34,7 @@ export default function Composer({ conversationId, onSent }) {
     } catch (e) {
       setError(
         errorStatus(e) === 429
-          ? 'Слишком много сообщений подряд. Подождите минуту.'
+          ? i18n.t('ui.composer.slishkomMnogoSoobscheniyPodryadPodozhdite')
           : errorMessage(e),
       );
     } finally {
@@ -55,8 +56,8 @@ export default function Composer({ conversationId, onSent }) {
           }}
           autoSize={{ minRows: 1, maxRows: 6 }}
           maxLength={5000}
-          placeholder="Напишите сообщение"
-          aria-label="Сообщение"
+          placeholder={i18n.t('ui.composer.napishiteSoobschenie')}
+          aria-label={i18n.t('ui.composer.soobschenie')}
         />
         <Button
           type="primary"
@@ -64,11 +65,16 @@ export default function Composer({ conversationId, onSent }) {
           loading={busy}
           disabled={empty}
           onClick={send}
-          aria-label="Отправить"
+          aria-label={i18n.t('ui.composer.otpravit')}
         />
       </div>
       <div style={{ marginTop: '8px' }}>
-        <FileUploader value={files} onChange={setFiles} max={MAX_FILES} label="Прикрепить файл" />
+        <FileUploader
+          value={files}
+          onChange={setFiles}
+          max={MAX_FILES}
+          label={i18n.t('ui.composer.prikrepitFayl')}
+        />
       </div>
       {error && (
         <div role="alert" style={{ color: '#F44336', marginTop: '6px' }}>

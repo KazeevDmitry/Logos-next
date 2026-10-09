@@ -1,6 +1,7 @@
 import { TreeSelect } from 'antd';
 import { useBranches } from '../../hooks/useReference';
 
+import i18n from '../../../utils/i18n-init';
 const branchKey = (id) => `b${id}`;
 const subbranchKey = (id) => `s${id}`;
 
@@ -49,7 +50,7 @@ export default function BranchSelect({ id, value, onChange, errorStatus, size })
       treeNodeFilterProp="title"
       style={{ width: '100%' }}
       dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-      placeholder="Начните ввод для поиска"
+      placeholder={i18n.t('ui.branchSelect.nachniteVvodDlyaPoiska')}
       treeData={treeData}
       value={selected}
       onChange={onThisChange}

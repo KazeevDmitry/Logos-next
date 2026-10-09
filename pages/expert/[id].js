@@ -21,6 +21,7 @@ import { useThemeContext } from '../../src/context/themeContext';
 import { useUserContext } from '../../src/context/userContext';
 import styles from './expertInfo.module.less';
 
+import i18n from '../../utils/i18n-init';
 const plural = (n, one, few, many) => {
   const mod10 = n % 10;
   const mod100 = n % 100;
@@ -63,7 +64,13 @@ export default function ExpertPage({ serverExpert }) {
   const isSelf = currentUser?.id === expert?.user.id;
 
   if (!expert) {
-    return <Result status="404" title="Эксперт не найден" style={{ marginTop: '120px' }} />;
+    return (
+      <Result
+        status="404"
+        title={i18n.t('pages.expertId.ekspertNeNayden')}
+        style={{ marginTop: '120px' }}
+      />
+    );
   }
 
   const { user } = expert;
@@ -77,7 +84,7 @@ export default function ExpertPage({ serverExpert }) {
         <div>
           {user.name} {user.surname ?? ''}
           {expert.verified && (
-            <Tooltip title="Документы проверены">
+            <Tooltip title={i18n.t('pages.expertId.dokumentyProvereny')}>
               <SafetyCertificateOutlined
                 style={{ color: '#32D69B', marginLeft: '12px', fontSize: '0.7em' }}
               />
@@ -134,7 +141,7 @@ export default function ExpertPage({ serverExpert }) {
               style={{ padding: `0px 0px 0px ${pad}`, overflow: 'hidden' }}
             >
               <div className={styles.firstContainer} style={{ marginLeft: '0px' }}>
-                <h3 className={styles.title}>Рейтинг</h3>
+                <h3 className={styles.title}>{i18n.t('pages.expertId.reyting')}</h3>
                 <div className={styles.subrow}>
                   <TrophyOutlined style={{ color: '#F4B336', fontSize: '24px' }} />
                   <span className={styles.cupNum}>{expert.rating}</span>
@@ -162,17 +169,17 @@ export default function ExpertPage({ serverExpert }) {
                 {conversation ? (
                   <Link href={`/messages?chat=${conversation.id}`}>
                     <Button type="primary" size={theme?.size} style={{ width: '100%' }}>
-                      Написать эксперту
+                      {i18n.t('pages.expertId.napisatEkspertu')}
                     </Button>
                   </Link>
                 ) : (
                   <>
                     <p style={{ color: '#5E6674' }}>
-                      Чат с экспертом откроется, когда он откликнется на вашу задачу.
+                      {i18n.t('pages.expertId.chatSEkspertomOtkroetsyaKogda')}
                     </p>
                     <Link href="/task/new">
                       <Button type="primary" size={theme?.size} style={{ width: '100%' }}>
-                        Создать задачу
+                        {i18n.t('pages.expertId.sozdatZadachu')}
                       </Button>
                     </Link>
                   </>
@@ -195,19 +202,22 @@ function Info({ expert }) {
     <div className={styles.blockMain}>
       <Row gutter={[pad, pad]} style={{ width: '100%' }}>
         <Col xs={24} sm={24} md={9} lg={9} xl={9}>
-          <p className={styles.title}>Специализация</p>
+          <p className={styles.title}>{i18n.t('pages.expertId.spetsializatsiya')}</p>
           <span className={styles.occupation}>
-            {expert.specializations.map((spec) => spec.name).join(', ') || 'Не указана'}
+            {expert.specializations.map((spec) => spec.name).join(', ') ||
+              i18n.t('pages.expertId.neUkazana')}
           </span>
           <div className={styles.subrow} style={{ marginLeft: '-20px' }}>
             <span
               className={styles.comment}
               style={{ marginLeft: '20px', marginTop: '10px', color: 'darkgrey' }}
             >
-              Стаж
+              {i18n.t('pages.expertId.stazh')}
             </span>
             <span className={styles.experience} style={{ marginTop: '10px' }}>
-              {years === null ? 'Не указан' : `${years} ${plural(years, 'год', 'года', 'лет')}`}
+              {years === null
+                ? i18n.t('pages.expertId.neUkazan')
+                : `${years} ${plural(years, i18n.t('pages.expertId.god'), i18n.t('pages.expertId.goda'), i18n.t('pages.expertId.let'))}`}
             </span>
             <div style={{ display: 'flex', marginLeft: '20px', marginTop: '10px' }}>
               <UserOutlined style={{ color: 'darkgrey' }} />
@@ -216,7 +226,7 @@ function Info({ expert }) {
         </Col>
         <Col xs={24} sm={24} md={15} lg={15} xl={15}>
           <div className={styles.category}>
-            <p className={styles.title}>Категории права</p>
+            <p className={styles.title}>{i18n.t('pages.expertId.kategoriiPrava')}</p>
             <div className={styles.subrow}>
               {expert.branches.map((branch) => (
                 <span key={branch.id} className={styles.lawType} style={{ fontSize: '14px' }}>
@@ -230,8 +240,8 @@ function Info({ expert }) {
 
       {expert.description && (
         <div className={styles.row2} style={{ width: '100%' }}>
-          <h3 className={styles.title}>Личная информация</h3>
-          <h4 className={styles.comment2}>О себе</h4>
+          <h3 className={styles.title}>{i18n.t('pages.expertId.lichnayaInformatsiya')}</h3>
+          <h4 className={styles.comment2}>{i18n.t('pages.expertId.oSebe')}</h4>
           <div className={styles.personalInfo}>
             <span className={styles.personalText} style={{ whiteSpace: 'pre-wrap' }}>
               {expert.description}
@@ -242,7 +252,7 @@ function Info({ expert }) {
 
       {expert.services.length > 0 && (
         <div className={styles.row4}>
-          <h3 className={styles.title}>Услуги и цены</h3>
+          <h3 className={styles.title}>{i18n.t('pages.expertId.uslugiITseny')}</h3>
           {expert.services.map((service) => (
             <div
               key={service.id}
@@ -265,7 +275,7 @@ function Info({ expert }) {
 
       {expert.educations.length > 0 && (
         <div className={styles.row4}>
-          <h3 className={styles.title}>Образование</h3>
+          <h3 className={styles.title}>{i18n.t('pages.expertId.obrazovanie')}</h3>
           <Row style={{ width: '100%' }} gutter={[pad, pad]}>
             {expert.educations.map((education) => (
               <Col key={education.id} xs={24} sm={24} md={12} lg={12} xl={12}>
@@ -273,7 +283,7 @@ function Info({ expert }) {
                   <h4 className={styles.subtitle}>
                     <span className={styles.univercity1}>{education.university}</span>
                     {education.hasDiploma && (
-                      <Tooltip title="Диплом загружен">
+                      <Tooltip title={i18n.t('pages.expertId.diplomZagruzhen')}>
                         <SafetyCertificateOutlined
                           style={{ color: '#32D69B', marginLeft: '8px' }}
                         />

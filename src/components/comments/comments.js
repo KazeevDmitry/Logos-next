@@ -8,6 +8,7 @@ import { errorMessage } from '../../../lib/api/client';
 import { useUserContext } from '../../context/userContext';
 import UserImage from '../userImage/userImage';
 
+import i18n from '../../../utils/i18n-init';
 const MAX_LENGTH = 3000;
 /** Replies deeper than this are drawn at the same indent, so long threads stay readable on phones. */
 const MAX_INDENT_LEVEL = 3;
@@ -44,7 +45,9 @@ function CommentForm({ articleId, parentId = null, onDone, autoFocus = false }) 
         maxLength={MAX_LENGTH}
         showCount
         value={text}
-        placeholder={parentId ? 'Ваш ответ' : 'Ваш комментарий'}
+        placeholder={
+          parentId ? i18n.t('ui.comments.vashOtvet') : i18n.t('ui.comments.vashKommentariy')
+        }
         onChange={(e) => setText(e.target.value)}
       />
       {mutation.isError && (
@@ -59,9 +62,9 @@ function CommentForm({ articleId, parentId = null, onDone, autoFocus = false }) 
           disabled={!text.trim()}
           onClick={() => mutation.mutate({ text, parentId })}
         >
-          Отправить
+          {i18n.t('ui.comments.otpravit')}
         </Button>
-        {onDone && <Button onClick={onDone}>Отмена</Button>}
+        {onDone && <Button onClick={onDone}>{i18n.t('ui.comments.otmena')}</Button>}
       </div>
     </div>
   );
@@ -92,7 +95,7 @@ function Comment({ comment, tree, articleId, level, canReply }) {
           </div>
           {canReply && !replying && (
             <Button type="link" style={{ padding: 0 }} onClick={() => setReplying(true)}>
-              Ответить
+              {i18n.t('ui.comments.otvetit')}
             </Button>
           )}
           {replying && (
@@ -138,12 +141,13 @@ export default function Comments({ articleId }) {
         <CommentForm articleId={articleId} />
       ) : (
         <p style={{ color: '#5E6674' }}>
-          <Link href="/login">Войдите</Link>, чтобы оставить комментарий.
+          <Link href="/login">{i18n.t('ui.comments.voydite')}</Link>
+          {i18n.t('ui.comments.chtobyOstavitKommentariy')}
         </p>
       )}
       {!isLoading && roots.length === 0 && (
         <p style={{ textAlign: 'center', marginTop: '20px' }}>
-          Для этой статьи пока нет комментариев
+          {i18n.t('ui.comments.dlyaEtoyStatiPokaNet')}
         </p>
       )}
       {roots.map((comment) => (

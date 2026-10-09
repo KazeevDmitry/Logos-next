@@ -12,9 +12,10 @@ import { useNotifyContext } from '../../src/context/notificationContext';
 import { useThemeContext } from '../../src/context/themeContext';
 import { useUserContext } from '../../src/context/userContext';
 
+import i18n from '../../utils/i18n-init';
 const AVATAR_ERRORS = {
-  413: 'Файл слишком большой (максимум 5 МБ)',
-  415: 'Подходят фотографии JPG, PNG и WEBP',
+  413: i18n.t('pages.personalaccountProfile.faylSlishkomBolshoyMaksimum5'),
+  415: i18n.t('pages.personalaccountProfile.podhodyatFotografiiJpgPngI'),
 };
 
 /** The profile photo with buttons to replace and remove it. */
@@ -59,7 +60,9 @@ function AvatarEditor({ user }) {
             }}
           >
             <Button icon={<UploadOutlined />} loading={busy}>
-              {user.avatarUrl ? 'Заменить фото' : 'Загрузить фото'}
+              {user.avatarUrl
+                ? i18n.t('pages.personalaccountProfile.zamenitFoto')
+                : i18n.t('pages.personalaccountProfile.zagruzitFoto')}
             </Button>
           </Upload>
           {user.avatarUrl && (
@@ -68,11 +71,13 @@ function AvatarEditor({ user }) {
               disabled={busy}
               onClick={() => change(() => users.removeAvatar())}
             >
-              Удалить
+              {i18n.t('pages.personalaccountProfile.udalit')}
             </Button>
           )}
         </div>
-        <div style={{ color: '#5E6674', marginTop: '8px' }}>JPG, PNG или WEBP до 5 МБ</div>
+        <div style={{ color: '#5E6674', marginTop: '8px' }}>
+          {i18n.t('pages.personalaccountProfile.jpgPngIliWebpDo')}
+        </div>
         {error && (
           <div role="alert" style={{ color: '#F44336', marginTop: '6px' }}>
             {error}
@@ -112,7 +117,7 @@ function ProfilePage({ user }) {
         cityId: values.cityId ?? null,
       });
       setCurrentUser(updated);
-      successNotification('Изменения сохранены', '');
+      successNotification(i18n.t('pages.personalaccountProfile.izmeneniyaSohraneny'), '');
     } catch (e) {
       setError(errorMessage(e));
     } finally {
@@ -121,7 +126,7 @@ function ProfilePage({ user }) {
   };
 
   return (
-    <AccountLayout title="Личные данные">
+    <AccountLayout title={i18n.t('pages.personalaccountProfile.lichnyeDannye')}>
       <AvatarEditor user={user} />
       <Form
         layout="vertical"
@@ -137,24 +142,34 @@ function ProfilePage({ user }) {
       >
         <Form.Item
           name="name"
-          label="Имя"
-          rules={[{ required: true, whitespace: true, message: 'Укажите имя' }]}
+          label={i18n.t('pages.personalaccountProfile.imya')}
+          rules={[
+            {
+              required: true,
+              whitespace: true,
+              message: i18n.t('pages.personalaccountProfile.ukazhiteImya'),
+            },
+          ]}
         >
           <Input size={theme?.size} maxLength={60} autoComplete="given-name" />
         </Form.Item>
-        <Form.Item name="surname" label="Фамилия">
+        <Form.Item name="surname" label={i18n.t('pages.personalaccountProfile.familiya')}>
           <Input size={theme?.size} maxLength={60} autoComplete="family-name" />
         </Form.Item>
         <Form.Item
           name="phone"
-          label="Телефон"
-          extra="В международном формате, например +7 916 123-45-67"
+          label={i18n.t('pages.personalaccountProfile.telefon')}
+          extra={i18n.t('pages.personalaccountProfile.vMezhdunarodnomFormateNaprimer7')}
           rules={[
             {
               validator: (_, value) =>
                 !value || /^\+[1-9]\d{9,14}$/.test(normalisePhone(value) ?? '')
                   ? Promise.resolve()
-                  : Promise.reject(new Error('Проверьте номер: нужен код страны и 10–15 цифр')),
+                  : Promise.reject(
+                      new Error(
+                        i18n.t('pages.personalaccountProfile.proverteNomerNuzhenKodStrany'),
+                      ),
+                    ),
             },
           ]}
         >
@@ -166,21 +181,24 @@ function ProfilePage({ user }) {
             placeholder="+7"
           />
         </Form.Item>
-        <Form.Item name="cityId" label="Город">
+        <Form.Item name="cityId" label={i18n.t('pages.personalaccountProfile.gorod')}>
           <CitySelect />
         </Form.Item>
-        <Form.Item name="gender" label="Пол">
+        <Form.Item name="gender" label={i18n.t('pages.personalaccountProfile.pol')}>
           <Radio.Group>
-            <Radio value="MALE">Мужской</Radio>
-            <Radio value="FEMALE">Женский</Radio>
+            <Radio value="MALE">{i18n.t('pages.personalaccountProfile.muzhskoy')}</Radio>
+            <Radio value="FEMALE">{i18n.t('pages.personalaccountProfile.zhenskiy')}</Radio>
           </Radio.Group>
         </Form.Item>
-        <Form.Item label="E-mail" extra="Адрес используется для входа; изменить его нельзя.">
+        <Form.Item
+          label="E-mail"
+          extra={i18n.t('pages.personalaccountProfile.adresIspolzuetsyaDlyaVhodaIzmenit')}
+        >
           <Input size={theme?.size} value={user.email} disabled />
         </Form.Item>
         <FormError>{error}</FormError>
         <Button type="primary" htmlType="submit" size={theme?.size} loading={busy}>
-          Сохранить
+          {i18n.t('pages.personalaccountProfile.sohranit')}
         </Button>
       </Form>
     </AccountLayout>

@@ -13,6 +13,7 @@ import { useThemeContext } from '../../src/context/themeContext';
 import { useUserContext } from '../../src/context/userContext';
 import { useBranches, useSpecializations } from '../../src/hooks/useReference';
 
+import i18n from '../../utils/i18n-init';
 const toOptions = (items) => items.map((item) => ({ value: item.id, label: item.name }));
 
 /**
@@ -42,14 +43,14 @@ function ExpertProfilePage() {
     try {
       if (isExpert) {
         queryClient.setQueryData(['my-expert'], await experts.update(body));
-        successNotification('Профиль сохранён', '');
+        successNotification(i18n.t('pages.personalaccountExpert.profilSohranen'), '');
       } else {
         queryClient.setQueryData(['my-expert'], await experts.become(body));
         // The role changed: the menu and the pages open to experts depend on it.
         await refreshUser();
         successNotification(
-          'Вы стали экспертом',
-          'Добавьте услуги и образование — так заказчикам проще вас выбрать.',
+          i18n.t('pages.personalaccountExpert.vyStaliEkspertom'),
+          i18n.t('pages.personalaccountExpert.dobavteUslugiIObrazovanieTak'),
         );
       }
     } catch (e) {
@@ -61,25 +62,35 @@ function ExpertProfilePage() {
 
   if (isExpert && isLoading) {
     return (
-      <AccountLayout title="Профиль эксперта">
+      <AccountLayout title={i18n.t('pages.personalaccountExpert.profilEksperta')}>
         <Spin />
       </AccountLayout>
     );
   }
 
   return (
-    <AccountLayout title={isExpert ? 'Профиль эксперта' : 'Стать экспертом'}>
+    <AccountLayout
+      title={
+        isExpert
+          ? i18n.t('pages.personalaccountExpert.profilEksperta')
+          : i18n.t('pages.personalaccountExpert.statEkspertom')
+      }
+    >
       {isExpert && expert ? (
         <p style={{ color: '#5E6674' }}>
-          Эти сведения видят заказчики в <Link href={`/expert/${expert.id}`}>вашем профиле</Link>.
+          {i18n.t('pages.personalaccountExpert.etiSvedeniyaVidyatZakazchikiV')}{' '}
+          <Link href={`/expert/${expert.id}`}>
+            {i18n.t('pages.personalaccountExpert.vashemProfile')}
+          </Link>
+          .
         </p>
       ) : (
         <Alert
           type="info"
           showIcon
           style={{ marginBottom: '24px', maxWidth: '720px' }}
-          message="Эксперты откликаются на задачи и отвечают на вопросы"
-          description="Расскажите о своей практике. Вы сможете и дальше создавать задачи как заказчик."
+          message={i18n.t('pages.personalaccountExpert.ekspertyOtklikayutsyaNaZadachiI')}
+          description={i18n.t('pages.personalaccountExpert.rasskazhiteOSvoeyPraktikeVy')}
         />
       )}
       <Form
@@ -95,13 +106,13 @@ function ExpertProfilePage() {
       >
         <Form.Item
           name="specializationIds"
-          label="Специализация"
+          label={i18n.t('pages.personalaccountExpert.spetsializatsiya')}
           rules={[
             {
               required: true,
               type: 'array',
               min: 1,
-              message: 'Выберите хотя бы одну специализацию',
+              message: i18n.t('pages.personalaccountExpert.vyberiteHotyaByOdnuSpetsializatsiyu'),
             },
           ]}
         >
@@ -110,14 +121,19 @@ function ExpertProfilePage() {
             size={theme?.size}
             optionFilterProp="label"
             options={toOptions(specializations)}
-            placeholder="Например: адвокат, юрист"
+            placeholder={i18n.t('pages.personalaccountExpert.naprimerAdvokatYurist')}
           />
         </Form.Item>
         <Form.Item
           name="branchIds"
-          label="Отрасли права"
+          label={i18n.t('pages.personalaccountExpert.otrasliPrava')}
           rules={[
-            { required: true, type: 'array', min: 1, message: 'Выберите хотя бы одну отрасль' },
+            {
+              required: true,
+              type: 'array',
+              min: 1,
+              message: i18n.t('pages.personalaccountExpert.vyberiteHotyaByOdnuOtrasl'),
+            },
           ]}
         >
           <Select
@@ -125,10 +141,10 @@ function ExpertProfilePage() {
             size={theme?.size}
             optionFilterProp="label"
             options={toOptions(branches)}
-            placeholder="В каких отраслях вы практикуете"
+            placeholder={i18n.t('pages.personalaccountExpert.vKakihOtraslyahVyPraktikuete')}
           />
         </Form.Item>
-        <Form.Item name="experience" label="Опыт работы, лет">
+        <Form.Item name="experience" label={i18n.t('pages.personalaccountExpert.opytRabotyLet')}>
           <InputNumber
             size={theme?.size}
             min={0}
@@ -137,12 +153,12 @@ function ExpertProfilePage() {
             style={{ width: '160px' }}
           />
         </Form.Item>
-        <Form.Item name="description" label="О себе">
+        <Form.Item name="description" label={i18n.t('pages.personalaccountExpert.oSebe')}>
           <Input.TextArea
             rows={8}
             maxLength={5000}
             showCount
-            placeholder="Чем вы занимаетесь, с какими делами работаете, чем можете быть полезны"
+            placeholder={i18n.t('pages.personalaccountExpert.chemVyZanimaetesSKakimi')}
           />
         </Form.Item>
         <FormError>{error}</FormError>
@@ -153,7 +169,9 @@ function ExpertProfilePage() {
           loading={busy}
           style={{ marginTop: '10px' }}
         >
-          {isExpert ? 'Сохранить' : 'Стать экспертом'}
+          {isExpert
+            ? i18n.t('pages.personalaccountExpert.sohranit')
+            : i18n.t('pages.personalaccountExpert.statEkspertom')}
         </Button>
       </Form>
     </AccountLayout>

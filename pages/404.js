@@ -2,21 +2,22 @@ import { Button, Result } from 'antd';
 import Link from 'next/link';
 import Seo from '../src/components/seo';
 
+import i18n from '../utils/i18n-init';
 export default function NotFoundPage() {
   return (
     <>
-      <Seo title="Страница не найдена" noindex />
+      <Seo title={i18n.t('pages.404.stranitsaNeNaydena')} noindex />
       <Result
         style={{ marginTop: '120px' }}
         status="404"
-        title="Страница не найдена"
-        subTitle="Возможно, ссылка устарела или в адресе опечатка."
+        title={i18n.t('pages.404.stranitsaNeNaydena')}
+        subTitle={i18n.t('pages.404.vozmozhnoSsylkaUstarelaIliV')}
         extra={[
           <Link key="home" href="/">
-            <Button type="primary">На главную</Button>
+            <Button type="primary">{i18n.t('pages.404.naGlavnuyu')}</Button>
           </Link>,
           <Link key="tasks" href="/tasks">
-            <Button>К задачам</Button>
+            <Button>{i18n.t('pages.404.kZadacham')}</Button>
           </Link>,
         ]}
       />

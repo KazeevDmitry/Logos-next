@@ -5,6 +5,7 @@ import ErrorBoundary from '../errorBoundary';
 import Footer from '../footer/footer';
 import styles from './mainLayout.module.less';
 
+import i18n from '../../../utils/i18n-init';
 const { Content } = Layout;
 
 /** Header, the page, footer. A crash inside the page leaves the header and footer usable. */
@@ -14,7 +15,7 @@ export default function MainLayout({ children, loading }) {
   return (
     <Layout>
       <a href="#content" className="skip-link">
-        Перейти к содержимому
+        {i18n.t('ui.mainLayout.pereytiKSoderzhimomu')}
       </a>
       <AppHeader loading={loading} />
       <Content

@@ -13,6 +13,7 @@ import PageHeader from '../src/components/layouts/pageHeader';
 import UserImage from '../src/components/userImage/userImage';
 import { useThemeContext } from '../src/context/themeContext';
 
+import i18n from '../utils/i18n-init';
 const panel = { background: 'white', borderRadius: '10px', overflow: 'hidden' };
 const HEIGHT = 'max(420px, calc(100vh - 300px))';
 
@@ -46,7 +47,7 @@ function MessagesPage({ user }) {
 
   return (
     <>
-      <PageHeader title="Сообщения" seo={{ noindex: true }} />
+      <PageHeader title={i18n.t('pages.messages.soobscheniya')} seo={{ noindex: true }} />
       <PageContainer>
         {isLoading && (
           <Col span={24} style={{ textAlign: 'center' }}>
@@ -57,7 +58,7 @@ function MessagesPage({ user }) {
           <Col span={24}>
             <Empty
               style={{ margin: '60px 0' }}
-              description="Диалогов пока нет. Чат открывается, когда эксперт откликается на задачу."
+              description={i18n.t('pages.messages.dialogovPokaNetChatOtkryvaetsya')}
             />
           </Col>
         )}
@@ -96,7 +97,7 @@ function MessagesPage({ user }) {
                     {!theme.isDesktop && (
                       <button
                         type="button"
-                        aria-label="К списку диалогов"
+                        aria-label={i18n.t('pages.messages.kSpiskuDialogov')}
                         onClick={() => select(null)}
                         style={{
                           border: 'none',
@@ -131,7 +132,9 @@ function MessagesPage({ user }) {
                 </>
               ) : (
                 <div style={{ margin: 'auto', color: '#5E6674' }}>
-                  {activeId ? 'Диалог не найден' : 'Выберите диалог слева'}
+                  {activeId
+                    ? i18n.t('pages.messages.dialogNeNayden')
+                    : i18n.t('pages.messages.vyberiteDialogSleva')}
                 </div>
               )}
             </div>

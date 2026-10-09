@@ -5,6 +5,7 @@ import RatingBar from '../ratingbar/ratingbar';
 import UserImage from '../userImage/userImage';
 import styles from './expertCard.module.less';
 
+import i18n from '../../../utils/i18n-init';
 /** One expert in the catalogue. `expert` is the API's ExpertDto. */
 export default function ExpertCard({ expert }) {
   const theme = useThemeContext();
@@ -37,7 +38,7 @@ export default function ExpertCard({ expert }) {
               >
                 {user.name} {user.surname ?? ''}
                 {expert.verified && (
-                  <Tooltip title="Документы проверены">
+                  <Tooltip title={i18n.t('ui.expertCard.dokumentyProvereny')}>
                     <SafetyCertificateOutlined style={{ color: '#32D69B', marginLeft: '8px' }} />
                   </Tooltip>
                 )}

@@ -1,9 +1,9 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
+import i18n from '../../utils/i18n-init';
 export const SITE_NAME = 'LogosEst';
-const DEFAULT_DESCRIPTION =
-  'LogosEst — сервис поиска юристов, адвокатов и нотариусов: разместите задачу, сравните предложения и выберите исполнителя.';
+const DEFAULT_DESCRIPTION = i18n.t('ui.seo.logosestServisPoiskaYuristovAdvokatov');
 /** Public address of the site, e.g. https://logosest.ru; needed for absolute links only. */
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? '').replace(/\/$/, '');
 
@@ -20,7 +20,9 @@ export function excerpt(text, length = 160) {
  */
 export default function Seo({ title, description, image, noindex = false, type = 'website' }) {
   const router = useRouter();
-  const fullTitle = title ? `${title} — ${SITE_NAME}` : `${SITE_NAME} — юридические услуги онлайн`;
+  const fullTitle = title
+    ? `${title} — ${SITE_NAME}`
+    : i18n.t('ui.seo.yuridicheskieUslugiOnlayn', { SITE_NAME });
   const text = excerpt(description) || DEFAULT_DESCRIPTION;
   // Filters and pages of a list are the same document as far as search engines go.
   const url = SITE_URL ? `${SITE_URL}${router.asPath.split(/[?#]/)[0]}` : null;

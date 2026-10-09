@@ -9,6 +9,7 @@ import TaskForm from '../../src/components/taskForm/taskForm';
 import { useNotifyContext } from '../../src/context/notificationContext';
 import { useThemeContext } from '../../src/context/themeContext';
 
+import i18n from '../../utils/i18n-init';
 function NewTask() {
   const theme = useThemeContext();
   const router = useRouter();
@@ -20,19 +21,24 @@ function NewTask() {
     const created = await tasks.create(body);
     queryClient.invalidateQueries('tasks');
     successNotification(
-      'Задача опубликована',
-      'Эксперты увидят её в каталоге и смогут откликнуться.',
+      i18n.t('pages.taskNew.zadachaOpublikovana'),
+      i18n.t('pages.taskNew.ekspertyUvidyatEeVKataloge'),
     );
     router.push(`/task/${created.id}`);
   };
 
   return (
     <>
-      <PageHeader title="Новая задача" maxWidth="900px" closeBtn seo={{ noindex: true }} />
+      <PageHeader
+        title={i18n.t('pages.taskNew.novayaZadacha')}
+        maxWidth="900px"
+        closeBtn
+        seo={{ noindex: true }}
+      />
       <PageContainer maxWidth="900px">
         <Col span={24}>
           <div style={{ background: 'white', borderRadius: '10px', padding: pad }}>
-            <TaskForm submitText="Опубликовать задачу" onSubmit={onSubmit} />
+            <TaskForm submitText={i18n.t('pages.taskNew.opublikovatZadachu')} onSubmit={onSubmit} />
           </div>
         </Col>
       </PageContainer>

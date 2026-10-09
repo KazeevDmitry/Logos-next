@@ -2,6 +2,7 @@ import { Button, Result } from 'antd';
 import { withRouter } from 'next/router';
 import React from 'react';
 
+import i18n from '../../utils/i18n-init';
 /**
  * Catches a rendering error in the page below it and offers a way out
  * instead of a blank screen. Resets when the visitor goes to another page.
@@ -32,14 +33,14 @@ class ErrorBoundary extends React.Component {
       <Result
         style={{ marginTop: '120px' }}
         status="error"
-        title="Что-то сломалось"
-        subTitle="Ошибка на нашей стороне. Обновите страницу; если не поможет, вернитесь на главную."
+        title={i18n.t('ui.errorBoundary.chtoToSlomalos')}
+        subTitle={i18n.t('ui.errorBoundary.oshibkaNaNasheyStoroneObnovite')}
         extra={[
           <Button key="reload" type="primary" onClick={() => window.location.reload()}>
-            Обновить страницу
+            {i18n.t('ui.errorBoundary.obnovitStranitsu')}
           </Button>,
           <Button key="home" onClick={() => this.props.router.push('/')}>
-            На главную
+            {i18n.t('ui.errorBoundary.naGlavnuyu')}
           </Button>,
         ]}
       />

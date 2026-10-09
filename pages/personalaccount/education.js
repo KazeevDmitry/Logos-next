@@ -10,6 +10,7 @@ import { FormError } from '../../src/components/authPage/authPage';
 import FileUploader from '../../src/components/fileUploader/fileUploader';
 import { useNotifyContext } from '../../src/context/notificationContext';
 
+import i18n from '../../utils/i18n-init';
 const THIS_YEAR = new Date().getFullYear();
 
 /** Dialog for adding an education entry or editing `education`. */
@@ -41,7 +42,11 @@ function EducationModal({ education, open, onClose, onSaved }) {
     <Modal
       open={open}
       destroyOnClose
-      title={education ? 'Изменить образование' : 'Добавить образование'}
+      title={
+        education
+          ? i18n.t('pages.personalaccountEducation.izmenitObrazovanie')
+          : i18n.t('pages.personalaccountEducation.dobavitObrazovanie')
+      }
       onCancel={onClose}
       footer={null}
     >
@@ -59,46 +64,69 @@ function EducationModal({ education, open, onClose, onSaved }) {
       >
         <Form.Item
           name="university"
-          label="Учебное заведение"
-          rules={[{ required: true, whitespace: true, message: 'Укажите учебное заведение' }]}
+          label={i18n.t('pages.personalaccountEducation.uchebnoeZavedenie')}
+          rules={[
+            {
+              required: true,
+              whitespace: true,
+              message: i18n.t('pages.personalaccountEducation.ukazhiteUchebnoeZavedenie'),
+            },
+          ]}
         >
-          <Input maxLength={200} placeholder="Например: МГУ им. М. В. Ломоносова" />
+          <Input
+            maxLength={200}
+            placeholder={i18n.t('pages.personalaccountEducation.naprimerMguImMV')}
+          />
         </Form.Item>
         <Form.Item
           name="speciality"
-          label="Специальность"
-          rules={[{ required: true, whitespace: true, message: 'Укажите специальность' }]}
+          label={i18n.t('pages.personalaccountEducation.spetsialnost')}
+          rules={[
+            {
+              required: true,
+              whitespace: true,
+              message: i18n.t('pages.personalaccountEducation.ukazhiteSpetsialnost'),
+            },
+          ]}
         >
-          <Input maxLength={200} placeholder="Например: юриспруденция" />
+          <Input
+            maxLength={200}
+            placeholder={i18n.t('pages.personalaccountEducation.naprimerYurisprudentsiya')}
+          />
         </Form.Item>
-        <Form.Item name="city" label="Город">
+        <Form.Item name="city" label={i18n.t('pages.personalaccountEducation.gorod')}>
           <Input maxLength={100} />
         </Form.Item>
         <Form.Item
           name="year"
-          label="Год окончания"
-          rules={[{ required: true, message: 'Укажите год окончания' }]}
+          label={i18n.t('pages.personalaccountEducation.godOkonchaniya')}
+          rules={[
+            {
+              required: true,
+              message: i18n.t('pages.personalaccountEducation.ukazhiteGodOkonchaniya'),
+            },
+          ]}
         >
           <InputNumber min={1950} max={THIS_YEAR + 8} precision={0} style={{ width: '140px' }} />
         </Form.Item>
         <Form.Item
           name="diploma"
-          label="Диплом"
-          extra="Скан или фото диплома. Его видите только вы и администратор; в профиле появится отметка «диплом загружен»."
+          label={i18n.t('pages.personalaccountEducation.diplom')}
+          extra={i18n.t('pages.personalaccountEducation.skanIliFotoDiplomaEgo')}
         >
           <FileUploader
             max={1}
             accept="image/jpeg,image/png,image/webp,application/pdf"
-            label="Прикрепить диплом"
+            label={i18n.t('pages.personalaccountEducation.prikrepitDiplom')}
           />
         </Form.Item>
         <FormError>{error}</FormError>
         <div
           style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '16px' }}
         >
-          <Button onClick={onClose}>Отмена</Button>
+          <Button onClick={onClose}>{i18n.t('pages.personalaccountEducation.otmena')}</Button>
           <Button type="primary" htmlType="submit" loading={busy}>
-            Сохранить
+            {i18n.t('pages.personalaccountEducation.sohranit')}
           </Button>
         </div>
       </Form>
@@ -128,25 +156,31 @@ function EducationPage() {
       await experts.removeEducation(education.id);
       refresh();
     } catch (e) {
-      infoNotification('Не получилось удалить', errorMessage(e));
+      infoNotification(
+        i18n.t('pages.personalaccountEducation.nePoluchilosUdalit'),
+        errorMessage(e),
+      );
     }
   };
 
   return (
-    <AccountLayout title="Образование">
+    <AccountLayout title={i18n.t('pages.personalaccountEducation.obrazovanie')}>
       <EducationModal
         open={editing !== undefined}
         education={editing ?? null}
         onClose={() => setEditing(undefined)}
         onSaved={() => {
           setEditing(undefined);
-          successNotification('Образование сохранено', '');
+          successNotification(i18n.t('pages.personalaccountEducation.obrazovanieSohraneno'), '');
           refresh();
         }}
       />
       {isLoading && <Spin />}
       {!isLoading && educations.length === 0 && (
-        <Empty description="Вы ещё не добавили образование" style={{ margin: '30px 0' }} />
+        <Empty
+          description={i18n.t('pages.personalaccountEducation.vyEscheNeDobaviliObrazovanie')}
+          style={{ margin: '30px 0' }}
+        />
       )}
       {educations.map((education) => (
         <div
@@ -163,28 +197,42 @@ function EducationPage() {
             <div style={{ fontSize: '18px', fontWeight: 500 }}>{education.university}</div>
             <div>{education.speciality}</div>
             <div style={{ color: '#5E6674' }}>
-              {[education.city, `${education.year} г.`].filter(Boolean).join(' · ')}
+              {[
+                education.city,
+                i18n.t('pages.personalaccountEducation.g', { year: education.year }),
+              ]
+                .filter(Boolean)
+                .join(' · ')}
             </div>
             {education.diploma ? (
               <a href={education.diploma.url} target="_blank" rel="noreferrer">
                 <PaperClipOutlined /> {education.diploma.name}
               </a>
             ) : (
-              <span style={{ color: '#C98A0B' }}>Диплом не загружен</span>
+              <span style={{ color: '#C98A0B' }}>
+                {i18n.t('pages.personalaccountEducation.diplomNeZagruzhen')}
+              </span>
             )}
           </div>
           <Button
             icon={<EditOutlined />}
-            aria-label={`Изменить: ${education.university}`}
+            aria-label={i18n.t('pages.personalaccountEducation.izmenit', {
+              university: education.university,
+            })}
             onClick={() => setEditing(education)}
           />
           <Popconfirm
-            title="Удалить эту запись?"
-            okText="Да"
-            cancelText="Нет"
+            title={i18n.t('pages.personalaccountEducation.udalitEtuZapis')}
+            okText={i18n.t('pages.personalaccountEducation.da')}
+            cancelText={i18n.t('pages.personalaccountEducation.net')}
             onConfirm={() => remove(education)}
           >
-            <Button icon={<DeleteOutlined />} aria-label={`Удалить: ${education.university}`} />
+            <Button
+              icon={<DeleteOutlined />}
+              aria-label={i18n.t('pages.personalaccountEducation.udalit', {
+                university: education.university,
+              })}
+            />
           </Popconfirm>
         </div>
       ))}
@@ -194,7 +242,7 @@ function EducationPage() {
         style={{ marginTop: '20px' }}
         onClick={() => setEditing(null)}
       >
-        Добавить образование
+        {i18n.t('pages.personalaccountEducation.dobavitObrazovanie')}
       </Button>
     </AccountLayout>
   );

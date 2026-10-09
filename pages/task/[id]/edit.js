@@ -8,6 +8,7 @@ import PageHeader from '../../../src/components/layouts/pageHeader';
 import TaskForm from '../../../src/components/taskForm/taskForm';
 import { useThemeContext } from '../../../src/context/themeContext';
 
+import i18n from '../../../utils/i18n-init';
 function EditTask({ user }) {
   const theme = useThemeContext();
   const router = useRouter();
@@ -29,13 +30,19 @@ function EditTask({ user }) {
     );
   }
   if (!task) {
-    return <Result status="404" title="Задача не найдена" style={{ marginTop: '120px' }} />;
+    return (
+      <Result
+        status="404"
+        title={i18n.t('pages.taskIdEdit.zadachaNeNaydena')}
+        style={{ marginTop: '120px' }}
+      />
+    );
   }
   if (task.author.id !== user.id) {
     return (
       <Result
         status="403"
-        title="Редактировать задачу может только её автор"
+        title={i18n.t('pages.taskIdEdit.redaktirovatZadachuMozhetTolkoEe')}
         style={{ marginTop: '120px' }}
       />
     );
@@ -44,8 +51,8 @@ function EditTask({ user }) {
     return (
       <Result
         status="warning"
-        title="Задачу уже нельзя редактировать"
-        subTitle="Изменять можно только задачу, которая ещё принимает отклики."
+        title={i18n.t('pages.taskIdEdit.zadachuUzheNelzyaRedaktirovat')}
+        subTitle={i18n.t('pages.taskIdEdit.izmenyatMozhnoTolkoZadachuKotoraya')}
         style={{ marginTop: '120px' }}
       />
     );
@@ -60,11 +67,20 @@ function EditTask({ user }) {
 
   return (
     <>
-      <PageHeader title="Редактирование задачи" maxWidth="900px" closeBtn seo={{ noindex: true }} />
+      <PageHeader
+        title={i18n.t('pages.taskIdEdit.redaktirovanieZadachi')}
+        maxWidth="900px"
+        closeBtn
+        seo={{ noindex: true }}
+      />
       <PageContainer maxWidth="900px">
         <Col span={24}>
           <div style={{ background: 'white', borderRadius: '10px', padding: pad }}>
-            <TaskForm task={task} submitText="Сохранить" onSubmit={onSubmit} />
+            <TaskForm
+              task={task}
+              submitText={i18n.t('pages.taskIdEdit.sohranit')}
+              onSubmit={onSubmit}
+            />
           </div>
         </Col>
       </PageContainer>

@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { useQuery, useQueryClient } from 'react-query';
 import { notifications } from '../../../lib/api';
 
+import i18n from '../../../utils/i18n-init';
 const SHOWN = 8;
 const REFRESH_MS = 60_000;
 
@@ -44,7 +45,10 @@ function NoticeList({ onNavigate }) {
   const items = data?.items ?? [];
   if (items.length === 0) {
     return (
-      <Empty description="Уведомлений пока нет" style={{ width: '340px', margin: '10px 0' }} />
+      <Empty
+        description={i18n.t('ui.notificationBell.uvedomleniyPokaNet')}
+        style={{ width: '340px', margin: '10px 0' }}
+      />
     );
   }
 
@@ -80,7 +84,7 @@ function NoticeList({ onNavigate }) {
       </ul>
       {data.unread > 0 && (
         <Button type="link" onClick={readAll} style={{ paddingLeft: '8px' }}>
-          Отметить все прочитанными
+          {i18n.t('ui.notificationBell.otmetitVseProchitannymi')}
         </Button>
       )}
     </div>
@@ -102,12 +106,16 @@ export default function NotificationBell({ size = 22 }) {
       open={open}
       onOpenChange={setOpen}
       destroyTooltipOnHide
-      title="Уведомления"
+      title={i18n.t('ui.notificationBell.uvedomleniya')}
       content={<NoticeList onNavigate={() => setOpen(false)} />}
     >
       <button
         type="button"
-        aria-label={unread > 0 ? `Уведомления, непрочитанных: ${unread}` : 'Уведомления'}
+        aria-label={
+          unread > 0
+            ? i18n.t('ui.notificationBell.uvedomleniyaNeprochitannyh', { unread })
+            : i18n.t('ui.notificationBell.uvedomleniya')
+        }
         style={{
           border: 'none',
           background: 'none',

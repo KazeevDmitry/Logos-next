@@ -9,10 +9,11 @@ import AccountTaskList from '../src/components/task/accountTaskList';
 import { useThemeContext } from '../src/context/themeContext';
 import { useUserContext } from '../src/context/userContext';
 
+import i18n from '../utils/i18n-init';
 const createButton = (size) => (
   <Link href="/task/new">
     <Button size={size} type="primary">
-      Создать задачу +
+      {i18n.t('pages.mytasks.sozdatZadachu')}
     </Button>
   </Link>
 );
@@ -36,7 +37,7 @@ function MyTasks() {
 
   return (
     <>
-      <PageHeader title="Мои задачи" seo={{ noindex: true }}>
+      <PageHeader title={i18n.t('pages.mytasks.moiZadachi')} seo={{ noindex: true }}>
         <div
           style={{
             display: 'flex',
@@ -56,8 +57,8 @@ function MyTasks() {
               value={performing ? 'performer' : 'author'}
               onChange={(e) => setRole(e.target.value)}
             >
-              <Radio.Button value="author">Я заказчик</Radio.Button>
-              <Radio.Button value="performer">Я исполнитель</Radio.Button>
+              <Radio.Button value="author">{i18n.t('pages.mytasks.yaZakazchik')}</Radio.Button>
+              <Radio.Button value="performer">{i18n.t('pages.mytasks.yaIspolnitel')}</Radio.Button>
             </Radio.Group>
           </Col>
         )}
@@ -66,10 +67,10 @@ function MyTasks() {
             key="performing"
             name={['tasks', 'performing']}
             fetcher={tasks.performing}
-            emptyText="Вас пока не выбирали исполнителем."
+            emptyText={i18n.t('pages.mytasks.vasPokaNeVybiraliIspolnitelem')}
             emptyAction={
               <Link href="/tasks">
-                <Button type="primary">Найти задачу</Button>
+                <Button type="primary">{i18n.t('pages.mytasks.naytiZadachu')}</Button>
               </Link>
             }
           />
@@ -78,7 +79,7 @@ function MyTasks() {
             key="mine"
             name={['tasks', 'mine']}
             fetcher={tasks.mine}
-            emptyText="Вы ещё не создавали задач."
+            emptyText={i18n.t('pages.mytasks.vyEscheNeSozdavaliZadach')}
             emptyAction={createButton()}
           />
         )}

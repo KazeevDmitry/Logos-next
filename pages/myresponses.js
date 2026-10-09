@@ -7,6 +7,7 @@ import PageContainer from '../src/components/layouts/pageContainer';
 import PageHeader from '../src/components/layouts/pageHeader';
 import AccountTaskList from '../src/components/task/accountTaskList';
 
+import i18n from '../utils/i18n-init';
 const note = {
   borderTop: '1px solid #EEF0F4',
   marginTop: '16px',
@@ -18,20 +19,20 @@ const note = {
 function MyResponses() {
   return (
     <>
-      <PageHeader title="Мои отклики" seo={{ noindex: true }} />
+      <PageHeader title={i18n.t('pages.myresponses.moiOtkliki')} seo={{ noindex: true }} />
       <PageContainer>
         <AccountTaskList
           name={['tasks', 'responded']}
           fetcher={tasks.responded}
-          emptyText="Вы ещё не откликались на задачи."
+          emptyText={i18n.t('pages.myresponses.vyEscheNeOtklikalisNa')}
           emptyAction={
             <Link href="/tasks">
-              <Button type="primary">Найти задачу</Button>
+              <Button type="primary">{i18n.t('pages.myresponses.naytiZadachu')}</Button>
             </Link>
           }
           renderNote={(task) => (
             <div style={note}>
-              Ваше предложение:{' '}
+              {i18n.t('pages.myresponses.vashePredlozhenie')}{' '}
               <b style={{ color: '#0066FF' }}>{task.myResponse.price.toLocaleString('ru-RU')} ₽</b>
               {' · '}
               {moment(task.myResponse.createdAt).format('DD.MM.YYYY')}

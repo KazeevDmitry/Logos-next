@@ -5,6 +5,7 @@ import Link from 'next/link';
 import RatingBar from '../ratingbar/ratingbar';
 import UserImage from '../userImage/userImage';
 
+import i18n from '../../../utils/i18n-init';
 /** One expert's offer. `response` is the API's ResponseDto; `actions` are buttons for the author. */
 export default function ResponseCard({ response, chosen = false, actions }) {
   const { expert } = response;
@@ -31,7 +32,7 @@ export default function ResponseCard({ response, chosen = false, actions }) {
             <div style={{ fontWeight: 500, fontSize: '17px' }}>
               {expert.user.name} {expert.user.surname ?? ''}
               {expert.verified && (
-                <Tooltip title="Документы проверены">
+                <Tooltip title={i18n.t('ui.responseCard.dokumentyProvereny')}>
                   <SafetyCertificateOutlined style={{ color: '#32D69B', marginLeft: '8px' }} />
                 </Tooltip>
               )}

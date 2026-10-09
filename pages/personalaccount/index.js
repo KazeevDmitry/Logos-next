@@ -6,7 +6,12 @@ import AccountLayout from '../../src/components/account/accountLayout';
 import { useCompleteness } from '../../src/components/account/completeness';
 import UserImage from '../../src/components/userImage/userImage';
 
-const ROLE = { USER: 'Заказчик', EXPERT: 'Эксперт', ADMIN: 'Администратор' };
+import i18n from '../../utils/i18n-init';
+const ROLE = {
+  USER: i18n.t('pages.personalaccountIndex.zakazchik'),
+  EXPERT: i18n.t('pages.personalaccountIndex.ekspert'),
+  ADMIN: i18n.t('pages.personalaccountIndex.administrator'),
+};
 
 /** One step of the checklist; a link when the step has a page to do it on. */
 function Check({ check }) {
@@ -34,7 +39,7 @@ function AccountOverview({ user }) {
   const { checks, percent } = useCompleteness();
 
   return (
-    <AccountLayout title="Личный кабинет">
+    <AccountLayout title={i18n.t('pages.personalaccountIndex.lichnyyKabinet')}>
       <div style={{ display: 'flex', gap: '20px', alignItems: 'center', flexWrap: 'wrap' }}>
         <UserImage image={user.avatarUrl ?? ''} width={90} />
         <div style={{ minWidth: 0 }}>
@@ -61,13 +66,15 @@ function AccountOverview({ user }) {
         <Progress type="circle" percent={percent} width={110} strokeColor="#0066FF" />
         <div>
           <h2 style={{ fontSize: '20px', fontWeight: 500 }}>
-            {percent === 100 ? 'Профиль заполнен' : 'Заполните профиль'}
+            {percent === 100
+              ? i18n.t('pages.personalaccountIndex.profilZapolnen')
+              : i18n.t('pages.personalaccountIndex.zapolniteProfil')}
           </h2>
           {percent < 100 && (
             <p style={{ color: '#5E6674', maxWidth: '520px' }}>
               {user.role === 'EXPERT'
-                ? 'Заказчики чаще выбирают исполнителей с подробным и подтверждённым профилем.'
-                : 'С заполненным профилем исполнителям проще с вами работать.'}
+                ? i18n.t('pages.personalaccountIndex.zakazchikiChascheVybirayutIspolniteleyS')
+                : i18n.t('pages.personalaccountIndex.sZapolnennymProfilemIspolnitelyamProsche')}
             </p>
           )}
           <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
@@ -87,12 +94,14 @@ function AccountOverview({ user }) {
             background: '#F0F2F6',
           }}
         >
-          <div style={{ fontSize: '18px', fontWeight: 500 }}>Вы юрист, адвокат или нотариус?</div>
+          <div style={{ fontSize: '18px', fontWeight: 500 }}>
+            {i18n.t('pages.personalaccountIndex.vyYuristAdvokatIliNotarius')}
+          </div>
           <p style={{ color: '#5E6674', margin: '6px 0 14px' }}>
-            Станьте экспертом: откликайтесь на задачи заказчиков и отвечайте на вопросы.
+            {i18n.t('pages.personalaccountIndex.stanteEkspertomOtklikaytesNaZadachi')}
           </p>
           <Link href="/personalaccount/expert">
-            <Button type="primary">Стать экспертом</Button>
+            <Button type="primary">{i18n.t('pages.personalaccountIndex.statEkspertom')}</Button>
           </Link>
         </div>
       )}

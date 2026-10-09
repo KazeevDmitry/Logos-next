@@ -9,6 +9,7 @@ import { roubles } from '../../../utils/money';
 import { useNotifyContext } from '../../context/notificationContext';
 import { FormError } from '../authPage/authPage';
 
+import i18n from '../../../utils/i18n-init';
 /** The API refuses smaller requests. */
 const MIN_PAYOUT = 100;
 
@@ -33,7 +34,13 @@ function PayoutModal({ open, available, onClose, onDone }) {
   };
 
   return (
-    <Modal open={open} destroyOnClose title="Вывод средств" onCancel={onClose} footer={null}>
+    <Modal
+      open={open}
+      destroyOnClose
+      title={i18n.t('ui.payouts.vyvodSredstv')}
+      onCancel={onClose}
+      footer={null}
+    >
       <Form
         layout="vertical"
         preserve={false}
@@ -42,23 +49,30 @@ function PayoutModal({ open, available, onClose, onDone }) {
       >
         <Form.Item
           name="amount"
-          label="Сумма"
-          extra={`Доступно ${roubles(available)}, минимум ${roubles(MIN_PAYOUT)}`}
+          label={i18n.t('ui.payouts.summa')}
+          extra={i18n.t('ui.payouts.dostupnoMinimum', {
+            v0: roubles(available),
+            v1: roubles(MIN_PAYOUT),
+          })}
           rules={[
-            { required: true, message: 'Укажите сумму' },
-            { type: 'number', min: MIN_PAYOUT, message: `Не меньше ${roubles(MIN_PAYOUT)}` },
-            { type: 'number', max: available, message: 'Больше, чем доступно' },
+            { required: true, message: i18n.t('ui.payouts.ukazhiteSummu') },
+            {
+              type: 'number',
+              min: MIN_PAYOUT,
+              message: i18n.t('ui.payouts.neMenshe', { v0: roubles(MIN_PAYOUT) }),
+            },
+            { type: 'number', max: available, message: i18n.t('ui.payouts.bolsheChemDostupno') },
           ]}
         >
           <InputNumber min={0} precision={0} addonAfter="₽" style={{ width: '200px' }} />
         </Form.Item>
         <Form.Item
           name="details"
-          label="Куда перевести"
-          extra="Номер карты или банковские реквизиты. Их увидит только администратор, который делает перевод."
+          label={i18n.t('ui.payouts.kudaPerevesti')}
+          extra={i18n.t('ui.payouts.nomerKartyIliBankovskieRekvizity')}
           rules={[
-            { required: true, whitespace: true, message: 'Укажите реквизиты' },
-            { min: 5, message: 'Слишком коротко' },
+            { required: true, whitespace: true, message: i18n.t('ui.payouts.ukazhiteRekvizity') },
+            { min: 5, message: i18n.t('ui.payouts.slishkomKorotko') },
           ]}
         >
           <Input.TextArea rows={3} maxLength={500} showCount />
@@ -67,9 +81,9 @@ function PayoutModal({ open, available, onClose, onDone }) {
         <div
           style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '16px' }}
         >
-          <Button onClick={onClose}>Отмена</Button>
+          <Button onClick={onClose}>{i18n.t('ui.payouts.otmena')}</Button>
           <Button type="primary" htmlType="submit" loading={busy}>
-            Отправить заявку
+            {i18n.t('ui.payouts.otpravitZayavku')}
           </Button>
         </div>
       </Form>
@@ -97,8 +111,8 @@ export default function Payouts({ available }) {
         onDone={() => {
           setOpen(false);
           successNotification(
-            'Заявка отправлена',
-            'Сумма зарезервирована. Мы сообщим, когда деньги будут переведены.',
+            i18n.t('ui.payouts.zayavkaOtpravlena'),
+            i18n.t('ui.payouts.summaZarezervirovanaMySoobschimKogda'),
           );
           queryClient.invalidateQueries('finance');
         }}
@@ -113,18 +127,21 @@ export default function Payouts({ available }) {
         }}
       >
         <Button type="primary" disabled={available < MIN_PAYOUT} onClick={() => setOpen(true)}>
-          Вывести средства
+          {i18n.t('ui.payouts.vyvestiSredstva')}
         </Button>
         {available < MIN_PAYOUT && (
           <span style={{ color: '#5E6674' }}>
-            Вывод доступен от {roubles(MIN_PAYOUT)} на балансе.
+            {i18n.t('ui.payouts.vyvodDostupenOt')} {roubles(MIN_PAYOUT)}{' '}
+            {i18n.t('ui.payouts.naBalanse')}
           </span>
         )}
       </div>
 
       {payouts.length > 0 && (
         <>
-          <h2 style={{ fontSize: '20px', fontWeight: 500, marginTop: '36px' }}>Заявки на вывод</h2>
+          <h2 style={{ fontSize: '20px', fontWeight: 500, marginTop: '36px' }}>
+            {i18n.t('ui.payouts.zayavkiNaVyvod')}
+          </h2>
           <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
             {payouts.map((payout) => (
               <li
@@ -145,7 +162,11 @@ export default function Payouts({ available }) {
                     {moment(payout.createdAt).format('DD.MM.YYYY, HH:mm')}
                   </span>
                   <div style={{ color: '#5E6674' }}>{payout.details}</div>
-                  {payout.comment && <div>Комментарий администратора: {payout.comment}</div>}
+                  {payout.comment && (
+                    <div>
+                      {i18n.t('ui.payouts.kommentariyAdministratora')} {payout.comment}
+                    </div>
+                  )}
                 </div>
                 <div style={{ fontSize: '18px', whiteSpace: 'nowrap' }}>
                   {roubles(payout.amount)}

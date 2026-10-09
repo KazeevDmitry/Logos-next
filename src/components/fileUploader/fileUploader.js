@@ -4,9 +4,10 @@ import { useState } from 'react';
 import { files as filesApi } from '../../../lib/api';
 import { errorMessage, errorStatus } from '../../../lib/api/client';
 
+import i18n from '../../../utils/i18n-init';
 const UPLOAD_ERRORS = {
-  413: 'Файл слишком большой (максимум 10 МБ)',
-  415: 'Подходят JPG, PNG, WEBP, PDF, DOC и DOCX',
+  413: i18n.t('ui.fileUploader.faylSlishkomBolshoyMaksimum10'),
+  415: i18n.t('ui.fileUploader.podhodyatJpgPngWebpPdf'),
 };
 
 /**
@@ -21,7 +22,7 @@ export default function FileUploader({
   onChange,
   max = 5,
   accept,
-  label = 'Прикрепить файл',
+  label = i18n.t('ui.fileUploader.prikrepitFayl'),
 }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
@@ -55,7 +56,7 @@ export default function FileUploader({
           <Button
             type="text"
             size="small"
-            aria-label={`Убрать ${file.name}`}
+            aria-label={i18n.t('ui.fileUploader.ubrat', { name: file.name })}
             icon={<DeleteOutlined />}
             onClick={() => onChange?.(value.filter((item) => item.id !== file.id))}
           />

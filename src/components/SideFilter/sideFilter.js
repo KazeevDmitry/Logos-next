@@ -7,6 +7,7 @@ import CityInput from '../cityInput/cityInput';
 import InputSlider from '../input-slider/input-slider';
 import styles from './sideFilter.module.less';
 
+import i18n from '../../../utils/i18n-init';
 const BUDGET_RANGE = [1000, 500000];
 const FILTER_KEYS = [
   'city',
@@ -59,15 +60,15 @@ export default function SideFilter({
     >
       {!theme.isDesktop && (
         <div className={styles.flexCont}>
-          <div className={styles.filterHeader}> Фильтр </div>
+          <div className={styles.filterHeader}> {i18n.t('ui.sideFilter.filtr')} </div>
           <Button size={theme?.size} type="primary" htmlType="button" onClick={reset} ghost>
-            Сбросить
+            {i18n.t('ui.sideFilter.sbrosit')}
           </Button>
         </div>
       )}
       {theme.isDesktop && (
         <div style={{ fontSize: '22px', lineHeight: '22px', fontWeight: '550', marginBottom: pad }}>
-          Фильтр
+          {i18n.t('ui.sideFilter.filtr')}
         </div>
       )}
 
@@ -92,7 +93,7 @@ export default function SideFilter({
       {show.branch && (
         <>
           <div className={styles.specBlockHeader} style={divided}>
-            Отрасль права
+            {i18n.t('ui.sideFilter.otraslPrava')}
           </div>
           <BranchSelect
             size={theme.size}
@@ -127,7 +128,7 @@ export default function SideFilter({
               )
             }
           >
-            По договоренности
+            {i18n.t('ui.sideFilter.poDogovorennosti')}
           </Checkbox>
         </>
       )}
@@ -157,7 +158,7 @@ export function AskQuestionSideBlock({ style }) {
       <span
         style={{ fontSize: '22px', lineHeight: '22px', fontWeight: '600', textAlign: 'center' }}
       >
-        Задайте бесплатный вопрос специалистам портала
+        {i18n.t('ui.sideFilter.zadayteBesplatnyyVoprosSpetsialistamPortal')}
       </span>
       <Button
         type="primary"
@@ -165,7 +166,7 @@ export function AskQuestionSideBlock({ style }) {
         size={theme.size}
         style={{ marginTop: style?.padding, width: '100%' }}
       >
-        Задать вопрос
+        {i18n.t('ui.sideFilter.zadatVopros')}
       </Button>
     </div>
   );

@@ -8,6 +8,7 @@ import { useThemeContext } from '../src/context/themeContext';
 import { useUserContext } from '../src/context/userContext';
 import { listServerProps, useListQuery } from '../src/hooks/useListQuery';
 
+import i18n from '../utils/i18n-init';
 const PAGE_SIZE = 5;
 const options = {
   filters: { branch: ['branchId', 'int'], subbranch: ['subbranchId', 'int'] },
@@ -22,8 +23,8 @@ export default function Questions({ serverData }) {
 
   return (
     <ListPage
-      title="Вопросы и ответы"
-      description="Вопросы юристам и ответы практикующих специалистов. Задайте свой вопрос бесплатно."
+      title={i18n.t('pages.questions.voprosyIOtvety')}
+      description={i18n.t('pages.questions.voprosyYuristamIOtvetyPraktikuyuschih')}
       headerChildren={
         <div
           style={{
@@ -36,17 +37,17 @@ export default function Questions({ serverData }) {
         >
           <Link href="/addquestion">
             <Button size={theme?.size} type="primary">
-              Задать вопрос
+              {i18n.t('pages.questions.zadatVopros')}
             </Button>
           </Link>
         </div>
       }
-      searchPlaceholder="Введите строку для поиска"
+      searchPlaceholder={i18n.t('pages.questions.vvediteStrokuDlyaPoiska')}
       filter={{ branch: true, spec: false, city: false, budget: false }}
       query={query}
       pageSize={PAGE_SIZE}
       pluralPath="questions.plural"
-      emptyText="Вопросов не найдено"
+      emptyText={i18n.t('pages.questions.voprosovNeNaydeno')}
       sideExtra={!isExpert && <AskQuestionSideBlock style={{ padding: pad }} />}
       renderItem={(question) => (
         <Link href={`/question/${question.id}`} style={{ color: 'black', cursor: 'pointer' }}>
