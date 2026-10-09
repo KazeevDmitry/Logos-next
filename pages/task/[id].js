@@ -12,6 +12,7 @@ import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { chat, tasks } from '../../lib/api';
 import { createApi } from '../../lib/api/client';
+import FileLink from '../../src/components/fileLink/fileLink';
 import PageContainer from '../../src/components/layouts/pageContainer';
 import PageHeader from '../../src/components/layouts/pageHeader';
 import { AuthorLine, BranchPills } from '../../src/components/questionCard/questionCard';
@@ -143,10 +144,7 @@ export default function TaskPage({ serverTask }) {
                 </div>
                 {task.documents.map((file) => (
                   <div key={file.id}>
-                    <PaperClipOutlined />{' '}
-                    <a href={file.url} target="_blank" rel="noreferrer">
-                      {file.name}
-                    </a>
+                    <PaperClipOutlined /> <FileLink url={file.url}>{file.name}</FileLink>
                   </div>
                 ))}
               </>

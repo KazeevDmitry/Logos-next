@@ -4,6 +4,7 @@ import dayjs from '../../../utils/dayjs';
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { chat } from '../../../lib/api';
 import { useSocketEvent } from '../../context/socketContext';
+import FileLink from '../fileLink/fileLink';
 import Composer from './composer';
 
 import i18n from '../../../utils/i18n-init';
@@ -27,14 +28,9 @@ function Bubble({ message, mine }) {
         {message.text && <div style={{ whiteSpace: 'pre-wrap' }}>{message.text}</div>}
         {message.attachments.map((file) => (
           <div key={file.id}>
-            <a
-              href={file.url}
-              target="_blank"
-              rel="noreferrer"
-              style={{ color: 'inherit', textDecoration: 'underline' }}
-            >
+            <FileLink url={file.url} style={{ color: 'inherit', textDecoration: 'underline' }}>
               <PaperClipOutlined /> {file.name}
-            </a>
+            </FileLink>
           </div>
         ))}
         <div style={{ fontSize: '11px', opacity: 0.7, textAlign: 'right' }}>

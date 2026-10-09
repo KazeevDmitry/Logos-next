@@ -7,6 +7,7 @@ import { errorMessage } from '../../lib/api/client';
 import { withRole } from '../../lib/withAuth';
 import AccountLayout from '../../src/components/account/accountLayout';
 import { FormError } from '../../src/components/authPage/authPage';
+import FileLink from '../../src/components/fileLink/fileLink';
 import FileUploader from '../../src/components/fileUploader/fileUploader';
 import { useNotifyContext } from '../../src/context/notificationContext';
 
@@ -203,9 +204,9 @@ function EducationPage() {
                 .join(' · ')}
             </div>
             {education.diploma ? (
-              <a href={education.diploma.url} target="_blank" rel="noreferrer">
+              <FileLink url={education.diploma.url}>
                 <PaperClipOutlined /> {education.diploma.name}
-              </a>
+              </FileLink>
             ) : (
               <span style={{ color: '#C98A0B' }}>
                 {i18n.t('pages.personalaccountEducation.diplomNeZagruzhen')}
