@@ -122,7 +122,7 @@ export default function QuestionPage({ serverQuestion, serverAnswers = [] }) {
 
   return (
     <>
-      <PageHeader title={question.title} seo={{ description: question.text }} />
+      <PageHeader title={question.title} seo={{ description: question.description }} />
       <PageContainer>
         <Col xs={24} sm={24} md={16} lg={17} xl={18}>
           <QuestionCard question={{ ...question, answersCount: answers.length }} expanded />
