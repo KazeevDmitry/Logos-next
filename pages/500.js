@@ -1,14 +1,11 @@
 import { Button, Result } from 'antd';
-import Head from 'next/head';
 import Link from 'next/link';
+import Seo from '../src/components/seo';
 
 export default function ServerErrorPage() {
   return (
     <>
-      <Head>
-        <title>Ошибка сервера — LogosEst</title>
-        <meta name="robots" content="noindex" />
-      </Head>
+      <Seo title="Ошибка сервера" noindex />
       <Result
         style={{ marginTop: '120px' }}
         status="500"

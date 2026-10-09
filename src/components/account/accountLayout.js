@@ -33,7 +33,7 @@ export default function AccountLayout({ title, children }) {
 
   return (
     <>
-      <PageHeader title={title} />
+      <PageHeader title={title} seo={{ noindex: true }} />
       <PageContainer>
         <Col xs={24} sm={24} md={8} lg={7} xl={6}>
           <nav aria-label="Разделы личного кабинета" style={{ ...accountBlock, padding: '10px 0', overflow: 'hidden' }}>

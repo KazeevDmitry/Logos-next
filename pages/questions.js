@@ -23,6 +23,7 @@ export default function Questions({ serverData }) {
   return (
     <ListPage
       title="Вопросы и ответы"
+      description="Вопросы юристам и ответы практикующих специалистов. Задайте свой вопрос бесплатно."
       headerChildren={
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
           <Link href="/addquestion">

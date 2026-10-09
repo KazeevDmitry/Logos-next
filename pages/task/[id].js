@@ -83,7 +83,7 @@ export default function TaskPage({ serverTask }) {
           refresh();
         }}
       />
-      <PageHeader title={task.title} />
+      <PageHeader title={task.title} seo={{ description: task.text }} />
       <PageContainer>
         <Col xs={24} sm={24} md={24} lg={17} xl={18}>
           <div style={{ ...block, padding: pad }}>

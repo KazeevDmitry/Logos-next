@@ -39,7 +39,7 @@ function MessagesPage({ user }) {
 
   return (
     <>
-      <PageHeader title="Сообщения" />
+      <PageHeader title="Сообщения" seo={{ noindex: true }} />
       <PageContainer>
         {isLoading && (
           <Col span={24} style={{ textAlign: 'center' }}>

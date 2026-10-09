@@ -1,14 +1,11 @@
 import { Button, Result } from 'antd';
-import Head from 'next/head';
 import Link from 'next/link';
+import Seo from '../src/components/seo';
 
 export default function NotFoundPage() {
   return (
     <>
-      <Head>
-        <title>Страница не найдена — LogosEst</title>
-        <meta name="robots" content="noindex" />
-      </Head>
+      <Seo title="Страница не найдена" noindex />
       <Result
         style={{ marginTop: '120px' }}
         status="404"

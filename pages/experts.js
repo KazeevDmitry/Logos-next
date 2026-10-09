@@ -19,6 +19,7 @@ export default function Experts({ serverData }) {
   return (
     <ListPage
       title="Эксперты"
+      description="Юристы, адвокаты и нотариусы с рейтингом и отзывами заказчиков. Выберите специалиста по отрасли права и городу."
       searchPlaceholder="Введите полностью или частично имя или фамилию"
       filter={{ city: true, spec: true, branch: true, budget: false }}
       query={query}

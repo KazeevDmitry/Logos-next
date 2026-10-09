@@ -13,7 +13,7 @@ export default function AuthPage({ title, children }) {
 
   return (
     <>
-      <PageHeader title={title} maxWidth={maxWidth} closeBtn />
+      <PageHeader title={title} maxWidth={maxWidth} closeBtn seo={{ noindex: true }} />
       <PageContainer maxWidth={maxWidth} bGcolor={isPhone ? 'white' : ''}>
         <Col span={24}>
           <div className={styles.blockMain} style={{ padding: pad }}>

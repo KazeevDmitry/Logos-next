@@ -25,7 +25,7 @@ function NewTask() {
 
   return (
     <>
-      <PageHeader title="Новая задача" maxWidth="900px" closeBtn />
+      <PageHeader title="Новая задача" maxWidth="900px" closeBtn seo={{ noindex: true }} />
       <PageContainer maxWidth="900px">
         <Col span={24}>
           <div style={{ background: 'white', borderRadius: '10px', padding: pad }}>

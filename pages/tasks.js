@@ -25,6 +25,7 @@ export default function Tasks({ serverData }) {
   return (
     <ListPage
       title="Задачи"
+      description="Юридические задачи от заказчиков: договоры, споры, консультации. Откликайтесь и получайте заказы."
       headerChildren={
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
           <Link href="/task/new">

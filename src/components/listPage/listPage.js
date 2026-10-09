@@ -14,6 +14,7 @@ import SideFilter from '../SideFilter/sideFilter';
  */
 export default function ListPage({
   title,
+  description,
   headerChildren,
   searchPlaceholder,
   filter,
@@ -50,7 +51,9 @@ export default function ListPage({
 
   return (
     <>
-      <PageHeader title={title}>{headerChildren}</PageHeader>
+      <PageHeader title={title} seo={{ description }}>
+        {headerChildren}
+      </PageHeader>
       <PageContainer>
         <Col xs={24} sm={24} md={16} lg={17} xl={18}>
           <SearchField

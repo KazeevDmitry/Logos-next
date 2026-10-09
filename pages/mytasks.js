@@ -32,7 +32,7 @@ function MyTasks() {
 
   return (
     <>
-      <PageHeader title="Мои задачи">
+      <PageHeader title="Мои задачи" seo={{ noindex: true }}>
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
           {createButton(theme?.size)}
         </div>

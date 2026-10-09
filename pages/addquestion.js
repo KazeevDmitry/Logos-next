@@ -44,7 +44,7 @@ function AddQuestion() {
 
   return (
     <>
-      <PageHeader title="Задать вопрос" maxWidth="900px" closeBtn />
+      <PageHeader title="Задать вопрос" maxWidth="900px" closeBtn seo={{ noindex: true }} />
       <PageContainer maxWidth="900px">
         <Col span={24}>
           <div style={{ background: 'white', borderRadius: '10px', padding: pad }}>

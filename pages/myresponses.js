@@ -13,7 +13,7 @@ const note = { borderTop: '1px solid #EEF0F4', marginTop: '16px', paddingTop: '1
 function MyResponses() {
   return (
     <>
-      <PageHeader title="Мои отклики" />
+      <PageHeader title="Мои отклики" seo={{ noindex: true }} />
       <PageContainer>
         <AccountTaskList
           name={['tasks', 'responded']}

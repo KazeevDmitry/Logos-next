@@ -42,7 +42,10 @@ export default function ArticlePage({ serverArticle, serverSimilar = [] }) {
 
   return (
     <>
-      <PageHeader title={article.title}>
+      <PageHeader
+        title={article.title}
+        seo={{ description: article.description ?? article.content, image: article.imageUrl, type: 'article' }}
+      >
         {article.publishedAt && (
           <PublishedDate
             style={{ marginTop: '20px', fontSize: '16px' }}

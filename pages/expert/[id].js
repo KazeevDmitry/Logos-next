@@ -9,6 +9,7 @@ import Feedbacks from '../../src/components/feedbacks/feedbacks';
 import SideFeedbacks from '../../src/components/feedbacks/sideFeedbacks';
 import PageContainer from '../../src/components/layouts/pageContainer';
 import PageHeader from '../../src/components/layouts/pageHeader';
+import Seo from '../../src/components/seo';
 import UserImage from '../../src/components/userImage/userImage';
 import { useThemeContext } from '../../src/context/themeContext';
 import styles from './expertInfo.module.less';
@@ -72,6 +73,13 @@ export default function ExpertPage({ serverExpert }) {
 
   return (
     <>
+      {/* The heading is a block with the photo, so the tab title is set here. */}
+      <Seo
+        title={`${user.name} ${user.surname ?? ''}`.trim()}
+        description={expert.description}
+        image={user.avatarUrl}
+        type="profile"
+      />
       <PageHeader title={title} />
       <PageContainer>
         <Col xs={24} sm={24} md={18} lg={18} xl={18}>

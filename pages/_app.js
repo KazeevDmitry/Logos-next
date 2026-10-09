@@ -18,6 +18,7 @@ import en from 'antd/lib/locale/en_US';
 import moment from 'moment';
 import 'moment/locale/ru';
 import MainLayout from '../src/components/layouts/mainLayout';
+import Seo from '../src/components/seo';
 import { Hydrate, QueryClient, QueryClientProvider } from "react-query";
 
 moment.locale('ru')
@@ -76,6 +77,7 @@ export default function MyApp({ Component, pageProps }) {
                 <SocketProvider>
                   <NoteProvider>
                     <ConfigProvider locale={antdLocales(i18n.language)}>
+                      <Seo />
                       <MainLayout loading={loading}>
                         <Component {...pageProps} />
                       </MainLayout>

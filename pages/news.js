@@ -45,7 +45,10 @@ export default function News({ serverData, categories = [], partnerNews = [] }) 
 
   return (
     <>
-      <PageHeader title="Новости" />
+      <PageHeader
+        title="Новости"
+        seo={{ description: 'Новости права и разборы изменений в законодательстве от редакции LogosEst.' }}
+      />
       <PageContainer>
         <Col xs={24} sm={24} md={16} lg={17} xl={18}>
           <SearchField
