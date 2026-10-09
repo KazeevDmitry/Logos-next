@@ -4,11 +4,12 @@ import {
   TrophyOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-import { Col, Result, Row, Space, Tabs, Tooltip } from 'antd';
+import { Button, Col, Result, Row, Space, Tabs, Tooltip } from 'antd';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from 'react-query';
-import { experts } from '../../lib/api';
+import { chat, experts } from '../../lib/api';
 import { createApi } from '../../lib/api/client';
 import Feedbacks from '../../src/components/feedbacks/feedbacks';
 import SideFeedbacks from '../../src/components/feedbacks/sideFeedbacks';
@@ -17,6 +18,7 @@ import PageHeader from '../../src/components/layouts/pageHeader';
 import Seo from '../../src/components/seo';
 import UserImage from '../../src/components/userImage/userImage';
 import { useThemeContext } from '../../src/context/themeContext';
+import { useUserContext } from '../../src/context/userContext';
 import styles from './expertInfo.module.less';
 
 const plural = (n, one, few, many) => {
@@ -31,6 +33,7 @@ export default function ExpertPage({ serverExpert }) {
   const { t } = useTranslation();
   const theme = useThemeContext();
   const router = useRouter();
+  const { currentUser } = useUserContext();
   const expertId = Number(router.query.id);
 
   const { data: expert } = useQuery(['expert', expertId], () => experts.get(expertId), {
@@ -45,6 +48,19 @@ export default function ExpertPage({ serverExpert }) {
     () => experts.feedbacks(expertId, { pageSize: 1 }),
     { enabled: Boolean(expert), refetchOnWindowFocus: false },
   );
+
+  // A chat exists per offer, so writing to an expert is possible once they
+  // have responded to one of the visitor's tasks. Newest chat first.
+  const { data: conversations = [] } = useQuery(
+    ['chat', 'conversations'],
+    () => chat.conversations(),
+    {
+      enabled: Boolean(currentUser) && Boolean(expert),
+      refetchOnWindowFocus: false,
+    },
+  );
+  const conversation = conversations.find((item) => item.companion.id === expert?.user.id);
+  const isSelf = currentUser?.id === expert?.user.id;
 
   if (!expert) {
     return <Result status="404" title="Эксперт не найден" style={{ marginTop: '120px' }} />;
@@ -133,6 +149,36 @@ export default function ExpertPage({ serverExpert }) {
               reviewsCount={expert.reviewsCount}
               distribution={reviews?.distribution}
             />
+            {!isSelf && (
+              <div
+                style={{
+                  background: 'white',
+                  borderRadius: '10px',
+                  padding: pad,
+                  width: '100%',
+                  marginTop: pad,
+                }}
+              >
+                {conversation ? (
+                  <Link href={`/messages?chat=${conversation.id}`}>
+                    <Button type="primary" size={theme?.size} style={{ width: '100%' }}>
+                      Написать эксперту
+                    </Button>
+                  </Link>
+                ) : (
+                  <>
+                    <p style={{ color: '#5E6674' }}>
+                      Чат с экспертом откроется, когда он откликнется на вашу задачу.
+                    </p>
+                    <Link href="/task/new">
+                      <Button type="primary" size={theme?.size} style={{ width: '100%' }}>
+                        Создать задачу
+                      </Button>
+                    </Link>
+                  </>
+                )}
+              </div>
+            )}
           </Row>
         </Col>
       </PageContainer>
