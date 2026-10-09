@@ -3,7 +3,7 @@ import { Col, Empty, Spin } from 'antd';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback } from 'react';
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { chat } from '../lib/api';
 import { withAuth } from '../lib/withAuth';
 import ConversationList, { companionName } from '../src/components/chat/conversationList';
@@ -26,13 +26,11 @@ function MessagesPage({ user }) {
   const theme = useThemeContext();
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { data: conversations, isLoading } = useQuery(
-    ['chat', 'conversations'],
-    () => chat.conversations(),
-    {
-      refetchOnWindowFocus: false,
-    },
-  );
+  const { data: conversations, isLoading } = useQuery({
+    queryKey: ['chat', 'conversations'],
+    queryFn: () => chat.conversations(),
+    refetchOnWindowFocus: false,
+  });
   const activeId = Number(router.query.chat) || null;
   const active = conversations?.find((conversation) => conversation.id === activeId) ?? null;
 
@@ -40,7 +38,10 @@ function MessagesPage({ user }) {
     router.push({ pathname: '/messages', query: id ? { chat: id } : {} }, undefined, {
       shallow: true,
     });
-  const refreshChats = useCallback(() => queryClient.invalidateQueries('chat'), [queryClient]);
+  const refreshChats = useCallback(
+    () => queryClient.invalidateQueries({ queryKey: ['chat'] }),
+    [queryClient],
+  );
 
   const showList = theme.isDesktop || !active;
   const showThread = theme.isDesktop || Boolean(active);

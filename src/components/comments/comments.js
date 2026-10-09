@@ -2,7 +2,7 @@ import { Button, Input } from 'antd';
 import moment from 'moment';
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { news } from '../../../lib/api';
 import { errorMessage } from '../../../lib/api/client';
 import { useUserContext } from '../../context/userContext';
@@ -28,11 +28,12 @@ function byParent(comments) {
 function CommentForm({ articleId, parentId = null, onDone, autoFocus = false }) {
   const queryClient = useQueryClient();
   const [text, setText] = useState('');
-  const mutation = useMutation((body) => news.addComment(articleId, body), {
+  const mutation = useMutation({
+    mutationFn: (body) => news.addComment(articleId, body),
     onSuccess: () => {
       setText('');
-      queryClient.invalidateQueries(['comments', articleId]);
-      queryClient.invalidateQueries(['article']);
+      queryClient.invalidateQueries({ queryKey: ['comments', articleId] });
+      queryClient.invalidateQueries({ queryKey: ['article'] });
       onDone?.();
     },
   });
@@ -58,7 +59,7 @@ function CommentForm({ articleId, parentId = null, onDone, autoFocus = false }) 
       <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
         <Button
           type="primary"
-          loading={mutation.isLoading}
+          loading={mutation.isPending}
           disabled={!text.trim()}
           onClick={() => mutation.mutate({ text, parentId })}
         >
@@ -125,13 +126,11 @@ function Comment({ comment, tree, articleId, level, canReply }) {
 /** The comment thread of an article with a form for signed-in readers. */
 export default function Comments({ articleId }) {
   const { currentUser } = useUserContext();
-  const { data: comments = [], isLoading } = useQuery(
-    ['comments', articleId],
-    () => news.comments(articleId),
-    {
-      refetchOnWindowFocus: false,
-    },
-  );
+  const { data: comments = [], isLoading } = useQuery({
+    queryKey: ['comments', articleId],
+    queryFn: () => news.comments(articleId),
+    refetchOnWindowFocus: false,
+  });
   const tree = useMemo(() => byParent(comments), [comments]);
   const roots = tree.get(0) ?? [];
 

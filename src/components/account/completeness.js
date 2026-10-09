@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { experts } from '../../../lib/api';
 import { useUserContext } from '../../context/userContext';
 
@@ -6,7 +6,9 @@ import i18n from '../../../utils/i18n-init';
 /** The signed-in expert's own profile, or undefined for a customer. */
 export function useMyExpert() {
   const { isExpert } = useUserContext();
-  return useQuery(['my-expert'], () => experts.mine(), {
+  return useQuery({
+    queryKey: ['my-expert'],
+    queryFn: () => experts.mine(),
     enabled: isExpert,
     refetchOnWindowFocus: false,
   });

@@ -3,7 +3,7 @@ import moment from 'moment';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQuery } from 'react-query';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { finance } from '../lib/api';
 import { withAuth } from '../lib/withAuth';
 import AccountLayout from '../src/components/account/accountLayout';
@@ -46,12 +46,15 @@ function Amount({ label, value, hint, accent }) {
 function FinancePage() {
   const { t } = useTranslation();
   const [page, setPage] = useState(1);
-  const { data: balance } = useQuery(['finance', 'balance'], () => finance.balance());
-  const { data: history, isLoading } = useQuery(
-    ['finance', 'transactions', page],
-    () => finance.transactions({ page, pageSize: PAGE_SIZE }),
-    { keepPreviousData: true },
-  );
+  const { data: balance } = useQuery({
+    queryKey: ['finance', 'balance'],
+    queryFn: () => finance.balance(),
+  });
+  const { data: history, isLoading } = useQuery({
+    queryKey: ['finance', 'transactions', page],
+    queryFn: () => finance.transactions({ page, pageSize: PAGE_SIZE }),
+    placeholderData: keepPreviousData,
+  });
   const items = history?.items ?? [];
 
   return (

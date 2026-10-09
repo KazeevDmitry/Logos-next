@@ -1,7 +1,7 @@
 import { Alert, Button, Spin } from 'antd';
 import moment from 'moment';
 import { useState } from 'react';
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { experts } from '../../lib/api';
 import { errorMessage } from '../../lib/api/client';
 import { withRole } from '../../lib/withAuth';
@@ -62,12 +62,14 @@ function PassportForm({ onSent, again }) {
 /** Identity check: a verified expert gets a mark in the profile and in search results. */
 function VerificationPage() {
   const queryClient = useQueryClient();
-  const { data: request, isLoading } = useQuery(['my-verification'], () => experts.verification(), {
+  const { data: request, isLoading } = useQuery({
+    queryKey: ['my-verification'],
+    queryFn: () => experts.verification(),
     refetchOnWindowFocus: false,
   });
   const refresh = () => {
-    queryClient.invalidateQueries(['my-verification']);
-    queryClient.invalidateQueries(['my-expert']);
+    queryClient.invalidateQueries({ queryKey: ['my-verification'] });
+    queryClient.invalidateQueries({ queryKey: ['my-expert'] });
   };
   const status = request?.status;
 

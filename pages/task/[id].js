@@ -9,7 +9,7 @@ import moment from 'moment';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { chat, tasks } from '../../lib/api';
 import { createApi } from '../../lib/api/client';
 import PageContainer from '../../src/components/layouts/pageContainer';
@@ -43,7 +43,9 @@ export default function TaskPage({ serverTask }) {
   const pad = `${theme?.gutters?.gorizontal?.[theme?.id] ?? 20}px`;
 
   // Refetched once the visitor's session is known: documents and viewerStatus depend on who asks.
-  const { data: task } = useQuery(['task', id, currentUser?.id ?? null], () => tasks.get(id), {
+  const { data: task } = useQuery({
+    queryKey: ['task', id, currentUser?.id ?? null],
+    queryFn: () => tasks.get(id),
     initialData: serverTask ?? undefined,
     enabled: Number.isFinite(id),
     refetchOnWindowFocus: false,
@@ -51,33 +53,29 @@ export default function TaskPage({ serverTask }) {
 
   const isAuthor = task?.viewerStatus === 'youAuthor';
   const hasOwnOffer = ['youRespond', 'youChosen', 'youPerformer'].includes(task?.viewerStatus);
-  const { data: responses = [] } = useQuery(
-    ['responses', id, currentUser?.id ?? null],
-    () => tasks.responses(id),
-    {
-      enabled: Boolean(task) && (isAuthor || hasOwnOffer),
-      refetchOnWindowFocus: false,
-    },
-  );
+  const { data: responses = [] } = useQuery({
+    queryKey: ['responses', id, currentUser?.id ?? null],
+    queryFn: () => tasks.responses(id),
+    enabled: Boolean(task) && (isAuthor || hasOwnOffer),
+    refetchOnWindowFocus: false,
+  });
 
   // Every offer has a chat between the author and the expert who made it.
-  const { data: conversations = [] } = useQuery(
-    ['chat', 'conversations'],
-    () => chat.conversations(),
-    {
-      enabled: Boolean(task) && (isAuthor || hasOwnOffer),
-      refetchOnWindowFocus: false,
-    },
-  );
+  const { data: conversations = [] } = useQuery({
+    queryKey: ['chat', 'conversations'],
+    queryFn: () => chat.conversations(),
+    enabled: Boolean(task) && (isAuthor || hasOwnOffer),
+    refetchOnWindowFocus: false,
+  });
   const chatWith = (userId) =>
     conversations.find(
       (conversation) => conversation.task.id === id && conversation.companion.id === userId,
     );
 
   const refresh = () => {
-    queryClient.invalidateQueries(['task', id]);
-    queryClient.invalidateQueries(['responses', id]);
-    queryClient.invalidateQueries('tasks');
+    queryClient.invalidateQueries({ queryKey: ['task', id] });
+    queryClient.invalidateQueries({ queryKey: ['responses', id] });
+    queryClient.invalidateQueries({ queryKey: ['tasks'] });
   };
   const { run: runAction, running } = useTaskAction(id, refresh);
 

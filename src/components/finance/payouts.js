@@ -2,7 +2,7 @@ import { Button, Form, Input, InputNumber, Modal, Tag } from 'antd';
 import moment from 'moment';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { finance } from '../../../lib/api';
 import { errorMessage } from '../../../lib/api/client';
 import { roubles } from '../../../utils/money';
@@ -100,7 +100,10 @@ export default function Payouts({ available }) {
   const { t } = useTranslation();
   const { successNotification } = useNotifyContext();
   const [open, setOpen] = useState(false);
-  const { data: payouts = [] } = useQuery(['finance', 'payouts'], () => finance.payouts());
+  const { data: payouts = [] } = useQuery({
+    queryKey: ['finance', 'payouts'],
+    queryFn: () => finance.payouts(),
+  });
 
   return (
     <>
@@ -114,7 +117,7 @@ export default function Payouts({ available }) {
             i18n.t('ui.payouts.zayavkaOtpravlena'),
             i18n.t('ui.payouts.summaZarezervirovanaMySoobschimKogda'),
           );
-          queryClient.invalidateQueries('finance');
+          queryClient.invalidateQueries({ queryKey: ['finance'] });
         }}
       />
       <div

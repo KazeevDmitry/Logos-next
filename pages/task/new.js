@@ -1,6 +1,6 @@
 import { Col } from 'antd';
 import { useRouter } from 'next/router';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { tasks } from '../../lib/api';
 import { withAuth } from '../../lib/withAuth';
 import PageContainer from '../../src/components/layouts/pageContainer';
@@ -19,7 +19,7 @@ function NewTask() {
 
   const onSubmit = async (body) => {
     const created = await tasks.create(body);
-    queryClient.invalidateQueries('tasks');
+    queryClient.invalidateQueries({ queryKey: ['tasks'] });
     successNotification(
       i18n.t('pages.taskNew.zadachaOpublikovana'),
       i18n.t('pages.taskNew.ekspertyUvidyatEeVKataloge'),

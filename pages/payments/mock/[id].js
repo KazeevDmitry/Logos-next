@@ -2,7 +2,7 @@ import { Alert, Button, Result, Spin } from 'antd';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { finance } from '../../../lib/api';
 import { errorMessage } from '../../../lib/api/client';
 import { withAuth } from '../../../lib/withAuth';
@@ -24,7 +24,9 @@ function MockPaymentPage() {
     data: payment,
     isLoading,
     isError,
-  } = useQuery(['payment', id], () => finance.payment(id), {
+  } = useQuery({
+    queryKey: ['payment', id],
+    queryFn: () => finance.payment(id),
     enabled: Number.isFinite(id),
     retry: false,
     refetchOnWindowFocus: false,

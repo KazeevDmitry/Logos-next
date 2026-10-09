@@ -1,7 +1,7 @@
 import { DeleteOutlined, EditOutlined, PaperClipOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Empty, Form, Input, InputNumber, Modal, Popconfirm, Spin } from 'antd';
 import { useState } from 'react';
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { experts } from '../../lib/api';
 import { errorMessage } from '../../lib/api/client';
 import { withRole } from '../../lib/withAuth';
@@ -137,19 +137,17 @@ function EducationModal({ education, open, onClose, onSaved }) {
 function EducationPage() {
   const queryClient = useQueryClient();
   const { successNotification, infoNotification } = useNotifyContext();
-  const { data: educations = [], isLoading } = useQuery(
-    ['my-educations'],
-    () => experts.educations(),
-    {
-      refetchOnWindowFocus: false,
-    },
-  );
+  const { data: educations = [], isLoading } = useQuery({
+    queryKey: ['my-educations'],
+    queryFn: () => experts.educations(),
+    refetchOnWindowFocus: false,
+  });
   // undefined: closed; null: adding; an entry: editing it.
   const [editing, setEditing] = useState(undefined);
 
   const refresh = () => {
-    queryClient.invalidateQueries(['my-educations']);
-    queryClient.invalidateQueries(['my-expert']);
+    queryClient.invalidateQueries({ queryKey: ['my-educations'] });
+    queryClient.invalidateQueries({ queryKey: ['my-expert'] });
   };
   const remove = async (education) => {
     try {

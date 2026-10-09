@@ -1,6 +1,6 @@
 import { Empty, Pagination, Row, Spin } from 'antd';
 import { useState } from 'react';
-import { useQuery } from 'react-query';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { experts } from '../../../lib/api';
 import { useThemeContext } from '../../context/themeContext';
 import FeedbackCard from './feedbackCard';
@@ -12,11 +12,12 @@ const PAGE_SIZE = 6;
 export default function Feedbacks({ expertId }) {
   const theme = useThemeContext();
   const [page, setPage] = useState(1);
-  const { data, isLoading } = useQuery(
-    ['feedbacks', expertId, page],
-    () => experts.feedbacks(expertId, { page, pageSize: PAGE_SIZE }),
-    { keepPreviousData: true, refetchOnWindowFocus: false },
-  );
+  const { data, isLoading } = useQuery({
+    queryKey: ['feedbacks', expertId, page],
+    queryFn: () => experts.feedbacks(expertId, { page, pageSize: PAGE_SIZE }),
+    placeholderData: keepPreviousData,
+    refetchOnWindowFocus: false,
+  });
   const gutter = theme?.gutters?.gorizontal?.[theme?.id] ?? 20;
 
   if (isLoading) {

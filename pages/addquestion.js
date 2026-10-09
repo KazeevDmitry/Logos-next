@@ -1,7 +1,7 @@
 import { Button, Col, Form, Input } from 'antd';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { questions } from '../lib/api';
 import { errorMessage } from '../lib/api/client';
 import { withAuth } from '../lib/withAuth';
@@ -34,7 +34,7 @@ function AddQuestion() {
         subbranchId: branch.subbranch_id ?? undefined,
         fileIds: attachments.map((file) => file.id),
       });
-      queryClient.invalidateQueries('questions');
+      queryClient.invalidateQueries({ queryKey: ['questions'] });
       successNotification(
         i18n.t('pages.addquestion.voprosSohranen'),
         i18n.t('pages.addquestion.ozhidayteOtvetaSpetsialistov'),

@@ -3,7 +3,7 @@ import moment from 'moment';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { questions } from '../../lib/api';
 import { createApi, errorMessage } from '../../lib/api/client';
 import PageContainer from '../../src/components/layouts/pageContainer';
@@ -20,11 +20,12 @@ const ANSWERS_REFRESH_MS = 30_000;
 function AnswerForm({ questionId }) {
   const queryClient = useQueryClient();
   const [text, setText] = useState('');
-  const mutation = useMutation((value) => questions.answer(questionId, value), {
+  const mutation = useMutation({
+    mutationFn: (value) => questions.answer(questionId, value),
     onSuccess: () => {
       setText('');
-      queryClient.invalidateQueries(['answers', questionId]);
-      queryClient.invalidateQueries(['question', questionId]);
+      queryClient.invalidateQueries({ queryKey: ['answers', questionId] });
+      queryClient.invalidateQueries({ queryKey: ['question', questionId] });
     },
   });
 
@@ -49,7 +50,7 @@ function AnswerForm({ questionId }) {
       <Button
         type="primary"
         style={{ marginTop: '12px' }}
-        loading={mutation.isLoading}
+        loading={mutation.isPending}
         disabled={!text.trim()}
         onClick={() => mutation.mutate(text)}
       >
@@ -90,13 +91,17 @@ export default function QuestionPage({ serverQuestion, serverAnswers = [] }) {
   const id = Number(useRouter().query.id);
   const pad = `${theme?.gutters?.gorizontal?.[theme?.id] ?? 20}px`;
 
-  const { data: question } = useQuery(['question', id], () => questions.get(id), {
+  const { data: question } = useQuery({
+    queryKey: ['question', id],
+    queryFn: () => questions.get(id),
     initialData: serverQuestion ?? undefined,
     enabled: Number.isFinite(id),
     refetchOnWindowFocus: false,
     staleTime: 30_000,
   });
-  const { data: answers = [] } = useQuery(['answers', id], () => questions.answers(id), {
+  const { data: answers = [] } = useQuery({
+    queryKey: ['answers', id],
+    queryFn: () => questions.answers(id),
     initialData: serverAnswers,
     enabled: Boolean(question),
     refetchInterval: ANSWERS_REFRESH_MS,

@@ -1,7 +1,7 @@
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Form, Input, InputNumber, Spin } from 'antd';
 import { useState } from 'react';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { experts } from '../../lib/api';
 import { errorMessage } from '../../lib/api/client';
 import { withRole } from '../../lib/withAuth';

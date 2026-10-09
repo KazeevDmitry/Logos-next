@@ -3,7 +3,7 @@ import { Col, Result, Row } from 'antd';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import gfm from 'remark-gfm';
 import { news } from '../../lib/api';
 import { createApi } from '../../lib/api/client';
@@ -21,22 +21,22 @@ export default function ArticlePage({ serverArticle, serverSimilar = [] }) {
   const theme = useThemeContext();
   const { slug } = useRouter().query;
 
-  const { data: article } = useQuery(['article', slug], () => news.get(slug), {
+  const { data: article } = useQuery({
+    queryKey: ['article', slug],
+    queryFn: () => news.get(slug),
     initialData: serverArticle ?? undefined,
     enabled: Boolean(slug),
     refetchOnWindowFocus: false,
     staleTime: 30_000,
   });
-  const { data: similar = [] } = useQuery(
-    ['article', slug, 'similar'],
-    () => news.similar(slug, 2),
-    {
-      initialData: serverSimilar,
-      enabled: Boolean(article),
-      refetchOnWindowFocus: false,
-      staleTime: 60_000,
-    },
-  );
+  const { data: similar = [] } = useQuery({
+    queryKey: ['article', slug, 'similar'],
+    queryFn: () => news.similar(slug, 2),
+    initialData: serverSimilar,
+    enabled: Boolean(article),
+    refetchOnWindowFocus: false,
+    staleTime: 60_000,
+  });
 
   if (!article) {
     return (

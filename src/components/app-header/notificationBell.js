@@ -3,7 +3,7 @@ import { Badge, Button, Empty, Popover, Spin } from 'antd';
 import moment from 'moment';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { notifications } from '../../../lib/api';
 
 import i18n from '../../../utils/i18n-init';
@@ -13,10 +13,11 @@ const REFRESH_MS = 60_000;
 function NoticeList({ onNavigate }) {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { data, isLoading } = useQuery(['notifications', 'latest'], () =>
-    notifications.list({ pageSize: SHOWN }),
-  );
-  const refresh = () => queryClient.invalidateQueries('notifications');
+  const { data, isLoading } = useQuery({
+    queryKey: ['notifications', 'latest'],
+    queryFn: () => notifications.list({ pageSize: SHOWN }),
+  });
+  const refresh = () => queryClient.invalidateQueries({ queryKey: ['notifications'] });
 
   const open = (notice) => {
     if (!notice.read) {
@@ -94,7 +95,9 @@ function NoticeList({ onNavigate }) {
 /** The bell in the header: unread count and the latest notices in a dropdown. */
 export default function NotificationBell({ size = 22 }) {
   const [open, setOpen] = useState(false);
-  const { data } = useQuery(['notifications', 'unread'], () => notifications.unreadCount(), {
+  const { data } = useQuery({
+    queryKey: ['notifications', 'unread'],
+    queryFn: () => notifications.unreadCount(),
     refetchInterval: REFRESH_MS,
   });
   const unread = data?.unread ?? 0;

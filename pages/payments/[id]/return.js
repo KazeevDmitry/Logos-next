@@ -2,7 +2,7 @@ import { Button, Result, Spin } from 'antd';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { finance } from '../../../lib/api';
 import { withAuth } from '../../../lib/withAuth';
 import { roubles } from '../../../utils/money';
@@ -21,12 +21,14 @@ function PaymentReturnPage() {
   const queryClient = useQueryClient();
   const id = Number(router.query.id);
   const [waitedTooLong, setWaitedTooLong] = useState(false);
-  const { data: payment, isError } = useQuery(['payment', id], () => finance.payment(id), {
+  const { data: payment, isError } = useQuery({
+    queryKey: ['payment', id],
+    queryFn: () => finance.payment(id),
     enabled: Number.isFinite(id),
     retry: false,
     refetchOnWindowFocus: false,
-    refetchInterval: (current) =>
-      current?.status === 'PENDING' && !waitedTooLong ? POLL_MS : false,
+    refetchInterval: (query) =>
+      query.state.data?.status === 'PENDING' && !waitedTooLong ? POLL_MS : false,
   });
   const status = payment?.status;
 
@@ -38,9 +40,9 @@ function PaymentReturnPage() {
   useEffect(() => {
     if (status === 'SUCCEEDED') {
       // The task moved on and the money is reserved: drop what the cache knew.
-      queryClient.invalidateQueries('task');
-      queryClient.invalidateQueries('tasks');
-      queryClient.invalidateQueries('finance');
+      queryClient.invalidateQueries({ queryKey: ['task'] });
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+      queryClient.invalidateQueries({ queryKey: ['finance'] });
     }
   }, [status, queryClient]);
 

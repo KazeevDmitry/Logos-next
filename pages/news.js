@@ -1,5 +1,5 @@
 import { Col, Empty, Row, Spin } from 'antd';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { news } from '../lib/api';
 import PageContainer from '../src/components/layouts/pageContainer';
 import PageHeader from '../src/components/layouts/pageHeader';
@@ -33,11 +33,13 @@ export default function News({ serverData, categories = [], partnerNews = [] }) 
     ...options,
     serverData,
   });
-  const { data: partner = partnerNews } = useQuery(
-    ['news', 'partner'],
-    () => news.list({ partner: true, pageSize: 5 }).then((res) => res.items),
-    { initialData: partnerNews, staleTime: 60_000, refetchOnWindowFocus: false },
-  );
+  const { data: partner = partnerNews } = useQuery({
+    queryKey: ['news', 'partner'],
+    queryFn: () => news.list({ partner: true, pageSize: 5 }).then((res) => res.items),
+    initialData: partnerNews,
+    staleTime: 60_000,
+    refetchOnWindowFocus: false,
+  });
 
   const gutter = theme?.gutters?.gorizontal?.[theme?.id] ?? 20;
   const pad = `${gutter}px`;

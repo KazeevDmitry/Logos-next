@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { useRef } from 'react';
-import { useQuery } from 'react-query';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
 
 const toInt = (value) => {
   const number = Number.parseInt(value, 10);
@@ -53,8 +53,10 @@ export function useListQuery(name, fetcher, { filters, pageSize = 10, serverData
   const firstKey = useRef(JSON.stringify(key));
   const isFirst = firstKey.current === JSON.stringify(key);
 
-  const result = useQuery(key, () => fetcher(params), {
-    keepPreviousData: true,
+  const result = useQuery({
+    queryKey: key,
+    queryFn: () => fetcher(params),
+    placeholderData: keepPreviousData,
     refetchOnWindowFocus: false,
     initialData: isFirst && serverData ? serverData : undefined,
     // Server-rendered data is fresh; do not refetch it right after hydration.

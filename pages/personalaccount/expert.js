@@ -1,7 +1,7 @@
 import { Alert, Button, Form, Input, InputNumber, Select, Spin } from 'antd';
 import Link from 'next/link';
 import { useState } from 'react';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { experts } from '../../lib/api';
 import { errorMessage } from '../../lib/api/client';
 import { withAuth } from '../../lib/withAuth';

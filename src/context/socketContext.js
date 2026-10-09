@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { io } from 'socket.io-client';
 import { chat, users } from '../../lib/api';
 import { useUserContext } from './userContext';
@@ -42,7 +42,7 @@ export function SocketProvider({ children }) {
     connection.on('ready', () => {
       retried = false;
     });
-    const refreshChats = () => queryClient.invalidateQueries('chat');
+    const refreshChats = () => queryClient.invalidateQueries({ queryKey: ['chat'] });
     connection.on('message:new', refreshChats);
     connection.on('message:read', refreshChats);
     setSocket(connection);
@@ -75,7 +75,9 @@ export function useSocketEvent(event, handler) {
 /** Unread chat messages in total, for the badge in the header. */
 export function useUnreadMessages() {
   const { currentUser } = useUserContext();
-  const { data } = useQuery(['chat', 'unread'], () => chat.unreadCount(), {
+  const { data } = useQuery({
+    queryKey: ['chat', 'unread'],
+    queryFn: () => chat.unreadCount(),
     enabled: Boolean(currentUser),
     // The socket keeps this current; the interval covers a dropped connection.
     refetchInterval: 120_000,

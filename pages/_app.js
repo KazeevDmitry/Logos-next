@@ -17,7 +17,7 @@ import moment from 'moment';
 import 'moment/locale/ru';
 import MainLayout from '../src/components/layouts/mainLayout';
 import Seo from '../src/components/seo';
-import { Hydrate, QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 moment.locale('ru');
 

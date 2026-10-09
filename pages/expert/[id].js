@@ -8,7 +8,7 @@ import { Button, Col, Result, Row, Space, Tabs, Tooltip } from 'antd';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { chat, experts } from '../../lib/api';
 import { createApi } from '../../lib/api/client';
 import Feedbacks from '../../src/components/feedbacks/feedbacks';
@@ -37,29 +37,30 @@ export default function ExpertPage({ serverExpert }) {
   const { currentUser } = useUserContext();
   const expertId = Number(router.query.id);
 
-  const { data: expert } = useQuery(['expert', expertId], () => experts.get(expertId), {
+  const { data: expert } = useQuery({
+    queryKey: ['expert', expertId],
+    queryFn: () => experts.get(expertId),
     initialData: serverExpert ?? undefined,
     enabled: Number.isFinite(expertId),
     refetchOnWindowFocus: false,
     staleTime: 30_000,
   });
   // Only the star distribution is needed here; the list itself is loaded by <Feedbacks>.
-  const { data: reviews } = useQuery(
-    ['feedbacks', expertId, 'summary'],
-    () => experts.feedbacks(expertId, { pageSize: 1 }),
-    { enabled: Boolean(expert), refetchOnWindowFocus: false },
-  );
+  const { data: reviews } = useQuery({
+    queryKey: ['feedbacks', expertId, 'summary'],
+    queryFn: () => experts.feedbacks(expertId, { pageSize: 1 }),
+    enabled: Boolean(expert),
+    refetchOnWindowFocus: false,
+  });
 
   // A chat exists per offer, so writing to an expert is possible once they
   // have responded to one of the visitor's tasks. Newest chat first.
-  const { data: conversations = [] } = useQuery(
-    ['chat', 'conversations'],
-    () => chat.conversations(),
-    {
-      enabled: Boolean(currentUser) && Boolean(expert),
-      refetchOnWindowFocus: false,
-    },
-  );
+  const { data: conversations = [] } = useQuery({
+    queryKey: ['chat', 'conversations'],
+    queryFn: () => chat.conversations(),
+    enabled: Boolean(currentUser) && Boolean(expert),
+    refetchOnWindowFocus: false,
+  });
   const conversation = conversations.find((item) => item.companion.id === expert?.user.id);
   const isSelf = currentUser?.id === expert?.user.id;
 

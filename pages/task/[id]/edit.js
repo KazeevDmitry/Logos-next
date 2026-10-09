@@ -1,6 +1,6 @@
 import { Col, Result, Spin } from 'antd';
 import { useRouter } from 'next/router';
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { tasks } from '../../../lib/api';
 import { withAuth } from '../../../lib/withAuth';
 import PageContainer from '../../../src/components/layouts/pageContainer';
@@ -17,7 +17,9 @@ function EditTask({ user }) {
   const pad = `${theme?.gutters?.gorizontal?.[theme?.id] ?? 20}px`;
 
   // Loaded in the browser as the author, so the documents are included.
-  const { data: task, isLoading } = useQuery(['task', id], () => tasks.get(id), {
+  const { data: task, isLoading } = useQuery({
+    queryKey: ['task', id],
+    queryFn: () => tasks.get(id),
     enabled: Number.isFinite(id),
     refetchOnWindowFocus: false,
   });
@@ -60,8 +62,8 @@ function EditTask({ user }) {
 
   const onSubmit = async (body) => {
     await tasks.update(id, body);
-    queryClient.invalidateQueries(['task', id]);
-    queryClient.invalidateQueries('tasks');
+    queryClient.invalidateQueries({ queryKey: ['task', id] });
+    queryClient.invalidateQueries({ queryKey: ['tasks'] });
     router.push(`/task/${id}`);
   };
 
