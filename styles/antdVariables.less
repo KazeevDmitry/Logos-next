@@ -1,5 +1,7 @@
 @import '~antd/lib/style/themes/default.less';
-@import '~antd/dist/antd.less'; // Import Ant Design styles
+// Only the theme variables: this file is prepended to every .less file, and
+// each antd component brings its own styles (babel-plugin-import, .babelrc.js).
+// Importing antd.less here copied the whole library's CSS into every page.
 
 @input-border-color: #d9d9d9;
 @input-bg: none;

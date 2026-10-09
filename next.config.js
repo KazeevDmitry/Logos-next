@@ -36,7 +36,9 @@ module.exports = withAntdLess({
     ]);
   },
 
-  webpack(config) {
+  webpack(config, { webpack }) {
+    // moment ships ~130 locales; the site needs Russian (English is built in).
+    config.plugins.push(new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /ru/));
     return config;
   },
 });

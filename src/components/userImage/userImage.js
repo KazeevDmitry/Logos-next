@@ -83,7 +83,9 @@ export default function UserImage ({image, online, width, onClick, onMouseEnter,
                                       src={userImage} 
                                       onMouseEnter={onImageMouseEnter}
                                       onMouseLeave={onImageMouseLeave}
-                                      alt="">
+                                      alt=""
+                                      loading="lazy"
+                                      decoding="async">
                                   </img> 
                                   }
   
