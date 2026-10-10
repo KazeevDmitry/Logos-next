@@ -72,6 +72,22 @@ module.exports = {
   // a separate output folder keeps it from overwriting the dev server's files.
   distDir: process.env.NEXT_DIST_DIR ?? '.next',
 
+  // The production image is built with NEXT_STANDALONE=1: the build then
+  // gathers the server and only the packages it loads into .next/standalone,
+  // and the image carries that instead of the whole node_modules.
+  output: process.env.NEXT_STANDALONE ? 'standalone' : undefined,
+
+  // A production build is made from scratch each time (image build, CI), so
+  // the bundler's on-disk cache would only take space next to the result.
+  experimental: {
+    turbopackFileSystemCacheForBuild: false,
+  },
+
+  // Resized pictures are kept on disk; the oldest go once this much is used.
+  images: {
+    maximumDiskCacheSize: 256 * 1024 * 1024,
+  },
+
   i18n: {
     locales: LOCALES,
     defaultLocale: 'ru',
