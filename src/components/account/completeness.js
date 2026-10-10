@@ -76,6 +76,12 @@ export function useCompleteness() {
         href: '/personalaccount/services',
       },
       {
+        // Without a price nobody can write to the expert.
+        text: i18n.t('ui.completeness.ukazatTsenuKonsultatsii'),
+        done: Boolean(expert?.consultationPrice),
+        href: '/personalaccount/services',
+      },
+      {
         text: i18n.t('ui.completeness.dobavitObrazovanie'),
         done: Boolean(expert?.educations.length),
         href: '/personalaccount/education',

@@ -6,6 +6,7 @@ import { chat } from '../../../lib/api';
 import { useSocketEvent } from '../../context/socketContext';
 import FileLink from '../fileLink/fileLink';
 import Composer from './composer';
+import { ChatGate, ConsultationNote } from './consultation';
 
 import i18n from '../../../utils/i18n-init';
 const PAGE = 30;
@@ -65,9 +66,12 @@ const dayLabel = (date) =>
 /**
  * One chat: messages oldest at the top with earlier pages loaded on demand,
  * and the box for writing. Seeing the companion's messages marks them read;
- * own messages show one tick when sent and two when read.
+ * own messages show one tick when sent and two when read. `conversation`
+ * says whether anyone can write: a chat is a paid consultation, so the box
+ * gives way to the reason and the pay button while it is locked or closed.
+ * `onChanged` is called when the chat's state may have changed.
  */
-export default function Thread({ conversationId, viewerId, onRead }) {
+export default function Thread({ conversationId, conversation, viewerId, onRead, onChanged }) {
   const [messages, setMessages] = useState([]);
   const [hasMore, setHasMore] = useState(false);
   const [state, setState] = useState('loading'); // loading | ready | error
@@ -204,7 +208,22 @@ export default function Thread({ conversationId, viewerId, onRead }) {
           );
         })}
       </div>
-      {state === 'ready' && <Composer conversationId={conversationId} onSent={append} />}
+      {state === 'ready' &&
+        (conversation.status === 'OPEN' ? (
+          <>
+            <ConsultationNote conversation={conversation} />
+            <Composer
+              conversationId={conversationId}
+              onSent={(message) => {
+                append(message);
+                // The expert's first reply ends the wait; the list knows the new state.
+                onChanged();
+              }}
+            />
+          </>
+        ) : (
+          <ChatGate conversation={conversation} />
+        ))}
     </>
   );
 }

@@ -14,6 +14,7 @@ import { chat, tasks } from '../../lib/api';
 import { createApi } from '../../lib/api/client';
 import FileLink from '../../src/components/fileLink/fileLink';
 import JsonLd from '../../src/components/jsonLd';
+import { useConsultationPayment } from '../../src/components/chat/consultation';
 import PageContainer from '../../src/components/layouts/pageContainer';
 import PageHeader from '../../src/components/layouts/pageHeader';
 import { AuthorLine, BranchPills } from '../../src/components/questionCard/questionCard';
@@ -33,6 +34,7 @@ import { useUserContext } from '../../src/context/userContext';
 import { graph, taskBreadcrumbs } from '../../src/seo/schema';
 
 import i18n from '../../utils/i18n-init';
+import { roubles } from '../../utils/money';
 const block = { background: 'white', borderRadius: '10px' };
 
 export default function TaskPage({ serverTask }) {
@@ -63,7 +65,9 @@ export default function TaskPage({ serverTask }) {
     refetchOnWindowFocus: false,
   });
 
-  // Every offer has a chat between the author and the expert who made it.
+  // Every offer has a chat between the author and the expert who made it. It
+  // is a paid consultation: locked until the author pays what the expert asks.
+  const consultation = useConsultationPayment();
   const { data: conversations = [] } = useQuery({
     queryKey: ['chat', 'conversations'],
     queryFn: () => chat.conversations(),
@@ -72,7 +76,7 @@ export default function TaskPage({ serverTask }) {
   });
   const chatWith = (userId) =>
     conversations.find(
-      (conversation) => conversation.task.id === id && conversation.companion.id === userId,
+      (conversation) => conversation.task?.id === id && conversation.companion.id === userId,
     );
 
   const refresh = () => {
@@ -198,15 +202,28 @@ export default function TaskPage({ serverTask }) {
                             {i18n.t('pages.taskId.vybratIspolnitelem')}
                           </Button>
                         )}
-                        {conversation && (
-                          <Link href={`/messages?chat=${conversation.id}`}>
-                            <Button icon={<MessageOutlined />}>
-                              {isAuthor
-                                ? i18n.t('pages.taskId.napisatEkspertu')
-                                : i18n.t('pages.taskId.napisatZakazchiku')}
+                        {conversation &&
+                          (isAuthor &&
+                          conversation.status !== 'OPEN' &&
+                          conversation.consultationPrice !== null ? (
+                            <Button
+                              icon={<MessageOutlined />}
+                              loading={consultation.busy}
+                              onClick={() => consultation.pay(conversation.id)}
+                            >
+                              {i18n.t('pages.taskId.napisatEkspertuZa', {
+                                price: roubles(conversation.consultationPrice),
+                              })}
                             </Button>
-                          </Link>
-                        )}
+                          ) : (
+                            <Link href={`/messages?chat=${conversation.id}`}>
+                              <Button icon={<MessageOutlined />}>
+                                {isAuthor
+                                  ? i18n.t('pages.taskId.napisatEkspertu')
+                                  : i18n.t('pages.taskId.napisatZakazchiku')}
+                              </Button>
+                            </Link>
+                          ))}
                         {!isAuthor && task.status === 'OPEN' && (
                           <Button onClick={withdraw}>{i18n.t('pages.taskId.otozvatOtklik')}</Button>
                         )}

@@ -72,10 +72,14 @@ function MockPaymentPage() {
       <div style={{ fontSize: '32px', color: '#0066FF', margin: '24px 0 4px' }}>
         {roubles(payment.amount)}
       </div>
-      <p>
-        {i18n.t('pages.paymentsMockId.oplataZadachi')}{' '}
-        <Link href={`/task/${payment.taskId}`}>№ {payment.taskId}</Link>
-      </p>
+      {payment.conversationId ? (
+        <p>{i18n.t('pages.paymentsMockId.oplataKonsultatsii')}</p>
+      ) : (
+        <p>
+          {i18n.t('pages.paymentsMockId.oplataZadachi')}{' '}
+          <Link href={`/task/${payment.taskId}`}>№ {payment.taskId}</Link>
+        </p>
+      )}
       {payment.status === 'PENDING' ? (
         <div style={{ display: 'grid', gap: '10px', marginTop: '20px' }}>
           <Button

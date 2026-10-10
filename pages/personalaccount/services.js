@@ -14,6 +14,67 @@ import { useThemeContext } from '../../src/context/themeContext';
 import i18n from '../../utils/i18n-init';
 const MAX_SERVICES = 50;
 
+/**
+ * What a customer pays to start a chat with the expert. Saved apart from the
+ * price list; an empty field means the expert takes no consultations.
+ */
+function ConsultationPrice({ expert }) {
+  const theme = useThemeContext();
+  const queryClient = useQueryClient();
+  const { successNotification } = useNotifyContext();
+  const [price, setPrice] = useState(expert.consultationPrice);
+  const [error, setError] = useState('');
+  const [busy, setBusy] = useState(false);
+
+  const save = async () => {
+    setBusy(true);
+    setError('');
+    try {
+      const updated = await experts.update({ consultationPrice: price ?? null });
+      queryClient.setQueryData(['my-expert'], updated);
+      successNotification(i18n.t('pages.personalaccountServices.konsultatsiyaSohranena'), '');
+    } catch (e) {
+      setError(errorMessage(e));
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <section style={{ maxWidth: '760px', marginBottom: '36px' }}>
+      <h2 style={{ fontSize: '20px', fontWeight: 500 }}>
+        {i18n.t('pages.personalaccountServices.tsenaKonsultatsii')}
+      </h2>
+      <p style={{ color: '#5E6674' }}>
+        {i18n.t('pages.personalaccountServices.tsenaKonsultatsiiPoyasnenie')}
+      </p>
+      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <InputNumber
+          size={theme?.size}
+          min={1}
+          max={1000000}
+          precision={0}
+          suffix="₽"
+          value={price}
+          onChange={setPrice}
+          placeholder={i18n.t('pages.personalaccountServices.tsena')}
+          aria-label={i18n.t('pages.personalaccountServices.tsenaKonsultatsii')}
+          style={{ width: '200px' }}
+        />
+        <Button type="primary" size={theme?.size} loading={busy} onClick={save}>
+          {i18n.t('pages.personalaccountServices.sohranit')}
+        </Button>
+      </div>
+      {price === null && (
+        <p style={{ color: '#5E6674', marginTop: '8px' }}>
+          {i18n.t('pages.personalaccountServices.bezTsenyNeNapishut')}
+        </p>
+      )}
+      <FormError>{error}</FormError>
+    </section>
+  );
+}
+
 /** The expert's price list. The whole list is saved at once, in the order shown. */
 function ServicesPage() {
   const theme = useThemeContext();
@@ -44,96 +105,105 @@ function ServicesPage() {
       {isLoading || !expert ? (
         <Spin />
       ) : (
-        <Form
-          onFinish={save}
-          style={{ maxWidth: '760px' }}
-          initialValues={{
-            services: expert.services.map(({ title, price }) => ({ title, price })),
-          }}
-        >
-          <p style={{ color: '#5E6674' }}>
-            {i18n.t('pages.personalaccountServices.chtoVyDelaeteISkolko')}
-          </p>
-          <Form.List name="services">
-            {(fields, { add, remove }) => (
-              <>
-                {fields.map(({ key, name }, index) => (
-                  <div key={key} style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
-                    <Form.Item
-                      name={[name, 'title']}
-                      style={{ flex: 1, minWidth: 0 }}
-                      rules={[
-                        {
-                          required: true,
-                          whitespace: true,
-                          message: i18n.t('pages.personalaccountServices.nazoviteUslugu'),
-                        },
-                      ]}
+        <>
+          <ConsultationPrice expert={expert} />
+          <h2 style={{ fontSize: '20px', fontWeight: 500 }}>
+            {i18n.t('pages.personalaccountServices.uslugiITseny')}
+          </h2>
+          <Form
+            onFinish={save}
+            style={{ maxWidth: '760px' }}
+            initialValues={{
+              services: expert.services.map(({ title, price }) => ({ title, price })),
+            }}
+          >
+            <p style={{ color: '#5E6674' }}>
+              {i18n.t('pages.personalaccountServices.chtoVyDelaeteISkolko')}
+            </p>
+            <Form.List name="services">
+              {(fields, { add, remove }) => (
+                <>
+                  {fields.map(({ key, name }, index) => (
+                    <div
+                      key={key}
+                      style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}
                     >
-                      <Input
+                      <Form.Item
+                        name={[name, 'title']}
+                        style={{ flex: 1, minWidth: 0 }}
+                        rules={[
+                          {
+                            required: true,
+                            whitespace: true,
+                            message: i18n.t('pages.personalaccountServices.nazoviteUslugu'),
+                          },
+                        ]}
+                      >
+                        <Input
+                          size={theme?.size}
+                          maxLength={200}
+                          placeholder={i18n.t(
+                            'pages.personalaccountServices.naprimerSostavlenieIskovogoZayavleniya',
+                          )}
+                          aria-label={i18n.t('pages.personalaccountServices.usluga', {
+                            v0: index + 1,
+                          })}
+                        />
+                      </Form.Item>
+                      <Form.Item
+                        name={[name, 'price']}
+                        rules={[
+                          {
+                            required: true,
+                            message: i18n.t('pages.personalaccountServices.ukazhiteTsenu'),
+                          },
+                        ]}
+                      >
+                        <InputNumber
+                          size={theme?.size}
+                          min={0}
+                          max={100000000}
+                          precision={0}
+                          suffix="₽"
+                          placeholder={i18n.t('pages.personalaccountServices.tsena')}
+                          aria-label={i18n.t('pages.personalaccountServices.tsenaUslugi', {
+                            v0: index + 1,
+                          })}
+                          style={{ width: theme.isDesktop ? '180px' : '130px' }}
+                        />
+                      </Form.Item>
+                      <Button
                         size={theme?.size}
-                        maxLength={200}
-                        placeholder={i18n.t(
-                          'pages.personalaccountServices.naprimerSostavlenieIskovogoZayavleniya',
-                        )}
-                        aria-label={i18n.t('pages.personalaccountServices.usluga', {
+                        icon={<DeleteOutlined />}
+                        aria-label={i18n.t('pages.personalaccountServices.udalitUslugu', {
                           v0: index + 1,
                         })}
+                        onClick={() => remove(name)}
                       />
-                    </Form.Item>
-                    <Form.Item
-                      name={[name, 'price']}
-                      rules={[
-                        {
-                          required: true,
-                          message: i18n.t('pages.personalaccountServices.ukazhiteTsenu'),
-                        },
-                      ]}
-                    >
-                      <InputNumber
-                        size={theme?.size}
-                        min={0}
-                        max={100000000}
-                        precision={0}
-                        suffix="₽"
-                        placeholder={i18n.t('pages.personalaccountServices.tsena')}
-                        aria-label={i18n.t('pages.personalaccountServices.tsenaUslugi', {
-                          v0: index + 1,
-                        })}
-                        style={{ width: theme.isDesktop ? '180px' : '130px' }}
-                      />
-                    </Form.Item>
+                    </div>
+                  ))}
+                  {fields.length === 0 && (
+                    <p>{i18n.t('pages.personalaccountServices.uslugPokaNet')}</p>
+                  )}
+                  {fields.length < MAX_SERVICES && (
                     <Button
-                      size={theme?.size}
-                      icon={<DeleteOutlined />}
-                      aria-label={i18n.t('pages.personalaccountServices.udalitUslugu', {
-                        v0: index + 1,
-                      })}
-                      onClick={() => remove(name)}
-                    />
-                  </div>
-                ))}
-                {fields.length === 0 && (
-                  <p>{i18n.t('pages.personalaccountServices.uslugPokaNet')}</p>
-                )}
-                {fields.length < MAX_SERVICES && (
-                  <Button
-                    icon={<PlusOutlined />}
-                    onClick={() => add({ title: '', price: undefined })}
-                  >
-                    {i18n.t('pages.personalaccountServices.dobavitUslugu')}
-                  </Button>
-                )}
-              </>
-            )}
-          </Form.List>
-          <FormError>{error}</FormError>
-          <div style={{ marginTop: '24px' }}>
-            <Button type="primary" htmlType="submit" size={theme?.size} loading={busy}>
-              {i18n.t('pages.personalaccountServices.sohranit')}
-            </Button>
-          </div>
-        </Form>
+                      icon={<PlusOutlined />}
+                      onClick={() => add({ title: '', price: undefined })}
+                    >
+                      {i18n.t('pages.personalaccountServices.dobavitUslugu')}
+                    </Button>
+                  )}
+                </>
+              )}
+            </Form.List>
+            <FormError>{error}</FormError>
+            <div style={{ marginTop: '24px' }}>
+              <Button type="primary" htmlType="submit" size={theme?.size} loading={busy}>
+                {i18n.t('pages.personalaccountServices.sohranit')}
+              </Button>
+            </div>
+          </Form>
+        </>
       )}
     </AccountLayout>
   );

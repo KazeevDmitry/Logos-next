@@ -14,6 +14,7 @@ import { createApi } from '../../lib/api/client';
 import Feedbacks from '../../src/components/feedbacks/feedbacks';
 import SideFeedbacks from '../../src/components/feedbacks/sideFeedbacks';
 import JsonLd from '../../src/components/jsonLd';
+import { useConsultationPayment } from '../../src/components/chat/consultation';
 import PageContainer from '../../src/components/layouts/pageContainer';
 import PageHeader from '../../src/components/layouts/pageHeader';
 import Seo from '../../src/components/seo';
@@ -24,6 +25,7 @@ import { expertBreadcrumbs, expertProfile, graph } from '../../src/seo/schema';
 import styles from './expertInfo.module.scss';
 
 import i18n from '../../utils/i18n-init';
+import { roubles } from '../../utils/money';
 const plural = (n, one, few, many) => {
   const mod10 = n % 10;
   const mod100 = n % 100;
@@ -63,7 +65,11 @@ export default function ExpertPage({ serverExpert }) {
     enabled: Boolean(currentUser) && Boolean(expert),
     refetchOnWindowFocus: false,
   });
-  const conversation = conversations.find((item) => item.companion.id === expert?.user.id);
+  // A chat with this expert that is open (paid for) needs no payment to go on.
+  const conversation = conversations.find(
+    (item) => item.companion.id === expert?.user.id && item.status === 'OPEN',
+  );
+  const consultation = useConsultationPayment();
   const isSelf = currentUser?.id === expert?.user.id;
 
   if (!expert) {
@@ -173,19 +179,50 @@ export default function ExpertPage({ serverExpert }) {
                 {conversation ? (
                   <Link href={`/messages?chat=${conversation.id}`}>
                     <Button type="primary" size={theme?.size} style={{ width: '100%' }}>
-                      {i18n.t('pages.expertId.napisatEkspertu')}
+                      {i18n.t('pages.expertId.pereytiVChat')}
                     </Button>
                   </Link>
-                ) : (
+                ) : expert.consultationPrice === null ? (
                   <>
-                    <p style={{ color: '#5E6674' }}>
-                      {i18n.t('pages.expertId.chatSEkspertomOtkroetsyaKogda')}
-                    </p>
+                    <p style={{ color: '#5E6674' }}>{i18n.t('pages.expertId.neKonsultiruet')}</p>
                     <Link href="/task/new">
                       <Button type="primary" size={theme?.size} style={{ width: '100%' }}>
                         {i18n.t('pages.expertId.sozdatZadachu')}
                       </Button>
                     </Link>
+                  </>
+                ) : (
+                  <>
+                    {/* A chat with an expert is a paid consultation; visitors sign in first. */}
+                    {currentUser ? (
+                      <Button
+                        type="primary"
+                        size={theme?.size}
+                        style={{ width: '100%' }}
+                        loading={consultation.busy}
+                        onClick={() => consultation.start(expert.id)}
+                      >
+                        {i18n.t('pages.expertId.napisatEkspertuZa', {
+                          price: roubles(expert.consultationPrice),
+                        })}
+                      </Button>
+                    ) : (
+                      <Link href={`/login?next=/expert/${expert.id}`}>
+                        <Button type="primary" size={theme?.size} style={{ width: '100%' }}>
+                          {i18n.t('pages.expertId.napisatEkspertuZa', {
+                            price: roubles(expert.consultationPrice),
+                          })}
+                        </Button>
+                      </Link>
+                    )}
+                    <p style={{ color: '#5E6674', margin: '10px 0 0', fontSize: '13px' }}>
+                      {i18n.t('pages.expertId.oplataOtkryvaetChat')}
+                    </p>
+                    {consultation.error && (
+                      <p role="alert" style={{ color: '#D4380D', margin: '8px 0 0' }}>
+                        {consultation.error}
+                      </p>
+                    )}
                   </>
                 )}
               </div>

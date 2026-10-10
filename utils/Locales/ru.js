@@ -373,6 +373,7 @@ export default {
   },
   finance: {
     types: {
+      consultationReleased: 'Оплата консультации',
       taskFunded: 'Оплата задачи (деньги зарезервированы)',
       taskReleased: 'Оплата за выполненную задачу',
       taskRefunded: 'Возврат за задачу',
@@ -453,12 +454,16 @@ export default {
         'Ссылка уже использована или устарела. Новую можно запросить в личном кабинете.',
     },
     expertId: {
+      napisatEkspertuZa: 'Написать эксперту — {{price}}',
+      pereytiVChat: 'Перейти в чат',
+      oplataOtkryvaetChat:
+        'Оплата открывает чат с экспертом. Если эксперт не ответит в срок, деньги вернутся.',
+      neKonsultiruet:
+        'Эксперт сейчас не принимает консультации. Создайте задачу: эксперты откликнутся сами.',
       ekspertNeNayden: 'Эксперт не найден',
       dokumentyProvereny: 'Документы проверены',
       reyting: 'Рейтинг',
       napisatEkspertu: 'Написать эксперту',
-      chatSEkspertomOtkroetsyaKogda:
-        'Чат с экспертом откроется, когда он откликнется на вашу задачу.',
       sozdatZadachu: 'Создать задачу',
       spetsializatsiya: 'Специализация',
       neUkazana: 'Не указана',
@@ -519,7 +524,7 @@ export default {
     messages: {
       soobscheniya: 'Сообщения',
       dialogovPokaNetChatOtkryvaetsya:
-        'Диалогов пока нет. Чат открывается, когда эксперт откликается на задачу.',
+        'Диалогов пока нет. Чат с экспертом открывается после оплаты консультации: с его страницы или из отклика на вашу задачу.',
       kSpiskuDialogov: 'К списку диалогов',
       dialogNeNayden: 'Диалог не найден',
       vyberiteDialogSleva: 'Выберите диалог слева',
@@ -548,6 +553,10 @@ export default {
       novostiPartnerov: 'Новости партнеров',
     },
     paymentsIdReturn: {
+      pereytiVChat: 'Перейти в чат',
+      chatOtkryt:
+        'Чат открыт. Эксперт получит деньги после первого ответа; если он не ответит в срок, оплата вернётся.',
+      dengiNeSpisanyChat: 'Деньги не списаны. Вернитесь в чат и попробуйте оплатить ещё раз.',
       vernutsyaKZadache: 'Вернуться к задаче',
       platezhNeNayden: 'Платёж не найден',
       proveryaemOplatu: 'Проверяем оплату',
@@ -563,6 +572,7 @@ export default {
         'Мы пришлём уведомление, когда банк подтвердит оплату. Статус задачи обновится сам.',
     },
     paymentsMockId: {
+      oplataKonsultatsii: 'Оплата консультации эксперта',
       oplata: 'Оплата',
       platezhNeNayden: 'Платёж не найден',
       testovayaOplata: 'Тестовая оплата',
@@ -667,6 +677,11 @@ export default {
       sohranit: 'Сохранить',
     },
     personalaccountServices: {
+      tsenaKonsultatsii: 'Цена консультации',
+      tsenaKonsultatsiiPoyasnenie:
+        'Столько заказчик платит, чтобы начать с вами чат: с вашей страницы или после вашего отклика на задачу. Деньги приходят на ваш баланс после вашего первого ответа, за вычетом комиссии сервиса. Если вы не ответите в срок, оплата вернётся заказчику.',
+      bezTsenyNeNapishut: 'Цена не указана: заказчики не смогут вам написать.',
+      konsultatsiyaSohranena: 'Цена консультации сохранена',
       uslugiSohraneny: 'Услуги сохранены',
       uslugiITseny: 'Услуги и цены',
       chtoVyDelaeteISkolko:
@@ -786,6 +801,7 @@ export default {
       sohranit: 'Сохранить',
     },
     taskId: {
+      napisatEkspertuZa: 'Написать — {{price}}',
       zadachaNeNaydena: 'Задача не найдена',
       otklikOtpravlen: 'Отклик отправлен',
       zakazchikUviditEgoISmozhet: 'Заказчик увидит его и сможет выбрать вас исполнителем.',
@@ -840,6 +856,7 @@ export default {
       zadatVopros: 'Задать вопрос',
     },
     completeness: {
+      ukazatTsenuKonsultatsii: 'Указать цену консультации',
       podtverditEMail: 'Подтвердить e-mail',
       ukazatFamiliyu: 'Указать фамилию',
       dobavitFotografiyu: 'Добавить фотографию',
@@ -881,6 +898,31 @@ export default {
     },
     branchSelect: {
       nachniteVvodDlyaPoiska: 'Начните ввод для поиска',
+    },
+    consultation: {
+      pay: 'Оплатить консультацию — {{price}}',
+      payAgain: 'Начать новую консультацию — {{price}}',
+      payFailed: 'Не удалось начать оплату. Попробуйте ещё раз.',
+      lockedCustomer:
+        'Чат откроется после оплаты консультации. Если эксперт не ответит в срок, деньги вернутся.',
+      lockedExpert: 'Заказчик ещё не оплатил консультацию. Писать можно будет после оплаты.',
+      closedCustomer:
+        'Консультация завершена. Переписку можно читать; чтобы продолжить, оплатите новую консультацию.',
+      closedExpert: 'Консультация завершена. Переписку можно читать.',
+      noConsultations: 'Эксперт сейчас не принимает консультации.',
+      awaitingCustomer:
+        'Консультация оплачена ({{price}}). Эксперт ответит до {{date}}; если ответа не будет, деньги вернутся.',
+      awaitingExpert:
+        'Заказчик оплатил консультацию ({{price}}). Ответьте до {{date}}, чтобы получить оплату; иначе деньги вернутся заказчику.',
+      finish: 'Завершить',
+      finishConfirm:
+        'Завершить консультацию? Чат закроется, когда это подтвердит и вторая сторона.',
+      finishedByMe: 'Вы завершили консультацию. Чат закроется, когда это подтвердит собеседник.',
+      finishedByCompanion:
+        'Собеседник завершил консультацию. Нажмите «Завершить», чтобы закрыть чат.',
+      consultation: 'Консультация',
+      statusLocked: 'не оплачен',
+      statusClosed: 'завершён',
     },
     composer: {
       slishkomMnogoSoobscheniyPodryadPodozhdite:

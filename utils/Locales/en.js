@@ -374,6 +374,7 @@ export default {
   },
   finance: {
     types: {
+      consultationReleased: 'Payment for a consultation',
       taskFunded: 'Task payment (money held)',
       taskReleased: 'Payment for a completed task',
       taskRefunded: 'Refund for a task',
@@ -455,11 +456,16 @@ export default {
         'The link has been used or has expired. You can request a new one in your account.',
     },
     expertId: {
+      napisatEkspertuZa: 'Message the expert — {{price}}',
+      pereytiVChat: 'Open the chat',
+      oplataOtkryvaetChat:
+        'The payment opens a chat with the expert. If the expert does not reply in time, the money is returned.',
+      neKonsultiruet:
+        'The expert takes no consultations at the moment. Create a task and experts will respond.',
       ekspertNeNayden: 'Expert not found',
       dokumentyProvereny: 'Documents verified',
       reyting: 'Rating',
       napisatEkspertu: 'Message the expert',
-      chatSEkspertomOtkroetsyaKogda: 'A chat with the expert opens once they respond to your task.',
       sozdatZadachu: 'Create a task',
       spetsializatsiya: 'Specialization',
       neUkazana: 'Not specified',
@@ -520,7 +526,7 @@ export default {
     messages: {
       soobscheniya: 'Messages',
       dialogovPokaNetChatOtkryvaetsya:
-        'No chats yet. A chat opens when an expert responds to a task.',
+        "No chats yet. A chat with an expert opens once the consultation is paid for: from the expert's page or from a response to your task.",
       kSpiskuDialogov: 'Back to chats',
       dialogNeNayden: 'Chat not found',
       vyberiteDialogSleva: 'Choose a chat on the left',
@@ -549,6 +555,10 @@ export default {
       novostiPartnerov: 'Partner news',
     },
     paymentsIdReturn: {
+      pereytiVChat: 'Open the chat',
+      chatOtkryt:
+        'The chat is open. The expert is paid after the first reply; if there is none in time, the payment is returned.',
+      dengiNeSpisanyChat: 'No money was taken. Go back to the chat and try to pay again.',
       vernutsyaKZadache: 'Back to the task',
       platezhNeNayden: 'Payment not found',
       proveryaemOplatu: 'Checking the payment',
@@ -563,6 +573,7 @@ export default {
         'We will notify you when the bank confirms the payment. The task status will update by itself.',
     },
     paymentsMockId: {
+      oplataKonsultatsii: 'Payment for a consultation with an expert',
       oplata: 'Payment',
       platezhNeNayden: 'Payment not found',
       testovayaOplata: 'Test payment',
@@ -666,6 +677,11 @@ export default {
       sohranit: 'Save',
     },
     personalaccountServices: {
+      tsenaKonsultatsii: 'Consultation price',
+      tsenaKonsultatsiiPoyasnenie:
+        'What a customer pays to start a chat with you, from your page or after you respond to a task. The money reaches your balance after your first reply, less the service fee. If you do not reply in time, the payment returns to the customer.',
+      bezTsenyNeNapishut: 'No price is set: customers cannot write to you.',
+      konsultatsiyaSohranena: 'The consultation price is saved',
       uslugiSohraneny: 'Services saved',
       uslugiITseny: 'Services and prices',
       chtoVyDelaeteISkolko:
@@ -785,6 +801,7 @@ export default {
       sohranit: 'Save',
     },
     taskId: {
+      napisatEkspertuZa: 'Message — {{price}}',
       zadachaNeNaydena: 'Task not found',
       otklikOtpravlen: 'Offer sent',
       zakazchikUviditEgoISmozhet: 'The customer will see it and can choose you as the performer.',
@@ -839,6 +856,7 @@ export default {
       zadatVopros: 'Ask a question',
     },
     completeness: {
+      ukazatTsenuKonsultatsii: 'Set the consultation price',
       podtverditEMail: 'Confirm your e-mail',
       ukazatFamiliyu: 'Add your last name',
       dobavitFotografiyu: 'Add a photo',
@@ -880,6 +898,32 @@ export default {
     },
     branchSelect: {
       nachniteVvodDlyaPoiska: 'Start typing to search',
+    },
+    consultation: {
+      pay: 'Pay for the consultation — {{price}}',
+      payAgain: 'Start a new consultation — {{price}}',
+      payFailed: 'The payment could not be started. Please try again.',
+      lockedCustomer:
+        'The chat opens once the consultation is paid for. If the expert does not reply in time, the money is returned.',
+      lockedExpert:
+        'The customer has not paid for the consultation yet. You can write once it is paid.',
+      closedCustomer:
+        'The consultation is over. You can read the conversation; to go on, pay for a new consultation.',
+      closedExpert: 'The consultation is over. You can read the conversation.',
+      noConsultations: 'The expert takes no consultations at the moment.',
+      awaitingCustomer:
+        'The consultation is paid for ({{price}}). The expert will reply by {{date}}; otherwise the money is returned.',
+      awaitingExpert:
+        'The customer paid for the consultation ({{price}}). Reply by {{date}} to be paid; otherwise the money returns to the customer.',
+      finish: 'Finish',
+      finishConfirm: 'Finish the consultation? The chat closes once the other side confirms too.',
+      finishedByMe:
+        'You have finished the consultation. The chat closes once the other side confirms.',
+      finishedByCompanion:
+        'The other side has finished the consultation. Press "Finish" to close the chat.',
+      consultation: 'Consultation',
+      statusLocked: 'not paid',
+      statusClosed: 'finished',
     },
     composer: {
       slishkomMnogoSoobscheniyPodryadPodozhdite: 'Too many messages in a row. Wait a minute.',

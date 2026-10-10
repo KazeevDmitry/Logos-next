@@ -34,10 +34,16 @@ export default {
   'Only the author of the task can review the performer':
     'Оставить отзыв может только автор задачи',
   'Only the author pays for the task': 'Оплатить задачу может только её автор',
+  'Only the customer pays for a consultation': 'Консультацию оплачивает заказчик',
   'Payment not found': 'Платёж не найден',
   'Payout not found': 'Заявка на вывод не найдена',
   'Question not found': 'Вопрос не найден',
   'Session expired': 'Сессия истекла. Войдите снова',
+  'The chat is already open': 'Чат уже открыт',
+  'The chat is closed': 'Консультация завершена: чат закрыт',
+  'The chat is not open': 'Чат не открыт',
+  'The chat opens after the consultation is paid for': 'Чат откроется после оплаты консультации',
+  'The expert does not take consultations': 'Эксперт сейчас не принимает консультации',
   'Session not found': 'Сессия не найдена. Войдите снова',
   'Session was revoked': 'Сессия завершена. Войдите снова',
   'Set a budget or mark the price as negotiable':

@@ -43,13 +43,23 @@ function PaymentReturnPage() {
       queryClient.invalidateQueries({ queryKey: ['task'] });
       queryClient.invalidateQueries({ queryKey: ['tasks'] });
       queryClient.invalidateQueries({ queryKey: ['finance'] });
+      queryClient.invalidateQueries({ queryKey: ['chat'] });
     }
   }, [status, queryClient]);
 
+  // A payment is for a task, or for a consultation: a chat with an expert.
+  const forChat = Boolean(payment?.conversationId);
   const toTask = payment && (
-    <Link href={`/task/${payment.taskId}`} key="task">
+    <Link
+      href={forChat ? `/messages?chat=${payment.conversationId}` : `/task/${payment.taskId}`}
+      key="back"
+    >
       <Button type="primary" size="large">
-        {i18n.t('pages.paymentsIdReturn.vernutsyaKZadache')}
+        {i18n.t(
+          forChat
+            ? 'pages.paymentsIdReturn.pereytiVChat'
+            : 'pages.paymentsIdReturn.vernutsyaKZadache',
+        )}
       </Button>
     </Link>
   );
@@ -79,7 +89,11 @@ function PaymentReturnPage() {
         style={{ marginTop: '120px' }}
         status="success"
         title={i18n.t('pages.paymentsIdReturn.oplataProshla', { v0: roubles(payment.amount) })}
-        subTitle={i18n.t('pages.paymentsIdReturn.dengiZarezervirovanyIspolnitelPoluchitIh')}
+        subTitle={i18n.t(
+          forChat
+            ? 'pages.paymentsIdReturn.chatOtkryt'
+            : 'pages.paymentsIdReturn.dengiZarezervirovanyIspolnitelPoluchitIh',
+        )}
         extra={toTask}
       />
     );
@@ -90,7 +104,11 @@ function PaymentReturnPage() {
         style={{ marginTop: '120px' }}
         status="error"
         title={i18n.t('pages.paymentsIdReturn.platezhNeProshel')}
-        subTitle={i18n.t('pages.paymentsIdReturn.dengiNeSpisanyVernitesK')}
+        subTitle={i18n.t(
+          forChat
+            ? 'pages.paymentsIdReturn.dengiNeSpisanyChat'
+            : 'pages.paymentsIdReturn.dengiNeSpisanyVernitesK',
+        )}
         extra={toTask}
       />
     );

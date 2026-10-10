@@ -18,6 +18,7 @@ const TYPES = {
   'task.released': 'taskReleased',
   'task.refunded': 'taskRefunded',
   'payment.refunded': 'paymentRefunded',
+  'consultation.released': 'consultationReleased',
   'payout.requested': 'payoutRequested',
   'payout.paid': 'payoutPaid',
   'payout.rejected': 'payoutRejected',

@@ -55,7 +55,17 @@ export default function ConversationList({ conversations, activeId, viewerId, on
                   )}
                 </span>
                 <span style={{ ...ellipsis, display: 'block', color: '#0066FF', fontSize: '13px' }}>
-                  {conversation.task.title}
+                  {conversation.task?.title ?? i18n.t('ui.consultation.consultation')}
+                  {conversation.status !== 'OPEN' && (
+                    <span style={{ color: '#9AA1AD' }}>
+                      {' · '}
+                      {i18n.t(
+                        conversation.status === 'CLOSED'
+                          ? 'ui.consultation.statusClosed'
+                          : 'ui.consultation.statusLocked',
+                      )}
+                    </span>
+                  )}
                 </span>
                 <span
                   style={{
