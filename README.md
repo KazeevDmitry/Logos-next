@@ -28,7 +28,7 @@ If port 3000 is taken: `WEB_PORT=3100 make up` (the same variable works for the 
 | `make format`  | Prettier, write changes                                          |
 | `make locales` | Check that `ru.js` and `en.js` have the same keys                |
 | `make build`   | Production build into `.next-check`, safe next to the dev server |
-| `make clean`   | Stop the dev server and delete the build caches (free disk space) |
+| `make clean`   | Stop the dev server and delete the build caches                  |
 | `make e2e`     | Browser tests of the whole product in a throwaway stack          |
 | `make install` | Reinstall dependencies after `package.json` changes              |
 | `make shell`   | Shell inside the container                                       |
