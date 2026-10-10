@@ -76,6 +76,10 @@ A chat with an expert is a paid consultation. "Написать эксперту
 
 Deployment is described in the API repository: `../Logos-api/docs/deploy-yandex-cloud.md`.
 
+The production image (`Dockerfile`, target `prod`) holds Next's standalone output: the server and the packages it loads, without the rest of `node_modules`, the sources or build caches. The Dockerfile turns this on with `NEXT_STANDALONE=1`; a plain `yarn build` gives the usual `.next` for `next start`, which is what the install without Docker uses.
+
+Nothing on disk grows without limit. A production build keeps no bundler cache. The cache of resized pictures (`.next/cache/images`) is capped at 256 MB (`images.maximumDiskCacheSize` in `next.config.js`). In development the `.next` volume is emptied when the container starts once it is over 1 GB; `make clean` does it at any time.
+
 ## Checks
 
 CI (`.github/workflows/ci.yml`) runs lint, the format check, the locale check and a production build on every push and pull request. The browser tests need the API repository next to this one and start once the repository variable `API_REPOSITORY` is set.
