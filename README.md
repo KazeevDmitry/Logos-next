@@ -67,6 +67,12 @@ Public pages also describe themselves in schema.org terms (JSON-LD in the head):
 
 Addresses in the canonical link, the sharing tags and the structured data are absolute only when `NEXT_PUBLIC_SITE_URL` is set, so set it for anything a search engine will see.
 
+## Payments and chats
+
+A chat with an expert is a paid consultation. "Написать эксперту — … ₽" on an expert's page, and the same button next to an expert's response to the customer's task, start a payment (`useConsultationPayment` in `src/components/chat/consultation.js`) and send the customer to the payment page: Robokassa's in production, `pages/payments/mock/[id].js` in development. The customer returns to `pages/payments/[id]/return.js`, which waits until the API knows the outcome and then leads into the chat or back to the task.
+
+`pages/messages.js` shows what the API says about each chat (`status`, `role`, `replyDueAt`, who has finished): the text box gives way to `ChatGate` (why nobody can write, and the pay button) while the chat is locked or closed; an open chat shows until when the expert must reply and the "Завершить" button. An expert sets the price in the account, on the "Услуги и цены" page. How the money moves and how billing is set up: `../Logos-api/docs/billing.md`.
+
 Deployment is described in the API repository: `../Logos-api/docs/deploy-yandex-cloud.md`.
 
 ## Checks
