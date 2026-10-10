@@ -173,9 +173,15 @@ test.describe.serial('a task from publication to review', () => {
     await expect(expertPage.getByText('Всё чётко и в срок, рекомендую.').first()).toBeVisible();
   });
 
-  test('the two can talk in the chat of the task', async () => {
+  test('the customer pays for a consultation and the two talk in the chat of the task', async () => {
     await customerPage.goto(taskUrl);
-    await customerPage.getByRole('link', { name: /Написать эксперту/ }).click();
+    // The chat with an expert who responded is locked until their consultation is paid for.
+    await customerPage.getByRole('button', { name: /Написать — [\d\s]+ ₽$/ }).click();
+    await expect(customerPage).toHaveURL(/\/payments\/mock\/\d+$/);
+    await expect(customerPage.getByText('Оплата консультации эксперта')).toBeVisible();
+    await customerPage.getByRole('button', { name: 'Оплатить', exact: true }).click();
+    await expect(customerPage.getByText(/Чат открыт/)).toBeVisible();
+    await customerPage.getByRole('link', { name: 'Перейти в чат' }).click();
     await expect(customerPage).toHaveURL(/\/messages\?chat=\d+$/);
     const text = `Спасибо за работу! ${Date.now()}`;
     await customerPage.getByLabel('Сообщение', { exact: true }).fill(text);
