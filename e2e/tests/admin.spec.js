@@ -219,6 +219,29 @@ test.describe.serial('the admin panel', () => {
     await expect(admin.getByText('Пользователь разблокирован')).toBeVisible();
   });
 
+  test('the journal says who did what, and cannot be edited', async () => {
+    const journal = (table, id) =>
+      `${ADMIN_URL}/admin/resources/AdminAuditLog?filters.resource=${table}&filters.recordId=${id}`;
+    const rows = admin.locator('table tbody tr');
+
+    await admin.goto(journal('User', boris.userId));
+    await expect(rows).toHaveCount(2);
+    await expect(rows.filter({ hasText: 'Заблокировать' })).toContainText(ADMIN.email);
+    await expect(rows.filter({ hasText: 'Разблокировать' })).toHaveCount(1);
+
+    // The reason typed when rejecting is kept with the action.
+    await admin.goto(journal('VerificationRequest', boris.requestId));
+    await expect(rows).toHaveCount(1);
+    await expect(rows).toContainText('Отклонить');
+    await expect(rows).toContainText('Скан обрезан');
+
+    await expect(admin.getByTestId('action-new')).toHaveCount(0);
+    await rows.first().click();
+    await expect(admin.getByTestId('property-show-title')).toContainText('Отклонить');
+    await expect(admin.getByTestId('action-edit')).toHaveCount(0);
+    await expect(admin.getByTestId('action-delete')).toHaveCount(0);
+  });
+
   test('adds an expert, who signs in on the site with the temporary password', async ({ page }) => {
     const email = uniqueEmail('added');
     await admin.goto(`${ADMIN_URL}/admin/resources/Expert`);
