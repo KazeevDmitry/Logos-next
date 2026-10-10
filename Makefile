@@ -1,6 +1,6 @@
 RUN = docker compose run --rm web
 
-.PHONY: up down logs install lint format build shell e2e locales
+.PHONY: up down logs install lint format build clean shell e2e locales
 
 up: ## start the dev server on http://localhost:3000
 	docker compose up -d --build
@@ -22,6 +22,10 @@ format:
 
 build: ## production build into .next-check, safe to run next to the dev server
 	docker compose run --rm -e NEXT_DIST_DIR=.next-check web yarn build
+
+clean: ## free disk space: drop the build caches (.next volume, .next-check); they are rebuilt on demand
+	$(RUN) rm -rf .next-check
+	docker compose down -v
 
 shell:
 	$(RUN) bash
