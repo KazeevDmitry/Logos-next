@@ -191,6 +191,16 @@ test.describe.serial('the admin panel', () => {
     expect((await page.goto(`/articles/${article.slug}`)).status()).toBe(404);
   });
 
+  test('a link to a button does nothing, even for a signed-in administrator', async () => {
+    // AdminJS would run the button on a plain GET; the API refuses page navigations.
+    const link = `${ADMIN_URL}/admin/api/resources/User/records/${boris.userId}/block`;
+    expect((await admin.goto(link)).status()).toBe(403);
+
+    await admin.goto(record('User', boris.userId));
+    await expect(admin.getByTestId('property-show-status')).toContainText('Активен');
+    expect((await borisPage.request.get('/api/v1/users/me')).status()).toBe(200);
+  });
+
   test('blocks an account: it is signed out at once and cannot sign in', async () => {
     await admin.goto(record('User', boris.userId));
     await confirmAction(admin, 'block');
