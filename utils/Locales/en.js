@@ -40,6 +40,7 @@ export default {
       requests: 'My Requests',
       messages: 'Messages',
       finance: 'Finance',
+      admin: 'Administration',
     },
   },
   icons: {

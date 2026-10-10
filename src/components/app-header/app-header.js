@@ -13,6 +13,12 @@ import NotificationBell from './notificationBell';
 
 import i18n from '../../../utils/i18n-init';
 /** A <button> that looks like the element it replaced: no border, no background. */
+/**
+ * The admin panel is served by the API. In production that is this site's
+ * own origin; in development the API's address is the one the chat uses.
+ */
+const ADMIN_PANEL_URL = `${process.env.NEXT_PUBLIC_WS_URL ?? ''}/admin`;
+
 const plainButton = {
   border: 'none',
   background: 'none',
@@ -31,7 +37,7 @@ export default function AppHeader({ loading }) {
   const { t } = useTranslation();
   const router = useRouter();
   const theme = useThemeContext();
-  const { currentUser, logout, isExpert } = useUserContext();
+  const { currentUser, logout, isExpert, isAdmin } = useUserContext();
   const [menuOpen, setMenuOpen] = useState(false);
   const signedIn = Boolean(currentUser);
 
@@ -41,13 +47,14 @@ export default function AppHeader({ loading }) {
     { name: t('header.menu.2'), to: '/articles' },
     { name: t('header.menu.3'), to: '/questions' },
   ];
-  // "My responses" is for experts only.
+  // "My responses" is for experts only, the panel for administrators.
   const USER_MENU_ITEMS = [
     { name: t('menu.user.profile'), to: '/personalaccount' },
     { name: t('menu.user.projects'), to: '/mytasks' },
     ...(isExpert ? [{ name: t('menu.user.requests'), to: '/myresponses' }] : []),
     { name: t('menu.user.messages'), to: '/messages' },
     { name: t('menu.user.finance'), to: '/finance' },
+    ...(isAdmin ? [{ name: t('menu.user.admin'), to: ADMIN_PANEL_URL, outside: true }] : []),
   ];
 
   const toggleMenu = () => setMenuOpen((open) => !open);
@@ -264,11 +271,18 @@ function DropMenu({ className, groups, onClose, onSignOut, signOutText }) {
     <nav className={className} ref={box} aria-label={i18n.t('ui.appHeader.menyu')}>
       {groups.map((items) => (
         <div key={items[0].to} className={styles.userLinkBox}>
-          {items.map(({ to, name }) => (
-            <Link key={to} href={to} className={styles.menuLink} onClick={onClose}>
-              {name}
-            </Link>
-          ))}
+          {items.map(({ to, name, outside }) =>
+            // Not a page of this site: a plain link, so the browser loads it.
+            outside ? (
+              <a key={to} href={to} className={styles.menuLink} onClick={onClose}>
+                {name}
+              </a>
+            ) : (
+              <Link key={to} href={to} className={styles.menuLink} onClick={onClose}>
+                {name}
+              </Link>
+            ),
+          )}
         </div>
       ))}
       {onSignOut && (

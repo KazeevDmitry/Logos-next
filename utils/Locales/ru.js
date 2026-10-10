@@ -40,6 +40,7 @@ export default {
       requests: 'Мои отклики',
       messages: 'Сообщения',
       finance: 'Финансы',
+      admin: 'Администрирование',
     },
   },
   icons: {
